@@ -1,0 +1,179 @@
+---
+---
+
+<!-- Mobile-only bottom navigation -->
+<nav
+  id="bottom-nav"
+  class="md:hidden fixed bottom-0 left-0 right-0 z-40 px-2 pb-safe"
+  style="padding-bottom: max(env(safe-area-inset-bottom, 0px), 8px);"
+  aria-label="Mobile navigation"
+>
+  <!-- Glass bar -->
+  <div
+    class="flex items-center justify-around rounded-2xl border border-border-soft mx-1 mb-2 relative overflow-hidden"
+    style="
+      background: var(--color-nav-bg-scrolled);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 -4px 32px rgba(0,0,0,0.35), 0 0 0 1px rgba(0,200,255,0.06);
+    "
+  >
+    <!-- Active pill background (moves via JS) -->
+    <div id="bnav-pill" class="absolute top-1 h-[calc(100%-8px)] rounded-xl transition-all duration-300 ease-out pointer-events-none" style="background: rgba(0,200,255,0.08); width: 20%; left: 0%; opacity: 0;"></div>
+
+    <!-- Nav items -->
+    {[
+      {
+        id: 'top',
+        href: '#top',
+        icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+        label_en: 'Home',
+        label_es: 'Inicio',
+      },
+      {
+        id: 'services',
+        href: '#services',
+        icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,
+        label_en: 'Services',
+        label_es: 'Servicios',
+      },
+      {
+        id: 'process',
+        href: '#process',
+        icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M5.34 18.66l-1.41 1.41M2 12h2M20 12h2M5.34 5.34L6.75 6.75M17.25 17.25l1.42 1.42M12 2v2M12 20v2"/></svg>`,
+        label_en: 'Process',
+        label_es: 'Proceso',
+      },
+      {
+        id: 'pricing',
+        href: '#pricing',
+        icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>`,
+        label_en: 'Pricing',
+        label_es: 'Precios',
+      },
+      {
+        id: 'contact',
+        href: '#contact',
+        icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>`,
+        label_en: 'Contact',
+        label_es: 'Contacto',
+      },
+    ].map(({ id, href, icon, label_en, label_es }, i) => (
+      <a
+        href={href}
+        data-bnav={id}
+        class="bnav-item relative flex flex-col items-center justify-center gap-0.5 py-3 px-1 flex-1 transition-colors duration-200 no-underline"
+        style="color: var(--color-muted); min-width: 0;"
+      >
+        <!-- Icon -->
+        <span class="bnav-icon transition-transform duration-200 block" set:html={icon} />
+        <!-- Active dot -->
+        <span class="bnav-dot w-1 h-1 rounded-full opacity-0 transition-all duration-200 mt-0.5" style="background: #00c8ff;"></span>
+        <!-- Label -->
+        <span class="bnav-text text-[9px] font-semibold leading-none transition-colors duration-200">
+          <span class="en">{label_en}</span>
+          <span class="es">{label_es}</span>
+        </span>
+      </a>
+    ))}
+  </div>
+</nav>
+
+<style>
+  .bnav-item.active {
+    color: #00c8ff;
+  }
+  .bnav-item.active .bnav-icon {
+    transform: translateY(-1px);
+  }
+  .bnav-item.active .bnav-dot {
+    opacity: 1;
+  }
+  .bnav-item.active .bnav-text {
+    color: #00c8ff;
+  }
+
+  /* hide the floating WA a bit higher so it clears the bottom nav */
+  @media (max-width: 767px) {
+    #wa-fab {
+      bottom: 88px !important;
+    }
+  }
+</style>
+
+<script>
+  const bnavItems = document.querySelectorAll<HTMLElement>('.bnav-item');
+  const pill = document.getElementById('bnav-pill');
+
+  function setBottomActive(id: string) {
+    bnavItems.forEach((el, i) => {
+      const isActive = el.dataset.bnav === id;
+      el.classList.toggle('active', isActive);
+      if (isActive && pill) {
+        pill.style.left = `${(i / bnavItems.length) * 100}%`;
+        pill.style.width = `${100 / bnavItems.length}%`;
+        pill.style.opacity = '1';
+      }
+    });
+  }
+
+  // Set home active on load
+  setBottomActive('top');
+
+  // Scroll spy
+  const sectionIds = ['services', 'process', 'pricing', 'contact'];
+  let currentSection = 'top';
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          currentSection = entry.target.id;
+          setBottomActive(currentSection);
+        }
+      });
+    },
+    { rootMargin: '-25% 0px -65% 0px', threshold: 0 }
+  );
+
+  sectionIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
+
+  // Back to top detection
+  const scrollObserver = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        currentSection = 'top';
+        setBottomActive('top');
+      }
+    },
+    { rootMargin: '0px', threshold: 0.5 }
+  );
+  const heroEl = document.querySelector('section') || document.querySelector('main > *');
+  if (heroEl) scrollObserver.observe(heroEl);
+
+  // Click: close any open mobile nav menu
+  bnavItems.forEach(el => {
+    el.addEventListener('click', () => {
+      const id = el.dataset.bnav ?? 'top';
+      setBottomActive(id);
+      // close top hamburger menu if open
+      const mobileMenu = document.getElementById('mobile-menu') as HTMLElement | null;
+      if (mobileMenu && mobileMenu.style.maxHeight !== '0px' && mobileMenu.style.maxHeight !== '') {
+        mobileMenu.style.maxHeight = '0';
+        mobileMenu.style.opacity = '0';
+        mobileMenu.style.pointerEvents = 'none';
+        const toggle = document.getElementById('nav-toggle');
+        if (toggle) toggle.setAttribute('aria-expanded', 'false');
+        const bar1 = document.getElementById('bar1') as HTMLElement | null;
+        const bar2 = document.getElementById('bar2') as HTMLElement | null;
+        const bar3 = document.getElementById('bar3') as HTMLElement | null;
+        if (bar1) bar1.style.transform = '';
+        if (bar2) { bar2.style.opacity = '1'; bar2.style.transform = ''; }
+        if (bar3) { bar3.style.transform = ''; bar3.style.width = '14px'; }
+      }
+    });
+  });
+</script>

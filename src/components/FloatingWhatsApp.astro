@@ -1,0 +1,87 @@
+---
+// ← Cambia este número por el tuyo (formato internacional, sin + ni espacios)
+const WA_NUMBER = '50412345678';
+const msgs = {
+  en: 'Hi! I found Kizercode and would like to know more about your services.',
+  es: 'Hola! Vi Kizercode y me gustaría saber más sobre sus servicios.',
+};
+---
+
+<a
+  id="wa-fab"
+  href={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msgs.en)}`}
+  data-wa-number={WA_NUMBER}
+  data-wa-en={msgs.en}
+  data-wa-es={msgs.es}
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Contact on WhatsApp"
+  class="fixed right-4 md:right-6 z-40 flex items-center group"
+  style="bottom: 88px;"
+>
+  <!-- Hover tooltip (desktop) -->
+  <span
+    class="hidden md:block text-xs font-semibold px-3 py-1.5 rounded-l-xl mr-0 opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0 transition-all duration-300 pointer-events-none whitespace-nowrap"
+    style="background: linear-gradient(135deg,#00c8ff,#00ff9d); color: #040d18;"
+  >
+    <span class="en">Chat with us</span>
+    <span class="es">Escríbenos</span>
+  </span>
+
+  <!-- FAB button -->
+  <div
+    class="relative flex items-center justify-center rounded-2xl shrink-0 group-hover:scale-105 transition-transform duration-200"
+    style="width:54px;height:54px;background:linear-gradient(135deg,#00c8ff 0%,#00e5a0 60%,#00ff9d 100%);box-shadow:0 4px 24px rgba(0,200,255,0.4),0 2px 10px rgba(0,0,0,0.3);"
+  >
+    <!-- Pulse ring -->
+    <span
+      class="absolute inset-0 rounded-2xl"
+      style="background:linear-gradient(135deg,#00c8ff,#00ff9d);animation:waPulse 2.8s ease-out infinite;"
+    ></span>
+
+    <!-- WhatsApp SVG -->
+    <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" class="relative z-10">
+      <path fill="#04121f" d="M16 2C8.268 2 2 8.268 2 16c0 2.478.648 4.804 1.782 6.82L2 30l7.376-1.754A13.92 13.92 0 0016 30c7.732 0 14-6.268 14-14S23.732 2 16 2z"/>
+      <path fill="white" d="M22.5 19.75c-.306.862-1.52 1.576-2.492 1.786-.663.14-1.53.252-4.444-1.028-3.73-1.614-6.138-5.374-6.326-5.624-.18-.25-1.52-2.02-1.52-3.854 0-1.834.96-2.728 1.3-3.098.34-.37.74-.462 1-.462.24 0 .48.002.69.012.22.01.52-.084.814.62.306.722 1.04 2.556 1.13 2.742.09.186.15.404.03.65-.11.254-.17.41-.34.63-.17.22-.356.492-.51.66-.17.186-.346.386-.148.756.198.37.878 1.448 1.886 2.346 1.296 1.154 2.39 1.512 2.726 1.68.336.17.532.142.728-.086.198-.228.846-.988 1.072-1.328.226-.34.452-.284.762-.17.31.112 1.966.928 2.304 1.096.338.17.562.254.646.396.084.142.084.818-.222 1.68z"/>
+    </svg>
+  </div>
+</a>
+
+<style>
+  @keyframes waPulse {
+    0%   { transform: scale(1); opacity: 0.55; }
+    70%  { transform: scale(1.5); opacity: 0; }
+    100% { transform: scale(1.5); opacity: 0; }
+  }
+
+  /* On mobile, sit above bottom nav */
+  @media (max-width: 767px) {
+    #wa-fab { bottom: 88px !important; }
+  }
+  @media (min-width: 768px) {
+    #wa-fab { bottom: 32px !important; }
+  }
+</style>
+
+<script>
+  const fab = document.getElementById('wa-fab') as HTMLAnchorElement | null;
+  if (fab) {
+    const num = fab.dataset.waNumber;
+    const msgs: Record<string, string> = {
+      en: fab.dataset.waEn ?? '',
+      es: fab.dataset.waEs ?? '',
+    };
+
+    function updateHref() {
+      const lang = document.documentElement.getAttribute('lang') || 'en';
+      fab!.href = `https://wa.me/${num}?text=${encodeURIComponent(msgs[lang] || msgs.en)}`;
+    }
+
+    new MutationObserver(updateHref).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['lang'],
+    });
+
+    updateHref();
+  }
+</script>
