@@ -42,10 +42,23 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={new URL(image, Astro.site)} />
 
-  <!-- Fonts -->
+  <!-- Fonts — non-render-blocking: preload + swap -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link
+    rel="preload"
+    as="style"
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet"
+    media="print"
+    onload="this.media='all'"
+  />
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  </noscript>
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -106,15 +119,36 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 <body>
   <slot />
   <script>
-    import { initGSAP, animateHero, animateSections, initMagneticButtons, initNavScroll } from '@/lib/animations/gsap';
+    // Defer GSAP to after first paint — reduces forced reflows and LCP render delay
+    async function bootAnimations() {
+      const { initGSAP, animateHero, animateSections, initMagneticButtons, initNavScroll } =
+        await import('@/lib/animations/gsap');
 
-    document.addEventListener('DOMContentLoaded', () => {
       initGSAP();
+      // Hero animates immediately (above the fold)
       animateHero();
-      animateSections();
-      initMagneticButtons();
-      initNavScroll();
-    });
+      // Defer below-the-fold animations to idle time
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(() => {
+          animateSections();
+          initMagneticButtons();
+          initNavScroll();
+        });
+      } else {
+        setTimeout(() => {
+          animateSections();
+          initMagneticButtons();
+          initNavScroll();
+        }, 100);
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', bootAnimations);
+    } else {
+      // DOM already ready — schedule on next frame to avoid blocking paint
+      requestAnimationFrame(bootAnimations);
+    }
   </script>
 </body>
 </html>

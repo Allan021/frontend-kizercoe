@@ -1,10 +1,10 @@
 ---
 ---
-<nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-5 md:px-[60px] py-4 backdrop-blur-xl border-b border-border-soft transition-all duration-300" style="background: var(--color-nav-bg);">
+<nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-[60px] py-3 backdrop-blur-xl border-b border-border-soft transition-all duration-300" style="background: var(--color-nav-bg);">
   <!-- Logo -->
-  <a href="/" class="flex items-center gap-3 no-underline group" aria-label="Kizercode home">
-    <div class="w-10 h-10 flex items-center justify-center" style="filter: drop-shadow(0 0 8px rgba(0,200,255,0.5))">
-      <svg width="40" height="40" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <a href="/" class="flex items-center gap-2.5 no-underline group shrink-0" aria-label="Kizercode home">
+    <div class="w-9 h-9 flex items-center justify-center" style="filter: drop-shadow(0 0 8px rgba(0,200,255,0.5))">
+      <svg width="36" height="36" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="navlg1" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
             <stop offset="0%" stop-color="#00c8ff"/>
@@ -19,7 +19,7 @@
         <text x="11" y="21" font-family="JetBrains Mono, monospace" font-weight="800" font-size="10" fill="url(#navlg1)">{"{ K }"}</text>
       </svg>
     </div>
-    <span class="text-lg font-extrabold tracking-tight text-primary">Kizer<span class="text-brand-cyan">code</span></span>
+    <span class="text-base font-extrabold tracking-tight text-primary">Kizer<span class="text-brand-cyan">code</span></span>
   </a>
 
   <!-- Desktop Links -->
@@ -31,8 +31,13 @@
       { href: '#pricing', en: 'Pricing', es: 'Precios' },
     ].map(({ href, en, es }) => (
       <li>
-        <a href={href} class="text-muted text-sm font-medium hover:text-brand-cyan transition-colors duration-200 cursor-pointer">
+        <a
+          href={href}
+          data-nav-link={href.replace('#','')}
+          class="nav-link text-muted text-sm font-medium hover:text-brand-cyan transition-colors duration-200 cursor-pointer relative pb-0.5"
+        >
           <span class="en">{en}</span><span class="es">{es}</span>
+          <span class="nav-indicator absolute -bottom-1 left-0 right-0 h-[2px] rounded-full bg-brand-cyan scale-x-0 transition-transform duration-200 origin-left"></span>
         </a>
       </li>
     ))}
@@ -43,27 +48,26 @@
     </li>
   </ul>
 
-  <!-- Right controls: lang + theme + hamburger -->
-  <div class="flex items-center gap-2">
-    <!-- Language toggle -->
+  <!-- Right controls -->
+  <div class="flex items-center gap-1.5 md:gap-2">
+    <!-- Language toggle (always visible) -->
     <button
       id="lang-toggle"
       aria-label="Toggle language"
-      class="hidden md:flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border-soft text-muted text-xs font-mono font-bold hover:border-brand-cyan/30 hover:text-brand-cyan transition-all duration-200 cursor-pointer"
+      class="flex items-center gap-1 px-2 py-1.5 rounded-lg border border-border-soft text-muted text-xs font-mono font-bold hover:border-brand-cyan/40 hover:text-brand-cyan transition-all duration-200 cursor-pointer"
       style="background: var(--color-card);"
     >
       <span id="lang-label">EN</span>
     </button>
 
-    <!-- Theme toggle -->
+    <!-- Theme toggle (always visible) -->
     <button
       id="theme-toggle"
       aria-label="Toggle dark/light mode"
-      class="hidden md:flex w-9 h-9 items-center justify-center rounded-lg border border-border-soft text-muted hover:border-brand-cyan/30 hover:text-brand-cyan transition-all duration-200 cursor-pointer"
+      class="flex w-8 h-8 md:w-9 md:h-9 items-center justify-center rounded-lg border border-border-soft text-muted hover:border-brand-cyan/40 hover:text-brand-cyan transition-all duration-200 cursor-pointer"
       style="background: var(--color-card);"
     >
-      <!-- Sun icon (shown in dark mode) -->
-      <svg id="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+      <svg id="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
         <circle cx="12" cy="12" r="5"/>
         <line x1="12" y1="1" x2="12" y2="3"/>
         <line x1="12" y1="21" x2="12" y2="23"/>
@@ -74,85 +78,147 @@
         <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
         <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
       </svg>
-      <!-- Moon icon (shown in light mode) -->
-      <svg id="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" class="hidden">
+      <svg id="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" class="hidden">
         <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>
       </svg>
     </button>
 
     <!-- Mobile hamburger -->
-    <button id="nav-toggle" class="md:hidden flex flex-col gap-1.5 p-2 cursor-pointer bg-transparent border-0" aria-label="Toggle menu" aria-expanded="false">
-      <span class="block w-5 h-0.5 bg-primary transition-all duration-300" id="bar1" style="background: var(--color-text)"></span>
-      <span class="block w-5 h-0.5 bg-primary transition-all duration-300" id="bar2" style="background: var(--color-text)"></span>
-      <span class="block w-5 h-0.5 bg-primary transition-all duration-300" id="bar3" style="background: var(--color-text)"></span>
+    <button id="nav-toggle" class="md:hidden flex flex-col justify-center items-center w-8 h-8 gap-1.5 cursor-pointer bg-transparent border-0 shrink-0" aria-label="Toggle menu" aria-expanded="false">
+      <span class="block w-5 h-[1.5px] transition-all duration-300 rounded-full" id="bar1" style="background: var(--color-text)"></span>
+      <span class="block w-5 h-[1.5px] transition-all duration-300 rounded-full" id="bar2" style="background: var(--color-text)"></span>
+      <span class="block w-3.5 h-[1.5px] transition-all duration-300 rounded-full ml-auto" id="bar3" style="background: var(--color-text)"></span>
     </button>
   </div>
 
-  <!-- Mobile menu -->
-  <div id="mobile-menu" class="absolute top-full left-0 right-0 hidden flex-col border-b border-border-soft py-5 px-5" style="background: var(--color-bg-2);">
-    {[
-      { href: '#services', en: 'Services', es: 'Servicios' },
-      { href: '#why', en: 'Why Us', es: '¿Por qué Nosotros?' },
-      { href: '#process', en: 'Process', es: 'Proceso' },
-      { href: '#pricing', en: 'Pricing', es: 'Precios' },
-    ].map(({ href, en, es }) => (
-      <a href={href} class="py-3.5 text-muted hover:text-brand-cyan transition-colors duration-200 font-medium border-b border-border-soft text-sm">
-        <span class="en">{en}</span><span class="es">{es}</span>
+  <!-- Mobile menu overlay -->
+  <div
+    id="mobile-menu"
+    class="absolute top-full left-0 right-0 border-b border-border-soft overflow-hidden"
+    style="background: var(--color-bg-2); max-height: 0; transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease; opacity: 0; pointer-events: none;"
+  >
+    <div class="px-4 pt-2 pb-5">
+      <!-- Section links -->
+      <div class="flex flex-col">
+        {[
+          { href: '#services', en: 'Services', es: 'Servicios' },
+          { href: '#why', en: 'Why Us', es: '¿Por qué Nosotros?' },
+          { href: '#process', en: 'Process', es: 'Proceso' },
+          { href: '#pricing', en: 'Pricing', es: 'Precios' },
+        ].map(({ href, en, es }) => (
+          <a
+            href={href}
+            data-mob-link={href.replace('#','')}
+            class="mob-nav-link flex items-center justify-between py-3.5 text-muted font-medium border-b border-border-soft text-sm group transition-colors duration-200"
+          >
+            <span>
+              <span class="en">{en}</span><span class="es">{es}</span>
+            </span>
+            <svg class="w-4 h-4 text-brand-cyan/0 group-[.active]:text-brand-cyan transition-colors duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/>
+            </svg>
+          </a>
+        ))}
+      </div>
+
+      <!-- CTA -->
+      <a href="#contact" class="mob-close-link mt-4 flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-bg bg-gradient-to-br from-brand-cyan to-brand-electric hover:opacity-90 transition-opacity duration-200">
+        <span class="en">Start a Project</span><span class="es">Iniciar Proyecto</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
-    ))}
-    <a href="#contact" class="mt-4 px-6 py-3 rounded-lg text-sm font-bold text-bg text-center bg-gradient-to-br from-brand-cyan to-brand-electric">
-      <span class="en">Start a Project →</span><span class="es">Iniciar Proyecto →</span>
-    </a>
-    <!-- Mobile controls row -->
-    <div class="flex items-center gap-3 mt-4 pt-4 border-t border-border-soft">
-      <button id="lang-toggle-mobile" class="flex items-center gap-1 px-3 py-2 rounded-lg border border-border-soft text-muted text-xs font-mono font-bold hover:text-brand-cyan transition-all cursor-pointer" style="background: var(--color-card);">
-        <span id="lang-label-mobile">EN</span>
-      </button>
-      <button id="theme-toggle-mobile" class="flex items-center gap-2 px-3 py-2 rounded-lg border border-border-soft text-muted text-xs font-semibold hover:text-brand-cyan transition-all cursor-pointer" style="background: var(--color-card);">
-        <span id="theme-label-mobile">Dark Mode</span>
-      </button>
     </div>
   </div>
 </nav>
 
+<style>
+  .nav-link.active .nav-indicator { transform: scaleX(1); }
+  .nav-link.active { color: var(--color-text); }
+  .mob-nav-link.active { color: var(--color-text); }
+  #bar3 { transition: width 0.3s ease, margin 0.3s ease; }
+</style>
+
 <script>
-  // ── Mobile menu ──────────────────────────────────────────────────────
-  const toggle = document.getElementById('nav-toggle');
-  const menu = document.getElementById('mobile-menu');
-  const bar1 = document.getElementById('bar1');
-  const bar2 = document.getElementById('bar2');
-  const bar3 = document.getElementById('bar3');
+  // ── Mobile menu ───────────────────────────────────────────────────────
+  const toggle = document.getElementById('nav-toggle') as HTMLButtonElement;
+  const menu = document.getElementById('mobile-menu') as HTMLElement;
+  const bar1 = document.getElementById('bar1') as HTMLElement;
+  const bar2 = document.getElementById('bar2') as HTMLElement;
+  const bar3 = document.getElementById('bar3') as HTMLElement;
   let menuOpen = false;
 
-  toggle?.addEventListener('click', () => {
-    menuOpen = !menuOpen;
-    menu?.classList.toggle('hidden', !menuOpen);
-    menu?.classList.toggle('flex', menuOpen);
-    toggle.setAttribute('aria-expanded', menuOpen.toString());
-    if (bar1) bar1.style.transform = menuOpen ? 'rotate(45deg) translate(4px, 5px)' : '';
-    if (bar2) bar2.style.opacity = menuOpen ? '0' : '1';
-    if (bar3) bar3.style.transform = menuOpen ? 'rotate(-45deg) translate(4px, -5px)' : '';
-  });
+  function openMenu() {
+    menuOpen = true;
+    menu.style.maxHeight = menu.scrollHeight + 80 + 'px';
+    menu.style.opacity = '1';
+    menu.style.pointerEvents = 'auto';
+    toggle.setAttribute('aria-expanded', 'true');
+    bar1.style.transform = 'rotate(45deg) translate(3px, 4px)';
+    bar2.style.opacity = '0';
+    bar2.style.transform = 'scaleX(0)';
+    bar3.style.transform = 'rotate(-45deg) translate(3px, -4px)';
+    bar3.style.width = '20px';
+    bar3.style.marginLeft = 'auto';
+    bar3.style.marginRight = 'auto';
+  }
 
+  function closeMenu() {
+    menuOpen = false;
+    menu.style.maxHeight = '0';
+    menu.style.opacity = '0';
+    menu.style.pointerEvents = 'none';
+    toggle.setAttribute('aria-expanded', 'false');
+    bar1.style.transform = '';
+    bar2.style.opacity = '1';
+    bar2.style.transform = '';
+    bar3.style.transform = '';
+    bar3.style.width = '14px';
+    bar3.style.marginLeft = 'auto';
+    bar3.style.marginRight = '0';
+  }
+
+  toggle?.addEventListener('click', () => menuOpen ? closeMenu() : openMenu());
+
+  // close on link click
   menu?.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      menuOpen = false;
-      menu.classList.add('hidden');
-      menu.classList.remove('flex');
-      if (bar1) bar1.style.transform = '';
-      if (bar2) bar2.style.opacity = '1';
-      if (bar3) bar3.style.transform = '';
-      toggle?.setAttribute('aria-expanded', 'false');
-    });
+    a.addEventListener('click', closeMenu);
   });
 
-  // ── Language toggle ──────────────────────────────────────────────────
+  // ── Scroll Spy ───────────────────────────────────────────────────────
+  const sections = ['services', 'why', 'process', 'pricing'];
+  let activeSection = '';
+
+  function setActive(id: string) {
+    if (id === activeSection) return;
+    activeSection = id;
+
+    document.querySelectorAll<HTMLElement>('[data-nav-link]').forEach(el => {
+      el.classList.toggle('active', el.dataset.navLink === id);
+    });
+    document.querySelectorAll<HTMLElement>('[data-mob-link]').forEach(el => {
+      el.classList.toggle('active', el.dataset.mobLink === id);
+    });
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setActive(entry.target.id);
+        }
+      });
+    },
+    { rootMargin: '-30% 0px -60% 0px', threshold: 0 }
+  );
+
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
+
+  // ── Language toggle ───────────────────────────────────────────────────
   function updateLangUI(lang: string) {
-    const labels = [
-      document.getElementById('lang-label'),
-      document.getElementById('lang-label-mobile'),
-    ];
-    labels.forEach(el => { if (el) el.textContent = lang.toUpperCase(); });
+    const label = document.getElementById('lang-label');
+    if (label) label.textContent = lang.toUpperCase();
   }
 
   function toggleLang() {
@@ -164,17 +230,14 @@
   }
 
   document.getElementById('lang-toggle')?.addEventListener('click', toggleLang);
-  document.getElementById('lang-toggle-mobile')?.addEventListener('click', toggleLang);
 
-  // ── Theme toggle (View Transitions) ──────────────────────────────────
+  // ── Theme toggle ──────────────────────────────────────────────────────
   function updateThemeUI(theme: string) {
     const isDark = theme === 'dark';
     const sunIcon = document.getElementById('icon-sun');
     const moonIcon = document.getElementById('icon-moon');
-    const label = document.getElementById('theme-label-mobile');
     if (sunIcon) sunIcon.classList.toggle('hidden', !isDark);
     if (moonIcon) moonIcon.classList.toggle('hidden', isDark);
-    if (label) label.textContent = isDark ? 'Light Mode' : 'Dark Mode';
   }
 
   async function toggleTheme() {
@@ -206,9 +269,8 @@
   }
 
   document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
-  document.getElementById('theme-toggle-mobile')?.addEventListener('click', toggleTheme);
 
-  // ── Init UI from saved state ──────────────────────────────────────────
+  // ── Init from saved state ─────────────────────────────────────────────
   const savedTheme = document.documentElement.getAttribute('data-theme') || 'dark';
   const savedLang = document.documentElement.getAttribute('lang') || 'en';
   updateThemeUI(savedTheme);

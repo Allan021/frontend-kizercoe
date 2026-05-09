@@ -51,8 +51,11 @@ const chars = 'Kizercode'.split('').map((c, i) => {
       <!-- Kizercode — chars animated by GSAP (letter-by-letter bounce) -->
       <div class="mb-3">
         <h1 id="kz-title" class="font-black tracking-tight leading-none" style="font-size: clamp(60px, 9vw, 130px); filter: drop-shadow(0 0 28px rgba(0,200,255,0.22)) drop-shadow(0 0 60px rgba(0,255,157,0.08));">
-          {chars.map(({ char, color }) => (
-            <span class="kz-char opacity-0" style={`display:inline-block; color:${color};`}>{char}</span>
+          {chars.map(({ char, color }, i) => (
+            <span
+              class="kz-char"
+              style={`display:inline-block; color:${color}; opacity:0; animation: kzCharFallback 0.4s ease-out ${0.08 + i * 0.05}s forwards;`}
+            >{char}</span>
           ))}
           <span id="kz-cursor" class="opacity-0 align-middle" style="display:inline-block; width:3px; height:0.68em; background:#00c8ff; border-radius:2px; margin-left:4px; margin-bottom:6px;"></span>
         </h1>

@@ -6,10 +6,13 @@ export function initGSAP() {
   if (typeof window === 'undefined') return;
   gsap.registerPlugin(ScrollTrigger, SplitText);
 
+  // Mark body so CSS fallback animations stop
+  document.documentElement.classList.add('gsap-ready');
+
   // Global defaults
   gsap.defaults({ ease: 'power3.out' });
 
-  // Refresh ScrollTrigger on resize
+  // Refresh ScrollTrigger on resize (debounced)
   let resizeTimer: ReturnType<typeof setTimeout>;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
@@ -92,6 +95,13 @@ export function animateHero() {
       { opacity: 1, x: 0, scale: 1, duration: 0.75, ease: 'power3.out' },
       0.22
     );
+
+    // Clean up will-change after all hero animations finish
+    tl.add(() => {
+      document.querySelectorAll('.kz-char, #hero-badge, #hero-tagline, #hero-sub, #hero-actions, .hero-stat, #hero-visual').forEach((el) => {
+        (el as HTMLElement).style.willChange = 'auto';
+      });
+    });
 
     // Stat number counters
     document.querySelectorAll('[data-count]').forEach((el) => {
@@ -216,13 +226,30 @@ export function initMagneticButtons() {
   if (typeof window === 'undefined') return;
 
   document.querySelectorAll<HTMLElement>('[data-magnetic]').forEach((btn) => {
-    btn.addEventListener('mousemove', (e: MouseEvent) => {
-      const rect = btn.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-      gsap.to(btn, { x: x * 0.3, y: y * 0.3, duration: 0.4, ease: 'power2.out' });
+    let rect: DOMRect | null = null;
+    let rafId: number | null = null;
+
+    btn.addEventListener('mouseenter', () => {
+      // Cache rect on enter to avoid repeated reflows on mousemove
+      rect = btn.getBoundingClientRect();
     });
+
+    btn.addEventListener('mousemove', (e: MouseEvent) => {
+      if (!rect) return;
+      // Throttle to one update per frame to avoid forced reflows
+      if (rafId) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        if (!rect) return;
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        gsap.to(btn, { x: x * 0.3, y: y * 0.3, duration: 0.4, ease: 'power2.out' });
+      });
+    });
+
     btn.addEventListener('mouseleave', () => {
+      rect = null;
+      if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
       gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.5)' });
     });
   });
