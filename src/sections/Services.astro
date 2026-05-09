@@ -1,0 +1,244 @@
+---
+const services = [
+  {
+    id: 'web',
+    title_en: 'Web Applications',
+    title_es: 'Aplicaciones Web',
+    description_en: 'Scalable, high-performance web apps built with React, Next.js, and modern stacks. From internal dashboards to customer-facing platforms.',
+    description_es: 'Apps web de alto rendimiento con React y Next.js. Desde dashboards internos hasta plataformas de cara al cliente.',
+    features: ['React / Next.js', 'Custom dashboards', 'REST & GraphQL APIs', 'Cloud deployment'],
+    color: '#00c8ff',
+  },
+  {
+    id: 'mobile',
+    title_en: 'Mobile Apps',
+    title_es: 'Apps Móviles',
+    description_en: 'Cross-platform iOS and Android apps with Flutter or React Native. Native performance, beautiful UI, one codebase.',
+    description_es: 'Apps iOS y Android con Flutter o React Native. Rendimiento nativo, UI hermosa, un solo código.',
+    features: ['Flutter & React Native', 'iOS + Android', 'Push notifications', 'Offline-first'],
+    color: '#00ff9d',
+  },
+  {
+    id: 'branding',
+    title_en: 'Brand Identity',
+    title_es: 'Identidad de Marca',
+    description_en: 'From logo and visual system to brand voice and messaging strategy. We build brands that command attention and earn trust.',
+    description_es: 'Del logo y sistema visual hasta la voz de marca. Creamos marcas que captan atención y generan confianza.',
+    features: ['Logo & visual system', 'Brand guidelines', 'Messaging strategy', 'Brand collateral'],
+    color: '#c8a0ff',
+    highlight: true,
+  },
+  {
+    id: 'marketing',
+    title_en: 'Digital Marketing',
+    title_es: 'Marketing Digital',
+    description_en: 'SEO, paid advertising, social media strategy, and email campaigns engineered to drive measurable growth — not vanity metrics.',
+    description_es: 'SEO, publicidad pagada, redes sociales y campañas de email diseñadas para crecer — no para métricas vacías.',
+    features: ['SEO & SEM', 'Social media strategy', 'Email campaigns', 'Analytics & ROI tracking'],
+    color: '#ff6b35',
+    highlight: true,
+  },
+  {
+    id: 'billing',
+    title_en: 'Billing Systems',
+    title_es: 'Sistemas de Facturación',
+    description_en: 'End-to-end invoicing, subscription management, and financial reporting that replaces spreadsheets and paper workflows.',
+    description_es: 'Facturación automatizada, suscripciones y reportes financieros que reemplazan hojas de cálculo y papel.',
+    features: ['Automated invoicing', 'Subscription logic', 'Tax compliance (SAR)', 'Financial reports'],
+    color: '#ff6b35',
+  },
+  {
+    id: 'payments',
+    title_en: 'Payment Platforms',
+    title_es: 'Plataformas de Pago',
+    description_en: 'Secure, PCI-compliant payment integrations. Stripe, PayPal, local gateways, and custom payment flows for any business model.',
+    description_es: 'Integraciones de pago seguras y conformes a PCI. Stripe, PayPal, pasarelas locales y flujos personalizados.',
+    features: ['Stripe & PayPal', 'Local gateways (HN)', 'Recurring billing', 'Fraud prevention'],
+    color: '#c8a0ff',
+  },
+  {
+    id: 'ai',
+    title_en: 'AI Automation',
+    title_es: 'Automatización con IA',
+    description_en: 'Intelligent automation that learns your workflows. Document processing, conversational AI, and predictive analytics that save thousands of hours.',
+    description_es: 'Automatización inteligente que aprende tus flujos de trabajo. OCR, chatbots y analítica predictiva que ahorran miles de horas.',
+    features: ['LLM integrations', 'Document OCR', 'Chatbots & agents', 'Process automation'],
+    color: '#00ff9d',
+  },
+  {
+    id: 'integrations',
+    title_en: 'Digital Integrations',
+    title_es: 'Integraciones Digitales',
+    description_en: 'Connect your existing tools and systems. ERP, CRM, accounting software, government portals — we build the bridges.',
+    description_es: 'Conecta tus herramientas y sistemas existentes. ERP, CRM, software contable, portales gubernamentales.',
+    features: ['API integrations', 'ERP & CRM sync', 'SAT / SAR portals', 'Webhook automation'],
+    color: '#00c8ff',
+  },
+];
+---
+
+<section id="services" class="py-24 px-5 md:px-[60px] bg-bg-2">
+  <div class="max-w-[1200px] mx-auto">
+    <!-- Header -->
+    <div class="mb-12 md:mb-16" data-gsap="fade-up">
+      <span class="section-tag mb-5">
+        <span class="en">Our Services</span><span class="es">Nuestros Servicios</span>
+      </span>
+      <h2 class="text-4xl md:text-5xl font-black tracking-tight mt-4 mb-5">
+        <span class="en">Everything your business<br /><span class="gradient-text">needs to dominate digitally.</span></span>
+        <span class="es">Todo lo que tu empresa<br /><span class="gradient-text">necesita para dominar digitalmente.</span></span>
+      </h2>
+      <p class="text-muted text-lg max-w-[580px] leading-relaxed">
+        <span class="en">Brand. Software. Marketing. We're the only agency in Honduras that covers the full digital stack — from logo to launch to growth.</span>
+        <span class="es">Marca. Software. Marketing. Somos la única agencia en Honduras que cubre el stack digital completo — del logo al lanzamiento al crecimiento.</span>
+      </p>
+    </div>
+
+    <!-- Services grid: 4 cols on large -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5" data-gsap="stagger">
+      {services.map((service) => (
+        <div
+          data-gsap-child
+          class={`group relative rounded-2xl p-6 border transition-all duration-300 cursor-pointer overflow-hidden ${service.highlight ? 'border-brand-cyan/20' : 'border-border-soft hover:border-brand-cyan/25'}`}
+          style={`background: var(--color-card); ${service.highlight ? `box-shadow: 0 0 30px ${service.color}10;` : ''}`}
+        >
+          <!-- NEW badge for branding/marketing -->
+          {service.highlight && (
+            <div class="absolute top-3 right-3 px-2 py-0.5 rounded-full text-[9px] font-black tracking-widest font-mono text-bg" style={`background: ${service.color};`}>
+              NEW
+            </div>
+          )}
+
+          <!-- Top gradient line on hover -->
+          <div
+            class="absolute top-0 left-0 right-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            style={`background: linear-gradient(90deg, transparent, ${service.color}, transparent);`}
+          ></div>
+
+          <!-- Glow on hover -->
+          <div
+            class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl"
+            style={`background: radial-gradient(circle at top left, ${service.color}08, transparent 60%);`}
+          ></div>
+
+          <!-- Icon -->
+          <div
+            class="w-11 h-11 rounded-xl flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110"
+            style={`background: ${service.color}15; border: 1px solid ${service.color}30;`}
+          >
+            {service.id === 'web' && (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={`color: ${service.color};`}>
+                <rect x="2" y="3" width="20" height="15" rx="2" stroke="currentColor" stroke-width="1.8" fill="none"/>
+                <path d="M8 21h8M12 18v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M2 14h20" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+              </svg>
+            )}
+            {service.id === 'mobile' && (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={`color: ${service.color};`}>
+                <rect x="5" y="2" width="14" height="20" rx="3" stroke="currentColor" stroke-width="1.8" fill="none"/>
+                <circle cx="12" cy="18" r="1" fill="currentColor"/>
+                <path d="M9 6h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+              </svg>
+            )}
+            {service.id === 'branding' && (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={`color: ${service.color};`}>
+                <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/>
+                <path d="M2 17l10 5 10-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M2 12l10 5 10-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            )}
+            {service.id === 'marketing' && (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={`color: ${service.color};`}>
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            )}
+            {service.id === 'billing' && (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={`color: ${service.color};`}>
+                <path d="M4 4h16v16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" stroke="currentColor" stroke-width="1.8" fill="none"/>
+                <path d="M4 9h16" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+                <path d="M8 13h8M8 16h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            )}
+            {service.id === 'payments' && (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={`color: ${service.color};`}>
+                <rect x="2" y="5" width="20" height="14" rx="3" stroke="currentColor" stroke-width="1.8" fill="none"/>
+                <path d="M2 10h20" stroke="currentColor" stroke-width="1.8"/>
+                <path d="M6 15h4M16 15h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            )}
+            {service.id === 'ai' && (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={`color: ${service.color};`}>
+                <rect x="3" y="8" width="18" height="11" rx="3" stroke="currentColor" stroke-width="1.8" fill="none"/>
+                <circle cx="8.5" cy="13.5" r="1.5" fill="currentColor"/>
+                <circle cx="15.5" cy="13.5" r="1.5" fill="currentColor"/>
+                <path d="M8 8V5M12 8V3M16 8V5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            )}
+            {service.id === 'integrations' && (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={`color: ${service.color};`}>
+                <circle cx="7" cy="12" r="3" stroke="currentColor" stroke-width="1.8" fill="none"/>
+                <circle cx="17" cy="12" r="3" stroke="currentColor" stroke-width="1.8" fill="none"/>
+                <path d="M10 12h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M4 5l3 7M4 19l3-7M20 5l-3 7M20 19l-3-7" stroke="currentColor" stroke-width="1.2" opacity="0.4" stroke-linecap="round"/>
+              </svg>
+            )}
+          </div>
+
+          <!-- Content -->
+          <h3 class="text-base font-bold mb-2 group-hover:text-brand-cyan transition-colors duration-200 text-primary">
+            <span class="en">{service.title_en}</span><span class="es">{service.title_es}</span>
+          </h3>
+          <p class="text-muted text-sm leading-relaxed mb-4">
+            <span class="en">{service.description_en}</span><span class="es">{service.description_es}</span>
+          </p>
+
+          <!-- Feature list -->
+          <ul class="space-y-1.5">
+            {service.features.map((feature) => (
+              <li class="flex items-center gap-2 text-xs text-muted font-mono">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={`color: ${service.color}; flex-shrink: 0;`}>
+                  <path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                {feature}
+              </li>
+            ))}
+          </ul>
+
+          <!-- Arrow on hover -->
+          <div class="mt-4 flex items-center gap-1.5 text-xs font-semibold opacity-0 group-hover:opacity-100 transition-all duration-200 -translate-x-2 group-hover:translate-x-0"
+            style={`color: ${service.color};`}>
+            <span class="en">Learn more</span><span class="es">Ver más</span>
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Differentiator banner -->
+    <div
+      class="mt-10 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 border border-brand-cyan/15 relative overflow-hidden"
+      style="background: linear-gradient(135deg, rgba(0,200,255,0.06), rgba(0,255,157,0.04));"
+      data-gsap="fade-up"
+    >
+      <div class="absolute top-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, rgba(0,200,255,0.4), transparent);"></div>
+      <div>
+        <h4 class="font-black text-xl text-primary mb-1">
+          <span class="en">Brand + Software + Marketing. Under one roof.</span>
+          <span class="es">Marca + Software + Marketing. Bajo un mismo techo.</span>
+        </h4>
+        <p class="text-muted text-sm max-w-[600px]">
+          <span class="en">While other agencies hand you off between designers, developers, and marketers — we handle it all. One team, one vision, zero gaps.</span>
+          <span class="es">Mientras otras agencias te pasan entre diseñadores, desarrolladores y marketeros — nosotros manejamos todo. Un equipo, una visión, sin grietas.</span>
+        </p>
+      </div>
+      <a
+        href="#contact"
+        class="flex-shrink-0 px-6 py-3 rounded-xl font-bold text-sm text-bg bg-gradient-to-br from-brand-cyan to-brand-electric shadow-btn hover:shadow-btn-hover hover:-translate-y-0.5 transition-all duration-200 cursor-pointer whitespace-nowrap"
+      >
+        <span class="en">Get a free audit →</span><span class="es">Auditoría gratuita →</span>
+      </a>
+    </div>
+  </div>
+</section>

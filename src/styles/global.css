@@ -1,0 +1,226 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Theme tokens ─────────────────────────────────────────────────── */
+:root {
+  --color-bg: #040d18;
+  --color-bg-2: #071020;
+  --color-bg-3: #0a1628;
+  --color-card: #0d1f35;
+  --color-card-2: #0f2540;
+  --color-text: #f0f8ff;
+  --color-muted: #7a9bbf;
+  --color-muted-2: #4a6a8a;
+  --color-nav-bg: rgba(4,13,24,0.88);
+  --color-nav-bg-scrolled: rgba(4,13,24,0.98);
+  --color-border: rgba(0,200,255,0.12);
+  --color-border-soft: rgba(0,200,255,0.06);
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  --color-bg: #f5f9ff;
+  --color-bg-2: #eaf2fd;
+  --color-bg-3: #deeafb;
+  --color-card: #ffffff;
+  --color-card-2: #f0f7ff;
+  --color-text: #0a1628;
+  --color-muted: #4a6a8a;
+  --color-muted-2: #8099b5;
+  --color-nav-bg: rgba(245,249,255,0.92);
+  --color-nav-bg-scrolled: rgba(245,249,255,0.99);
+  --color-border: rgba(0,100,200,0.15);
+  --color-border-soft: rgba(0,100,200,0.08);
+  color-scheme: light;
+}
+
+/* ─── Base ─────────────────────────────────────────────────────────── */
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: 'Outfit', sans-serif;
+    overflow-x: hidden;
+    cursor: default;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--color-bg); }
+  ::-webkit-scrollbar-thumb { background: #00c8ff; border-radius: 2px; }
+}
+
+/* ─── Utilities ────────────────────────────────────────────────────── */
+@layer utilities {
+  .gradient-text {
+    background: linear-gradient(135deg, #00c8ff, #00ff9d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .glass {
+    background: rgba(13, 31, 53, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 200, 255, 0.12);
+  }
+  .section-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: #00c8ff;
+    text-transform: uppercase;
+  }
+  .section-tag::before {
+    content: '';
+    width: 24px;
+    height: 2px;
+    background: #00c8ff;
+    display: inline-block;
+  }
+  .section-tag.center::before { display: none; }
+  .text-primary { color: var(--color-text); }
+}
+
+/* ─── i18n visibility ──────────────────────────────────────────────── */
+html:not([lang="es"]) .es { display: none !important; }
+html[lang="es"] .en { display: none !important; }
+
+/* ─── View Transition ───────────────────────────────────────────────── */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* ─── Hero background title glitch ─────────────────────────────────── */
+.kz-bg-title {
+  position: relative;
+  display: block;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(0,200,255,0.12);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  user-select: none;
+  will-change: transform;
+}
+
+.kz-bg-title .kz-glitch-a,
+.kz-bg-title .kz-glitch-b {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  color: transparent;
+  font: inherit;
+  letter-spacing: inherit;
+  pointer-events: none;
+}
+.kz-bg-title .kz-glitch-a {
+  -webkit-text-stroke: 1px rgba(0,200,255,0.18);
+  animation: kzGlitchA 9s steps(1) infinite;
+}
+.kz-bg-title .kz-glitch-b {
+  -webkit-text-stroke: 1px rgba(0,255,157,0.14);
+  animation: kzGlitchB 9s steps(1) infinite;
+}
+
+@keyframes kzGlitchA {
+  0%, 84%, 100% { clip-path: none; transform: none; opacity: 0; }
+  85%  { clip-path: inset(8% 0 72% 0);  transform: translateX(-10px); opacity: 1; }
+  87%  { clip-path: inset(60% 0 12% 0); transform: translateX(10px);  opacity: 1; }
+  89%  { clip-path: inset(30% 0 45% 0); transform: translateX(-6px);  opacity: 1; }
+  91%  { clip-path: inset(80% 0 4% 0);  transform: translateX(6px);   opacity: 1; }
+  93%  { opacity: 0; }
+}
+@keyframes kzGlitchB {
+  0%, 86%, 100% { clip-path: none; transform: none; opacity: 0; }
+  87%  { clip-path: inset(45% 0 30% 0); transform: translateX(12px);  opacity: 1; }
+  89%  { clip-path: inset(15% 0 65% 0); transform: translateX(-8px);  opacity: 1; }
+  91%  { clip-path: inset(70% 0 8% 0);  transform: translateX(4px);   opacity: 1; }
+  93%  { opacity: 0; }
+}
+
+/* Scan line */
+.kz-scan {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.kz-scan::after {
+  content: '';
+  position: absolute;
+  left: -100%;
+  top: 0;
+  bottom: 0;
+  width: 60%;
+  background: linear-gradient(90deg, transparent, rgba(0,200,255,0.06) 40%, rgba(0,200,255,0.12) 50%, rgba(0,200,255,0.06) 60%, transparent);
+  animation: kzScan 5s ease-in-out infinite;
+  animation-delay: 3s;
+}
+@keyframes kzScan {
+  0%   { left: -60%; }
+  100% { left: 150%; }
+}
+
+/* ─── Performance: content-visibility for off-screen sections ───────── */
+#services, #why, #process, #reviews, #pricing {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 700px;
+}
+
+/* ─── Light mode specific overrides ────────────────────────────────── */
+[data-theme="light"] .glass {
+  background: rgba(255,255,255,0.85);
+  border-color: rgba(0,100,200,0.12);
+}
+[data-theme="light"] .kz-bg-title {
+  -webkit-text-stroke: 1px rgba(0,100,200,0.07);
+}
+[data-theme="light"] .kz-bg-title .kz-glitch-a {
+  -webkit-text-stroke: 1px rgba(0,100,200,0.10);
+}
+[data-theme="light"] .kz-bg-title .kz-glitch-b {
+  -webkit-text-stroke: 1px rgba(0,150,100,0.08);
+}
+
+/* ─── Hero title cursor blink (added by GSAP after chars finish) ─── */
+.kz-cursor-blink {
+  animation: kzCursorBlink 0.65s step-end infinite;
+}
+@keyframes kzCursorBlink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+
+/* GSAP will-change hints */
+.gsap-target { will-change: transform, opacity; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .kz-scan::after { display: none; }
+}

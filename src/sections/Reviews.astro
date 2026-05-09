@@ -1,0 +1,148 @@
+---
+const reviews = [
+  {
+    stars: 5,
+    text: "Kizercode rebuilt our entire invoicing system from scratch. What used to take our team 3 days every month now runs automatically overnight. The ROI was immediate.",
+    author: "María Fernanda L.",
+    role: "Operations Director",
+    company: "Comercial Los Andes",
+    initial: "M",
+    color: "#00c8ff",
+  },
+  {
+    stars: 5,
+    text: "Their team understood our bilingual requirements from day one. The mobile app they built has a 4.8-star rating on both app stores. Exceptional work.",
+    author: "Roberto A.",
+    role: "CTO",
+    company: "TeleHN Group",
+    initial: "R",
+    color: "#00ff9d",
+  },
+  {
+    stars: 5,
+    text: "We hired three other agencies before finding Kizercode. They delivered in 10 weeks what others couldn't do in a year. Communication was outstanding throughout.",
+    author: "Alejandra V.",
+    role: "CEO",
+    company: "Fintech Centroamerica",
+    initial: "A",
+    color: "#ff6b35",
+  },
+  {
+    stars: 5,
+    text: "Our SAR/SAT integrations work flawlessly. The billing platform processes over 2,000 invoices daily without a single issue. Truly enterprise-grade software.",
+    author: "Jorge M.",
+    role: "Finance Manager",
+    company: "Distribuidora Nacional",
+    initial: "J",
+    color: "#c8a0ff",
+  },
+  {
+    stars: 5,
+    text: "The AI automation they built reduced our document processing time by 85%. Our team can now focus on growth instead of data entry. Transformative work.",
+    author: "Sofía R.",
+    role: "VP of Technology",
+    company: "Grupo Agroindustrial HN",
+    initial: "S",
+    color: "#00c8ff",
+  },
+];
+
+const doubled = [...reviews, ...reviews];
+---
+
+<section id="reviews" class="py-28 bg-bg overflow-hidden">
+  <div class="px-6 md:px-[60px] max-w-[1200px] mx-auto mb-14">
+    <div class="text-center" data-gsap="fade-up">
+      <span class="section-tag center mb-5">
+        <span class="en">Client Reviews</span><span class="es">Reseñas de Clientes</span>
+      </span>
+      <h2 class="text-4xl md:text-5xl font-black tracking-tight mt-4 mb-5">
+        <span class="en">Trusted by enterprises<br /><span class="gradient-text">across Honduras.</span></span>
+        <span class="es">La confianza de empresas<br /><span class="gradient-text">en toda Honduras.</span></span>
+      </h2>
+      <p class="text-muted text-lg max-w-[500px] mx-auto leading-relaxed">
+        <span class="en">Don't take our word for it — here's what our clients say after going live.</span>
+        <span class="es">No lo decimos nosotros — esto es lo que dicen nuestros clientes tras el lanzamiento.</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- Carousel -->
+  <div class="relative overflow-hidden">
+    <!-- Fade masks -->
+    <div
+      class="absolute left-0 top-0 bottom-0 w-32 z-10 pointer-events-none"
+      style="background: linear-gradient(90deg, var(--color-bg), transparent);"
+    ></div>
+    <div
+      class="absolute right-0 top-0 bottom-0 w-32 z-10 pointer-events-none"
+      style="background: linear-gradient(-90deg, var(--color-bg), transparent);"
+    ></div>
+
+    <div class="flex gap-6 animate-scroll-left-slow hover:[animation-play-state:paused] w-max px-6">
+      {doubled.map((review) => (
+        <div
+          class="w-[380px] flex-shrink-0 rounded-2xl p-7 border border-border-soft relative overflow-hidden group"
+          style="background: var(--color-card);"
+        >
+          <!-- Glow -->
+          <div
+            class="absolute top-0 left-0 right-0 h-[1px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            style={`background: linear-gradient(90deg, transparent, ${review.color}50, transparent);`}
+          ></div>
+
+          <!-- Stars -->
+          <div class="flex gap-1 mb-5">
+            {Array.from({ length: review.stars }).map(() => (
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="#ffbd2e">
+                <path d="M8 1.5l1.9 3.8 4.2.6-3 3 .7 4.2L8 11l-3.8 2.1.7-4.2-3-3 4.2-.6z"/>
+              </svg>
+            ))}
+          </div>
+
+          <!-- Review text -->
+          <p class="text-primary text-sm leading-relaxed mb-6 opacity-90">
+            "{review.text}"
+          </p>
+
+          <!-- Author -->
+          <div class="flex items-center gap-3">
+            <div
+              class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0"
+              style={`background: ${review.color}18; border: 1px solid ${review.color}30; color: ${review.color};`}
+            >
+              {review.initial}
+            </div>
+            <div>
+              <p class="font-bold text-primary text-sm">{review.author}</p>
+              <p class="text-muted text-xs">{review.role} &bull; {review.company}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Stats bar -->
+  <div class="px-6 md:px-[60px] max-w-[1200px] mx-auto mt-14">
+    <div
+      class="rounded-2xl p-8 grid grid-cols-2 md:grid-cols-4 gap-8 border border-border-soft"
+      style="background: var(--color-card);"
+      data-gsap="fade-up"
+    >
+      {[
+        { value: '5.0', label: 'Average rating', suffix: '/5' },
+        { value: '50+', label: 'Happy clients', suffix: '' },
+        { value: '100', label: 'Recommend us', suffix: '%' },
+        { value: '48h', label: 'Avg. first response', suffix: '' },
+      ].map((stat) => (
+        <div class="text-center">
+          <div class="text-3xl font-black gradient-text mb-1">
+            {stat.value}<span class="text-muted text-lg font-normal">{stat.suffix}</span>
+          </div>
+          <p class="text-muted text-sm">{stat.label}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,47 @@
+---
+import CodeNestHero from '@/components/CodeNestHero';
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="view-transition" content="same-origin" />
+  <title>CodeNest — Launch Your Coding Career</title>
+  <meta name="description" content="Master in-demand coding skills with hands-on projects and mentorship from industry professionals. Build a portfolio that gets you hired." />
+
+  <!-- Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- Fonts: Inter + Plus Jakarta Sans + Instrument Serif italic -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800&family=Instrument+Serif:ital@1&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    /* Reset */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; background: #070b0a; overflow-x: hidden; }
+
+    /* Responsive padding helpers — Tailwind !px-* doesn't work
+       well on elements with inline styles, so we handle it here */
+    @media (max-width: 640px) {
+      .cn-hero-padding { padding-left: 20px !important; padding-right: 20px !important; }
+    }
+    @media (min-width: 641px) and (max-width: 768px) {
+      .cn-hero-padding { padding-left: 32px !important; padding-right: 32px !important; }
+    }
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .cn-hero-padding { padding-left: 64px !important; padding-right: 64px !important; }
+    }
+    @media (min-width: 1025px) {
+      .cn-hero-padding { padding-left: 96px !important; padding-right: 96px !important; }
+    }
+  </style>
+</head>
+<body>
+  <CodeNestHero client:only="react" />
+</body>
+</html>

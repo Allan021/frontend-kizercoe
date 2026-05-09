@@ -1,0 +1,107 @@
+---
+import ContactForm from '@/components/ContactForm';
+---
+
+<section id="contact" class="py-24 px-5 md:px-[60px] bg-bg relative overflow-hidden">
+  <!-- Background gradient blobs -->
+  <div
+    class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] pointer-events-none"
+    style="background: radial-gradient(ellipse at center top, rgba(0,200,255,0.07) 0%, transparent 70%);"
+  ></div>
+  <div
+    class="absolute bottom-0 left-0 w-[500px] h-[300px] pointer-events-none"
+    style="background: radial-gradient(ellipse at bottom left, rgba(0,255,157,0.05) 0%, transparent 70%);"
+  ></div>
+
+  <div class="max-w-[1200px] mx-auto relative z-10">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+
+      <!-- Left: Copy -->
+      <div>
+        <span class="section-tag mb-5" data-gsap="fade-up">
+          <span class="en">Get In Touch</span><span class="es">Contáctanos</span>
+        </span>
+        <h2 class="text-4xl md:text-5xl font-black tracking-tight mt-4 mb-6" data-gsap="fade-up">
+          <span class="en">Let's build your<br /><span class="gradient-text">digital future.</span></span>
+          <span class="es">Construyamos tu<br /><span class="gradient-text">futuro digital.</span></span>
+        </h2>
+        <p class="text-muted text-lg leading-relaxed mb-8 max-w-[480px]" data-gsap="fade-up">
+          <span class="en">Tell us what you're building. We'll get back to you within 24 hours with a tailored plan — no generic proposals, no pressure.</span>
+          <span class="es">Cuéntanos qué estás construyendo. Te respondemos en 24 horas con un plan personalizado — sin propuestas genéricas, sin presión.</span>
+        </p>
+
+        <!-- Contact details -->
+        <div class="space-y-4" data-gsap="stagger">
+          <div class="flex items-center gap-4" data-gsap-child>
+            <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style="background: rgba(0,200,255,0.1); border: 1px solid rgba(0,200,255,0.2);">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style="color: #00c8ff;">
+                <path d="M3 3h12v12a2 2 0 01-2 2H5a2 2 0 01-2-2V3z" stroke="currentColor" stroke-width="1.4" fill="none"/>
+                <path d="M3 7l6 4 6-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-[11px] text-muted font-mono uppercase tracking-widest mb-0.5">Email</p>
+              <a href="mailto:hello@kizercode.com" class="text-primary font-semibold hover:text-brand-cyan transition-colors duration-200 cursor-pointer">
+                hello@kizercode.com
+              </a>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4" data-gsap-child>
+            <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style="background: rgba(0,255,157,0.08); border: 1px solid rgba(0,255,157,0.15);">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style="color: #00ff9d;">
+                <path d="M9 0.75C4.168 0.75 0.25 4.668 0.25 9.5c0 1.572.41 3.05 1.13 4.332L0.25 17.25l3.464-1.117A8.696 8.696 0 009 17.25c4.832 0 8.75-3.918 8.75-8.75S13.832.75 9 .75zm0 15.96a7.16 7.16 0 01-3.664-1.007l-.262-.155-2.72.715.727-2.65-.17-.272A7.16 7.16 0 011.79 9.5C1.79 5.518 5.018 2.29 9 2.29c3.982 0 7.21 3.228 7.21 7.21S12.982 16.71 9 16.71z" fill="currentColor" opacity="0.8"/>
+                <path d="M12.68 10.48c-.198-.1-1.17-.577-1.352-.643-.181-.066-.313-.099-.446.1-.131.198-.51.643-.625.773-.115.132-.231.148-.429.05-.198-.1-.836-.308-1.592-.982-.588-.524-.985-1.172-1.1-1.37-.116-.198-.012-.305.086-.403.089-.088.198-.231.297-.346.1-.116.132-.199.198-.331.066-.132.033-.247-.017-.346-.05-.099-.445-1.074-.61-1.47-.16-.387-.325-.333-.446-.34-.114-.006-.247-.007-.379-.007-.132 0-.346.05-.527.248-.18.197-.693.676-.693 1.65 0 .974.71 1.915.808 2.047.099.132 1.397 2.13 3.382 2.99.472.204.84.325 1.128.416.474.15.905.129 1.246.079.38-.057 1.17-.479 1.336-.941.165-.462.165-.858.116-.941-.05-.083-.181-.132-.38-.231z" fill="currentColor"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-[11px] text-muted font-mono uppercase tracking-widest mb-0.5">WhatsApp</p>
+              <a href="https://wa.me/50498622160" target="_blank" rel="noopener noreferrer" class="text-primary font-semibold hover:text-brand-electric transition-colors duration-200 cursor-pointer">
+                +504 9862-2160
+              </a>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4" data-gsap-child>
+            <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style="background: rgba(0,200,255,0.1); border: 1px solid rgba(0,200,255,0.2);">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style="color: #00c8ff;">
+                <path d="M9 1.5C5.5 1.5 2.5 4.5 2.5 8c0 4.5 6.5 10.5 6.5 10.5S15.5 12.5 15.5 8c0-3.5-3-6.5-6.5-6.5z" stroke="currentColor" stroke-width="1.4" fill="none"/>
+                <circle cx="9" cy="8" r="2" stroke="currentColor" stroke-width="1.4" fill="none"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-[11px] text-muted font-mono uppercase tracking-widest mb-0.5">
+                <span class="en">Location</span><span class="es">Ubicación</span>
+              </p>
+              <p class="text-primary font-semibold">El Progreso, Yoro, Honduras</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Availability badge -->
+        <div class="mt-8 inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-brand-electric/20" style="background: rgba(0,255,157,0.05);" data-gsap="fade-up">
+          <span class="w-2 h-2 rounded-full bg-brand-electric animate-pulse-dot"></span>
+          <span class="text-brand-electric text-sm font-semibold">
+            <span class="en">Currently accepting new projects</span><span class="es">Actualmente aceptando nuevos proyectos</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Right: Form -->
+      <div
+        class="rounded-2xl p-7 border border-border-soft"
+        style="background: var(--color-card);"
+        data-gsap="fade-up"
+      >
+        <h3 class="text-xl font-bold text-primary mb-1.5">
+          <span class="en">Send us a message</span><span class="es">Envíanos un mensaje</span>
+        </h3>
+        <p class="text-muted text-sm mb-6">
+          <span class="en">We'll respond with a personalized plan within 24 hours.</span>
+          <span class="es">Respondemos con un plan personalizado en 24 horas.</span>
+        </p>
+        <ContactForm client:load />
+      </div>
+    </div>
+  </div>
+</section>
