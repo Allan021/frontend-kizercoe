@@ -11,7 +11,7 @@
   --color-card-2: #0f2540;
   --color-text: #f0f8ff;
   --color-muted: #7a9bbf;
-  --color-muted-2: #4a6a8a;
+  --color-muted-2: #6b8299;
   --color-nav-bg: rgba(4,13,24,0.88);
   --color-nav-bg-scrolled: rgba(4,13,24,0.98);
   --color-border: rgba(0,200,255,0.12);
@@ -27,7 +27,7 @@
   --color-card-2: #f0f7ff;
   --color-text: #0a1628;
   --color-muted: #4a6a8a;
-  --color-muted-2: #8099b5;
+  --color-muted-2: #516a80;
   --color-nav-bg: rgba(245,249,255,0.92);
   --color-nav-bg-scrolled: rgba(245,249,255,0.99);
   --color-border: rgba(0,100,200,0.15);
@@ -186,6 +186,13 @@ html[lang="es"] .en { display: none !important; }
   content-visibility: auto;
   contain-intrinsic-size: 0 700px;
 }
+
+/* ─── Light mode contrast corrections ──────────────────────────────── */
+[data-theme="light"] .text-brand-cyan  { color: #005f99; }
+[data-theme="light"] .text-brand-electric { color: #00763e; }
+[data-theme="light"] .metric-num { filter: brightness(0.5); }
+[data-theme="light"] .process-dur-badge { filter: brightness(0.5) saturate(0.9); }
+[data-theme="light"] .why-num-box { filter: brightness(0.55); }
 
 /* ─── Light mode specific overrides ────────────────────────────────── */
 [data-theme="light"] .glass {

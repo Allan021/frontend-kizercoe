@@ -84,6 +84,7 @@ const steps = [
           <!-- Step number + icon row -->
           <div class="flex items-center justify-between mb-5">
             <span
+              aria-hidden="true"
               class="font-mono text-[42px] font-black leading-none select-none"
               style={`color: ${step.color}20;`}
             >
@@ -141,7 +142,7 @@ const steps = [
 
           <!-- Duration badge -->
           <div
-            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-semibold"
+            class="process-dur-badge inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-semibold"
             style={`background: ${step.color}10; color: ${step.color}; border: 1px solid ${step.color}20;`}
           >
             <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
