@@ -17,7 +17,7 @@ const msgs = {
   rel="noopener noreferrer"
   aria-label="Contact on WhatsApp"
   class="fixed right-4 md:right-6 z-40 flex items-center group"
-  style="bottom: 88px;"
+  style="bottom: 24px;"
 >
   <!-- Hover tooltip (desktop) -->
   <span
@@ -54,9 +54,9 @@ const msgs = {
     100% { transform: scale(1.5); opacity: 0; }
   }
 
-  /* On mobile, sit above bottom nav */
+  /* On mobile, consistent positioning */
   @media (max-width: 767px) {
-    #wa-fab { bottom: 88px !important; }
+    #wa-fab { bottom: 20px !important; }
   }
   @media (min-width: 768px) {
     #wa-fab { bottom: 32px !important; }

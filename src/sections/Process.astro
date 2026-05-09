@@ -3,48 +3,66 @@ const steps = [
   {
     number: '01',
     title: 'Discovery Call',
-    description: 'We learn about your business, current pain points, and digital goals. No templates — just a real conversation about what matters to you.',
-    duration: '1–2 days',
+    title_es: 'Llamada de Descubrimiento',
+    description: 'We learn your goals, brand identity, and pain points in a focused call. We move fast — no weeks of back-and-forth.',
+    description_es: 'Conocemos tus objetivos, identidad de marca y puntos de dolor en una llamada enfocada. Nos movemos rápido — sin semanas de ida y vuelta.',
+    duration: '1 day',
+    duration_es: '1 día',
     color: '#00c8ff',
     icon: 'phone',
   },
   {
     number: '02',
     title: 'Proposal & Scope',
-    description: 'You receive a detailed technical proposal: architecture, timelines, milestones, and transparent pricing. No hidden costs.',
-    duration: '3–5 days',
+    title_es: 'Propuesta y Alcance',
+    description: 'A clear technical proposal with architecture, milestones, and transparent pricing — delivered in days, not weeks.',
+    description_es: 'Una propuesta técnica clara con arquitectura, hitos y precios transparentes — entregada en días, no semanas.',
+    duration: '1–2 days',
+    duration_es: '1–2 días',
     color: '#00ff9d',
     icon: 'doc',
   },
   {
     number: '03',
     title: 'Design & UX',
-    description: 'Our designers craft wireframes and high-fidelity prototypes in Figma. You review and approve before a single line of code is written.',
-    duration: '1–3 weeks',
+    title_es: 'Diseño y UX',
+    description: 'High-fidelity prototypes aligned with your brand identity. You approve every screen before we write a single line of code.',
+    description_es: 'Prototipos de alta fidelidad alineados con tu identidad de marca. Apruebas cada pantalla antes de que escribamos una sola línea de código.',
+    duration: '3–7 days',
+    duration_es: '3–7 días',
     color: '#ff6b35',
     icon: 'design',
   },
   {
     number: '04',
     title: 'Development',
-    description: 'Agile sprints with weekly demos. Your team gets real-time visibility into progress via a shared project board and Slack channel.',
-    duration: '4–16 weeks',
+    title_es: 'Desarrollo',
+    description: 'Secure, scalable code built in agile sprints with weekly demos. Production-grade from day one — no shortcuts.',
+    description_es: 'Código seguro y escalable construido en sprints ágiles con demos semanales. Calidad de producción desde el día uno — sin atajos.',
+    duration: '2–8 weeks',
+    duration_es: '2–8 semanas',
     color: '#c8a0ff',
     icon: 'code',
   },
   {
     number: '05',
     title: 'Testing & QA',
-    description: 'Comprehensive automated and manual testing. Load testing, security audits, cross-device checks — nothing ships without passing QA.',
-    duration: '1–2 weeks',
+    title_es: 'Pruebas y QA',
+    description: 'Security audits, load testing, and cross-device checks. Your system ships battle-tested and enterprise-ready.',
+    description_es: 'Auditorías de seguridad, pruebas de carga y verificación multi-dispositivo. Tu sistema se lanza probado y listo para escalar.',
+    duration: '3–5 days',
+    duration_es: '3–5 días',
     color: '#00ff9d',
     icon: 'check',
   },
   {
     number: '06',
     title: 'Launch + Support',
-    description: 'Smooth deployment with zero-downtime strategy. After launch, we provide ongoing monitoring, updates, and feature enhancements.',
+    title_es: 'Lanzamiento + Soporte',
+    description: 'Zero-downtime deployment with ongoing monitoring. Your brand-aligned platform evolves with your business.',
+    description_es: 'Despliegue sin interrupciones con monitoreo continuo. Tu plataforma alineada con tu marca evoluciona con tu negocio.',
     duration: 'Ongoing',
+    duration_es: 'Continuo',
     color: '#00c8ff',
     icon: 'rocket',
   },
@@ -59,12 +77,12 @@ const steps = [
         <span class="en">How We Work</span><span class="es">Cómo Trabajamos</span>
       </span>
       <h2 class="text-4xl md:text-5xl font-black tracking-tight mt-4 mb-5">
-        <span class="en">From idea to launch —<br /><span class="gradient-text">a proven process.</span></span>
-        <span class="es">De la idea al lanzamiento —<br /><span class="gradient-text">un proceso probado.</span></span>
+        <span class="en">Fast delivery —<br /><span class="gradient-text">built to last.</span></span>
+        <span class="es">Entrega rápida —<br /><span class="gradient-text">construido para durar.</span></span>
       </h2>
-      <p class="text-muted text-lg max-w-[520px] mx-auto leading-relaxed">
-        <span class="en">Six structured phases that eliminate surprises, keep you informed, and deliver results on time.</span>
-        <span class="es">Seis fases estructuradas que eliminan sorpresas, te mantienen informado y entregan resultados a tiempo.</span>
+      <p class="text-muted text-lg max-w-[560px] mx-auto leading-relaxed">
+        <span class="en">We move at startup speed without compromising security, scalability, or your brand identity. Six lean phases — zero surprises.</span>
+        <span class="es">Nos movemos a velocidad de startup sin comprometer la seguridad, escalabilidad, ni tu identidad de marca. Seis fases ágiles — cero sorpresas.</span>
       </p>
     </div>
 
@@ -136,9 +154,11 @@ const steps = [
 
           <!-- Content -->
           <h3 class="text-lg font-bold text-primary mb-3 group-hover:text-brand-cyan transition-colors duration-200">
-            {step.title}
+            <span class="en">{step.title}</span><span class="es">{step.title_es}</span>
           </h3>
-          <p class="text-muted text-sm leading-relaxed mb-4">{step.description}</p>
+          <p class="text-muted text-sm leading-relaxed mb-4">
+            <span class="en">{step.description}</span><span class="es">{step.description_es}</span>
+          </p>
 
           <!-- Duration badge -->
           <div
@@ -149,7 +169,7 @@ const steps = [
               <circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/>
               <path d="M5 2.5V5l1.5 1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
             </svg>
-            {step.duration}
+            <span class="en">{step.duration}</span><span class="es">{step.duration_es}</span>
           </div>
 
           <!-- Arrow connector (not on last in each row) -->
