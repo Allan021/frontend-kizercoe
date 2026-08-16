@@ -5,6 +5,23 @@ export interface ContactFormData {
   service: string;
   budget?: string;
   message: string;
+  /** Slug del proyecto desde el que escribieron, si vino de uno. */
+  projectSlug?: string;
+}
+
+export interface Project {
+  id?: string;
+  slug: string;
+  title: string;
+  summary: string;
+  body: string;
+  client: string | null;
+  period: string | null;
+  imageUrl: string | null;
+  liveUrl: string | null;
+  tags: string[];
+  published: boolean;
+  position: number;
 }
 
 export interface ContactResponse {

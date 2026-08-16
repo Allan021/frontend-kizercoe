@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -27,6 +27,16 @@ const errorClass = 'text-[#ff6b6b] text-xs mt-1.5 flex items-center gap-1.5';
 export default function ContactForm() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
+  // De qué proyecto vino, si llegó desde una tarjeta del portafolio.
+  const [projectSlug, setProjectSlug] = useState<string | null>(null);
+
+  useEffect(() => {
+    // El enlace es /#contact?proyecto=slug: el parámetro viaja en el hash, así
+    // que no está en location.search sino después del "?" del fragmento.
+    const hash = window.location.hash;
+    const query = hash.includes('?') ? hash.slice(hash.indexOf('?')) : window.location.search;
+    setProjectSlug(new URLSearchParams(query).get('proyecto'));
+  }, []);
 
   const {
     register,
@@ -48,6 +58,7 @@ export default function ContactForm() {
         service: data.service,
         budget: data.budget,
         message: data.message,
+        ...(projectSlug ? { projectSlug } : {}),
       };
       await submitContact(payload);
       setStatus('success');

@@ -1,0 +1,13 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Panel from '@/components/Panel.tsx';
+---
+
+<!-- noindex: el panel no tiene por qué salir en Google. -->
+<Layout title="Panel — Kizercode" description="Administración de Kizercode" noindex>
+  <main class="mx-auto flex min-h-dvh max-w-5xl flex-col justify-center px-6 py-16">
+    <!-- client:only porque todo depende del token del navegador: no hay nada
+         que renderizar en el servidor. -->
+    <Panel client:only="react" />
+  </main>
+</Layout>

@@ -1,0 +1,21 @@
+---
+import ProjectsGrid from '@/components/Projects.tsx';
+---
+
+<section id="proyectos" class="py-24 sm:py-32">
+  <div class="mx-auto max-w-6xl px-6">
+    <div class="mb-12 max-w-2xl">
+      <p class="section-tag">// trabajo</p>
+      <h2 class="mt-4 text-3xl font-black tracking-tight sm:text-4xl">
+        Lo que hemos <span class="gradient-text">construido</span>
+      </h2>
+      <p class="mt-4 text-base" style="color: var(--color-muted)">
+        Sistemas que hoy están corriendo en negocios reales de Honduras.
+      </p>
+    </div>
+
+    <!-- client:visible: no se pide nada a la API hasta que la sección entra
+         en pantalla. Así el portafolio no pesa en la carga inicial. -->
+    <ProjectsGrid client:visible />
+  </div>
+</section>
