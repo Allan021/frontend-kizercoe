@@ -1,0 +1,21 @@
+{
+  "name": "Kizercode",
+  "short_name": "Kizercode",
+  "description": "Custom software, web & mobile apps, branding and digital marketing for enterprises in Honduras and Latin America.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#0a0a0a",
+  "theme_color": "#00c8ff",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

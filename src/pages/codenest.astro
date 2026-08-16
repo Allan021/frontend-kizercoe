@@ -1,5 +1,11 @@
 ---
 import CodeNestHero from '@/components/CodeNestHero';
+
+const title = 'CodeNest — Launch Your Coding Career';
+const description = 'Master in-demand coding skills with hands-on projects and mentorship from industry professionals. Build a portfolio that gets you hired.';
+const siteURL = 'https://kizercode.com';
+const ogImage = `${siteURL}/codenest-og.png`;
+const canonicalURL = `${siteURL}/codenest`;
 ---
 <!doctype html>
 <html lang="en">
@@ -7,8 +13,67 @@ import CodeNestHero from '@/components/CodeNestHero';
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="view-transition" content="same-origin" />
-  <title>CodeNest — Launch Your Coding Career</title>
-  <meta name="description" content="Master in-demand coding skills with hands-on projects and mentorship from industry professionals. Build a portfolio that gets you hired." />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="keywords" content="coding bootcamp Honduras, learn programming, web development course, coding career, software developer, mentorship, portfolio" />
+  <meta name="author" content="Kizercode" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#070b0a" />
+  <link rel="canonical" href={canonicalURL} />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="CodeNest — Coding bootcamp by Kizercode" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:locale:alternate" content="es_HN" />
+  <meta property="og:site_name" content="Kizercode" />
+
+  <!-- Twitter / X Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@kizercode" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
+  <meta name="twitter:image:alt" content="CodeNest — Coding bootcamp by Kizercode" />
+
+  <!-- hreflang -->
+  <link rel="alternate" hreflang="en" href={canonicalURL} />
+  <link rel="alternate" hreflang="es" href={canonicalURL} />
+  <link rel="alternate" hreflang="x-default" href={canonicalURL} />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+
+  <!-- Schema.org -->
+  <script is:inline type="application/ld+json">{JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Course",
+    "name": "CodeNest — Coding Bootcamp",
+    "description": description,
+    "url": canonicalURL,
+    "image": ogImage,
+    "provider": {
+      "@type": "Organization",
+      "@id": `${siteURL}/#business`,
+      "name": "Kizercode",
+      "url": siteURL
+    },
+    "inLanguage": ["en", "es"],
+    "offers": {
+      "@type": "Offer",
+      "availability": "https://schema.org/InStock"
+    }
+  })}</script>
 
   <!-- Preconnect -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -42,6 +107,6 @@ import CodeNestHero from '@/components/CodeNestHero';
   </style>
 </head>
 <body>
-  <CodeNestHero client:only="react" />
+  <CodeNestHero client:load />
 </body>
 </html>

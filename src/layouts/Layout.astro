@@ -5,15 +5,24 @@ interface Props {
   title?: string;
   description?: string;
   image?: string;
+  imageAlt?: string;
+  keywords?: string;
+  locale?: string;
+  type?: 'website' | 'article';
 }
 
 const {
   title = 'Kizercode — Brand · Software · Growth | Honduras',
   description = 'Custom software, web & mobile apps, branding, digital marketing and billing systems for enterprises in Honduras and Latin America.',
   image = '/og-image.png',
+  imageAlt = 'Kizercode — Software & Branding Agency in Honduras',
+  keywords = 'software development Honduras, web apps, mobile apps, branding, marketing digital, billing systems, digital transformation, enterprise software, El Progreso Yoro',
+  locale = 'en_US',
+  type = 'website',
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageURL = new URL(image, Astro.site);
 ---
 <!doctype html>
 <html lang="en" data-theme="dark" class="scroll-smooth">
@@ -23,24 +32,34 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <meta name="view-transition" content="same-origin" />
   <title>{title}</title>
   <meta name="description" content={description} />
-  <meta name="keywords" content="software development Honduras, web apps, mobile apps, branding, marketing digital, billing systems, digital transformation, enterprise software, El Progreso Yoro" />
+  <meta name="keywords" content={keywords} />
   <meta name="author" content="Kizercode" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#0a0a0a" />
   <link rel="canonical" href={canonicalURL} />
 
   <!-- Open Graph -->
-  <meta property="og:type" content="website" />
+  <meta property="og:type" content={type} />
   <meta property="og:url" content={canonicalURL} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
-  <meta property="og:image" content={new URL(image, Astro.site)} />
-  <meta property="og:locale" content="en_US" />
+  <meta property="og:image" content={ogImageURL} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content={imageAlt} />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:locale" content={locale} />
+  <meta property="og:locale:alternate" content="es_HN" />
   <meta property="og:site_name" content="Kizercode" />
 
-  <!-- Twitter Card -->
+  <!-- Twitter / X Card -->
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@kizercode" />
+  <meta name="twitter:creator" content="@kizercode" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
-  <meta name="twitter:image" content={new URL(image, Astro.site)} />
+  <meta name="twitter:image" content={ogImageURL} />
+  <meta name="twitter:image:alt" content={imageAlt} />
 
   <!-- Fonts — non-render-blocking: preload + swap -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -60,8 +79,16 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
   </noscript>
 
+  <!-- hreflang — bilingual EN/ES -->
+  <link rel="alternate" hreflang="en" href={canonicalURL} />
+  <link rel="alternate" hreflang="es" href={canonicalURL} />
+  <link rel="alternate" hreflang="x-default" href={canonicalURL} />
+
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
 
   <!-- Schema.org -->
   <script is:inline type="application/ld+json" set:html={JSON.stringify({
@@ -73,7 +100,20 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         "name": "Kizercode",
         "description": description,
         "url": "https://kizercode.com",
-        "logo": "https://kizercode.com/og-image.png",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://kizercode.com/og-image.png",
+          "width": 1200,
+          "height": 630
+        },
+        "image": "https://kizercode.com/og-image.png",
+        "priceRange": "$$",
+        "areaServed": [
+          { "@type": "Country", "name": "Honduras" },
+          { "@type": "Country", "name": "Guatemala" },
+          { "@type": "Country", "name": "El Salvador" },
+          { "@type": "Country", "name": "Costa Rica" }
+        ],
         "telephone": "+50498622160",
         "address": {
           "@type": "PostalAddress",

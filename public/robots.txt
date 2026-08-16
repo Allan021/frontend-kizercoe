@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kizercode.com/sitemap-index.xml
