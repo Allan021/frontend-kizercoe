@@ -1,18 +1,12 @@
 ---
-const stats = [
-  { num: '50+', label_en: 'Projects Delivered', label_es: 'Proyectos Entregados', count: '50' },
-  { num: '100%', label_en: 'Client Satisfaction', label_es: 'Satisfacción del Cliente' },
-  { num: '5+', label_en: 'Years Experience', label_es: 'Años de Experiencia', count: '5' },
-  { num: '24h', label_en: 'Response Time', label_es: 'Tiempo de Respuesta' },
-];
-
+// Sin emojis: los rubros se leen solos y el emoji los hacía ver de plantilla.
 const industries = [
-  { icon: '🏦', en: 'Banking', es: 'Banca' },
-  { icon: '🛒', en: 'Retail', es: 'Retail' },
-  { icon: '🏥', en: 'Healthcare', es: 'Salud' },
-  { icon: '🚚', en: 'Logistics', es: 'Logística' },
-  { icon: '🏛️', en: 'Government', es: 'Gobierno' },
-  { icon: '📡', en: 'Telecom', es: 'Telecom' },
+  { en: 'Banking', es: 'Banca' },
+  { en: 'Retail', es: 'Retail' },
+  { en: 'Healthcare', es: 'Salud' },
+  { en: 'Logistics', es: 'Logística' },
+  { en: 'Government', es: 'Gobierno' },
+  { en: 'Telecom', es: 'Telecom' },
 ];
 
 // Per-char interpolated color: cyan #00c8ff → green #00ff9d
@@ -97,19 +91,10 @@ const chars = 'Kizercode'.split('').map((c, i) => {
         </a>
       </div>
 
-      <!-- Stats -->
-      <div class="flex flex-wrap gap-6 pt-6 border-t border-border-soft mb-6">
-        {stats.map((s) => (
-          <div class="hero-stat opacity-0">
-            <div class="font-black gradient-text leading-none" style="font-size: clamp(26px, 3vw, 38px);" data-count={s.count}>
-              {s.num}
-            </div>
-            <div class="text-[11px] mt-1 font-medium tracking-wide" style="color: var(--color-muted-2);">
-              <span class="en">{s.label_en}</span><span class="es">{s.label_es}</span>
-            </div>
-          </div>
-        ))}
-      </div>
+      <!-- Acá iba una tira de cifras inventadas (50+ proyectos, 100% de
+           satisfacción, 5+ años). Se quitó: si alguien preguntaba de dónde
+           salían, no había respuesta. Cuando existan números reales que
+           sostener, vuelven. -->
 
       <!-- Trusted by industries -->
       <div class="opacity-0" id="hero-industries">
@@ -122,7 +107,6 @@ const chars = 'Kizercode'.split('').map((c, i) => {
               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border border-border-soft transition-all duration-200 hover:border-brand-cyan/30 cursor-default"
               style="background: var(--color-card); color: var(--color-muted);"
             >
-              {ind.icon}
               <span class="en">{ind.en}</span><span class="es">{ind.es}</span>
             </span>
           ))}
@@ -165,19 +149,6 @@ const chars = 'Kizercode'.split('').map((c, i) => {
           <div>&#125;<span class="inline-block w-0.5 h-3.5 bg-brand-cyan ml-0.5 align-middle animate-blink"></span></div>
         </div>
 
-        <!-- Metrics strip -->
-        <div class="px-6 pb-5 pt-2 grid grid-cols-3 gap-3">
-          {[
-            { val: '98%', label: 'On-time' },
-            { val: '5★', label: 'Rating' },
-            { val: '∞', label: 'Support' },
-          ].map(m => (
-            <div class="rounded-xl p-3 text-center border border-border-soft" style="background: rgba(0,200,255,0.04);">
-              <div class="font-black text-brand-cyan text-lg leading-none">{m.val}</div>
-              <div class="text-[10px] font-mono mt-1" style="color: var(--color-muted-2);">{m.label}</div>
-            </div>
-          ))}
-        </div>
       </div>
 
       <!-- Floating status badge -->

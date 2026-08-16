@@ -9,6 +9,19 @@ export interface ContactFormData {
   projectSlug?: string;
 }
 
+export interface Testimonial {
+  id?: string;
+  author: string;
+  role: string | null;
+  company: string | null;
+  text: string;
+  rating: number;
+  /** El destacado: sale grande y de primero. */
+  featured: boolean;
+  published: boolean;
+  position: number;
+}
+
 export interface Project {
   id?: string;
   slug: string;

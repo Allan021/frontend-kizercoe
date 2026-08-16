@@ -30,11 +30,37 @@ const whyPoints = [
   },
 ];
 
+/**
+ * Antes acá había cuatro cifras inventadas (98% a tiempo, 50+ proyectos, 5★,
+ * soporte infinito). Se cambiaron por cosas que sí se pueden sostener si un
+ * cliente pregunta: son características de lo que ya está construido, no
+ * estadísticas que nadie midió.
+ */
 const metrics = [
-  { value: '98%', label_en: 'On-time delivery', label_es: 'Entrega a tiempo', color: '#00c8ff' },
-  { value: '50+', label_en: 'Projects shipped', label_es: 'Proyectos entregados', color: '#00ff9d' },
-  { value: '5★', label_en: 'Client rating', label_es: 'Calificación clientes', color: '#ff6b35' },
-  { value: '∞', label_en: 'Post-launch support', label_es: 'Soporte post-lanzamiento', color: '#c8a0ff' },
+  {
+    value: 'Offline',
+    label_en: 'Systems that keep selling without internet',
+    label_es: 'Sistemas que siguen vendiendo sin internet',
+    color: '#00c8ff',
+  },
+  {
+    value: 'SAR',
+    label_en: 'CAI, credit notes, compliant invoicing',
+    label_es: 'CAI, notas de crédito, facturación en regla',
+    color: '#00ff9d',
+  },
+  {
+    value: 'HN',
+    label_en: 'Built here, support in your language',
+    label_es: 'Hecho acá, soporte en tu idioma',
+    color: '#ff6b35',
+  },
+  {
+    value: 'Propio',
+    label_en: 'Our own code — no templates, no third-party licenses',
+    label_es: 'Código propio — sin plantillas ni licencias de terceros',
+    color: '#c8a0ff',
+  },
 ];
 ---
 
@@ -99,7 +125,9 @@ const metrics = [
               class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
               style={`background: radial-gradient(circle at center, ${metric.color}08, transparent 70%);`}
             ></div>
-            <div class="text-[48px] font-black leading-none mb-2 metric-num" style={`color: ${metric.color};`}>
+            <!-- Palabras y no cifras: el tamaño baja para que "Offline" no
+                 desborde la tarjeta como sí entraba un "98%". -->
+            <div class="text-[30px] font-black leading-none mb-3 metric-num" style={`color: ${metric.color};`}>
               {metric.value}
             </div>
             <p class="text-muted text-sm font-medium leading-snug">

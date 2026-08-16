@@ -1,4 +1,4 @@
-import type { ContactFormData, ContactResponse, Project } from '@/types';
+import type { ContactFormData, ContactResponse, Project, Testimonial } from '@/types';
 
 const API_URL = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:3001';
 
@@ -26,6 +26,12 @@ export async function submitContact(data: ContactFormData): Promise<ContactRespo
 /** Los publicados. Es lo que ve cualquiera en el sitio. */
 export function fetchProjects(): Promise<Project[]> {
   return pedir<Project[]>('/v1/projects');
+}
+
+// ── Testimonios ──
+
+export function fetchTestimonials(): Promise<Testimonial[]> {
+  return pedir<Testimonial[]>('/v1/testimonials');
 }
 
 // ── Panel ──
@@ -67,3 +73,11 @@ export const panelSaveProject = (p: Partial<Project>) =>
 
 export const panelDeleteProject = (id: string) =>
   pedir<{ ok: boolean }>(`/v1/panel/projects/${id}`, conToken({ method: 'DELETE' }));
+
+export const panelTestimonials = () => pedir<Testimonial[]>('/v1/panel/testimonials', conToken());
+
+export const panelSaveTestimonial = (t: Partial<Testimonial>) =>
+  pedir<Testimonial>('/v1/panel/testimonials', conToken({ method: 'POST', body: JSON.stringify(t) }));
+
+export const panelDeleteTestimonial = (id: string) =>
+  pedir<{ ok: boolean }>(`/v1/panel/testimonials/${id}`, conToken({ method: 'DELETE' }));
