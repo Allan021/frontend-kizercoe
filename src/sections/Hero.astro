@@ -20,7 +20,18 @@ const garantias = [
   class="relative overflow-hidden pb-20 pt-32 sm:pb-28 sm:pt-40"
   aria-labelledby="hero-title"
 >
-  <!-- Rejilla de fondo. aria-hidden: es decoración, no contenido. -->
+  <!-- Resplandor azul detrás del titular. Es lo que separa el fondo plano de
+       algo con profundidad: una elipse difuminada, no una sombra.
+       `closest-side` hace que el degradado muera justo en el borde del div, así
+       no se ve el corte. aria-hidden porque es decoración pura. -->
+  <div
+    aria-hidden="true"
+    class="kz-resplandor pointer-events-none absolute left-1/2 h-[700px] w-[1100px] -translate-x-1/2"
+    style="top:-380px;background:radial-gradient(closest-side, color-mix(in srgb, var(--color-accent-strong) 28%, transparent), transparent)"
+  >
+  </div>
+
+  <!-- Rejilla, encima del resplandor. -->
   <div
     aria-hidden="true"
     class="pointer-events-none absolute inset-0 opacity-[0.35]"
@@ -31,7 +42,9 @@ const garantias = [
   <div class="relative mx-auto grid max-w-6xl gap-14 px-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
     <!-- ── Columna de texto ── -->
     <div>
-      <p class="kz-eyebrow kz-rise">
+      <!-- Pastilla con el punto que late: dice "estamos abiertos" sin escribirlo. -->
+      <p class="kz-rise kz-pastilla">
+        <span class="kz-latido" aria-hidden="true"></span>
         <span class="en">Software, AI and marketing agency</span>
         <span class="es">Agencia de software, IA y marketing</span>
       </p>

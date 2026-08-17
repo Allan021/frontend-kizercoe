@@ -81,8 +81,12 @@
   }
   .kz-card:hover { border-color: var(--color-accent); }
 
-  /* La tarjeta grande ya nace con el borde de acento. */
-  .kz-card-principal { border-color: var(--color-accent); }
+  /* La tarjeta grande nace con el borde de acento y su anillo, que es lo que
+     la hace verse elevada sobre el fondo. */
+  .kz-card-principal {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 1px rgba(46, 91, 255, 0.25);
+  }
 
   .kz-chip {
     font-size: 13px;
@@ -127,8 +131,46 @@
   .kz-btn-primario {
     background: var(--color-accent-strong);
     color: #fff;
+    /* Anillo de 1px en vez de sombra difusa: sobre fondo casi negro una sombra
+       no se ve, pero el borde luminoso sí despega el botón del fondo. */
+    box-shadow: 0 0 0 1px rgba(91, 140, 255, 0.35);
   }
-  .kz-btn-primario:hover { background: var(--color-accent); }
+  .kz-btn-primario:hover {
+    background: var(--color-accent);
+    box-shadow: 0 0 0 1px rgba(91, 140, 255, 0.55), 0 8px 28px rgba(46, 91, 255, 0.28);
+  }
+
+  /* Pastilla del hero, con el punto que late. */
+  .kz-pastilla {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    height: 32px;
+    padding: 0 14px;
+    border-radius: 999px;
+    border: 1px solid var(--color-border);
+    background: var(--color-card);
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-accent-soft);
+    white-space: nowrap;
+  }
+
+  .kz-latido {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--color-accent);
+    flex-shrink: 0;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .kz-latido { animation: kz-latir 2s ease-in-out infinite; }
+  }
+  @keyframes kz-latir {
+    50% { opacity: 0.35; transform: scale(0.8); }
+  }
 
   .kz-btn-secundario {
     border: 1px solid var(--color-border);
