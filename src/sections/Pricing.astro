@@ -1,208 +1,163 @@
 ---
-import type { PricingPlan } from '@/types';
+import { Icon } from 'astro-icon/components';
 
-const plans: PricingPlan[] = [
+const planes = [
   {
-    name: 'Starter',
-    price: '$750',
-    period: '/month',
-    description: 'For small businesses taking their first digital steps. Solid web presence, brand basics, and light automation.',
-    features: [
-      'Up to 1 web application',
-      'Responsive design (mobile-first)',
-      'Basic brand identity kit',
-      'Standard REST API',
-      'Email support',
-      'Monthly performance report',
-      '1 revision round per sprint',
-      'Basic analytics dashboard',
+    nombre: 'Starter',
+    precio: '$750',
+    en_sub: 'A part-time developer, for a first system',
+    es_sub: 'Un desarrollador medio tiempo, para un primer sistema',
+    en: [
+      'Developer 20 h/week',
+      'Site or system with 3 to 5 screens',
+      'Content admin panel',
+      '1 round of revisions per month',
+      'Support in under 24 h',
     ],
-    cta: 'Get Started',
-    ctaVariant: 'outline',
+    es: [
+      'Desarrollador 20 h/semana',
+      'Sitio o sistema de 3 a 5 pantallas',
+      'Panel de administración de contenido',
+      '1 ronda de revisiones al mes',
+      'Soporte en menos de 24 h',
+    ],
+    en_cta: 'Start',
+    es_cta: 'Empezar',
   },
   {
-    name: 'Growth',
-    price: '$1.9k',
-    period: '/month',
-    description: 'For growing enterprises ready to automate workflows, build brand authority, run digital marketing, and scale operations.',
-    features: [
-      'Up to 3 concurrent projects',
-      'Web + mobile app development',
-      'Full brand identity & guidelines',
-      'Digital marketing campaigns',
-      'Billing & invoicing system',
-      'Payment gateway integration',
-      'AI workflow automation',
-      'Dedicated Slack channel',
-      'Priority support (24h SLA)',
-      'Weekly demo calls',
+    nombre: 'Growth',
+    precio: '$1,900',
+    destacado: true,
+    en_sub: 'A senior developer full time on your project',
+    es_sub: 'Un desarrollador senior a tiempo completo en tu proyecto',
+    en: [
+      'Senior developer 40 h/week',
+      'Custom web or mobile app',
+      'UX/UI design and prototype',
+      'Payments, billing and CRM integrations',
+      '2 rounds of revisions per month',
+      'Priority support in under 4 h',
     ],
-    featured: true,
-    cta: 'Start with Growth',
-    ctaVariant: 'filled',
+    es: [
+      'Desarrollador senior 40 h/semana',
+      'Aplicación web o móvil a la medida',
+      'Diseño UX/UI y prototipo',
+      'Integraciones con pagos, facturación y CRM',
+      '2 rondas de revisiones al mes',
+      'Soporte prioritario en menos de 4 h',
+    ],
+    en_cta: 'Start',
+    es_cta: 'Empezar',
   },
   {
-    name: 'Enterprise',
-    price: '$3.5k',
-    period: '/month',
-    description: 'Full-scale digital transformation. Brand strategy, custom architecture, dedicated team, marketing, and unlimited scope.',
-    features: [
-      'Unlimited projects & scope',
-      'Dedicated engineering team',
-      'Brand strategy & rebranding',
-      'Full marketing stack management',
-      'Custom architecture design',
-      'Full ERP/CRM integration',
-      'AI agents & LLM pipelines',
-      'Security audits & pen testing',
-      'SLA 4h response guarantee',
-      'C-level strategy consulting',
+    nombre: 'Scale',
+    precio: '$3,500',
+    en_sub: 'A full team for platforms with hardware in the field',
+    es_sub: 'Equipo completo para plataformas con equipo en campo',
+    en: [
+      'Developer + designer + QA',
+      'Complete platform, web and mobile',
+      'Hardware supply and on-site installation',
+      'Data migration and training',
+      'Unlimited revisions',
+      'Same-day support and weekly calls',
     ],
-    cta: 'Contact Sales',
-    ctaVariant: 'outline',
+    es: [
+      'Desarrollador + diseñador + QA',
+      'Plataforma completa, web y móvil',
+      'Suministro de equipo e instalación en sitio',
+      'Migración de datos y capacitación',
+      'Revisiones ilimitadas',
+      'Soporte el mismo día y llamadas semanales',
+    ],
+    en_cta: 'Talk to sales',
+    es_cta: 'Hablar con ventas',
   },
 ];
 ---
 
-<section id="pricing" class="py-24 px-5 md:px-[60px] bg-bg-2">
-  <div class="max-w-[1200px] mx-auto">
-    <!-- Header -->
-    <div class="text-center mb-14" data-gsap="fade-up">
-      <span class="section-tag center mb-5">
-        <span class="en">Pricing</span><span class="es">Precios</span>
-      </span>
-      <h2 class="text-4xl md:text-5xl font-black tracking-tight mt-4 mb-5">
-        <span class="en">Transparent pricing.<br /><span class="gradient-text">No surprises.</span></span>
-        <span class="es">Precios transparentes.<br /><span class="gradient-text">Sin sorpresas.</span></span>
+<section id="pricing" class="py-24 sm:py-32" aria-labelledby="pricing-title">
+  <div class="mx-auto max-w-6xl px-6">
+    <header class="mb-12 max-w-2xl">
+      <p class="kz-eyebrow">// <span class="en">pricing</span><span class="es">precios</span></p>
+      <h2 id="pricing-title" class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
+        <span class="en">Monthly plans with<br />a dedicated team.</span>
+        <span class="es">Planes mensuales con<br />equipo dedicado.</span>
       </h2>
-      <p class="text-muted text-lg max-w-[500px] mx-auto leading-relaxed">
-        <span class="en">All plans include project management, code ownership, and post-launch support. Need something custom? Let's talk.</span>
-        <span class="es">Todos los planes incluyen gestión de proyecto, propiedad del código y soporte post-lanzamiento. ¿Necesitas algo personalizado? Hablemos.</span>
+      <p class="mt-4 leading-relaxed" style="color: var(--color-muted)">
+        <span class="en">
+          For businesses that need continuous development. One-off projects are quoted separately
+          by scope.
+        </span>
+        <span class="es">
+          Para negocios que necesitan desarrollo continuo. Los proyectos puntuales se cotizan
+          aparte por alcance.
+        </span>
       </p>
-    </div>
+    </header>
 
-    <!-- Plans grid -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch" data-gsap="stagger">
-      {plans.map((plan) => (
-        <div
-          data-gsap-child
-          class={`relative rounded-2xl p-7 flex flex-col transition-all duration-300 group ${
-            plan.featured
-              ? 'border-2 border-brand-cyan'
-              : 'border border-border-soft hover:border-brand-cyan/30'
-          }`}
-          style={plan.featured
-            ? 'background: linear-gradient(160deg, var(--color-card-2), var(--color-card)); box-shadow: 0 0 60px rgba(0,200,255,0.12);'
-            : 'background: var(--color-card);'}
-        >
-          <!-- Most popular badge -->
-          {plan.featured && (
-            <div class="absolute -top-4 left-1/2 -translate-x-1/2">
-              <div class="px-4 py-1.5 rounded-full text-xs font-black tracking-widest text-bg font-mono whitespace-nowrap" style="background: linear-gradient(90deg, #00c8ff, #00ff9d);">
-                <span class="en">MOST POPULAR</span><span class="es">MÁS POPULAR</span>
-              </div>
-            </div>
-          )}
+    <ul class="grid list-none items-start gap-5 lg:grid-cols-3">
+      {
+        planes.map((p) => (
+          <li>
+            <article
+              class={`kz-card flex h-full flex-col p-7 ${p.destacado ? 'kz-card-principal' : ''}`}
+            >
+              {p.destacado && (
+                <p class="kz-eyebrow mb-3">
+                  <span class="en">most chosen</span><span class="es">el más elegido</span>
+                </p>
+              )}
 
-          <!-- Top gradient glow for featured -->
-          {plan.featured && (
-            <div class="absolute top-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, rgba(0,200,255,0.6), transparent);"></div>
-          )}
+              <h3 class="text-xl font-bold">{p.nombre}</h3>
+              <p class="mt-1.5 text-sm leading-snug" style="color: var(--color-muted)">
+                <span class="en">{p.en_sub}</span><span class="es">{p.es_sub}</span>
+              </p>
 
-          <!-- Plan name -->
-          <div class="mb-5">
-            <h3 class={`text-xl font-black mb-1 ${plan.featured ? 'text-brand-cyan' : 'text-primary'}`}>
-              {plan.name === 'Starter' && <><span class="en">Starter</span><span class="es">Básico</span></>}
-              {plan.name === 'Growth' && <><span class="en">Growth</span><span class="es">Crecimiento</span></>}
-              {plan.name === 'Enterprise' && <><span class="en">Enterprise</span><span class="es">Empresarial</span></>}
-            </h3>
-            <p class="text-muted text-sm leading-relaxed">{plan.description}</p>
-          </div>
+              <p class="mt-6 flex items-baseline gap-1.5">
+                <span class="text-4xl font-bold tracking-tight">{p.precio}</span>
+                <span class="font-mono text-sm" style="color: var(--color-muted-2)">
+                  <span class="en">/mo</span><span class="es">/mes</span>
+                </span>
+              </p>
 
-          <!-- Price -->
-          <div class="mb-7">
-            <div class="flex items-baseline gap-1">
-              <span class={`text-5xl font-black ${plan.featured ? 'gradient-text' : 'text-primary'}`}>
-                {plan.price}
-              </span>
-              <span class="text-muted text-sm">{plan.period}</span>
-            </div>
-          </div>
+              <ul class="mt-7 flex-1 list-none space-y-2.5 text-sm">
+                {p.es.map((item, i) => (
+                  <li class="flex gap-2.5">
+                    <Icon
+                      name="lucide:check"
+                      size={16}
+                      class="mt-0.5 shrink-0"
+                      style="color: var(--color-accent)"
+                      aria-hidden="true"
+                    />
+                    <span style="color: var(--color-muted)">
+                      <span class="en">{p.en[i]}</span><span class="es">{item}</span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
 
-          <!-- Features -->
-          <ul class="space-y-2.5 mb-7 flex-1">
-            {plan.features.map((feature) => (
-              <li class="flex items-start gap-3 text-sm text-muted">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  class="flex-shrink-0 mt-0.5"
-                  style={`color: ${plan.featured ? '#00ff9d' : '#00c8ff'};`}
-                >
-                  <path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <span>{feature}</span>
-              </li>
-            ))}
-          </ul>
+              <a
+                href="#contact"
+                class={`kz-btn mt-8 w-full justify-center ${p.destacado ? 'kz-btn-primario' : 'kz-btn-secundario'}`}
+              >
+                <span class="en">{p.en_cta}</span><span class="es">{p.es_cta}</span>
+              </a>
+            </article>
+          </li>
+        ))
+      }
+    </ul>
 
-          <!-- CTA -->
-          <a
-            href="#contact"
-            class={`block text-center py-3.5 rounded-xl font-bold text-sm transition-all duration-200 cursor-pointer ${
-              plan.ctaVariant === 'filled'
-                ? 'text-bg bg-gradient-to-br from-brand-cyan to-brand-electric shadow-btn hover:shadow-btn-hover hover:-translate-y-0.5'
-                : 'text-primary border border-border hover:border-brand-cyan hover:bg-brand-cyan/5'
-            }`}
-            data-magnetic={plan.featured ? true : undefined}
-          >
-            {plan.cta === 'Get Started' && <><span class="en">Get Started →</span><span class="es">Comenzar →</span></>}
-            {plan.cta === 'Start with Growth' && <><span class="en">Start with Growth →</span><span class="es">Comenzar con Crecimiento →</span></>}
-            {plan.cta === 'Contact Sales' && <><span class="en">Contact Sales →</span><span class="es">Contactar Ventas →</span></>}
-          </a>
-        </div>
-      ))}
-    </div>
-
-    <!-- Footer note -->
-    <p class="text-center text-muted text-sm mt-6" data-gsap="fade-up">
-      <span class="en">All prices in USD. Billing is monthly. Cancel anytime. Custom quotes available.</span>
-      <span class="es">Precios en USD. Facturación mensual. Cancela cuando quieras. Cotizaciones personalizadas disponibles.</span>
+    <p class="mt-8 font-mono text-[12.5px]" style="color: var(--color-muted-2)">
+      <span class="en">
+        Prices in USD, before taxes. Hardware is quoted separately based on what each project needs.
+      </span>
+      <span class="es">
+        Precios en USD, antes de impuestos. El equipo se cotiza aparte según lo que requiera cada
+        proyecto.
+      </span>
     </p>
-
-    <!-- FAQ strip -->
-    <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-5" data-gsap="stagger">
-      {[
-        {
-          q_en: 'Do I own the source code?',
-          q_es: '¿Soy dueño del código fuente?',
-          a_en: '100% code ownership transferred to you upon final payment.',
-          a_es: '100% de propiedad del código te es transferida con el pago final.',
-        },
-        {
-          q_en: 'Can I upgrade plans mid-project?',
-          q_es: '¿Puedo cambiar de plan durante el proyecto?',
-          a_en: 'Absolutely. Upgrade or downgrade any time — no lock-in, no penalties.',
-          a_es: 'Claro. Sube o baja de plan cuando quieras — sin contratos de permanencia.',
-        },
-        {
-          q_en: 'Do you offer fixed-price projects?',
-          q_es: '¿Ofrecen proyectos a precio fijo?',
-          a_en: 'Yes. Alongside retainer plans, we offer fixed-price scoped projects.',
-          a_es: 'Sí. Además de los planes mensuales, ofrecemos proyectos a precio fijo.',
-        },
-      ].map((faq) => (
-        <div data-gsap-child class="rounded-xl p-6 border border-border-soft" style="background: var(--color-card);">
-          <h4 class="font-bold text-primary text-sm mb-2">
-            <span class="en">{faq.q_en}</span><span class="es">{faq.q_es}</span>
-          </h4>
-          <p class="text-muted text-sm leading-relaxed">
-            <span class="en">{faq.a_en}</span><span class="es">{faq.a_es}</span>
-          </p>
-        </div>
-      ))}
-    </div>
   </div>
 </section>

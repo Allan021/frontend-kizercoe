@@ -1,0 +1,79 @@
+---
+/**
+ * Marca de Kizercode: un monitor con `{K}` adentro.
+ *
+ * SVG en línea y no un archivo: entra con el HTML (sin petición extra ni
+ * parpadeo) y toma los colores del tema con `currentColor` y las variables.
+ * El texto va como texto de verdad, no como trazo, para que se pueda
+ * seleccionar y para que un lector de pantalla lo lea.
+ */
+interface Props {
+  /** Alto en píxeles del ícono. El texto escala con él. */
+  size?: number;
+  /** Solo la marca, sin el nombre al lado. */
+  markOnly?: boolean;
+  class?: string;
+}
+
+const { size = 34, markOnly = false, class: className = '' } = Astro.props;
+---
+
+<span class={`inline-flex items-center gap-2.5 ${className}`}>
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 40 40"
+    fill="none"
+    aria-hidden="true"
+    class="kz-logo-mark shrink-0"
+  >
+    <!-- Pantalla -->
+    <rect
+      x="3.5" y="6.5" width="33" height="23" rx="5.5"
+      stroke="var(--color-accent)" stroke-width="2"
+    />
+    <!-- Pie del monitor -->
+    <path
+      d="M15 34h10" stroke="var(--color-accent)"
+      stroke-width="2" stroke-linecap="round"
+    />
+    <path d="M20 29.5V34" stroke="var(--color-accent)" stroke-width="2" />
+    <!-- {K} -->
+    <text
+      x="20" y="18.6"
+      text-anchor="middle" dominant-baseline="middle"
+      font-family="'IBM Plex Mono', ui-monospace, monospace"
+      font-size="12.5" font-weight="500"
+      fill="var(--color-text)"
+    >{'{K}'}</text>
+  </svg>
+
+  {
+    !markOnly && (
+      <span
+        class="font-bold tracking-tight leading-none"
+        style={`font-size:${Math.round(size * 0.58)}px`}
+      >
+        <span style="color: var(--color-text)">Kizer</span><span
+          style="color: var(--color-accent)">code</span>
+      </span>
+    )
+  }
+</span>
+
+<style>
+  /* El resplandor del logo del mockup, sin sombra pesada: un filtro sobre el
+     trazo, que la GPU resuelve sin repintar la barra entera. */
+  .kz-logo-mark {
+    filter: drop-shadow(0 0 6px color-mix(in srgb, var(--color-accent) 45%, transparent));
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .kz-logo-mark {
+      transition: filter 0.3s ease;
+    }
+    :global(a:hover) > .kz-logo-mark {
+      filter: drop-shadow(0 0 10px color-mix(in srgb, var(--color-accent) 70%, transparent));
+    }
+  }
+</style>

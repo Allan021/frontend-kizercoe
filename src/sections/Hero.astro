@@ -1,181 +1,165 @@
 ---
-// Sin emojis: los rubros se leen solos y el emoji los hacía ver de plantilla.
-const industries = [
-  { en: 'Banking', es: 'Banca' },
-  { en: 'Retail', es: 'Retail' },
-  { en: 'Healthcare', es: 'Salud' },
-  { en: 'Logistics', es: 'Logística' },
-  { en: 'Government', es: 'Gobierno' },
-  { en: 'Telecom', es: 'Telecom' },
+import { Icon } from 'astro-icon/components';
+import Logo from '@/components/Logo.astro';
+
+/** Lo que la tarjeta de la derecha resume. Sin cifras que nadie pueda sostener. */
+const practicas = [
+  { icon: 'lucide:box', en: 'Custom software', es: 'Software a la medida' },
+  { icon: 'lucide:bot', en: 'AI automation', es: 'Automatización con IA' },
+  { icon: 'lucide:megaphone', en: 'Digital marketing', es: 'Marketing digital' },
 ];
 
-// Per-char interpolated color: cyan #00c8ff → green #00ff9d
-const chars = 'Kizercode'.split('').map((c, i) => {
-  const t = i / 8;
-  const g = Math.round(200 + t * 55);
-  const b = Math.round(255 - t * 98);
-  return { char: c, color: `rgb(0,${g},${b})` };
-});
+const garantias = [
+  { en: 'Reply in under 24 h', es: 'Respuesta en menos de 24 h' },
+  { en: 'Fixed price', es: 'Precio fijo' },
+  { en: 'Code under your name', es: 'Código a tu nombre' },
+];
 ---
 
-<section id="home" class="relative min-h-screen px-5 md:px-[60px] pt-[100px] pb-20 overflow-hidden">
-  <!-- Animated grid -->
+<section
+  class="relative overflow-hidden pb-20 pt-32 sm:pb-28 sm:pt-40"
+  aria-labelledby="hero-title"
+>
+  <!-- Rejilla de fondo. aria-hidden: es decoración, no contenido. -->
   <div
-    class="absolute inset-0 pointer-events-none"
-    style="background-image: linear-gradient(rgba(0,200,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(0,200,255,0.035) 1px, transparent 1px); background-size: 60px 60px; animation: gridMove 20s linear infinite;"
-  ></div>
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0 opacity-[0.35]"
+    style="background-image:linear-gradient(var(--color-border) 1px,transparent 1px),linear-gradient(90deg,var(--color-border) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse 80% 55% at 50% 0%,#000 40%,transparent 100%)"
+  >
+  </div>
 
-  <!-- Glow blobs -->
-  <div class="absolute top-[10%] right-[-4%] w-[480px] h-[480px] rounded-full pointer-events-none" style="background: radial-gradient(circle, rgba(0,200,255,0.08) 0%, transparent 70%);"></div>
-  <div class="absolute bottom-[8%] left-[-4%] w-[380px] h-[380px] rounded-full pointer-events-none" style="background: radial-gradient(circle, rgba(0,255,157,0.06) 0%, transparent 70%);"></div>
-
-  <!-- Two-column layout — fills from top, no dead centering space -->
-  <div class="relative z-10 w-full max-w-[1200px] mx-auto mt-6 md:mt-10 grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-10 lg:gap-16 items-start lg:items-center">
-
-    <!-- Left: Content -->
+  <div class="relative mx-auto grid max-w-6xl gap-14 px-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+    <!-- ── Columna de texto ── -->
     <div>
-      <!-- Badge -->
-      <div id="hero-badge" class="opacity-0 inline-flex items-center gap-2 border border-brand-cyan/20 px-4 py-2 rounded-full mb-5" style="background: rgba(0,200,255,0.06);">
-        <span class="w-1.5 h-1.5 rounded-full bg-brand-electric animate-pulse-dot"></span>
-        <span class="font-mono text-xs text-brand-cyan tracking-widest">
-          // <span class="en">Brand · Software · Growth — Honduras</span><span class="es">Marca · Software · Crecimiento — Honduras</span>
-        </span>
-      </div>
-
-      <!-- Kizercode — chars animated by GSAP (letter-by-letter bounce) -->
-      <div class="mb-3">
-        <h1 id="kz-title" class="font-black tracking-tight leading-none" style="font-size: clamp(60px, 9vw, 130px); filter: drop-shadow(0 0 28px rgba(0,200,255,0.22)) drop-shadow(0 0 60px rgba(0,255,157,0.08));">
-          {chars.map(({ char, color }, i) => (
-            <span
-              class="kz-char"
-              style={`display:inline-block; color:${color}; opacity:0; animation: kzCharFallback 0.4s ease-out ${0.08 + i * 0.05}s forwards;`}
-            >{char}</span>
-          ))}
-          <span id="kz-cursor" class="opacity-0 align-middle" style="display:inline-block; width:3px; height:0.68em; background:#00c8ff; border-radius:2px; margin-left:4px; margin-bottom:6px;"></span>
-        </h1>
-
-        <!-- Tagline sits tight under the title -->
-        <p id="hero-tagline" class="opacity-0 mt-2 leading-snug font-light" style="font-size: clamp(16px, 2vw, 26px); color: var(--color-muted);">
-          <span class="en">
-            <span style="color: var(--color-text); font-weight: 500;">Your business,</span>
-            digitally reborn. No more pen &amp; paper.
-          </span>
-          <span class="es">
-            <span style="color: var(--color-text); font-weight: 500;">Tu negocio,</span>
-            renacido digitalmente. Sin papel.
-          </span>
-        </p>
-      </div>
-
-      <!-- Sub -->
-      <p id="hero-sub" class="opacity-0 text-[15px] md:text-base leading-relaxed max-w-[520px] mb-7" style="color: var(--color-muted);">
-        <span class="en">We build <strong style="color: var(--color-text); font-weight: 600;">custom software, web &amp; mobile apps, brand identities, digital marketing and billing systems</strong> for enterprises ready to leave manual processes behind.</span>
-        <span class="es">Construimos <strong style="color: var(--color-text); font-weight: 600;">software a medida, apps web y móviles, identidad de marca, marketing digital y sistemas de facturación</strong> para empresas listas para dejar los procesos manuales atrás.</span>
+      <p class="kz-eyebrow kz-rise">
+        <span class="en">Software, AI and marketing agency</span>
+        <span class="es">Agencia de software, IA y marketing</span>
       </p>
 
-      <!-- Actions -->
-      <div id="hero-actions" class="opacity-0 flex flex-wrap gap-3 items-center mb-9">
-        <a
-          href="#contact"
-          data-magnetic
-          class="px-7 py-4 rounded-xl font-bold text-[15px] text-bg bg-gradient-to-br from-brand-cyan to-brand-electric shadow-btn hover:shadow-btn-hover hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
-        >
-          <span class="en">Start Your Project →</span><span class="es">Inicia Tu Proyecto →</span>
-        </a>
-        <a
-          href="#services"
-          class="px-7 py-4 rounded-xl font-semibold text-[15px] border border-border hover:border-brand-cyan hover:bg-brand-cyan/5 transition-all duration-200 cursor-pointer"
-          style="background: rgba(255,255,255,0.03); color: var(--color-text);"
-        >
-          <span class="en">See Our Services</span><span class="es">Ver Servicios</span>
-        </a>
-      </div>
-
-      <!-- Acá iba una tira de cifras inventadas (50+ proyectos, 100% de
-           satisfacción, 5+ años). Se quitó: si alguien preguntaba de dónde
-           salían, no había respuesta. Cuando existan números reales que
-           sostener, vuelven. -->
-
-      <!-- Trusted by industries -->
-      <div class="opacity-0" id="hero-industries">
-        <p class="text-[10px] font-mono tracking-widest mb-2.5 uppercase" style="color: var(--color-muted-2);">
-          <span class="en">// Trusted across industries</span><span class="es">// Confiado en múltiples industrias</span>
-        </p>
-        <div class="flex flex-wrap gap-2">
-          {industries.map((ind) => (
-            <span
-              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border border-border-soft transition-all duration-200 hover:border-brand-cyan/30 cursor-default"
-              style="background: var(--color-card); color: var(--color-muted);"
-            >
-              <span class="en">{ind.en}</span><span class="es">{ind.es}</span>
-            </span>
-          ))}
-        </div>
-      </div>
-    </div>
-
-    <!-- Right: Code window -->
-    <div id="hero-visual" class="opacity-0 hidden lg:block">
-      <div
-        class="rounded-2xl overflow-hidden border border-border"
-        style="background: var(--color-card); box-shadow: 0 32px 80px rgba(0,0,0,0.45), 0 0 40px rgba(0,200,255,0.18);"
+      <h1
+        id="hero-title"
+        class="kz-rise kz-rise-1 mt-5 text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl"
       >
-        <!-- Window bar -->
-        <div class="flex items-center gap-3 px-5 py-3.5 border-b border-border" style="background: var(--color-card-2);">
-          <div class="flex gap-1.5">
-            <div class="w-2.5 h-2.5 rounded-full bg-[#ff5f56]"></div>
-            <div class="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]"></div>
-            <div class="w-2.5 h-2.5 rounded-full bg-[#27c93f]"></div>
-          </div>
-          <span class="ml-auto font-mono text-xs" style="color: var(--color-muted-2);">kizercode.config.ts</span>
-        </div>
-        <!-- Code body -->
-        <div class="p-6 font-mono text-[13px] leading-[1.9]" style="color: var(--color-muted);">
-          <div style="color: var(--color-muted-2);">// <span class="en">Transforming businesses since 2019</span><span class="es">Transformando negocios desde 2019</span></div>
-          <br />
-          <div><span class="text-brand-cyan">const</span> <span class="text-[#ff9d6b]">kizercode</span> = &#123;</div>
-          <div class="pl-5"><span class="text-brand-cyan">mission</span>: <span class="text-brand-electric">"paper &rarr; digital"</span>,</div>
-          <div class="pl-5"><span class="text-brand-cyan">services</span>: [</div>
-          <div class="pl-10 text-brand-electric">"web &amp; mobile apps",</div>
-          <div class="pl-10 text-brand-electric">"brand identity",</div>
-          <div class="pl-10 text-brand-electric">"marketing digital",</div>
-          <div class="pl-10 text-brand-electric">"AI automation",</div>
-          <div class="pl-10 text-brand-electric">"billing systems"</div>
-          <div class="pl-5">],</div>
-          <div class="pl-5"><span class="text-brand-cyan">stack</span>: <span class="text-brand-electric">"React &middot; Node &middot; Flutter"</span>,</div>
-          <div class="pl-5"><span class="text-brand-cyan">location</span>: <span class="text-brand-electric">"El Progreso, Yoro 🇭🇳"</span>,</div>
-          <div class="pl-5"><span class="text-brand-cyan">clients</span>: <span class="text-[#c8a0ff]">50+</span>,</div>
-          <div class="pl-5"><span class="text-brand-cyan">satisfaction</span>: <span class="text-[#c8a0ff]">100</span><span class="text-brand-electric">"%"</span>,</div>
-          <div>&#125;<span class="inline-block w-0.5 h-3.5 bg-brand-cyan ml-0.5 align-middle animate-blink"></span></div>
-        </div>
+        <span class="en">We take your business<br /><span class="kz-degradado">to the next level.</span></span>
+        <span class="es">Llevamos tu negocio<br /><span class="kz-degradado">al siguiente nivel.</span></span>
+      </h1>
 
-      </div>
-
-      <!-- Floating status badge -->
-      <div class="mt-3 rounded-xl p-3.5 border border-brand-electric/20 flex items-center gap-3" style="background: rgba(0,255,157,0.05);">
-        <span class="w-2 h-2 rounded-full bg-brand-electric animate-pulse-dot flex-shrink-0"></span>
-        <span class="text-brand-electric text-xs font-semibold">
-          <span class="en">Currently accepting new projects</span><span class="es">Aceptando nuevos proyectos</span>
+      <p
+        class="kz-rise kz-rise-2 mt-6 max-w-xl text-base leading-relaxed sm:text-lg"
+        style="color: var(--color-muted)"
+      >
+        <span class="en">
+          We handle your entire digitalization: custom software, AI automation, digital marketing
+          and the team to run it. All tailored, with one person accountable.
         </span>
-        <a href="#contact" class="ml-auto text-[11px] font-mono text-brand-cyan hover:underline cursor-pointer">
-          <span class="en">Let's talk →</span><span class="es">Hablemos →</span>
+        <span class="es">
+          Nos encargamos de toda la digitalización de tu negocio: software a la medida,
+          automatizaciones con inteligencia artificial, marketing digital y el equipo necesario para
+          operarlo. Todo a la medida, con un solo responsable.
+        </span>
+      </p>
+
+      <div class="kz-rise kz-rise-3 mt-9 flex flex-wrap gap-3">
+        <a href="#contact" class="kz-btn kz-btn-primario">
+          <span class="en">Quote my project</span><span class="es">Cotizar mi proyecto</span>
+          <Icon name="lucide:arrow-right" size={17} aria-hidden="true" />
+        </a>
+        <a href="#proyectos" class="kz-btn kz-btn-secundario">
+          <span class="en">See cases</span><span class="es">Ver casos</span>
         </a>
       </div>
+
+      <!-- Lista de verdad, no divs: son tres cosas enumerables. -->
+      <ul
+        class="kz-rise kz-rise-4 mt-9 flex list-none flex-wrap gap-x-6 gap-y-2 font-mono text-[12.5px]"
+        style="color: var(--color-muted-2)"
+      >
+        {
+          garantias.map((g) => (
+            <li class="flex items-center gap-2">
+              <Icon name="lucide:check" size={14} style="color: var(--color-accent)" aria-hidden="true" />
+              <span class="en">{g.en}</span><span class="es">{g.es}</span>
+            </li>
+          ))
+        }
+      </ul>
     </div>
 
+    <!-- ── Tarjeta de agencia ── -->
+    <div class="kz-rise kz-rise-3">
+      <div class="kz-card overflow-hidden">
+        <div
+          class="flex items-center justify-between border-b px-5 py-3.5"
+          style="border-color: var(--color-border)"
+        >
+          <p class="font-mono text-[11.5px] uppercase tracking-[0.08em]" style="color: var(--color-muted-2)">
+            kizercode / <span class="en">agency</span><span class="es">agencia</span>
+          </p>
+          <div class="flex gap-1.5" aria-hidden="true">
+            <span class="h-2 w-2 rounded-full" style="background: var(--color-accent)"></span>
+            <span class="h-2 w-2 rounded-full" style="background: var(--color-accent-soft); opacity:.6"></span>
+            <span class="h-2 w-2 rounded-full" style="background: var(--color-muted-2); opacity:.4"></span>
+          </div>
+        </div>
+
+        <div class="px-5 py-8">
+          <div class="flex flex-col items-center gap-5">
+            <Logo size={64} markOnly />
+            <p class="font-mono text-[12px] tracking-[0.14em]" style="color: var(--color-muted-2)">
+              <span class="en">DESIGN · BUILD · DEPLOY</span>
+              <span class="es">DISEÑO · DESARROLLO · IMPLEMENTACIÓN</span>
+            </p>
+          </div>
+
+          <ul class="mt-8 grid list-none grid-cols-3 gap-3">
+            {
+              practicas.map((p) => (
+                <li
+                  class="rounded-xl border p-3.5 text-center"
+                  style="border-color: var(--color-border); background: var(--color-bg-2)"
+                >
+                  <Icon
+                    name={p.icon}
+                    size={20}
+                    class="mx-auto"
+                    style="color: var(--color-accent)"
+                    aria-hidden="true"
+                  />
+                  <p class="mt-2.5 font-mono text-[10.5px] leading-snug" style="color: var(--color-muted)">
+                    <span class="en">{p.en}</span><span class="es">{p.es}</span>
+                  </p>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const industriesEl = document.getElementById('hero-industries');
-    if (industriesEl) {
-      industriesEl.style.transform = 'translateY(10px)';
-      setTimeout(() => {
-        industriesEl.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        industriesEl.style.opacity = '1';
-        industriesEl.style.transform = 'translateY(0)';
-      }, 1600);
+<style>
+  .kz-degradado {
+    background: linear-gradient(120deg, var(--color-accent-soft), var(--color-accent-strong));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Entrada escalonada en CSS puro: sin GSAP, sin JavaScript, y no bloquea el
+     primer pintado. Los elementos ya están en su sitio, solo se revelan. */
+  @media (prefers-reduced-motion: no-preference) {
+    .kz-rise {
+      animation: kz-rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) backwards;
     }
-  });
-</script>
+    .kz-rise-1 { animation-delay: 0.06s; }
+    .kz-rise-2 { animation-delay: 0.12s; }
+    .kz-rise-3 { animation-delay: 0.18s; }
+    .kz-rise-4 { animation-delay: 0.24s; }
+  }
+
+  @keyframes kz-rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: none; }
+  }
+</style>

@@ -16,8 +16,10 @@ export default {
         border: { DEFAULT: 'var(--color-border)', soft: 'var(--color-border-soft)' },
       },
       fontFamily: {
-        sans: ['Outfit', 'sans-serif'],
-        mono: ['"JetBrains Mono"', 'monospace'],
+        sans: ['"Instrument Sans Variable"', 'system-ui', 'sans-serif'],
+        // La monoespaciada es parte de la identidad: etiquetas de sección,
+        // cifras y códigos. No es decoración.
+        mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
       },
       boxShadow: {
         'glow-cyan': '0 0 40px rgba(0,200,255,0.25)',

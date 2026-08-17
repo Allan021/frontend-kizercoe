@@ -1,204 +1,85 @@
 ---
-const steps = [
+const pasos = [
   {
-    number: '01',
-    title: 'Discovery Call',
-    title_es: 'Llamada de Descubrimiento',
-    description: 'We learn your goals, brand identity, and pain points in a focused call. We move fast — no weeks of back-and-forth.',
-    description_es: 'Conocemos tus objetivos, identidad de marca y puntos de dolor en una llamada enfocada. Nos movemos rápido — sin semanas de ida y vuelta.',
-    duration: '1 day',
-    duration_es: '1 día',
-    color: '#00c8ff',
-    icon: 'phone',
+    n: '01',
+    tiempo: '30 min',
+    en_t: 'Diagnostic call',
+    es_t: 'Llamada de diagnóstico',
+    en_d: 'We map how you work today and where the process breaks. Free, no commitment.',
+    es_d: 'Mapeamos cómo trabajás hoy y dónde se rompe el proceso. Gratis y sin compromiso.',
   },
   {
-    number: '02',
-    title: 'Proposal & Scope',
-    title_es: 'Propuesta y Alcance',
-    description: 'A clear technical proposal with architecture, milestones, and transparent pricing — delivered in days, not weeks.',
-    description_es: 'Una propuesta técnica clara con arquitectura, hitos y precios transparentes — entregada en días, no semanas.',
-    duration: '1–2 days',
-    duration_es: '1–2 días',
-    color: '#00ff9d',
-    icon: 'doc',
+    n: '02',
+    tiempo: '2–5 días',
+    en_t: 'Proposal',
+    es_t: 'Propuesta',
+    en_d: 'Written scope, fixed price and a real schedule, with hardware included when it applies.',
+    es_d: 'Alcance escrito, precio fijo y cronograma real, con equipo incluido cuando aplica.',
   },
   {
-    number: '03',
-    title: 'Design & UX',
-    title_es: 'Diseño y UX',
-    description: 'High-fidelity prototypes aligned with your brand identity. You approve every screen before we write a single line of code.',
-    description_es: 'Prototipos de alta fidelidad alineados con tu identidad de marca. Apruebas cada pantalla antes de que escribamos una sola línea de código.',
-    duration: '3–7 days',
-    duration_es: '3–7 días',
-    color: '#ff6b35',
-    icon: 'design',
+    n: '03',
+    tiempo: '1–2 sem',
+    en_t: 'Design',
+    es_t: 'Diseño',
+    en_d: 'A clickable prototype of every screen. You approve it before a line of code is written.',
+    es_d: 'Prototipo navegable de cada pantalla. Lo aprobás antes de escribir una línea de código.',
   },
   {
-    number: '04',
-    title: 'Development',
-    title_es: 'Desarrollo',
-    description: 'Secure, scalable code built in agile sprints with weekly demos. Production-grade from day one — no shortcuts.',
-    description_es: 'Código seguro y escalable construido en sprints ágiles con demos semanales. Calidad de producción desde el día uno — sin atajos.',
-    duration: '2–8 weeks',
-    duration_es: '2–8 semanas',
-    color: '#c8a0ff',
-    icon: 'code',
+    n: '04',
+    tiempo: '2–6 sem',
+    en_t: 'Development',
+    es_t: 'Desarrollo',
+    en_d: 'Weekly demos in a live environment. You see progress, not status reports.',
+    es_d: 'Demos semanales en un ambiente en línea. Ves avances, no informes de estado.',
   },
   {
-    number: '05',
-    title: 'Testing & QA',
-    title_es: 'Pruebas y QA',
-    description: 'Security audits, load testing, and cross-device checks. Your system ships battle-tested and enterprise-ready.',
-    description_es: 'Auditorías de seguridad, pruebas de carga y verificación multi-dispositivo. Tu sistema se lanza probado y listo para escalar.',
-    duration: '3–5 days',
-    duration_es: '3–5 días',
-    color: '#00ff9d',
-    icon: 'check',
-  },
-  {
-    number: '06',
-    title: 'Launch + Support',
-    title_es: 'Lanzamiento + Soporte',
-    description: 'Zero-downtime deployment with ongoing monitoring. Your brand-aligned platform evolves with your business.',
-    description_es: 'Despliegue sin interrupciones con monitoreo continuo. Tu plataforma alineada con tu marca evoluciona con tu negocio.',
-    duration: 'Ongoing',
-    duration_es: 'Continuo',
-    color: '#00c8ff',
-    icon: 'rocket',
+    n: '05',
+    tiempo: '+30 días',
+    en_t: 'Launch and support',
+    es_t: 'Lanzamiento y soporte',
+    en_d: 'Go-live, training, handover of credentials and 30 days of support included.',
+    es_d: 'Puesta en marcha, capacitación, entrega de credenciales y 30 días de soporte incluidos.',
   },
 ];
 ---
 
-<section id="process" class="py-28 px-6 md:px-[60px] bg-bg-2">
-  <div class="max-w-[1200px] mx-auto">
-    <!-- Header -->
-    <div class="text-center mb-16" data-gsap="fade-up">
-      <span class="section-tag center mb-5">
-        <span class="en">How We Work</span><span class="es">Cómo Trabajamos</span>
-      </span>
-      <h2 class="text-4xl md:text-5xl font-black tracking-tight mt-4 mb-5">
-        <span class="en">Fast delivery —<br /><span class="gradient-text">built to last.</span></span>
-        <span class="es">Entrega rápida —<br /><span class="gradient-text">construido para durar.</span></span>
+<section id="process" class="py-24 sm:py-32" aria-labelledby="process-title">
+  <div class="mx-auto max-w-6xl px-6">
+    <header class="mb-12 max-w-2xl">
+      <p class="kz-eyebrow">// <span class="en">process</span><span class="es">proceso</span></p>
+      <h2 id="process-title" class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
+        <span class="en">Five steps, no surprises<br />along the way.</span>
+        <span class="es">Cinco pasos, sin sorpresas<br />en el camino.</span>
       </h2>
-      <p class="text-muted text-lg max-w-[560px] mx-auto leading-relaxed">
-        <span class="en">We move at startup speed without compromising security, scalability, or your brand identity. Six lean phases — zero surprises.</span>
-        <span class="es">Nos movemos a velocidad de startup sin comprometer la seguridad, escalabilidad, ni tu identidad de marca. Seis fases ágiles — cero sorpresas.</span>
+      <p class="mt-4 leading-relaxed" style="color: var(--color-muted)">
+        <span class="en">
+          You approve each stage before the next one starts. If you change the scope midway, we
+          quote it separately and you decide.
+        </span>
+        <span class="es">
+          Aprobás cada etapa antes de que empiece la siguiente. Si cambiás el alcance a mitad del
+          proyecto lo cotizamos aparte y vos decidís.
+        </span>
       </p>
-    </div>
+    </header>
 
-    <!-- Steps grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative">
-      {steps.map((step, index) => (
-        <div
-          class="process-step-item group rounded-2xl p-7 border border-border-soft hover:border-brand-cyan/25 transition-all duration-300 relative overflow-hidden"
-          style="background: var(--color-card);"
-        >
-          <!-- Top accent line -->
-          <div
-            class="absolute top-0 left-7 right-7 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full"
-            style={`background: linear-gradient(90deg, transparent, ${step.color}, transparent);`}
-          ></div>
-
-          <!-- Step number + icon row -->
-          <div class="flex items-center justify-between mb-5">
-            <span
-              aria-hidden="true"
-              class="font-mono text-[42px] font-black leading-none select-none"
-              style={`color: ${step.color}60;`}
-            >
-              {step.number}
-            </span>
-            <div
-              class="w-11 h-11 rounded-xl flex items-center justify-center"
-              style={`background: ${step.color}18; border: 1px solid ${step.color}30;`}
-            >
-              {step.icon === 'phone' && (
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={`color: ${step.color};`}>
-                  <path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2C7 21 3 10 3 6a2 2 0 012-2z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round"/>
-                </svg>
-              )}
-              {step.icon === 'doc' && (
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={`color: ${step.color};`}>
-                  <path d="M14 3H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V8l-6-5z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round"/>
-                  <path d="M14 3v5h5M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-              )}
-              {step.icon === 'design' && (
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={`color: ${step.color};`}>
-                  <rect x="3" y="3" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8" fill="none"/>
-                  <rect x="13" y="3" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8" fill="none"/>
-                  <rect x="3" y="13" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.8" fill="none"/>
-                  <circle cx="17" cy="17" r="4" stroke="currentColor" stroke-width="1.8" fill="none"/>
-                  <path d="M17 15v2l1 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-              )}
-              {step.icon === 'code' && (
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={`color: ${step.color};`}>
-                  <path d="M8 9l-4 3 4 3M16 9l4 3-4 3M14 5l-4 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              )}
-              {step.icon === 'check' && (
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={`color: ${step.color};`}>
-                  <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8" fill="none"/>
-                </svg>
-              )}
-              {step.icon === 'rocket' && (
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={`color: ${step.color};`}>
-                  <path d="M4.5 16.5c-1.5 1.5-2 5-2 5s3.5-.5 5-2l4-4c2 .5 5 0 7.5-2.5C22 10.5 22 5 22 5s-5.5 0-8 2.5c-2.5 2.5-3 5.5-2.5 7.5l-4.5 1.5z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round"/>
-                  <circle cx="15" cy="9" r="1.5" fill="currentColor"/>
-                </svg>
-              )}
-            </div>
-          </div>
-
-          <!-- Content -->
-          <h3 class="text-lg font-bold text-primary mb-3 group-hover:text-brand-cyan transition-colors duration-200">
-            <span class="en">{step.title}</span><span class="es">{step.title_es}</span>
-          </h3>
-          <p class="text-muted text-sm leading-relaxed mb-4">
-            <span class="en">{step.description}</span><span class="es">{step.description_es}</span>
-          </p>
-
-          <!-- Duration badge -->
-          <div
-            class="process-dur-badge inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-semibold"
-            style={`background: ${step.color}10; color: ${step.color}; border: 1px solid ${step.color}20;`}
-          >
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-              <circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/>
-              <path d="M5 2.5V5l1.5 1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-            </svg>
-            <span class="en">{step.duration}</span><span class="es">{step.duration_es}</span>
-          </div>
-
-          <!-- Arrow connector (not on last in each row) -->
-          {index % 3 !== 2 && index < steps.length - 1 && (
-            <div class="hidden lg:block absolute -right-3 top-1/2 -translate-y-1/2 z-10">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M5 12h14M15 8l4 4-4 4" stroke="rgba(0,200,255,0.3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-          )}
-        </div>
-      ))}
-    </div>
-
-    <!-- Bottom CTA -->
-    <div class="mt-14 text-center" data-gsap="fade-up">
-      <p class="text-muted mb-5">
-        <span class="en">Ready to start the process?</span><span class="es">¿Listo para comenzar?</span>
-      </p>
-      <a
-        href="#contact"
-        data-magnetic
-        class="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-[15px] text-bg bg-gradient-to-br from-brand-cyan to-brand-electric shadow-btn hover:shadow-btn-hover hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
-      >
-        <span class="en">Book a free discovery call</span><span class="es">Agenda una llamada gratuita</span>
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </a>
-    </div>
+    <!-- Lista ordenada: el orden de los pasos ES la información. -->
+    <ol class="grid list-none gap-5 sm:grid-cols-2 lg:grid-cols-5">
+      {
+        pasos.map((p) => (
+          <li class="kz-card h-full p-6">
+            <p class="kz-eyebrow">
+              {p.n} <span aria-hidden="true">·</span> {p.tiempo}
+            </p>
+            <h3 class="mt-3.5 font-bold leading-snug">
+              <span class="en">{p.en_t}</span><span class="es">{p.es_t}</span>
+            </h3>
+            <p class="mt-2 text-sm leading-relaxed" style="color: var(--color-muted)">
+              <span class="en">{p.en_d}</span><span class="es">{p.es_d}</span>
+            </p>
+          </li>
+        ))
+      }
+    </ol>
   </div>
 </section>

@@ -2,28 +2,30 @@
 import ContactForm from '@/components/ContactForm';
 ---
 
-<section id="contact" class="py-24 px-5 md:px-[60px] bg-bg relative overflow-hidden">
-  <!-- Background gradient blobs -->
+<section
+  id="contact"
+  class="relative overflow-hidden px-5 py-24 sm:py-32 md:px-[60px]"
+  aria-labelledby="contact-title"
+>
+  <!-- Resplandor de fondo. aria-hidden: es decoración. -->
   <div
-    class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] pointer-events-none"
-    style="background: radial-gradient(ellipse at center top, rgba(0,200,255,0.07) 0%, transparent 70%);"
-  ></div>
-  <div
-    class="absolute bottom-0 left-0 w-[500px] h-[300px] pointer-events-none"
-    style="background: radial-gradient(ellipse at bottom left, rgba(0,255,157,0.05) 0%, transparent 70%);"
-  ></div>
+    aria-hidden="true"
+    class="pointer-events-none absolute left-1/2 top-0 h-[400px] w-[800px] -translate-x-1/2"
+    style="background: radial-gradient(ellipse at center top, color-mix(in srgb, var(--color-accent) 10%, transparent) 0%, transparent 70%);"
+  >
+  </div>
 
   <div class="max-w-[1200px] mx-auto relative z-10">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
 
       <!-- Left: Copy -->
       <div>
-        <span class="section-tag mb-5" data-gsap="fade-up">
-          <span class="en">Get In Touch</span><span class="es">Contáctanos</span>
-        </span>
-        <h2 class="text-4xl md:text-5xl font-black tracking-tight mt-4 mb-6" data-gsap="fade-up">
-          <span class="en">Let's build your<br /><span class="gradient-text">digital future.</span></span>
-          <span class="es">Construyamos tu<br /><span class="gradient-text">futuro digital.</span></span>
+        <p class="kz-eyebrow" data-gsap="fade-up">
+          // <span class="en">contact</span><span class="es">contacto</span>
+        </p>
+        <h2 id="contact-title" class="mt-4 mb-6 text-3xl font-bold tracking-tight sm:text-4xl" data-gsap="fade-up">
+          <span class="en">Tell us what you need<br />and we map the path.</span>
+          <span class="es">Contanos qué necesitás<br />y te trazamos el camino.</span>
         </h2>
         <p class="text-muted text-lg leading-relaxed mb-8 max-w-[480px]" data-gsap="fade-up">
           <span class="en">Tell us what you're building. We'll get back to you within 24 hours with a tailored plan — no generic proposals, no pressure.</span>

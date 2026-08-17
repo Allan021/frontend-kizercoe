@@ -1,4 +1,4 @@
-import type { ContactFormData, ContactResponse, Project, Testimonial } from '@/types';
+import type { ContactFormData, ContactResponse, Project, Service, Testimonial } from '@/types';
 
 const API_URL = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:3001';
 
@@ -32,6 +32,12 @@ export function fetchProjects(): Promise<Project[]> {
 
 export function fetchTestimonials(): Promise<Testimonial[]> {
   return pedir<Testimonial[]>('/v1/testimonials');
+}
+
+// ── Servicios ──
+
+export function fetchServices(): Promise<Service[]> {
+  return pedir<Service[]>('/v1/services');
 }
 
 // ── Panel ──
@@ -81,3 +87,11 @@ export const panelSaveTestimonial = (t: Partial<Testimonial>) =>
 
 export const panelDeleteTestimonial = (id: string) =>
   pedir<{ ok: boolean }>(`/v1/panel/testimonials/${id}`, conToken({ method: 'DELETE' }));
+
+export const panelServices = () => pedir<Service[]>('/v1/panel/services', conToken());
+
+export const panelSaveService = (s: Partial<Service>) =>
+  pedir<Service>('/v1/panel/services', conToken({ method: 'POST', body: JSON.stringify(s) }));
+
+export const panelDeleteService = (id: string) =>
+  pedir<{ ok: boolean }>(`/v1/panel/services/${id}`, conToken({ method: 'DELETE' }));

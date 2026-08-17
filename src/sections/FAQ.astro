@@ -1,0 +1,84 @@
+---
+/**
+ * Preguntas frecuentes con <details>/<summary>.
+ *
+ * Sin JavaScript: el navegador ya sabe abrir y cerrar, ya lo anuncia como
+ * botón expandible y ya responde a Enter y Espacio. Un acordeón hecho con divs
+ * y onClick cuesta cincuenta líneas para quedar peor.
+ */
+const preguntas = [
+  {
+    en_q: 'How much does a custom system cost?',
+    es_q: '¿Cuánto cuesta un sistema a la medida?',
+    en_a: 'It depends on scope. Small systems start around $1,500 and full platforms with hardware go up from there. After the diagnostic call you get a written quote with a fixed price.',
+    es_a: 'Depende del alcance. Los sistemas pequeños arrancan alrededor de $1,500 y las plataformas completas con equipo suben desde ahí. Después de la llamada de diagnóstico recibís una cotización escrita con precio fijo.',
+  },
+  {
+    en_q: 'How long does a project take?',
+    es_q: '¿Cuánto tiempo toma un proyecto?',
+    en_a: 'A website takes 3 to 5 weeks. A management system takes 6 to 12 weeks depending on how many processes it covers. We set milestones from day one and show progress every week.',
+    es_a: 'Un sitio web toma de 3 a 5 semanas. Un sistema de gestión toma de 6 a 12 semanas según cuántos procesos cubra. Fijamos hitos desde el primer día y mostramos avances cada semana.',
+  },
+  {
+    en_q: 'Do you also sell the hardware?',
+    es_q: '¿También venden el equipo?',
+    en_a: 'Yes. We supply terminals, scanners, printers and servers, install them at your place and configure them with the system, quoted in the same proposal.',
+    es_a: 'Sí. Suministramos terminales, lectores, impresoras y servidores, los instalamos en tu local y los configuramos con el sistema, cotizados en la misma propuesta.',
+  },
+  {
+    en_q: 'Is the source code mine?',
+    es_q: '¿El código fuente es mío?',
+    en_a: 'Yes, all of it. Code, domain, hosting, database and design files are registered to your company. If you change providers you take everything with you.',
+    es_a: 'Sí, todo. Código, dominio, hosting, base de datos y archivos de diseño quedan registrados a nombre de tu empresa. Si cambiás de proveedor te llevás todo.',
+  },
+  {
+    en_q: 'What happens after launch?',
+    es_q: '¿Qué pasa después del lanzamiento?',
+    en_a: 'Every project includes 30 days of support for fixes and adjustments. After that you can take a monthly plan for improvements, backups, security and monitoring.',
+    es_a: 'Cada proyecto incluye 30 días de soporte para correcciones y ajustes. Después podés tomar un plan mensual de mejoras, respaldos, seguridad y monitoreo.',
+  },
+];
+---
+
+<section id="faq" class="py-24 sm:py-32" aria-labelledby="faq-title">
+  <div class="mx-auto max-w-3xl px-6">
+    <header class="mb-10">
+      <p class="kz-eyebrow">// <span class="en">faq</span><span class="es">preguntas frecuentes</span></p>
+      <h2 id="faq-title" class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
+        <span class="en">Answered before you ask.</span>
+        <span class="es">Resueltas antes de que preguntes.</span>
+      </h2>
+    </header>
+
+    <div class="space-y-3">
+      {
+        preguntas.map((p) => (
+          <details class="kz-faq kz-card px-6">
+            <summary class="flex cursor-pointer items-center justify-between gap-4 py-5 font-semibold">
+              <span class="en">{p.en_q}</span><span class="es">{p.es_q}</span>
+              <span class="kz-faq-signo shrink-0" aria-hidden="true">+</span>
+            </summary>
+            <p class="pb-5 text-sm leading-relaxed" style="color: var(--color-muted)">
+              <span class="en">{p.en_a}</span><span class="es">{p.es_a}</span>
+            </p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  /* El triángulo por defecto se quita en los dos motores. */
+  .kz-faq summary { list-style: none; }
+  .kz-faq summary::-webkit-details-marker { display: none; }
+
+  .kz-faq-signo {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 20px;
+    line-height: 1;
+    color: var(--color-accent);
+    transition: transform 0.2s ease;
+  }
+  .kz-faq[open] .kz-faq-signo { transform: rotate(45deg); }
+</style>

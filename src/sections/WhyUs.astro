@@ -1,245 +1,72 @@
 ---
-const whyPoints = [
-  {
-    title_en: 'The Only Full-Stack Agency in Honduras',
-    title_es: 'La Única Agencia Full-Stack en Honduras',
-    description_en: 'Brand identity, digital marketing, and enterprise software — under one roof. No more coordinating between agencies. We\'re your single point of accountability.',
-    description_es: 'Identidad de marca, marketing digital y software empresarial — bajo un mismo techo. No más coordinar entre agencias. Somos tu único punto de responsabilidad.',
-    color: '#00c8ff',
-  },
-  {
-    title_en: 'Local Expertise, International Standards',
-    title_es: 'Conocimiento Local, Estándares Internacionales',
-    description_en: 'We know Honduras: SAR, SAT, CNBS integrations, local banks, the culture. And we build to the same standards as Silicon Valley teams — rigorous, tested, scalable.',
-    description_es: 'Conocemos Honduras: SAR, SAT, CNBS, bancos locales, la cultura. Y construimos con los mismos estándares que los mejores equipos del mundo — riguroso, probado, escalable.',
-    color: '#00ff9d',
-  },
-  {
-    title_en: 'Results Over Deliverables',
-    title_es: 'Resultados, No Solo Entregables',
-    description_en: 'We measure success by your growth: leads generated, revenue automated, hours saved. Every project has a ROI target — not just a launch date.',
-    description_es: 'Medimos el éxito por tu crecimiento: leads generados, ingresos automatizados, horas ahorradas. Cada proyecto tiene un objetivo de ROI — no solo una fecha de lanzamiento.',
-    color: '#ff6b35',
-  },
-  {
-    title_en: 'Transparent & Agile Partnership',
-    title_es: 'Alianza Transparente y Ágil',
-    description_en: 'Weekly demos, shared roadmaps, real-time updates. You always know what\'s happening. No black-box agencies, no ghosting, no excuses.',
-    description_es: 'Demos semanales, roadmaps compartidos, actualizaciones en tiempo real. Siempre sabes qué está pasando. Sin agencias caja negra, sin desaparecer, sin excusas.',
-    color: '#c8a0ff',
-  },
-];
+import { Icon } from 'astro-icon/components';
 
-/**
- * Antes acá había cuatro cifras inventadas (98% a tiempo, 50+ proyectos, 5★,
- * soporte infinito). Se cambiaron por cosas que sí se pueden sostener si un
- * cliente pregunta: son características de lo que ya está construido, no
- * estadísticas que nadie midió.
- */
-const metrics = [
+const razones = [
   {
-    value: 'Offline',
-    label_en: 'Systems that keep selling without internet',
-    label_es: 'Sistemas que siguen vendiendo sin internet',
-    color: '#00c8ff',
+    icon: 'lucide:server',
+    en_t: 'We run our own products in production',
+    es_t: 'Operamos nuestros propios productos en producción',
+    en_d: "We don't only build for others. Kizer Check and Kizer POS run every day with real clients, and that's where our standard for uptime, support and updates comes from.",
+    es_d: 'No solo construimos para terceros. Kizer Check y Kizer POS funcionan todos los días con clientes reales, y de ahí sale nuestro estándar de disponibilidad, soporte y actualizaciones.',
+    destacada: true,
   },
   {
-    value: 'SAR',
-    label_en: 'CAI, credit notes, compliant invoicing',
-    label_es: 'CAI, notas de crédito, facturación en regla',
-    color: '#00ff9d',
+    icon: 'lucide:file-check',
+    en_t: 'Fixed price, written scope',
+    es_t: 'Precio fijo, alcance escrito',
+    en_d: 'You know what you pay and what you get before we start. If the delay is ours, the price does not move.',
+    es_d: 'Sabés qué pagás y qué recibís antes de empezar. Si el retraso es nuestro, el precio no se mueve.',
   },
   {
-    value: 'HN',
-    label_en: 'Built here, support in your language',
-    label_es: 'Hecho acá, soporte en tu idioma',
-    color: '#ff6b35',
+    icon: 'lucide:key-round',
+    en_t: 'Everything under your name',
+    es_t: 'Todo a tu nombre',
+    en_d: 'Source code, domain, hosting and design files registered to your company. No strings attached.',
+    es_d: 'Código fuente, dominio, hosting y archivos de diseño a nombre de tu empresa. Sin ataduras.',
   },
   {
-    value: 'Propio',
-    label_en: 'Our own code — no templates, no third-party licenses',
-    label_es: 'Código propio — sin plantillas ni licencias de terceros',
-    color: '#c8a0ff',
+    icon: 'lucide:message-square',
+    en_t: 'One direct contact',
+    es_t: 'Un contacto directo',
+    en_d: 'You talk to whoever designs and codes your project, not to a middleman relaying messages.',
+    es_d: 'Hablás con quien diseña y programa tu proyecto, no con un intermediario que traslada mensajes.',
+  },
+  {
+    icon: 'lucide:truck',
+    en_t: 'Hardware included',
+    es_t: 'Equipo incluido',
+    en_d: 'Few agencies hand over the machine installed and running. We do, and in the same proposal.',
+    es_d: 'Pocas agencias entregan la máquina instalada y funcionando. Nosotros sí, y en la misma propuesta.',
   },
 ];
 ---
 
-<section id="why" class="py-24 px-5 md:px-[60px] bg-bg">
-  <div class="max-w-[1200px] mx-auto">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+<section id="why" class="py-24 sm:py-32" aria-labelledby="why-title">
+  <div class="mx-auto max-w-6xl px-6">
+    <header class="mb-12 max-w-2xl">
+      <p class="kz-eyebrow">// <span class="en">why kizercode</span><span class="es">por qué kizercode</span></p>
+      <h2 id="why-title" class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
+        <span class="en">Reasons that hold up<br />when you ask.</span>
+        <span class="es">Razones que se sostienen<br />cuando preguntás.</span>
+      </h2>
+    </header>
 
-      <!-- Left: Text content -->
-      <div>
-        <span class="section-tag mb-5" data-gsap="fade-up">
-          <span class="en">Why Kizercode</span><span class="es">¿Por qué Kizercode?</span>
-        </span>
-        <h2 class="text-4xl md:text-5xl font-black tracking-tight mt-4 mb-8" data-gsap="fade-up">
-          <span class="en">Not just code.<br /><span class="gradient-text">Brand. Strategy. Growth.</span></span>
-          <span class="es">No solo código.<br /><span class="gradient-text">Marca. Estrategia. Crecimiento.</span></span>
-        </h2>
-
-        <div class="space-y-7" data-gsap="stagger">
-          {whyPoints.map((point, index) => (
-            <div class="flex gap-4" data-gsap-child>
-              <div
-                class="why-num-box w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 font-mono font-bold text-sm mt-0.5"
-                style={`background: ${point.color}12; border: 1px solid ${point.color}30; color: ${point.color};`}
-              >
-                0{index + 1}
-              </div>
-              <div>
-                <h3 class="font-bold text-primary mb-1.5 leading-snug">
-                  <span class="en">{point.title_en}</span><span class="es">{point.title_es}</span>
-                </h3>
-                <p class="text-muted text-sm leading-relaxed">
-                  <span class="en">{point.description_en}</span><span class="es">{point.description_es}</span>
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div class="mt-10" data-gsap="fade-up">
-          <a
-            href="#contact"
-            data-magnetic
-            class="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-bold text-[15px] text-bg bg-gradient-to-br from-brand-cyan to-brand-electric shadow-btn hover:shadow-btn-hover hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
-          >
-            <span class="en">Let's talk about your project</span><span class="es">Hablemos de tu proyecto</span>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </a>
-        </div>
-      </div>
-
-      <!-- Right: Metrics grid -->
-      <div class="grid grid-cols-2 gap-4" data-gsap="stagger">
-        {metrics.map((metric) => (
-          <div
-            data-gsap-child
-            class="group rounded-2xl p-6 border border-border-soft hover:border-brand-cyan/25 transition-all duration-300 relative overflow-hidden"
-            style="background: var(--color-card);"
-          >
-            <div
-              class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-              style={`background: radial-gradient(circle at center, ${metric.color}08, transparent 70%);`}
-            ></div>
-            <!-- Palabras y no cifras: el tamaño baja para que "Offline" no
-                 desborde la tarjeta como sí entraba un "98%". -->
-            <div class="text-[30px] font-black leading-none mb-3 metric-num" style={`color: ${metric.color};`}>
-              {metric.value}
-            </div>
-            <p class="text-muted text-sm font-medium leading-snug">
-              <span class="en">{metric.label_en}</span><span class="es">{metric.label_es}</span>
-            </p>
-          </div>
-        ))}
-      </div>
-    </div>
-
-    <!-- Competitive comparison strip -->
-    <div
-      class="mt-16 rounded-2xl overflow-hidden border border-border-soft"
-      data-gsap="fade-up"
-    >
-      <div class="px-6 md:px-8 py-5 border-b border-border-soft" style="background: var(--color-card-2);">
-        <h3 class="font-black text-primary text-lg">
-          <span class="en">Kizercode vs. typical agencies</span><span class="es">Kizercode vs. agencias típicas</span>
-        </h3>
-      </div>
-      <div style="background: var(--color-card);">
-        {[
-          {
-            feature_en: 'Brand + Software + Marketing in one place',
-            feature_es: 'Marca + Software + Marketing en un lugar',
-            us: true,
-            them: false,
-          },
-          {
-            feature_en: 'Local Honduras regulatory knowledge (SAR, SAT, CNBS)',
-            feature_es: 'Conocimiento regulatorio local (SAR, SAT, CNBS)',
-            us: true,
-            them: false,
-          },
-          {
-            feature_en: 'Weekly demos & transparent roadmap',
-            feature_es: 'Demos semanales y roadmap transparente',
-            us: true,
-            them: false,
-          },
-          {
-            feature_en: '100% code ownership transferred to you',
-            feature_es: '100% del código te pertenece a ti',
-            us: true,
-            them: false,
-          },
-          {
-            feature_en: 'Post-launch ongoing support included',
-            feature_es: 'Soporte post-lanzamiento incluido',
-            us: true,
-            them: false,
-          },
-        ].map((row, i) => (
-          <div class={`flex items-center justify-between px-6 md:px-8 py-4 ${i < 4 ? 'border-b border-border-soft' : ''}`}>
-            <span class="text-sm text-muted flex-1 pr-4">
-              <span class="en">{row.feature_en}</span><span class="es">{row.feature_es}</span>
-            </span>
-            <div class="flex items-center gap-8 flex-shrink-0">
-              <div class="text-center w-20">
-                {row.us ? (
-                  <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-brand-electric/15 text-brand-electric">
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  </span>
-                ) : (
-                  <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-500/10 text-red-400">
-                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 2l6 6M8 2l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-                  </span>
-                )}
-                <p class="text-[10px] font-mono mt-1 text-brand-cyan">Kizercode</p>
-              </div>
-              <div class="text-center w-20">
-                {row.them ? (
-                  <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-brand-electric/15 text-brand-electric">
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  </span>
-                ) : (
-                  <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-500/10 text-red-400">
-                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 2l6 6M8 2l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-                  </span>
-                )}
-                <p class="text-[10px] font-mono mt-1" style="color: var(--color-muted-2);">
-                  <span class="en">Others</span><span class="es">Otros</span>
-                </p>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-
-    <!-- Testimonial quote -->
-    <div
-      class="mt-10 rounded-2xl p-8 md:p-10 border border-border-soft relative overflow-hidden"
-      style="background: linear-gradient(135deg, var(--color-card), var(--color-bg-3));"
-      data-gsap="fade-up"
-    >
-      <div class="absolute top-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, rgba(0,200,255,0.3), transparent);"></div>
-      <svg class="text-brand-cyan/20 mb-5" width="40" height="40" viewBox="0 0 48 48" fill="currentColor">
-        <path d="M14 28c0-5.5 4-9.5 10-10l1 3c-3 .5-5 2.5-5 5h5v9H14v-7zM29 28c0-5.5 4-9.5 10-10l1 3c-3 .5-5 2.5-5 5h5v9H29v-7z"/>
-      </svg>
-      <p class="text-primary text-xl md:text-2xl font-medium leading-relaxed mb-6 max-w-[800px]">
-        "Kizercode transformed our 15-year-old paper billing process into a fully automated platform in just 4 months. The ROI was evident within the first quarter."
-      </p>
-      <div class="flex items-center gap-4">
-        <div class="w-11 h-11 rounded-full border border-border flex items-center justify-center" style="background: linear-gradient(135deg, rgba(0,200,255,0.15), rgba(0,255,157,0.15));">
-          <span class="font-bold text-brand-cyan">C</span>
-        </div>
-        <div>
-          <p class="font-bold text-primary">Carlos M.</p>
-          <p class="text-muted text-sm">CFO, Distribuidora Nacional — Tegucigalpa, HN</p>
-        </div>
-      </div>
-    </div>
+    <ul class="grid list-none gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {
+        razones.map((r) => (
+          <li class={r.destacada ? 'md:col-span-2 lg:col-span-3' : ''}>
+            <article class={`kz-card h-full p-7 ${r.destacada ? 'kz-card-principal' : ''}`}>
+              <Icon name={r.icon} size={22} style="color: var(--color-accent)" aria-hidden="true" />
+              <h3 class="mt-4 text-lg font-bold leading-snug">
+                <span class="en">{r.en_t}</span><span class="es">{r.es_t}</span>
+              </h3>
+              <p class="mt-2.5 text-sm leading-relaxed" style="color: var(--color-muted)">
+                <span class="en">{r.en_d}</span><span class="es">{r.es_d}</span>
+              </p>
+            </article>
+          </li>
+        ))
+      }
+    </ul>
   </div>
 </section>

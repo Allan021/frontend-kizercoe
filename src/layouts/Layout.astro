@@ -160,6 +160,12 @@ const ogImageURL = new URL(image, Astro.site);
   </script>
 </head>
 <body>
+  <!-- Primer elemento enfocable de la página: quien navega con teclado o
+       lector de pantalla salta el menú de una vez, en vez de tabular por los
+       ocho enlaces del nav en cada carga. -->
+  <a href="#contenido" class="kz-skip">
+    <span class="en">Skip to content</span><span class="es">Saltar al contenido</span>
+  </a>
   <slot />
   <script>
     // Defer GSAP to after first paint — reduces forced reflows and LCP render delay

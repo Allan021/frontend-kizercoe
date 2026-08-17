@@ -1,0 +1,87 @@
+---
+import { Icon } from 'astro-icon/components';
+
+const entregas = [
+  {
+    icon: 'lucide:package',
+    en_t: 'Hardware supply',
+    es_t: 'Suministro de equipo',
+    en_d: 'Terminals, scanners, printers and peripherals, quoted with a clear margin.',
+    es_d: 'Terminales, lectores, impresoras y periféricos, cotizados con margen claro.',
+  },
+  {
+    icon: 'lucide:wrench',
+    en_t: 'On-site installation',
+    es_t: 'Instalación en sitio',
+    en_d: 'Mounting, network, permissions and testing at your place until everything responds.',
+    es_d: 'Montaje, red, permisos y pruebas en tu local hasta que todo responde.',
+  },
+  {
+    icon: 'lucide:database',
+    en_t: 'Data migration',
+    es_t: 'Migración de datos',
+    en_d: 'We move what you already have: spreadsheets, old systems, products and customers.',
+    es_d: 'Movemos lo que ya tenés: hojas de cálculo, sistemas viejos, productos y clientes.',
+  },
+  {
+    icon: 'lucide:graduation-cap',
+    en_t: 'Training and handover',
+    es_t: 'Capacitación y entrega',
+    en_d: 'Sessions with your team, recorded material and written documentation.',
+    es_d: 'Sesiones con tu equipo, material grabado y documentación escrita.',
+  },
+];
+---
+
+<section id="implementacion" class="py-24 sm:py-32" aria-labelledby="impl-title">
+  <div class="mx-auto max-w-6xl px-6">
+    <div class="kz-card kz-card-principal p-8 sm:p-12">
+      <p class="kz-eyebrow">
+        <span class="en">software + hardware + deployment</span>
+        <span class="es">software + equipo + implementación</span>
+      </p>
+
+      <h2 id="impl-title" class="mt-4 max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">
+        <span class="en">We also bring the hardware<br />and leave it running.</span>
+        <span class="es">También ponemos el equipo<br />y lo dejamos funcionando.</span>
+      </h2>
+
+      <p class="mt-5 max-w-2xl leading-relaxed" style="color: var(--color-muted)">
+        <span class="en">
+          A system is worth nothing sitting in a repository. If your project needs terminals,
+          scanners, printers or a server, we quote them, install them, configure them on site and
+          train whoever is going to use them.
+        </span>
+        <span class="es">
+          Un sistema no sirve de nada guardado en un repositorio. Si tu proyecto necesita
+          terminales, lectores, impresoras o un servidor, los cotizamos, los instalamos, los
+          configuramos en sitio y capacitamos a quien los va a usar.
+        </span>
+      </p>
+
+      <a href="#contact" class="kz-btn kz-btn-primario mt-8">
+        <span class="en">Quote software + hardware</span><span class="es">Cotizar software + equipo</span>
+        <Icon name="lucide:arrow-right" size={17} aria-hidden="true" />
+      </a>
+
+      <ul class="mt-10 grid list-none gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          entregas.map((e) => (
+            <li
+              class="rounded-xl border p-5"
+              style="border-color: var(--color-border); background: var(--color-bg-2)"
+            >
+              <Icon name={e.icon} size={20} style="color: var(--color-accent)" aria-hidden="true" />
+              <h3 class="mt-3.5 font-bold">
+                <span class="en">{e.en_t}</span><span class="es">{e.es_t}</span>
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed" style="color: var(--color-muted)">
+                <span class="en">{e.en_d}</span><span class="es">{e.es_d}</span>
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>

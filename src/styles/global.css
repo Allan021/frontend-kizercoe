@@ -1,49 +1,189 @@
+/* Fuentes autoalojadas: sin ir a fonts.googleapis.com no hay conexión a otro
+   dominio ni CLS esperando la hoja de estilos externa. Cuenta para el 100 de
+   rendimiento. */
+@import '@fontsource-variable/instrument-sans';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* ─── Theme tokens ─────────────────────────────────────────────────── */
+/**
+ * Paleta del rediseño v2: azul royal sobre casi-negro.
+ *
+ * El cyan/verde anterior se leía como plantilla de agencia genérica. Este azul
+ * es más serio y deja el degradado para acentos puntuales, no para todo.
+ *
+ * Los nombres de las variables NO cambiaron: así todo el sitio adopta la
+ * paleta nueva sin tocar un solo componente.
+ */
 :root {
-  --color-bg: #040d18;
-  --color-bg-2: #071020;
-  --color-bg-3: #0a1628;
-  --color-card: #0d1f35;
-  --color-card-2: #0f2540;
-  --color-text: #f0f8ff;
-  --color-muted: #7a9bbf;
-  --color-muted-2: #6b8299;
-  --color-nav-bg: rgba(4,13,24,0.88);
-  --color-nav-bg-scrolled: rgba(4,13,24,0.98);
-  --color-border: rgba(0,200,255,0.12);
-  --color-border-soft: rgba(0,200,255,0.06);
+  --color-bg: #06080d;
+  --color-bg-2: #080b12;
+  --color-bg-3: #0b0f19;
+  --color-card: #0d1220;
+  --color-card-2: #161c29;
+  --color-text: #f3f5f8;
+  --color-muted: #a7b0c0;
+  --color-muted-2: #6b7688;
+  --color-nav-bg: rgba(6,8,13,0.82);
+  --color-nav-bg-scrolled: rgba(6,8,13,0.96);
+  --color-border: #1b2334;
+  --color-border-soft: #161c29;
+  /* Acentos de marca: se usan tal cual, no con opacidades inventadas. */
+  --color-accent: #5b8cff;
+  --color-accent-strong: #2e5bff;
+  --color-accent-soft: #8fb0ff;
+  --color-accent-deep: #1b3fd1;
   color-scheme: dark;
 }
 
 [data-theme="light"] {
-  --color-bg: #f5f9ff;
-  --color-bg-2: #eaf2fd;
-  --color-bg-3: #deeafb;
+  --color-bg: #ffffff;
+  --color-bg-2: #f6f8fc;
+  --color-bg-3: #eef2f9;
   --color-card: #ffffff;
-  --color-card-2: #f0f7ff;
-  --color-text: #0a1628;
-  --color-muted: #4a6a8a;
-  --color-muted-2: #516a80;
-  --color-nav-bg: rgba(245,249,255,0.92);
-  --color-nav-bg-scrolled: rgba(245,249,255,0.99);
-  --color-border: rgba(0,100,200,0.15);
-  --color-border-soft: rgba(0,100,200,0.08);
+  --color-card-2: #f6f8fc;
+  --color-text: #0b0f19;
+  --color-muted: #5b6577;
+  --color-muted-2: #7d8798;
+  --color-nav-bg: rgba(255,255,255,0.82);
+  --color-nav-bg-scrolled: rgba(255,255,255,0.96);
+  --color-border: #e3e8f0;
+  --color-border-soft: #eef2f9;
+  --color-accent: #2e5bff;
+  --color-accent-strong: #1b3fd1;
+  --color-accent-soft: #5b8cff;
+  --color-accent-deep: #1b3fd1;
   color-scheme: light;
 }
 
 /* ─── Base ─────────────────────────────────────────────────────────── */
+/* Piezas compartidas del rediseño v2: una tarjeta se ve igual venga de
+   servicios, proyectos o testimonios. */
+@layer components {
+  /* Etiqueta monoespaciada "01 · CORE": es la firma visual del sistema. */
+  .kz-eyebrow {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .kz-card {
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    transition: border-color 0.25s ease, transform 0.25s ease;
+  }
+  .kz-card:hover { border-color: var(--color-accent); }
+
+  /* La tarjeta grande ya nace con el borde de acento. */
+  .kz-card-principal { border-color: var(--color-accent); }
+
+  .kz-chip {
+    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-2);
+    color: var(--color-muted);
+  }
+
+  .kz-tab {
+    font-size: 14px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--color-border);
+    color: var(--color-muted);
+    transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  }
+  .kz-tab:hover { color: var(--color-text); }
+  .kz-tab-activa {
+    color: var(--color-text);
+    font-weight: 600;
+    border-color: var(--color-accent);
+    background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  }
+
+  /* Botones. Alto mínimo 44px: es el tamaño que un dedo acierta sin pelear. */
+  .kz-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 46px;
+    padding: 0 22px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+  }
+  .kz-btn:hover { transform: translateY(-1px); }
+
+  .kz-btn-primario {
+    background: var(--color-accent-strong);
+    color: #fff;
+  }
+  .kz-btn-primario:hover { background: var(--color-accent); }
+
+  .kz-btn-secundario {
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+  }
+  .kz-btn-secundario:hover { border-color: var(--color-accent); }
+
+  .kz-skeleton {
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .kz-skeleton { animation: kz-pulse 1.6s ease-in-out infinite; }
+  }
+  @keyframes kz-pulse { 50% { opacity: 0.55; } }
+
+  /* Salto al contenido, para quien navega con teclado. */
+  .kz-skip {
+    position: absolute;
+    left: -9999px;
+    z-index: 999;
+    padding: 12px 20px;
+    background: var(--color-accent);
+    color: #fff;
+    border-radius: 0 0 8px 0;
+  }
+  .kz-skip:focus { left: 0; top: 0; }
+}
+
 @layer base {
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
 
+  /* Foco visible en todo lo enfocable: sin esto no hay accesibilidad que
+     valga, por más contraste que tengan los colores. */
+  :where(a, button, input, select, textarea, [tabindex]):focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  /* Quien pidió menos movimiento, recibe menos movimiento. */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
   body {
     background-color: var(--color-bg);
     color: var(--color-text);
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Instrument Sans Variable', system-ui, -apple-system, sans-serif;
     overflow-x: hidden;
     cursor: default;
     transition: background-color 0.3s ease, color 0.3s ease;

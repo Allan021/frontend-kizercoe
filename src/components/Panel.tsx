@@ -11,9 +11,12 @@ import {
   panelSaveProject,
   panelSaveTestimonial,
   panelTestimonials,
+  panelDeleteService,
+  panelSaveService,
+  panelServices,
   type PanelUser,
 } from '@/lib/api';
-import type { Project, Testimonial } from '@/types';
+import type { Practica, Project, Service, Testimonial } from '@/types';
 
 /**
  * Panel de Kizercode: cargar los proyectos sin tocar código.
@@ -48,7 +51,7 @@ export default function Panel() {
   );
 }
 
-type Pestana = 'proyectos' | 'testimonios';
+type Pestana = 'servicios' | 'proyectos' | 'testimonios';
 
 function Escritorio({ user, onSalir }: { user: PanelUser; onSalir: () => void }) {
   const [pestana, setPestana] = useState<Pestana>('proyectos');
@@ -69,7 +72,7 @@ function Escritorio({ user, onSalir }: { user: PanelUser; onSalir: () => void })
       </header>
 
       <nav className="mb-8 flex gap-2">
-        {(['proyectos', 'testimonios'] as const).map((p) => (
+        {(['servicios', 'proyectos', 'testimonios'] as const).map((p) => (
           <button
             key={p}
             onClick={() => setPestana(p)}
@@ -85,7 +88,9 @@ function Escritorio({ user, onSalir }: { user: PanelUser; onSalir: () => void })
         ))}
       </nav>
 
-      {pestana === 'proyectos' ? <Proyectos /> : <Testimonios />}
+      {pestana === 'servicios' && <Servicios />}
+      {pestana === 'proyectos' && <Proyectos />}
+      {pestana === 'testimonios' && <Testimonios />}
     </div>
   );
 }
@@ -404,6 +409,237 @@ function Proyectos() {
                 Editar
               </button>
               <button onClick={() => void borrar(p)} className="rounded-lg px-3 py-1.5" style={{ color: '#ff6b6b' }}>
+                Borrar
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const PRACTICAS: { id: Practica; label: string }[] = [
+  { id: 'software', label: 'Software y plataformas' },
+  { id: 'ia', label: 'IA y automatización' },
+  { id: 'marketing', label: 'Marketing y crecimiento' },
+];
+
+const SERVICIO_VACIO: Partial<Service> = {
+  slug: '',
+  practice: 'software',
+  title: '',
+  summary: '',
+  bullets: [],
+  icon: null,
+  featured: false,
+  published: false,
+  position: 0,
+};
+
+function Servicios() {
+  const [lista, setLista] = useState<Service[]>([]);
+  const [editando, setEditando] = useState<Partial<Service> | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  const cargar = () => panelServices().then(setLista).catch(() => setLista([]));
+  useEffect(() => {
+    void cargar();
+  }, []);
+
+  async function guardar(e: React.FormEvent) {
+    e.preventDefault();
+    if (!editando) return;
+    setBusy(true);
+    setError(null);
+    try {
+      await panelSaveService(editando);
+      setEditando(null);
+      await cargar();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'No se pudo guardar');
+    }
+    setBusy(false);
+  }
+
+  async function borrar(s: Service) {
+    if (!s.id || !confirm(`¿Borrar "${s.title}"? No se puede deshacer.`)) return;
+    await panelDeleteService(s.id);
+    await cargar();
+  }
+
+  return (
+    <div className="w-full">
+      <div className="mb-6 flex justify-end">
+        <button
+          onClick={() => setEditando({ ...SERVICIO_VACIO, position: lista.length })}
+          className="rounded-lg px-4 py-2 text-sm font-bold"
+          style={BTN}
+        >
+          Nuevo servicio
+        </button>
+      </div>
+
+      {editando && (
+        <form onSubmit={guardar} className="mb-8 rounded-2xl border p-6" style={CARD}>
+          <h2 className="text-lg font-bold">{editando.id ? 'Editar' : 'Nuevo'} servicio</h2>
+
+          <div className="mt-5 grid gap-4 sm:grid-cols-2">
+            <Campo etiqueta="Título">
+              <input
+                value={editando.title ?? ''}
+                onChange={(e) => setEditando({ ...editando, title: e.target.value })}
+                className={INPUT}
+                style={INPUT_STYLE}
+              />
+            </Campo>
+            <Campo etiqueta="Práctica" ayuda="Define en qué pestaña sale.">
+              <select
+                value={editando.practice ?? 'software'}
+                onChange={(e) => setEditando({ ...editando, practice: e.target.value as Practica })}
+                className={INPUT}
+                style={INPUT_STYLE}
+              >
+                {PRACTICAS.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.label}
+                  </option>
+                ))}
+              </select>
+            </Campo>
+          </div>
+
+          <div className="mt-4">
+            <Campo etiqueta="Resumen" ayuda="Dos o tres líneas. Es lo que se lee debajo del título.">
+              <textarea
+                rows={3}
+                value={editando.summary ?? ''}
+                onChange={(e) => setEditando({ ...editando, summary: e.target.value })}
+                className={INPUT}
+                style={INPUT_STYLE}
+              />
+            </Campo>
+          </div>
+
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <Campo etiqueta="Qué incluye" ayuda="Separado por coma: Panel propio, Roles, Reportes">
+              <input
+                value={(editando.bullets ?? []).join(', ')}
+                onChange={(e) => setEditando({ ...editando, bullets: e.target.value.split(',') })}
+                className={INPUT}
+                style={INPUT_STYLE}
+              />
+            </Campo>
+            <Campo etiqueta="Orden" ayuda="Menor primero.">
+              <input
+                type="number"
+                value={editando.position ?? 0}
+                onChange={(e) => setEditando({ ...editando, position: Number(e.target.value) })}
+                className={INPUT}
+                style={INPUT_STYLE}
+              />
+            </Campo>
+          </div>
+
+          <div className="mt-5 space-y-2">
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={editando.published ?? false}
+                onChange={(e) => setEditando({ ...editando, published: e.target.checked })}
+                className="h-4 w-4"
+              />
+              <span>
+                Publicado
+                <span className="ml-2 text-xs" style={{ color: 'var(--color-muted-2)' }}>
+                  sin esto no sale en el sitio
+                </span>
+              </span>
+            </label>
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={editando.featured ?? false}
+                onChange={(e) => setEditando({ ...editando, featured: e.target.checked })}
+                className="h-4 w-4"
+              />
+              <span>
+                Principal de su práctica
+                <span className="ml-2 text-xs" style={{ color: 'var(--color-muted-2)' }}>
+                  sale grande y de primero en esa pestaña
+                </span>
+              </span>
+            </label>
+          </div>
+
+          {error && (
+            <p role="alert" className="mt-4 text-sm" style={{ color: '#ff6b6b' }}>
+              {error}
+            </p>
+          )}
+
+          <div className="mt-6 flex gap-3">
+            <button type="submit" disabled={busy} className="rounded-lg px-5 py-2.5 text-sm font-bold disabled:opacity-50" style={BTN}>
+              {busy ? 'Guardando…' : 'Guardar'}
+            </button>
+            <button
+              type="button"
+              onClick={() => setEditando(null)}
+              className="rounded-lg border px-5 py-2.5 text-sm"
+              style={{ borderColor: 'var(--color-border)', color: 'var(--color-muted)' }}
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
+      )}
+
+      <div className="space-y-3">
+        {lista.length === 0 && (
+          <p style={{ color: 'var(--color-muted)' }}>
+            Sin servicios todavía. Mientras no haya ninguno publicado, esa sección no aparece en el
+            sitio.
+          </p>
+        )}
+        {lista.map((s) => (
+          <div key={s.id} className="flex flex-wrap items-center gap-4 rounded-xl border p-4" style={CARD}>
+            <div className="min-w-0 flex-1">
+              <p className="flex flex-wrap items-center gap-2 font-semibold">
+                {s.title}
+                <span className="text-xs" style={{ color: 'var(--color-muted-2)' }}>
+                  {PRACTICAS.find((p) => p.id === s.practice)?.label}
+                </span>
+                {s.featured && (
+                  <span
+                    className="rounded px-2 py-0.5 text-[11px] font-normal"
+                    style={{ background: 'rgba(91,140,255,0.15)', color: '#5b8cff' }}
+                  >
+                    principal
+                  </span>
+                )}
+                {!s.published && (
+                  <span
+                    className="rounded px-2 py-0.5 text-[11px] font-normal"
+                    style={{ background: 'rgba(255,107,53,0.15)', color: '#ff6b35' }}
+                  >
+                    borrador
+                  </span>
+                )}
+              </p>
+              <p className="truncate text-sm" style={{ color: 'var(--color-muted)' }}>
+                {s.summary}
+              </p>
+            </div>
+            <div className="flex gap-2 text-sm">
+              <button
+                onClick={() => setEditando({ ...s })}
+                className="rounded-lg border px-3 py-1.5"
+                style={{ borderColor: 'var(--color-border)' }}
+              >
+                Editar
+              </button>
+              <button onClick={() => void borrar(s)} className="rounded-lg px-3 py-1.5" style={{ color: '#ff6b6b' }}>
                 Borrar
               </button>
             </div>

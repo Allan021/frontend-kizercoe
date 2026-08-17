@@ -1,5 +1,13 @@
 ---
+import Logo from '@/components/Logo.astro';
+
 const currentYear = new Date().getFullYear();
+
+/** Productos propios en producción. Cada uno con su enlace real. */
+const productos = [
+  { nombre: 'Kizer POS', dominio: 'pos.kizercode.com', href: 'https://pos.kizercode.com' },
+  { nombre: 'Kizer Check', dominio: 'check.kizercode.com', href: 'https://check.kizercode.com' },
+];
 
 const services = [
   { label_en: 'Web Applications', label_es: 'Aplicaciones Web', href: '#services' },
@@ -27,30 +35,34 @@ const company = [
       <!-- Brand column -->
       <div class="sm:col-span-2 lg:col-span-1">
         <!-- Logo -->
-        <a href="/" class="flex items-center gap-3 mb-5 no-underline group" aria-label="Kizercode home">
-          <div class="w-10 h-10 flex items-center justify-center" style="filter: drop-shadow(0 0 6px rgba(0,200,255,0.4))">
-            <svg width="40" height="40" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="footerlg1" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#00c8ff"/>
-                  <stop offset="100%" stop-color="#00ff9d"/>
-                </linearGradient>
-              </defs>
-              <rect width="44" height="44" rx="10" fill="var(--color-card)"/>
-              <rect x="5" y="6" width="34" height="22" rx="4" fill="none" stroke="url(#footerlg1)" stroke-width="1.8"/>
-              <rect x="9" y="10" width="26" height="14" rx="2.5" fill="var(--color-bg)"/>
-              <rect x="20" y="28" width="4" height="5" rx="1.2" fill="url(#footerlg1)" opacity="0.5"/>
-              <rect x="14" y="33" width="16" height="3" rx="1.5" fill="url(#footerlg1)" opacity="0.5"/>
-              <text x="11" y="21" font-family="JetBrains Mono, monospace" font-weight="800" font-size="10" fill="url(#footerlg1)">{"{ K }"}</text>
-            </svg>
-          </div>
-          <span class="text-lg font-extrabold tracking-tight text-primary">Kizer<span class="text-brand-cyan">code</span></span>
+        <a href="/" class="mb-5 inline-block no-underline" aria-label="Kizercode — inicio">
+          <Logo size={38} />
         </a>
 
         <p class="text-muted text-sm leading-relaxed mb-4 max-w-[260px]">
-          <span class="en">Brand · Software · Growth. Your full-stack digital partner in Honduras.</span>
-          <span class="es">Marca · Software · Crecimiento. Tu socio digital integral en Honduras.</span>
+          <span class="en">Custom software, AI and marketing. Built in Honduras.</span>
+          <span class="es">Software a la medida, IA y marketing. Hecho en Honduras.</span>
         </p>
+
+        <!-- Los productos propios: son la prueba de lo que decimos hacer. -->
+        <ul class="mb-4 list-none space-y-2 text-sm">
+          {
+            productos.map((p) => (
+              <li>
+                <a
+                  href={p.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-1.5 no-underline transition-colors"
+                  style="color: var(--color-muted)"
+                >
+                  <span class="font-semibold" style="color: var(--color-text)">{p.nombre}</span>
+                  <span class="font-mono text-[11.5px]">{p.dominio}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
 
         <!-- Social links -->
         <div class="flex gap-3 mb-4">

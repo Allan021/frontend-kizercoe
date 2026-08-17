@@ -6,24 +6,29 @@ import Footer from '@/components/Footer.astro';
 import Hero from '@/sections/Hero.astro';
 import TechStrip from '@/sections/TechStrip.astro';
 import Services from '@/sections/Services.astro';
-import WhyUs from '@/sections/WhyUs.astro';
 import Projects from '@/sections/Projects.astro';
+import Implementacion from '@/sections/Implementacion.astro';
+import WhyUs from '@/sections/WhyUs.astro';
 import Process from '@/sections/Process.astro';
 import Reviews from '@/sections/Reviews.astro';
 import Pricing from '@/sections/Pricing.astro';
+import FAQ from '@/sections/FAQ.astro';
 import CTA from '@/sections/CTA.astro';
 ---
 <Layout>
   <Nav />
-  <main>
+  <!-- Un solo <main> por página, con el id al que apunta el salto de teclado. -->
+  <main id="contenido">
     <Hero />
     <TechStrip />
     <Services />
     <Projects />
+    <Implementacion />
     <WhyUs />
     <Process />
     <Reviews />
     <Pricing />
+    <FAQ />
     <CTA />
   </main>
   <Footer />

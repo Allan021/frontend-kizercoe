@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
+import icon from 'astro-icon';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -13,6 +14,9 @@ export default defineConfig({
     react(),
     tailwind({ applyBaseStyles: false }),
     sitemap(),
+    // Iconos como SVG en línea, solo los que se usan: cero JavaScript y cero
+    // petición extra. Se escriben <Icon name="lucide:arrow-right" />.
+    icon({ include: { lucide: ['*'] } }),
   ],
   output: 'static',
   compressHTML: true,

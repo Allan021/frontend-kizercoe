@@ -9,6 +9,22 @@ export interface ContactFormData {
   projectSlug?: string;
 }
 
+export type Practica = 'software' | 'ia' | 'marketing';
+
+export interface Service {
+  id?: string;
+  slug: string;
+  practice: Practica;
+  title: string;
+  summary: string;
+  bullets: string[];
+  /** Nombre del ícono de Lucide, sin el prefijo. */
+  icon: string | null;
+  featured: boolean;
+  published: boolean;
+  position: number;
+}
+
 export interface Testimonial {
   id?: string;
   author: string;
