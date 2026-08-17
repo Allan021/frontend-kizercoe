@@ -1,8 +1,8 @@
-﻿---
+---
 import Logo from '@/components/Logo.astro';
 ---
 <nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-[60px] py-3 backdrop-blur-xl border-b border-border-soft transition-all duration-300" style="background: var(--color-nav-bg);">
-  <a href="/" class="no-underline shrink-0" aria-label="Kizercode â€” inicio">
+  <a href="/" class="no-underline shrink-0" aria-label="Kizercode — inicio">
     <Logo size={34} />
   </a>
 
@@ -10,7 +10,7 @@ import Logo from '@/components/Logo.astro';
   <ul class="hidden md:flex items-center gap-7 list-none">
     {[
       { href: '#services', en: 'Services', es: 'Servicios' },
-      { href: '#why', en: 'Why Us', es: 'Â¿Por quÃ©?' },
+      { href: '#why', en: 'Why Us', es: '¿Por qué?' },
       { href: '#process', en: 'Process', es: 'Proceso' },
       { href: '#pricing', en: 'Pricing', es: 'Precios' },
     ].map(({ href, en, es }) => (
@@ -27,7 +27,7 @@ import Logo from '@/components/Logo.astro';
     ))}
     <li>
       <a href="#contact" class="px-5 py-2 rounded-lg text-sm font-bold text-white bg-accent-strong hover:bg-accent hover:-translate-y-0.5 transition-all duration-200 cursor-pointer">
-        <span class="en">Start a Project â†’</span><span class="es">Iniciar Proyecto â†’</span>
+        <span class="en">Start a Project →</span><span class="es">Iniciar Proyecto →</span>
       </a>
     </li>
   </ul>
@@ -86,7 +86,7 @@ import Logo from '@/components/Logo.astro';
       <div class="flex flex-col">
         {[
           { href: '#services', en: 'Services', es: 'Servicios' },
-          { href: '#why', en: 'Why Us', es: 'Â¿Por quÃ© Nosotros?' },
+          { href: '#why', en: 'Why Us', es: '¿Por qué Nosotros?' },
           { href: '#process', en: 'Process', es: 'Proceso' },
           { href: '#pricing', en: 'Pricing', es: 'Precios' },
         ].map(({ href, en, es }) => (
@@ -122,7 +122,7 @@ import Logo from '@/components/Logo.astro';
 </style>
 
 <script>
-  // â”€â”€ Mobile menu â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Mobile menu ───────────────────────────────────────────────────────
   const toggle = document.getElementById('nav-toggle') as HTMLButtonElement;
   const menu = document.getElementById('mobile-menu') as HTMLElement;
   const bar1 = document.getElementById('bar1') as HTMLElement;
@@ -167,7 +167,7 @@ import Logo from '@/components/Logo.astro';
     a.addEventListener('click', closeMenu);
   });
 
-  // â”€â”€ Scroll Spy â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Scroll Spy ───────────────────────────────────────────────────────
   const sections = ['services', 'why', 'process', 'pricing'];
   let activeSection = '';
 
@@ -199,7 +199,7 @@ import Logo from '@/components/Logo.astro';
     if (el) observer.observe(el);
   });
 
-  // â”€â”€ Language toggle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Language toggle ───────────────────────────────────────────────────
   function updateLangUI(lang: string) {
     const label = document.getElementById('lang-label');
     if (label) label.textContent = lang.toUpperCase();
@@ -215,7 +215,7 @@ import Logo from '@/components/Logo.astro';
 
   document.getElementById('lang-toggle')?.addEventListener('click', toggleLang);
 
-  // â”€â”€ Theme toggle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Theme toggle ──────────────────────────────────────────────────────
   function updateThemeUI(theme: string) {
     const isDark = theme === 'dark';
     const sunIcon = document.getElementById('icon-sun');
@@ -254,7 +254,7 @@ import Logo from '@/components/Logo.astro';
 
   document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
 
-  // â”€â”€ Init from saved state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Init from saved state ─────────────────────────────────────────────
   const savedTheme = document.documentElement.getAttribute('data-theme') || 'dark';
   const savedLang = document.documentElement.getAttribute('lang') || 'en';
   updateThemeUI(savedTheme);

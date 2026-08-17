@@ -1,4 +1,4 @@
-﻿/* Fuentes autoalojadas: sin ir a fonts.googleapis.com no hay conexiÃ³n a otro
+/* Fuentes autoalojadas: sin ir a fonts.googleapis.com no hay conexión a otro
    dominio ni CLS esperando la hoja de estilos externa. Cuenta para el 100 de
    rendimiento. */
 @import '@fontsource-variable/instrument-sans';
@@ -9,14 +9,14 @@
 @tailwind components;
 @tailwind utilities;
 
-/* â”€â”€â”€ Theme tokens â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Theme tokens ─────────────────────────────────────────────────── */
 /**
- * Paleta del rediseÃ±o v2: azul royal sobre casi-negro.
+ * Paleta del rediseño v2: azul royal sobre casi-negro.
  *
- * El cyan/verde anterior se leÃ­a como plantilla de agencia genÃ©rica. Este azul
- * es mÃ¡s serio y deja el degradado para acentos puntuales, no para todo.
+ * El cyan/verde anterior se leía como plantilla de agencia genérica. Este azul
+ * es más serio y deja el degradado para acentos puntuales, no para todo.
  *
- * Los nombres de las variables NO cambiaron: asÃ­ todo el sitio adopta la
+ * Los nombres de las variables NO cambiaron: así todo el sitio adopta la
  * paleta nueva sin tocar un solo componente.
  */
 :root {
@@ -60,11 +60,11 @@
   color-scheme: light;
 }
 
-/* â”€â”€â”€ Base â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-/* Piezas compartidas del rediseÃ±o v2: una tarjeta se ve igual venga de
+/* ─── Base ─────────────────────────────────────────────────────────── */
+/* Piezas compartidas del rediseño v2: una tarjeta se ve igual venga de
    servicios, proyectos o testimonios. */
 @layer components {
-  /* Etiqueta monoespaciada "01 Â· CORE": es la firma visual del sistema. */
+  /* Etiqueta monoespaciada "01 · CORE": es la firma visual del sistema. */
   .kz-eyebrow {
     font-family: 'IBM Plex Mono', ui-monospace, monospace;
     font-size: 11.5px;
@@ -109,7 +109,7 @@
     background: color-mix(in srgb, var(--color-accent) 12%, transparent);
   }
 
-  /* Botones. Alto mÃ­nimo 44px: es el tamaÃ±o que un dedo acierta sin pelear. */
+  /* Botones. Alto mínimo 44px: es el tamaño que un dedo acierta sin pelear. */
   .kz-btn {
     display: inline-flex;
     align-items: center;
@@ -163,14 +163,14 @@
   html { scroll-behavior: smooth; }
 
   /* Foco visible en todo lo enfocable: sin esto no hay accesibilidad que
-     valga, por mÃ¡s contraste que tengan los colores. */
+     valga, por más contraste que tengan los colores. */
   :where(a, button, input, select, textarea, [tabindex]):focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 3px;
     border-radius: 6px;
   }
 
-  /* Quien pidiÃ³ menos movimiento, recibe menos movimiento. */
+  /* Quien pidió menos movimiento, recibe menos movimiento. */
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
       animation-duration: 0.01ms !important;
@@ -204,7 +204,7 @@
   ::-webkit-scrollbar-thumb { background: var(--color-accent); border-radius: 2px; }
 }
 
-/* â”€â”€â”€ LCP fix: CSS fallback animation for hero chars â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── LCP fix: CSS fallback animation for hero chars ───────────────── */
 @keyframes kzCharFallback {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -216,7 +216,7 @@
   animation: none !important;
 }
 
-/* â”€â”€â”€ Utilities â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Utilities ────────────────────────────────────────────────────── */
 @layer utilities {
   .gradient-text {
     background: linear-gradient(135deg, var(--color-accent), var(--color-accent-strong));
@@ -251,18 +251,18 @@
   .text-primary { color: var(--color-text); }
 }
 
-/* â”€â”€â”€ i18n visibility â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── i18n visibility ──────────────────────────────────────────────── */
 html:not([lang="es"]) .es { display: none !important; }
 html[lang="es"] .en { display: none !important; }
 
-/* â”€â”€â”€ View Transition â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── View Transition ───────────────────────────────────────────────── */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;
   mix-blend-mode: normal;
 }
 
-/* â”€â”€â”€ Hero background title glitch â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Hero background title glitch ─────────────────────────────────── */
 .kz-bg-title {
   position: relative;
   display: block;
@@ -333,20 +333,20 @@ html[lang="es"] .en { display: none !important; }
   100% { left: 150%; }
 }
 
-/* â”€â”€â”€ Performance: content-visibility for off-screen sections â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Performance: content-visibility for off-screen sections ───────── */
 #services, #why, #process, #reviews, #pricing {
   content-visibility: auto;
   contain-intrinsic-size: 0 700px;
 }
 
-/* â”€â”€â”€ Light mode contrast corrections â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Light mode contrast corrections ──────────────────────────────── */
 [data-theme="light"] .text-brand-cyan  { color: #005f99; }
 [data-theme="light"] .text-brand-electric { color: #00763e; }
 [data-theme="light"] .metric-num { filter: brightness(0.5); }
 [data-theme="light"] .process-dur-badge { filter: brightness(0.5) saturate(0.9); }
 [data-theme="light"] .why-num-box { filter: brightness(0.55); }
 
-/* â”€â”€â”€ Light mode specific overrides â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Light mode specific overrides ────────────────────────────────── */
 [data-theme="light"] .glass {
   background: rgba(255,255,255,0.85);
   border-color: rgba(0,100,200,0.12);
@@ -361,7 +361,7 @@ html[lang="es"] .en { display: none !important; }
   -webkit-text-stroke: 1px rgba(0,150,100,0.08);
 }
 
-/* â”€â”€â”€ Hero title cursor blink (added by GSAP after chars finish) â”€â”€â”€ */
+/* ─── Hero title cursor blink (added by GSAP after chars finish) ─── */
 .kz-cursor-blink {
   animation: kzCursorBlink 0.65s step-end infinite;
 }

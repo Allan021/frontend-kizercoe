@@ -1,14 +1,14 @@
-﻿'use client';
+'use client';
 import { useEffect, useState } from 'react';
 import { fetchTestimonials } from '@/lib/api';
 import type { Testimonial } from '@/types';
 
 /**
- * Testimonios reales, traÃ­dos de la API.
+ * Testimonios reales, traídos de la API.
  *
- * Si no hay ninguno publicado, la secciÃ³n entera desaparece. Antes habÃ­a cinco
+ * Si no hay ninguno publicado, la sección entera desaparece. Antes había cinco
  * inventados y una barra con "50+ clientes felices" y "100% nos recomienda":
- * nÃºmeros que nadie podÃ­a sostener si se los preguntaban.
+ * números que nadie podía sostener si se los preguntaban.
  */
 
 const COLORES = ['var(--color-accent)', 'var(--color-accent-strong)', '#ff6b35', '#c8a0ff'];
@@ -68,7 +68,7 @@ function Estrellas({ n, size = 16 }: { n: number; size?: number }) {
 }
 
 function Firma({ t, color, size = 40 }: { t: Testimonial; color: string; size?: number }) {
-  const detalle = [t.role, t.company].filter(Boolean).join(' Â· ');
+  const detalle = [t.role, t.company].filter(Boolean).join(' · ');
   return (
     <div className="flex items-center gap-3">
       <div

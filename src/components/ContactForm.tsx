@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -27,12 +27,12 @@ const errorClass = 'text-[#ff6b6b] text-xs mt-1.5 flex items-center gap-1.5';
 export default function ContactForm() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
-  // De quÃ© proyecto vino, si llegÃ³ desde una tarjeta del portafolio.
+  // De qué proyecto vino, si llegó desde una tarjeta del portafolio.
   const [projectSlug, setProjectSlug] = useState<string | null>(null);
 
   useEffect(() => {
-    // El enlace es /#contact?proyecto=slug: el parÃ¡metro viaja en el hash, asÃ­
-    // que no estÃ¡ en location.search sino despuÃ©s del "?" del fragmento.
+    // El enlace es /#contact?proyecto=slug: el parámetro viaja en el hash, así
+    // que no está en location.search sino después del "?" del fragmento.
     const hash = window.location.hash;
     const query = hash.includes('?') ? hash.slice(hash.indexOf('?')) : window.location.search;
     setProjectSlug(new URLSearchParams(query).get('proyecto'));
@@ -111,7 +111,7 @@ export default function ContactForm() {
           <input
             id="name"
             type="text"
-            placeholder="Ana GarcÃ­a"
+            placeholder="Ana García"
             autoComplete="name"
             className={inputClass}
             {...register('name')}
@@ -211,8 +211,8 @@ export default function ContactForm() {
         >
           <option value="">Prefer not to say / Not sure</option>
           <option value="under-5k">Under $5,000</option>
-          <option value="5k-15k">$5,000 â€“ $15,000</option>
-          <option value="15k-50k">$15,000 â€“ $50,000</option>
+          <option value="5k-15k">$5,000 – $15,000</option>
+          <option value="15k-50k">$15,000 – $50,000</option>
           <option value="50k-plus">$50,000+</option>
           <option value="retainer">Monthly retainer preferred</option>
         </select>
