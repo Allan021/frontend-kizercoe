@@ -1,9 +1,9 @@
----
+﻿---
 import Logo from '@/components/Logo.astro';
 
 const currentYear = new Date().getFullYear();
 
-/** Productos propios en producción. Cada uno con su enlace real. */
+/** Productos propios en producciÃ³n. Cada uno con su enlace real. */
 const productos = [
   { nombre: 'Kizer POS', dominio: 'pos.kizercode.com', href: 'https://pos.kizercode.com' },
   { nombre: 'Kizer Check', dominio: 'check.kizercode.com', href: 'https://check.kizercode.com' },
@@ -11,18 +11,18 @@ const productos = [
 
 const services = [
   { label_en: 'Web Applications', label_es: 'Aplicaciones Web', href: '#services' },
-  { label_en: 'Mobile Apps', label_es: 'Apps Móviles', href: '#services' },
+  { label_en: 'Mobile Apps', label_es: 'Apps MÃ³viles', href: '#services' },
   { label_en: 'Brand Identity', label_es: 'Identidad de Marca', href: '#services' },
   { label_en: 'Digital Marketing', label_es: 'Marketing Digital', href: '#services' },
-  { label_en: 'Billing Systems', label_es: 'Facturación', href: '#services' },
-  { label_en: 'AI Automation', label_es: 'Automatización IA', href: '#services' },
+  { label_en: 'Billing Systems', label_es: 'FacturaciÃ³n', href: '#services' },
+  { label_en: 'AI Automation', label_es: 'AutomatizaciÃ³n IA', href: '#services' },
 ];
 
 const company = [
-  { label_en: 'Why Us', label_es: '¿Por qué Nosotros?', href: '#why' },
+  { label_en: 'Why Us', label_es: 'Â¿Por quÃ© Nosotros?', href: '#why' },
   { label_en: 'Our Process', label_es: 'Nuestro Proceso', href: '#process' },
   { label_en: 'Pricing', label_es: 'Precios', href: '#pricing' },
-  { label_en: 'Client Reviews', label_es: 'Reseñas', href: '#reviews' },
+  { label_en: 'Client Reviews', label_es: 'ReseÃ±as', href: '#reviews' },
   { label_en: 'Contact', label_es: 'Contacto', href: '#contact' },
 ];
 ---
@@ -35,7 +35,7 @@ const company = [
       <!-- Brand column -->
       <div class="sm:col-span-2 lg:col-span-1">
         <!-- Logo -->
-        <a href="/" class="mb-5 inline-block no-underline" aria-label="Kizercode — inicio">
+        <a href="/" class="mb-5 inline-block no-underline" aria-label="Kizercode â€” inicio">
           <Logo size={38} />
         </a>
 
@@ -102,7 +102,7 @@ const company = [
         </div>
 
         <!-- Status badge -->
-        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-brand-electric/15" style="background: rgba(0,255,157,0.05);">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-brand-electric/15" style="background: rgba(46,91,255,0.05);">
           <span class="w-1.5 h-1.5 rounded-full bg-brand-electric animate-pulse-dot"></span>
           <span class="text-brand-electric text-[11px] font-semibold">
             <span class="en">Open for projects</span><span class="es">Aceptando proyectos</span>
@@ -170,7 +170,7 @@ const company = [
           </div>
           <div>
             <p class="text-[11px] font-mono text-muted-2 uppercase tracking-widest mb-1">
-              <span class="en">Location</span><span class="es">Ubicación</span>
+              <span class="en">Location</span><span class="es">UbicaciÃ³n</span>
             </p>
             <p class="text-muted text-sm">El Progreso, Yoro, Honduras</p>
           </div>
@@ -192,7 +192,7 @@ const company = [
           <span class="en">Privacy Policy</span><span class="es">Privacidad</span>
         </a>
         <a href="/terms" class="text-muted-2 text-xs hover:text-muted transition-colors duration-200 cursor-pointer font-mono">
-          <span class="en">Terms of Service</span><span class="es">Términos</span>
+          <span class="en">Terms of Service</span><span class="es">TÃ©rminos</span>
         </a>
       </div>
     </div>

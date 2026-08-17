@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useEffect, useState } from 'react';
 import {
   clearPanelToken,
@@ -19,16 +19,16 @@ import {
 import type { Practica, Project, Service, Testimonial } from '@/types';
 
 /**
- * Panel de Kizercode: cargar los proyectos sin tocar código.
+ * Panel de Kizercode: cargar los proyectos sin tocar cÃ³digo.
  *
- * Corre entero en el navegador contra la API — el sitio es estático. El token
- * vive en sessionStorage: se va al cerrar la pestaña.
+ * Corre entero en el navegador contra la API â€” el sitio es estÃ¡tico. El token
+ * vive en sessionStorage: se va al cerrar la pestaÃ±a.
  */
 export default function Panel() {
   const [user, setUser] = useState<PanelUser | null>(null);
   const [cargando, setCargando] = useState(true);
 
-  // Si quedó un token de antes, se comprueba contra la API en vez de confiar.
+  // Si quedÃ³ un token de antes, se comprueba contra la API en vez de confiar.
   useEffect(() => {
     if (!getPanelToken()) return setCargando(false);
     panelMe()
@@ -37,7 +37,7 @@ export default function Panel() {
       .finally(() => setCargando(false));
   }, []);
 
-  if (cargando) return <p style={{ color: 'var(--color-muted)' }}>Cargando…</p>;
+  if (cargando) return <p style={{ color: 'var(--color-muted)' }}>Cargandoâ€¦</p>;
   if (!user) return <Login onEntrar={setUser} />;
 
   return (
@@ -107,8 +107,10 @@ const INPUT_STYLE: React.CSSProperties = {
   color: 'var(--color-text)',
 };
 const BTN: React.CSSProperties = {
-  background: 'linear-gradient(135deg,#00c8ff,#00ff9d)',
-  color: '#040d18',
+  // Azul plano con texto blanco: sobre el azul nuevo, el texto oscuro del
+  // degradado viejo quedaba por debajo del contraste mínimo.
+  background: 'var(--color-accent-strong)',
+  color: '#fff',
 };
 
 function Login({ onEntrar }: { onEntrar: (u: PanelUser) => void }) {
@@ -147,7 +149,7 @@ function Login({ onEntrar }: { onEntrar: (u: PanelUser) => void }) {
       </label>
 
       <label className="mt-4 block text-sm" style={{ color: 'var(--color-muted)' }}>
-        Contraseña
+        ContraseÃ±a
         <input
           type="password"
           value={password}
@@ -169,7 +171,7 @@ function Login({ onEntrar }: { onEntrar: (u: PanelUser) => void }) {
         className="mt-6 w-full rounded-lg py-3 text-sm font-bold disabled:opacity-50"
         style={BTN}
       >
-        {busy ? 'Entrando…' : 'Entrar'}
+        {busy ? 'Entrandoâ€¦' : 'Entrar'}
       </button>
     </form>
   );
@@ -217,7 +219,7 @@ function Proyectos() {
 
   async function borrar(p: Project) {
     // Borrar un proyecto no se deshace: se pregunta.
-    if (!p.id || !confirm(`¿Borrar "${p.title}"? No se puede deshacer.`)) return;
+    if (!p.id || !confirm(`Â¿Borrar "${p.title}"? No se puede deshacer.`)) return;
     await panelDeleteProject(p.id);
     await cargar();
   }
@@ -239,7 +241,7 @@ function Proyectos() {
           <h2 className="text-lg font-bold">{editando.id ? 'Editar' : 'Nuevo'} proyecto</h2>
 
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
-            <Campo etiqueta="Título" ayuda="Si dejás el enlace vacío, se arma con esto.">
+            <Campo etiqueta="TÃ­tulo" ayuda="Si dejÃ¡s el enlace vacÃ­o, se arma con esto.">
               <input
                 value={editando.title ?? ''}
                 onChange={(e) => setEditando({ ...editando, title: e.target.value })}
@@ -251,7 +253,7 @@ function Proyectos() {
               <input
                 value={editando.slug ?? ''}
                 onChange={(e) => setEditando({ ...editando, slug: e.target.value })}
-                placeholder="se arma solo del título"
+                placeholder="se arma solo del tÃ­tulo"
                 className={INPUT}
                 style={INPUT_STYLE}
               />
@@ -264,7 +266,7 @@ function Proyectos() {
                 style={INPUT_STYLE}
               />
             </Campo>
-            <Campo etiqueta="Período" ayuda="2026, o 2025–2026">
+            <Campo etiqueta="PerÃ­odo" ayuda="2026, o 2025â€“2026">
               <input
                 value={editando.period ?? ''}
                 onChange={(e) => setEditando({ ...editando, period: e.target.value })}
@@ -276,7 +278,7 @@ function Proyectos() {
               <input
                 value={editando.imageUrl ?? ''}
                 onChange={(e) => setEditando({ ...editando, imageUrl: e.target.value })}
-                placeholder="https://…"
+                placeholder="https://â€¦"
                 className={INPUT}
                 style={INPUT_STYLE}
               />
@@ -285,7 +287,7 @@ function Proyectos() {
               <input
                 value={editando.liveUrl ?? ''}
                 onChange={(e) => setEditando({ ...editando, liveUrl: e.target.value })}
-                placeholder="https://…"
+                placeholder="https://â€¦"
                 className={INPUT}
                 style={INPUT_STYLE}
               />
@@ -293,7 +295,7 @@ function Proyectos() {
           </div>
 
           <div className="mt-4">
-            <Campo etiqueta="Resumen" ayuda="Una línea. Es lo que se lee en la tarjeta.">
+            <Campo etiqueta="Resumen" ayuda="Una lÃ­nea. Es lo que se lee en la tarjeta.">
               <input
                 value={editando.summary ?? ''}
                 onChange={(e) => setEditando({ ...editando, summary: e.target.value })}
@@ -304,7 +306,7 @@ function Proyectos() {
           </div>
 
           <div className="mt-4">
-            <Campo etiqueta="El caso completo" ayuda="Opcional: qué problema resolvía y cómo.">
+            <Campo etiqueta="El caso completo" ayuda="Opcional: quÃ© problema resolvÃ­a y cÃ³mo.">
               <textarea
                 rows={5}
                 value={editando.body ?? ''}
@@ -358,7 +360,7 @@ function Proyectos() {
 
           <div className="mt-6 flex gap-3">
             <button type="submit" disabled={busy} className="rounded-lg px-5 py-2.5 text-sm font-bold disabled:opacity-50" style={BTN}>
-              {busy ? 'Guardando…' : 'Guardar'}
+              {busy ? 'Guardandoâ€¦' : 'Guardar'}
             </button>
             <button
               type="button"
@@ -375,7 +377,7 @@ function Proyectos() {
       <div className="space-y-3">
         {lista.length === 0 && (
           <p style={{ color: 'var(--color-muted)' }}>
-            Todavía no hay proyectos. Agregá el primero y aparece en el sitio al instante.
+            TodavÃ­a no hay proyectos. AgregÃ¡ el primero y aparece en el sitio al instante.
           </p>
         )}
         {lista.map((p) => (
@@ -397,7 +399,7 @@ function Proyectos() {
                 )}
               </p>
               <p className="truncate text-sm" style={{ color: 'var(--color-muted)' }}>
-                /{p.slug} · {p.summary}
+                /{p.slug} Â· {p.summary}
               </p>
             </div>
             <div className="flex gap-2 text-sm">
@@ -421,7 +423,7 @@ function Proyectos() {
 
 const PRACTICAS: { id: Practica; label: string }[] = [
   { id: 'software', label: 'Software y plataformas' },
-  { id: 'ia', label: 'IA y automatización' },
+  { id: 'ia', label: 'IA y automatizaciÃ³n' },
   { id: 'marketing', label: 'Marketing y crecimiento' },
 ];
 
@@ -464,7 +466,7 @@ function Servicios() {
   }
 
   async function borrar(s: Service) {
-    if (!s.id || !confirm(`¿Borrar "${s.title}"? No se puede deshacer.`)) return;
+    if (!s.id || !confirm(`Â¿Borrar "${s.title}"? No se puede deshacer.`)) return;
     await panelDeleteService(s.id);
     await cargar();
   }
@@ -486,7 +488,7 @@ function Servicios() {
           <h2 className="text-lg font-bold">{editando.id ? 'Editar' : 'Nuevo'} servicio</h2>
 
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
-            <Campo etiqueta="Título">
+            <Campo etiqueta="TÃ­tulo">
               <input
                 value={editando.title ?? ''}
                 onChange={(e) => setEditando({ ...editando, title: e.target.value })}
@@ -494,7 +496,7 @@ function Servicios() {
                 style={INPUT_STYLE}
               />
             </Campo>
-            <Campo etiqueta="Práctica" ayuda="Define en qué pestaña sale.">
+            <Campo etiqueta="PrÃ¡ctica" ayuda="Define en quÃ© pestaÃ±a sale.">
               <select
                 value={editando.practice ?? 'software'}
                 onChange={(e) => setEditando({ ...editando, practice: e.target.value as Practica })}
@@ -511,7 +513,7 @@ function Servicios() {
           </div>
 
           <div className="mt-4">
-            <Campo etiqueta="Resumen" ayuda="Dos o tres líneas. Es lo que se lee debajo del título.">
+            <Campo etiqueta="Resumen" ayuda="Dos o tres lÃ­neas. Es lo que se lee debajo del tÃ­tulo.">
               <textarea
                 rows={3}
                 value={editando.summary ?? ''}
@@ -523,7 +525,7 @@ function Servicios() {
           </div>
 
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
-            <Campo etiqueta="Qué incluye" ayuda="Separado por coma: Panel propio, Roles, Reportes">
+            <Campo etiqueta="QuÃ© incluye" ayuda="Separado por coma: Panel propio, Roles, Reportes">
               <input
                 value={(editando.bullets ?? []).join(', ')}
                 onChange={(e) => setEditando({ ...editando, bullets: e.target.value.split(',') })}
@@ -565,9 +567,9 @@ function Servicios() {
                 className="h-4 w-4"
               />
               <span>
-                Principal de su práctica
+                Principal de su prÃ¡ctica
                 <span className="ml-2 text-xs" style={{ color: 'var(--color-muted-2)' }}>
-                  sale grande y de primero en esa pestaña
+                  sale grande y de primero en esa pestaÃ±a
                 </span>
               </span>
             </label>
@@ -581,7 +583,7 @@ function Servicios() {
 
           <div className="mt-6 flex gap-3">
             <button type="submit" disabled={busy} className="rounded-lg px-5 py-2.5 text-sm font-bold disabled:opacity-50" style={BTN}>
-              {busy ? 'Guardando…' : 'Guardar'}
+              {busy ? 'Guardandoâ€¦' : 'Guardar'}
             </button>
             <button
               type="button"
@@ -598,7 +600,7 @@ function Servicios() {
       <div className="space-y-3">
         {lista.length === 0 && (
           <p style={{ color: 'var(--color-muted)' }}>
-            Sin servicios todavía. Mientras no haya ninguno publicado, esa sección no aparece en el
+            Sin servicios todavÃ­a. Mientras no haya ninguno publicado, esa secciÃ³n no aparece en el
             sitio.
           </p>
         )}
@@ -688,7 +690,7 @@ function Testimonios() {
   }
 
   async function borrar(t: Testimonial) {
-    if (!t.id || !confirm(`¿Borrar el testimonio de ${t.author}? No se puede deshacer.`)) return;
+    if (!t.id || !confirm(`Â¿Borrar el testimonio de ${t.author}? No se puede deshacer.`)) return;
     await panelDeleteTestimonial(t.id);
     await cargar();
   }
@@ -710,7 +712,7 @@ function Testimonios() {
           <h2 className="text-lg font-bold">{editando.id ? 'Editar' : 'Nuevo'} testimonio</h2>
 
           <div className="mt-5 grid gap-4 sm:grid-cols-3">
-            <Campo etiqueta="Quién lo dijo">
+            <Campo etiqueta="QuiÃ©n lo dijo">
               <input
                 value={editando.author ?? ''}
                 onChange={(e) => setEditando({ ...editando, author: e.target.value })}
@@ -718,7 +720,7 @@ function Testimonios() {
                 style={INPUT_STYLE}
               />
             </Campo>
-            <Campo etiqueta="Cargo" ayuda="Opcional. Vacío no se muestra.">
+            <Campo etiqueta="Cargo" ayuda="Opcional. VacÃ­o no se muestra.">
               <input
                 value={editando.role ?? ''}
                 onChange={(e) => setEditando({ ...editando, role: e.target.value })}
@@ -737,7 +739,7 @@ function Testimonios() {
           </div>
 
           <div className="mt-4">
-            <Campo etiqueta="Lo que dijo" ayuda="Tal cual lo dijo. Mínimo 20 caracteres.">
+            <Campo etiqueta="Lo que dijo" ayuda="Tal cual lo dijo. MÃ­nimo 20 caracteres.">
               <textarea
                 rows={4}
                 value={editando.text ?? ''}
@@ -749,7 +751,7 @@ function Testimonios() {
           </div>
 
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
-            <Campo etiqueta="Calificación" ayuda="De 1 a 5 estrellas.">
+            <Campo etiqueta="CalificaciÃ³n" ayuda="De 1 a 5 estrellas.">
               <select
                 value={editando.rating ?? 5}
                 onChange={(e) => setEditando({ ...editando, rating: Number(e.target.value) })}
@@ -813,7 +815,7 @@ function Testimonios() {
 
           <div className="mt-6 flex gap-3">
             <button type="submit" disabled={busy} className="rounded-lg px-5 py-2.5 text-sm font-bold disabled:opacity-50" style={BTN}>
-              {busy ? 'Guardando…' : 'Guardar'}
+              {busy ? 'Guardandoâ€¦' : 'Guardar'}
             </button>
             <button
               type="button"
@@ -830,7 +832,7 @@ function Testimonios() {
       <div className="space-y-3">
         {lista.length === 0 && (
           <p style={{ color: 'var(--color-muted)' }}>
-            Sin testimonios todavía. Mientras no haya ninguno publicado, esa sección no aparece en el
+            Sin testimonios todavÃ­a. Mientras no haya ninguno publicado, esa secciÃ³n no aparece en el
             sitio.
           </p>
         )}
@@ -839,11 +841,11 @@ function Testimonios() {
             <div className="min-w-0 flex-1">
               <p className="flex flex-wrap items-center gap-2 font-semibold">
                 {t.author}
-                <span style={{ color: '#ffbd2e' }}>{'★'.repeat(t.rating)}</span>
+                <span style={{ color: '#ffbd2e' }}>{'â˜…'.repeat(t.rating)}</span>
                 {t.featured && (
                   <span
                     className="rounded px-2 py-0.5 text-[11px] font-normal"
-                    style={{ background: 'rgba(0,200,255,0.15)', color: '#00c8ff' }}
+                    style={{ background: 'rgba(91,140,255,0.15)', color: 'var(--color-accent)' }}
                   >
                     destacado
                   </span>

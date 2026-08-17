@@ -1,4 +1,4 @@
----
+﻿---
 ---
 
 <!-- Mobile-only bottom navigation -->
@@ -15,11 +15,11 @@
       background: var(--color-nav-bg-scrolled);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      box-shadow: 0 -4px 32px rgba(0,0,0,0.35), 0 0 0 1px rgba(0,200,255,0.06);
+      box-shadow: 0 -4px 32px rgba(0,0,0,0.35), 0 0 0 1px rgba(91,140,255,0.06);
     "
   >
     <!-- Active pill background (moves via JS) -->
-    <div id="bnav-pill" class="absolute top-1 h-[calc(100%-8px)] rounded-xl transition-all duration-300 ease-out pointer-events-none" style="background: rgba(0,200,255,0.08); width: 20%; left: 0%; opacity: 0;"></div>
+    <div id="bnav-pill" class="absolute top-1 h-[calc(100%-8px)] rounded-xl transition-all duration-300 ease-out pointer-events-none" style="background: rgba(91,140,255,0.08); width: 20%; left: 0%; opacity: 0;"></div>
 
     <!-- Nav items -->
     {[
@@ -68,7 +68,7 @@
         <!-- Icon -->
         <span class="bnav-icon transition-transform duration-200 block" set:html={icon} />
         <!-- Active dot -->
-        <span class="bnav-dot w-1 h-1 rounded-full opacity-0 transition-all duration-200 mt-0.5" style="background: #00c8ff;"></span>
+        <span class="bnav-dot w-1 h-1 rounded-full opacity-0 transition-all duration-200 mt-0.5" style="background: var(--color-accent);"></span>
         <!-- Label -->
         <span class="bnav-text text-[9px] font-semibold leading-none transition-colors duration-200">
           <span class="en">{label_en}</span>
@@ -81,7 +81,7 @@
 
 <style>
   .bnav-item.active {
-    color: #00c8ff;
+    color: var(--color-accent);
   }
   .bnav-item.active .bnav-icon {
     transform: translateY(-1px);
@@ -90,7 +90,7 @@
     opacity: 1;
   }
   .bnav-item.active .bnav-text {
-    color: #00c8ff;
+    color: var(--color-accent);
   }
 
   /* hide the floating WA a bit higher so it clears the bottom nav */

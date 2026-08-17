@@ -6,11 +6,26 @@ export default {
       colors: {
         bg: { DEFAULT: 'var(--color-bg)', 2: 'var(--color-bg-2)', 3: 'var(--color-bg-3)' },
         card: { DEFAULT: 'var(--color-card)', 2: 'var(--color-card-2)' },
+        /**
+         * Los nombres quedan (cyan, electric) pero apuntan al azul del
+         * rediseño: así los botones y acentos que todavía usan
+         * `from-brand-cyan to-brand-electric` cambian solos, sin ir clase por
+         * clase por todo el sitio.
+         *
+         * Van a las variables y no a hex fijos para que el tema claro también
+         * los ajuste.
+         */
         brand: {
-          cyan: '#00c8ff',
-          cyan2: '#00e5ff',
-          electric: '#00ff9d',
+          cyan: 'var(--color-accent)',
+          cyan2: 'var(--color-accent-soft)',
+          electric: 'var(--color-accent-strong)',
           orange: '#ff6b35',
+        },
+        accent: {
+          DEFAULT: 'var(--color-accent)',
+          strong: 'var(--color-accent-strong)',
+          soft: 'var(--color-accent-soft)',
+          deep: 'var(--color-accent-deep)',
         },
         muted: { DEFAULT: 'var(--color-muted)', 2: 'var(--color-muted-2)' },
         border: { DEFAULT: 'var(--color-border)', soft: 'var(--color-border-soft)' },
@@ -22,11 +37,11 @@ export default {
         mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
       },
       boxShadow: {
-        'glow-cyan': '0 0 40px rgba(0,200,255,0.25)',
-        'glow-green': '0 0 40px rgba(0,255,157,0.2)',
-        'card-hover': '0 20px 60px rgba(0,0,0,0.3), 0 0 40px rgba(0,200,255,0.08)',
-        'btn': '0 4px 24px rgba(0,200,255,0.3)',
-        'btn-hover': '0 8px 32px rgba(0,200,255,0.4)',
+        'glow-cyan': '0 0 40px rgba(91,140,255,0.25)',
+        'glow-green': '0 0 40px rgba(46,91,255,0.2)',
+        'card-hover': '0 20px 60px rgba(0,0,0,0.35), 0 0 40px rgba(91,140,255,0.08)',
+        'btn': '0 4px 24px rgba(46,91,255,0.3)',
+        'btn-hover': '0 8px 32px rgba(46,91,255,0.42)',
       },
       animation: {
         'pulse-dot': 'pulseDot 2s ease-in-out infinite',

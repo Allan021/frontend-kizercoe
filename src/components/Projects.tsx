@@ -1,15 +1,15 @@
-'use client';
+﻿'use client';
 import { useEffect, useState } from 'react';
 import { fetchProjects } from '@/lib/api';
 import type { Project } from '@/types';
 
 /**
- * Los proyectos, leídos de la API en el navegador.
+ * Los proyectos, leÃ­dos de la API en el navegador.
  *
- * Se piden en el cliente y no al compilar a propósito: así publicar uno desde
+ * Se piden en el cliente y no al compilar a propÃ³sito: asÃ­ publicar uno desde
  * el panel se ve en el sitio al instante, sin volver a desplegar. El precio es
- * que estas tarjetas no las indexa el buscador — cuando el portafolio importe
- * para SEO, esto se pasa a build-time con un redeploy por publicación.
+ * que estas tarjetas no las indexa el buscador â€” cuando el portafolio importe
+ * para SEO, esto se pasa a build-time con un redeploy por publicaciÃ³n.
  */
 export default function Projects() {
   const [projects, setProjects] = useState<Project[] | null>(null);
@@ -19,8 +19,8 @@ export default function Projects() {
     fetchProjects().then(setProjects).catch(() => setFallo(true));
   }, []);
 
-  // Si la API no responde, la sección desaparece en vez de mostrar un error:
-  // es un portafolio, no una función crítica del sitio.
+  // Si la API no responde, la secciÃ³n desaparece en vez de mostrar un error:
+  // es un portafolio, no una funciÃ³n crÃ­tica del sitio.
   if (fallo || (projects && projects.length === 0)) return null;
 
   if (!projects) {
@@ -84,7 +84,7 @@ export default function Projects() {
                   <span
                     key={t}
                     className="rounded px-2 py-0.5 font-mono text-[11px]"
-                    style={{ background: 'rgba(0,200,255,0.1)', color: '#00c8ff' }}
+                    style={{ background: 'rgba(91,140,255,0.1)', color: 'var(--color-accent)' }}
                   >
                     {t}
                   </span>
@@ -93,13 +93,13 @@ export default function Projects() {
             )}
 
             <div className="mt-5 flex items-center gap-3">
-              {/* El slug viaja al formulario: el correo que llega dice de cuál vino. */}
+              {/* El slug viaja al formulario: el correo que llega dice de cuÃ¡l vino. */}
               <a
                 href={`/#contact?proyecto=${encodeURIComponent(p.slug)}`}
                 className="rounded-lg px-4 py-2 text-sm font-bold transition-opacity hover:opacity-90"
-                style={{ background: 'linear-gradient(135deg,#00c8ff,#00ff9d)', color: '#040d18' }}
+                style={{ background: 'var(--color-accent-strong)', color: '#fff' }}
               >
-                Quiero algo así
+                Quiero algo asÃ­
               </a>
               {p.liveUrl && (
                 <a
@@ -109,7 +109,7 @@ export default function Projects() {
                   className="text-sm transition-colors hover:opacity-80"
                   style={{ color: 'var(--color-muted)' }}
                 >
-                  Ver en vivo ↗
+                  Ver en vivo â†—
                 </a>
               )}
             </div>

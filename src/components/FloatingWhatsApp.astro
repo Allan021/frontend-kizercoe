@@ -1,9 +1,9 @@
----
-// ← Cambia este número por el tuyo (formato internacional, sin + ni espacios)
+﻿---
+// â† Cambia este nÃºmero por el tuyo (formato internacional, sin + ni espacios)
 const WA_NUMBER = '50498622160';
 const msgs = {
   en: 'Hi! I found Kizercode and would like to know more about your services.',
-  es: 'Hola! Vi Kizercode y me gustaría saber más sobre sus servicios.',
+  es: 'Hola! Vi Kizercode y me gustarÃ­a saber mÃ¡s sobre sus servicios.',
 };
 ---
 
@@ -22,21 +22,21 @@ const msgs = {
   <!-- Hover tooltip (desktop) -->
   <span
     class="hidden md:block text-xs font-semibold px-3 py-1.5 rounded-l-xl mr-0 opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0 transition-all duration-300 pointer-events-none whitespace-nowrap"
-    style="background: linear-gradient(135deg,#00c8ff,#00ff9d); color: #040d18;"
+    style="background: var(--color-accent-strong); color: #fff;"
   >
     <span class="en">Chat with us</span>
-    <span class="es">Escríbenos</span>
+    <span class="es">EscrÃ­benos</span>
   </span>
 
   <!-- FAB button -->
   <div
     class="relative flex items-center justify-center rounded-2xl shrink-0 group-hover:scale-105 transition-transform duration-200"
-    style="width:54px;height:54px;background:linear-gradient(135deg,#00c8ff 0%,#00e5a0 60%,#00ff9d 100%);box-shadow:0 4px 24px rgba(0,200,255,0.4),0 2px 10px rgba(0,0,0,0.3);"
+    style="width:54px;height:54px;background:linear-gradient(135deg,var(--color-accent) 0%,var(--color-accent-soft) 60%,var(--color-accent-strong) 100%);box-shadow:0 4px 24px rgba(91,140,255,0.4),0 2px 10px rgba(0,0,0,0.3);"
   >
     <!-- Pulse ring -->
     <span
       class="absolute inset-0 rounded-2xl"
-      style="background:linear-gradient(135deg,#00c8ff,#00ff9d);animation:waPulse 2.8s ease-out infinite;"
+      style="background:linear-gradient(135deg,var(--color-accent),var(--color-accent-strong));animation:waPulse 2.8s ease-out infinite;"
     ></span>
 
     <!-- WhatsApp SVG -->

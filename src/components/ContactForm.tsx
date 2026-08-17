@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -18,7 +18,7 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 const inputClass =
-  'w-full px-4 py-3 rounded-xl text-sm font-sans text-[#f0f8ff] placeholder-[#4a6a8a] border border-[rgba(0,200,255,0.12)] bg-[#071020] focus:outline-none focus:border-[#00c8ff] focus:ring-1 focus:ring-[#00c8ff] transition-colors duration-200';
+  'w-full px-4 py-3 rounded-xl text-sm font-sans text-[#f0f8ff] placeholder-[#4a6a8a] border border-[rgba(91,140,255,0.12)] bg-[#071020] focus:outline-none focus:border-[var(--color-accent)] focus:ring-1 focus:ring-[var(--color-accent)] transition-colors duration-200';
 
 const labelClass = 'block text-sm font-semibold text-[#f0f8ff] mb-2';
 
@@ -27,12 +27,12 @@ const errorClass = 'text-[#ff6b6b] text-xs mt-1.5 flex items-center gap-1.5';
 export default function ContactForm() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
-  // De qué proyecto vino, si llegó desde una tarjeta del portafolio.
+  // De quÃ© proyecto vino, si llegÃ³ desde una tarjeta del portafolio.
   const [projectSlug, setProjectSlug] = useState<string | null>(null);
 
   useEffect(() => {
-    // El enlace es /#contact?proyecto=slug: el parámetro viaja en el hash, así
-    // que no está en location.search sino después del "?" del fragmento.
+    // El enlace es /#contact?proyecto=slug: el parÃ¡metro viaja en el hash, asÃ­
+    // que no estÃ¡ en location.search sino despuÃ©s del "?" del fragmento.
     const hash = window.location.hash;
     const query = hash.includes('?') ? hash.slice(hash.indexOf('?')) : window.location.search;
     setProjectSlug(new URLSearchParams(query).get('proyecto'));
@@ -74,12 +74,12 @@ export default function ContactForm() {
       <div className="flex flex-col items-center justify-center py-16 px-8 text-center">
         <div
           className="w-20 h-20 rounded-full flex items-center justify-center mb-6"
-          style={{ background: 'rgba(0,255,157,0.12)', border: '2px solid rgba(0,255,157,0.3)' }}
+          style={{ background: 'rgba(46,91,255,0.12)', border: '2px solid rgba(46,91,255,0.3)' }}
         >
           <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
             <path
               d="M7 18l8 8L29 10"
-              stroke="#00ff9d"
+              stroke="var(--color-accent-strong)"
               strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -92,7 +92,7 @@ export default function ContactForm() {
         </p>
         <button
           onClick={() => setStatus('idle')}
-          className="px-6 py-3 rounded-xl text-sm font-bold border border-[rgba(0,200,255,0.2)] text-[#f0f8ff] hover:border-[#00c8ff] hover:bg-[rgba(0,200,255,0.05)] transition-all duration-200 cursor-pointer"
+          className="px-6 py-3 rounded-xl text-sm font-bold border border-[rgba(91,140,255,0.2)] text-[#f0f8ff] hover:border-[var(--color-accent)] hover:bg-[rgba(91,140,255,0.05)] transition-all duration-200 cursor-pointer"
         >
           Send another message
         </button>
@@ -106,12 +106,12 @@ export default function ContactForm() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <div>
           <label htmlFor="name" className={labelClass}>
-            Full Name <span className="text-[#00c8ff]">*</span>
+            Full Name <span className="text-[var(--color-accent)]">*</span>
           </label>
           <input
             id="name"
             type="text"
-            placeholder="Ana García"
+            placeholder="Ana GarcÃ­a"
             autoComplete="name"
             className={inputClass}
             {...register('name')}
@@ -128,7 +128,7 @@ export default function ContactForm() {
         </div>
         <div>
           <label htmlFor="email" className={labelClass}>
-            Work Email <span className="text-[#00c8ff]">*</span>
+            Work Email <span className="text-[var(--color-accent)]">*</span>
           </label>
           <input
             id="email"
@@ -167,7 +167,7 @@ export default function ContactForm() {
         </div>
         <div>
           <label htmlFor="service" className={labelClass}>
-            Service Needed <span className="text-[#00c8ff]">*</span>
+            Service Needed <span className="text-[var(--color-accent)]">*</span>
           </label>
           <select
             id="service"
@@ -211,8 +211,8 @@ export default function ContactForm() {
         >
           <option value="">Prefer not to say / Not sure</option>
           <option value="under-5k">Under $5,000</option>
-          <option value="5k-15k">$5,000 – $15,000</option>
-          <option value="15k-50k">$15,000 – $50,000</option>
+          <option value="5k-15k">$5,000 â€“ $15,000</option>
+          <option value="15k-50k">$15,000 â€“ $50,000</option>
           <option value="50k-plus">$50,000+</option>
           <option value="retainer">Monthly retainer preferred</option>
         </select>
@@ -221,7 +221,7 @@ export default function ContactForm() {
       {/* Message */}
       <div>
         <label htmlFor="message" className={labelClass}>
-          Tell us about your project <span className="text-[#00c8ff]">*</span>
+          Tell us about your project <span className="text-[var(--color-accent)]">*</span>
         </label>
         <textarea
           id="message"
@@ -260,10 +260,10 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={status === 'loading'}
-        className="w-full py-4 rounded-xl font-bold text-[15px] text-[#040d18] transition-all duration-200 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+        className="w-full py-4 rounded-xl font-bold text-[15px] text-white transition-all duration-200 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-3"
         style={{
-          background: 'linear-gradient(135deg, #00c8ff, #00ff9d)',
-          boxShadow: '0 4px 24px rgba(0,200,255,0.3)',
+          background: 'linear-gradient(135deg, var(--color-accent), var(--color-accent-strong))',
+          boxShadow: '0 4px 24px rgba(91,140,255,0.3)',
         }}
       >
         {status === 'loading' ? (
@@ -276,7 +276,7 @@ export default function ContactForm() {
               className="animate-spin"
             >
               <circle cx="9" cy="9" r="7" stroke="rgba(4,13,24,0.3)" strokeWidth="2"/>
-              <path d="M9 2a7 7 0 017 7" stroke="#040d18" strokeWidth="2" strokeLinecap="round"/>
+              <path d="M9 2a7 7 0 017 7" stroke="#fff" strokeWidth="2" strokeLinecap="round"/>
             </svg>
             Sending...
           </>

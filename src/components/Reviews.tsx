@@ -1,17 +1,17 @@
-'use client';
+﻿'use client';
 import { useEffect, useState } from 'react';
 import { fetchTestimonials } from '@/lib/api';
 import type { Testimonial } from '@/types';
 
 /**
- * Testimonios reales, traídos de la API.
+ * Testimonios reales, traÃ­dos de la API.
  *
- * Si no hay ninguno publicado, la sección entera desaparece. Antes había cinco
+ * Si no hay ninguno publicado, la secciÃ³n entera desaparece. Antes habÃ­a cinco
  * inventados y una barra con "50+ clientes felices" y "100% nos recomienda":
- * números que nadie podía sostener si se los preguntaban.
+ * nÃºmeros que nadie podÃ­a sostener si se los preguntaban.
  */
 
-const COLORES = ['#00c8ff', '#00ff9d', '#ff6b35', '#c8a0ff'];
+const COLORES = ['var(--color-accent)', 'var(--color-accent-strong)', '#ff6b35', '#c8a0ff'];
 
 export default function Reviews() {
   const [lista, setLista] = useState<Testimonial[] | null>(null);
@@ -68,7 +68,7 @@ function Estrellas({ n, size = 16 }: { n: number; size?: number }) {
 }
 
 function Firma({ t, color, size = 40 }: { t: Testimonial; color: string; size?: number }) {
-  const detalle = [t.role, t.company].filter(Boolean).join(' · ');
+  const detalle = [t.role, t.company].filter(Boolean).join(' Â· ');
   return (
     <div className="flex items-center gap-3">
       <div
@@ -76,8 +76,10 @@ function Firma({ t, color, size = 40 }: { t: Testimonial; color: string; size?: 
         style={{
           width: size,
           height: size,
-          background: `${color}18`,
-          border: `1px solid ${color}30`,
+          // color-mix y no `${color}18`: ahora los colores llegan como
+          // var(--…) y pegarles la opacidad al final da CSS inválido.
+          background: `color-mix(in srgb, ${color} 14%, transparent)`,
+          border: `1px solid color-mix(in srgb, ${color} 32%, transparent)`,
           color,
           fontSize: size / 2.6,
         }}
@@ -113,7 +115,7 @@ function Destacado({ t }: { t: Testimonial }) {
         {t.text}
       </blockquote>
       <figcaption className="mt-8">
-        <Firma t={t} color="#00c8ff" size={48} />
+        <Firma t={t} color="var(--color-accent)" size={48} />
       </figcaption>
     </figure>
   );
