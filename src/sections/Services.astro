@@ -1,24 +1,328 @@
 ---
-import ServicesList from '@/components/Services.tsx';
+import { Icon } from 'astro-icon/components';
+
+/**
+ * Servicios: tres prácticas con pestañas.
+ *
+ * Van fijos acá y no en el panel a propósito: cada práctica trae su propio
+ * panel ilustrativo (barras, lista de pasos, gráfico) y eso es diseño, no
+ * contenido editable. Meterlo en la base obligaría a un editor visual entero
+ * para que quedara igual.
+ *
+ * Las pestañas son radios con CSS: cero JavaScript, cero hidratación, y el
+ * teclado ya funciona nativo — flechas para moverse dentro del grupo.
+ */
+
+const practicas = [
+  {
+    id: 'software',
+    tab_en: 'Software and platforms',
+    tab_es: 'Software y plataformas',
+    n: '01',
+    t_en: 'Systems that hold up the whole operation',
+    t_es: 'Sistemas que sostienen la operación completa',
+    d_en: 'Inventory, billing, orders, logistics and approvals working as one system, with roles, history and live reports.',
+    d_es: 'Inventario, facturación, pedidos, logística y aprobaciones funcionando como un solo sistema, con roles, historial y reportes en vivo.',
+    chips_en: ['Own panel', 'Roles and permissions', 'Live reports'],
+    chips_es: ['Panel propio', 'Roles y permisos', 'Reportes en vivo'],
+    visual: 'barras',
+    visual_en: 'INVENTORY BY BRANCH',
+    visual_es: 'INVENTARIO POR SUCURSAL',
+    cards: [
+      { icon: 'lucide:code-xml', tag: 'A LA MEDIDA', t_en: 'Custom software', t_es: 'Software a la medida', d_en: 'Built on your real process, not on someone elses template.', d_es: 'Construido sobre tu proceso real, no sobre una plantilla ajena.' },
+      { icon: 'lucide:layout-panel-top', tag: 'WEB', t_en: 'Web applications', t_es: 'Aplicaciones web', d_en: 'Platforms and portals with a panel so your team publishes on its own.', d_es: 'Plataformas y portales con panel para que tu equipo publique solo.' },
+      { icon: 'lucide:smartphone', tag: 'IOS · ANDROID', t_en: 'Mobile apps', t_es: 'Apps móviles', d_en: 'One codebase connected to the systems you already run.', d_es: 'Una sola base de código conectada a los sistemas que ya operás.' },
+      { icon: 'lucide:shopping-cart', tag: 'E-COMMERCE', t_en: 'Online stores', t_es: 'Tiendas en línea', d_en: 'Catalog, payments and inventory ready to sell from day one.', d_es: 'Catálogo, pagos e inventario listos para vender desde el primer día.' },
+    ],
+  },
+  {
+    id: 'ia',
+    tab_en: 'AI and automation',
+    tab_es: 'IA y automatización',
+    n: '02',
+    t_en: 'AI agents that work while your team sleeps',
+    t_es: 'Agentes de IA que trabajan mientras tu equipo duerme',
+    d_en: 'They answer questions, quote, classify documents and log everything in your system. With clear rules, and everything they do is audited.',
+    d_es: 'Atienden consultas, cotizan, clasifican documentos y registran todo en tu sistema. Con reglas claras y todo lo que hacen queda auditado.',
+    chips_en: ['WhatsApp', 'Email', 'Documents'],
+    chips_es: ['WhatsApp', 'Correo', 'Documentos'],
+    visual: 'pasos',
+    visual_en: 'AGENT · QUOTES',
+    visual_es: 'AGENTE · COTIZACIONES',
+    cards: [
+      { icon: 'lucide:sparkles', tag: '24/7', t_en: 'Support agents', t_es: 'Agentes de atención', d_en: 'They answer and quote in your tone, with your real business data.', d_es: 'Responden y cotizan en tu tono, con la información real de tu negocio.' },
+      { icon: 'lucide:workflow', tag: 'PROCESOS', t_en: 'Workflow automation', t_es: 'Automatización de flujos', d_en: 'Repetitive tasks that move from one step to the next on their own.', d_es: 'Tareas repetitivas que pasan solas de un paso al siguiente.' },
+      { icon: 'lucide:plug', tag: 'APIS', t_en: 'Integrations', t_es: 'Integraciones', d_en: 'Billing, payments and CRM connected in a single data pipeline.', d_es: 'Facturación, pagos y CRM conectados en una sola tubería de datos.' },
+      { icon: 'lucide:shield-check', tag: 'AUDITABLE', t_en: 'Control and traceability', t_es: 'Control y trazabilidad', d_en: 'Every AI action is logged, reviewable and reversible.', d_es: 'Cada acción de la IA queda registrada, revisable y reversible.' },
+    ],
+  },
+  {
+    id: 'marketing',
+    tab_en: 'Marketing and growth',
+    tab_es: 'Marketing y crecimiento',
+    n: '03',
+    t_en: 'Marketing measured in customers, not likes',
+    t_es: 'Marketing que se mide en clientes, no en likes',
+    d_en: 'Sites that convert, campaigns with real tracking and content that answers what your customer searches for. All connected to the same panel where you see sales.',
+    d_es: 'Sitios que convierten, campañas con seguimiento real y contenido que responde a lo que tu cliente busca. Todo conectado al mismo panel donde ves las ventas.',
+    chips_en: ['Google', 'Meta', 'SEO'],
+    chips_es: ['Google', 'Meta', 'SEO'],
+    visual: 'grafico',
+    visual_en: 'LEADS PER WEEK',
+    visual_es: 'PROSPECTOS POR SEMANA',
+    cards: [
+      { icon: 'lucide:target', tag: 'CAMPAÑAS', t_en: 'Ads and acquisition', t_es: 'Anuncios y captación', d_en: 'Budget put where it brings customers, with a weekly report.', d_es: 'Presupuesto puesto donde deja clientes, con reporte semanal.' },
+      { icon: 'lucide:search', tag: 'SEO', t_en: 'Search positioning', t_es: 'Posicionamiento', d_en: 'Structure, content and speed so you show up when they search for you.', d_es: 'Estructura, contenido y velocidad para aparecer cuando te buscan.' },
+      { icon: 'lucide:chart-line', tag: 'ANALÍTICA', t_en: 'Real measurement', t_es: 'Medición real', d_en: 'You know where each customer came from and what it cost to bring them.', d_es: 'Sabés de dónde viene cada cliente y cuánto costó traerlo.' },
+      { icon: 'lucide:palette', tag: 'MARCA', t_en: 'Visual identity', t_es: 'Identidad visual', d_en: 'Logo, colors and pieces consistent across everything your business publishes.', d_es: 'Logo, colores y piezas coherentes en todo lo que publica tu negocio.' },
+    ],
+  },
+];
+
+const pasos = [
+  { es: 'Mensaje recibido', en: 'Message received' },
+  { es: 'Cliente identificado', en: 'Customer identified' },
+  { es: 'Cotización enviada', en: 'Quote sent' },
+  { es: 'Seguimiento programado', en: 'Follow-up scheduled' },
+];
 ---
 
-<!-- aria-labelledby ata la sección con su título: así un lector de pantalla
-     anuncia "Qué construimos" al entrar, en vez de "sección". -->
 <section id="services" class="py-24 sm:py-32" aria-labelledby="services-title">
   <div class="mx-auto max-w-6xl px-6">
-    <header class="mb-12 max-w-2xl">
-      <p class="kz-eyebrow">// qué construimos</p>
-      <h2 id="services-title" class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
-        <span class="en">Everything custom.<br />One person accountable.</span>
-        <span class="es">Todo a la medida.<br />Un solo responsable.</span>
-      </h2>
-      <p class="mt-4 leading-relaxed" style="color: var(--color-muted)">
+    <header class="mb-12 grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+      <div>
+        <p class="kz-eyebrow">// <span class="en">what we build</span><span class="es">qué construimos</span></p>
+        <h2 id="services-title" class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
+          <span class="en">Everything custom.<br /><span class="kz-apagado">One person accountable.</span></span>
+          <span class="es">Todo a la medida.<br /><span class="kz-apagado">Un solo responsable.</span></span>
+        </h2>
+      </div>
+      <p class="leading-relaxed" style="color: var(--color-muted)">
         <span class="en">Three practices, one team end to end. Switch tabs to see what each delivers.</span>
         <span class="es">Tres prácticas, un mismo equipo de principio a fin. Cambiá de pestaña para ver qué entrega cada una.</span>
       </p>
     </header>
 
-    <!-- Se administran desde /panel. Sin servicios publicados, no se muestra nada. -->
-    <ServicesList client:visible />
+    <!-- Radios y no botones: el navegador ya trae el manejo de teclado de un
+         grupo de opciones, y no hace falta una gota de JavaScript. -->
+    <fieldset class="kz-practicas">
+      <legend class="sr-only">
+        <span class="en">Practices</span><span class="es">Prácticas</span>
+      </legend>
+
+      <div class="mb-10 flex flex-wrap gap-2">
+        {
+          practicas.map((p, i) => (
+            <>
+              <input
+                type="radio"
+                name="practica"
+                id={`practica-${p.id}`}
+                class="kz-practica-radio sr-only"
+                checked={i === 0}
+              />
+              <label for={`practica-${p.id}`} class="kz-tab kz-practica-tab cursor-pointer">
+                <span class="en">{p.tab_en}</span><span class="es">{p.tab_es}</span>
+              </label>
+            </>
+          ))
+        }
+      </div>
+
+      {
+        practicas.map((p) => (
+          <div class="kz-practica-panel" data-practica={p.id}>
+            <article class="kz-card kz-card-principal mb-5 grid items-center gap-8 p-8 sm:p-10 lg:grid-cols-[1fr_0.85fr]">
+              <div>
+                <p class="kz-eyebrow">
+                  <span class="en">PRACTICE</span><span class="es">PRÁCTICA</span> {p.n}
+                </p>
+                <h3 class="mt-4 text-2xl font-bold leading-snug tracking-tight sm:text-3xl">
+                  <span class="en">{p.t_en}</span><span class="es">{p.t_es}</span>
+                </h3>
+                <p class="mt-4 leading-relaxed" style="color: var(--color-muted)">
+                  <span class="en">{p.d_en}</span><span class="es">{p.d_es}</span>
+                </p>
+                <ul class="mt-7 flex list-none flex-wrap gap-2">
+                  {p.chips_es.map((c, i) => (
+                    <li class="kz-chip">
+                      <span class="en">{p.chips_en[i]}</span><span class="es">{c}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Panel ilustrativo: dibuja de qué se trata. aria-hidden porque
+                  no aporta información que haya que leer en voz alta. */}
+              <div class="kz-visual" aria-hidden="true">
+                <p class="kz-visual-titulo">
+                  <span class="en">{p.visual_en}</span><span class="es">{p.visual_es}</span>
+                </p>
+
+                {p.visual === 'barras' && (
+                  <div class="mt-4 space-y-2.5">
+                    {[72, 48, 30].map((w) => (
+                      <div class="kz-barra">
+                        <span class="kz-barra-llena" style={`width:${w}%`} />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {p.visual === 'pasos' && (
+                  <ul class="mt-4 list-none space-y-2">
+                    {pasos.map((paso, i) => (
+                      <li class="kz-paso">
+                        <span class={`kz-punto ${i === 3 ? 'kz-punto-tenue' : ''}`} />
+                        <span class="en">{paso.en}</span><span class="es">{paso.es}</span>
+                        <span class="kz-paso-estado ml-auto">{i === 3 ? '...' : 'ok'}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                {p.visual === 'grafico' && (
+                  <div class="mt-5 flex h-28 items-end gap-2">
+                    {[38, 46, 42, 62, 74, 100].map((h, i) => (
+                      <span
+                        class={`kz-columna ${i === 5 ? 'kz-columna-viva' : ''}`}
+                        style={`height:${h}%`}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </article>
+
+            <ul class="grid list-none gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {p.cards.map((c) => (
+                <li>
+                  <article class="kz-card h-full p-6">
+                    <div class="flex items-start justify-between gap-3">
+                      <span class="kz-icono">
+                        <Icon name={c.icon} size={19} aria-hidden="true" />
+                      </span>
+                      <span class="kz-etiqueta">{c.tag}</span>
+                    </div>
+                    <h4 class="mt-5 text-lg font-bold leading-snug">
+                      <span class="en">{c.t_en}</span><span class="es">{c.t_es}</span>
+                    </h4>
+                    <p class="mt-2 text-sm leading-relaxed" style="color: var(--color-muted)">
+                      <span class="en">{c.d_en}</span><span class="es">{c.d_es}</span>
+                    </p>
+                  </article>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </fieldset>
   </div>
 </section>
+
+<style>
+  .kz-practicas { border: 0; padding: 0; margin: 0; }
+
+  /* Cada panel se muestra solo si su radio está marcado. */
+  .kz-practica-panel { display: none; }
+  .kz-practicas:has(#practica-software:checked) [data-practica='software'],
+  .kz-practicas:has(#practica-ia:checked) [data-practica='ia'],
+  .kz-practicas:has(#practica-marketing:checked) [data-practica='marketing'] {
+    display: block;
+  }
+
+  /* La pestaña activa se pinta desde el estado del radio, no con una clase. */
+  .kz-practica-radio:checked + .kz-practica-tab {
+    color: var(--color-text);
+    font-weight: 600;
+    border-color: var(--color-accent);
+    background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  }
+  /* El radio está oculto: el foco se dibuja sobre su etiqueta. */
+  .kz-practica-radio:focus-visible + .kz-practica-tab {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  .kz-apagado { color: var(--color-muted-2); }
+
+  .kz-visual {
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    background: var(--color-bg-2);
+    padding: 18px;
+  }
+  .kz-visual-titulo {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted-2);
+  }
+
+  .kz-barra {
+    height: 8px;
+    border-radius: 999px;
+    background: var(--color-card-2);
+    overflow: hidden;
+  }
+  .kz-barra-llena {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: var(--color-accent);
+  }
+
+  .kz-paso {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid var(--color-border);
+    border-radius: 9px;
+    background: var(--color-card);
+    padding: 9px 12px;
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--color-muted);
+  }
+  .kz-punto {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--color-accent);
+    flex-shrink: 0;
+  }
+  .kz-punto-tenue { background: var(--color-muted-2); }
+  .kz-paso-estado { font-size: 11px; color: var(--color-muted-2); }
+
+  .kz-columna {
+    flex: 1;
+    border-radius: 6px 6px 0 0;
+    background: var(--color-card-2);
+  }
+  .kz-columna-viva { background: var(--color-accent); }
+
+  .kz-icono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-2);
+    color: var(--color-accent);
+  }
+
+  .kz-etiqueta {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    padding: 4px 9px;
+    border-radius: 999px;
+    border: 1px solid var(--color-border);
+    color: var(--color-accent-soft);
+    white-space: nowrap;
+  }
+</style>
