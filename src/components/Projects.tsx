@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { fetchProjects } from '@/lib/api';
+import { T } from '@/lib/lang';
 import type { Project } from '@/types';
 
 /**
@@ -99,7 +100,7 @@ export default function Projects() {
                 className="rounded-lg px-4 py-2 text-sm font-bold transition-opacity hover:opacity-90"
                 style={{ background: 'var(--color-accent-strong)', color: '#fff' }}
               >
-                Quiero algo así
+                <T en="I want something like this" es="Quiero algo así" />
               </a>
               {p.liveUrl && (
                 <a
@@ -109,7 +110,7 @@ export default function Projects() {
                   className="text-sm transition-colors hover:opacity-80"
                   style={{ color: 'var(--color-muted)' }}
                 >
-                  Ver en vivo ↗
+                  <T en="View live" es="Ver en vivo" /> ↗
                 </a>
               )}
             </div>

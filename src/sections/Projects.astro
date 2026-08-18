@@ -2,17 +2,19 @@
 import ProjectsGrid from '@/components/Projects.tsx';
 ---
 
-<section id="proyectos" class="py-24 sm:py-32">
+<section id="proyectos" class="py-24 sm:py-32" aria-labelledby="projects-title">
   <div class="mx-auto max-w-6xl px-6">
-    <div class="mb-12 max-w-2xl">
-      <p class="section-tag">// trabajo</p>
-      <h2 class="mt-4 text-3xl font-black tracking-tight sm:text-4xl">
-        Lo que hemos <span class="gradient-text">construido</span>
+    <header class="mb-12 max-w-2xl">
+      <p class="kz-eyebrow">// <span class="en">work</span><span class="es">trabajo</span></p>
+      <h2 id="projects-title" class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
+        <span class="en">What we have <span class="gradient-text">built</span></span>
+        <span class="es">Lo que hemos <span class="gradient-text">construido</span></span>
       </h2>
-      <p class="mt-4 text-base" style="color: var(--color-muted)">
-        Sistemas que hoy están corriendo en negocios reales de Honduras.
+      <p class="mt-4 leading-relaxed" style="color: var(--color-muted)">
+        <span class="en">Systems running today in real businesses in Honduras.</span>
+        <span class="es">Sistemas que hoy están corriendo en negocios reales de Honduras.</span>
       </p>
-    </div>
+    </header>
 
     <!-- client:visible: no se pide nada a la API hasta que la sección entra
          en pantalla. Así el portafolio no pesa en la carga inicial. -->

@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { fetchTestimonials } from '@/lib/api';
+import { useLang } from '@/lib/lang';
 import type { Testimonial } from '@/types';
 
 /**
@@ -56,8 +57,9 @@ export default function Reviews() {
 }
 
 function Estrellas({ n, size = 16 }: { n: number; size?: number }) {
+  const lang = useLang();
   return (
-    <div className="flex gap-1" aria-label={`${n} de 5`}>
+    <div className="flex gap-1" aria-label={lang === 'es' ? `${n} de 5` : `${n} out of 5`}>
       {Array.from({ length: n }).map((_, i) => (
         <svg key={i} width={size} height={size} viewBox="0 0 16 16" fill="#ffbd2e" aria-hidden="true">
           <path d="M8 1.5l1.9 3.8 4.2.6-3 3 .7 4.2L8 11l-3.8 2.1.7-4.2-3-3 4.2-.6z" />

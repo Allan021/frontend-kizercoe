@@ -1,30 +1,104 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { submitContact } from '@/lib/api';
+import { useLang, T, type Lang } from '@/lib/lang';
 import type { ContactFormData } from '@/types';
 
-const schema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Enter a valid email address'),
-  company: z.string().optional(),
-  service: z.string().min(1, 'Please select a service'),
-  budget: z.string().optional(),
-  message: z.string().min(10, 'Message must be at least 10 characters'),
-});
+/**
+ * Formulario de contacto.
+ *
+ * Todo lo que se ve cambia de idioma con el botón del nav: el texto suelto con
+ * <T> (dos nodos, los pinta el CSS) y lo que va en atributos —placeholders,
+ * <option>, mensajes de validación— con useLang().
+ *
+ * Los `value` de los <select> se quedan en inglés a propósito: es lo que viaja
+ * al correo y a la base, y no debe cambiar porque alguien tocó el idioma.
+ */
 
-type FormValues = z.infer<typeof schema>;
+const COPY = {
+  en: {
+    nameMin: 'Name must be at least 2 characters',
+    emailBad: 'Enter a valid email address',
+    servicePick: 'Please select a service',
+    messageMin: 'Message must be at least 10 characters',
+    genericError: 'Something went wrong. Please try again.',
+    namePlaceholder: 'Ana García',
+    emailPlaceholder: 'ana@company.com',
+    companyPlaceholder: 'Acme Inc.',
+    servicePlaceholder: 'Select a service...',
+    budgetNone: 'Prefer not to say / Not sure',
+    budgetUnder: 'Under $5,000',
+    budgetRetainer: 'Monthly retainer preferred',
+    messagePlaceholder:
+      'Describe your current challenge, what you want to build, and any relevant technical details...',
+    services: {
+      'Web Applications': 'Web Application',
+      'Mobile Apps': 'Mobile App',
+      'Billing Systems': 'Billing System',
+      'Payment Platforms': 'Payment Platform',
+      'AI Automation': 'AI Automation',
+      'Digital Integrations': 'Digital Integrations',
+      'Computer Repair': 'Computer Repair',
+      'Security Cameras': 'Security Cameras',
+      Other: 'Other / Not sure yet',
+    },
+  },
+  es: {
+    nameMin: 'El nombre necesita al menos 2 caracteres',
+    emailBad: 'Escribí un correo válido',
+    servicePick: 'Elegí un servicio',
+    messageMin: 'El mensaje necesita al menos 10 caracteres',
+    genericError: 'Algo salió mal. Probá de nuevo.',
+    namePlaceholder: 'Ana García',
+    emailPlaceholder: 'ana@empresa.com',
+    companyPlaceholder: 'Empresa S.A. de C.V.',
+    servicePlaceholder: 'Elegí un servicio...',
+    budgetNone: 'Prefiero no decir / No sé todavía',
+    budgetUnder: 'Menos de $5,000',
+    budgetRetainer: 'Prefiero plan mensual',
+    messagePlaceholder:
+      'Contanos qué problema tenés hoy, qué querés construir y cualquier detalle técnico que sirva...',
+    services: {
+      'Web Applications': 'Aplicación web',
+      'Mobile Apps': 'App móvil',
+      'Billing Systems': 'Sistema de facturación',
+      'Payment Platforms': 'Plataforma de pagos',
+      'AI Automation': 'Automatización con IA',
+      'Digital Integrations': 'Integraciones',
+      'Computer Repair': 'Reparación de equipo',
+      'Security Cameras': 'Cámaras de seguridad',
+      Other: 'Otro / Todavía no sé',
+    },
+  },
+} satisfies Record<Lang, Record<string, unknown>>;
+
+const SERVICIOS = Object.keys(COPY.en.services) as (keyof typeof COPY.en.services)[];
 
 const inputClass =
-  'w-full px-4 py-3 rounded-xl text-sm font-sans text-[#f0f8ff] placeholder-[#4a6a8a] border border-[rgba(91,140,255,0.12)] bg-[#071020] focus:outline-none focus:border-[var(--color-accent)] focus:ring-1 focus:ring-[var(--color-accent)] transition-colors duration-200';
+  'w-full px-4 py-3 rounded-xl text-sm font-sans text-[var(--color-text)] placeholder-[var(--color-muted-2)] border border-[var(--color-border)] bg-[var(--color-bg-2)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-1 focus:ring-[var(--color-accent)] transition-colors duration-200';
 
-const labelClass = 'block text-sm font-semibold text-[#f0f8ff] mb-2';
+const labelClass = 'block text-sm font-semibold text-[var(--color-text)] mb-2';
 
 const errorClass = 'text-[#ff6b6b] text-xs mt-1.5 flex items-center gap-1.5';
 
+const opcional = 'text-[var(--color-muted-2)] font-normal';
+
+function IconoError() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+      <circle cx="6" cy="6" r="5" stroke="#ff6b6b" strokeWidth="1.2" />
+      <path d="M6 4v3M6 8.5v.5" stroke="#ff6b6b" strokeWidth="1.2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export default function ContactForm() {
+  const lang = useLang();
+  const t = COPY[lang];
+
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
   // De qué proyecto vino, si llegó desde una tarjeta del portafolio.
@@ -38,14 +112,28 @@ export default function ContactForm() {
     setProjectSlug(new URLSearchParams(query).get('proyecto'));
   }, []);
 
+  // El esquema se rearma al cambiar de idioma: los mensajes viven adentro.
+  const schema = useMemo(
+    () =>
+      z.object({
+        name: z.string().min(2, t.nameMin),
+        email: z.string().email(t.emailBad),
+        company: z.string().optional(),
+        service: z.string().min(1, t.servicePick),
+        budget: z.string().optional(),
+        message: z.string().min(10, t.messageMin),
+      }),
+    [t],
+  );
+
+  type FormValues = z.infer<typeof schema>;
+
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FormValues>({
-    resolver: zodResolver(schema),
-  });
+  } = useForm<FormValues>({ resolver: zodResolver(schema) });
 
   const onSubmit = async (data: FormValues) => {
     setStatus('loading');
@@ -65,7 +153,7 @@ export default function ContactForm() {
       reset();
     } catch (err) {
       setStatus('error');
-      setErrorMsg(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
+      setErrorMsg(err instanceof Error ? err.message : t.genericError);
     }
   };
 
@@ -76,7 +164,7 @@ export default function ContactForm() {
           className="w-20 h-20 rounded-full flex items-center justify-center mb-6"
           style={{ background: 'rgba(46,91,255,0.12)', border: '2px solid rgba(46,91,255,0.3)' }}
         >
-          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true">
             <path
               d="M7 18l8 8L29 10"
               stroke="var(--color-accent-strong)"
@@ -86,15 +174,20 @@ export default function ContactForm() {
             />
           </svg>
         </div>
-        <h3 className="text-2xl font-black text-[#f0f8ff] mb-3">Message Received!</h3>
-        <p className="text-[#7a9bbf] text-sm leading-relaxed max-w-[360px] mb-8">
-          Thanks for reaching out. Our team will review your request and get back to you within 24 hours.
+        <h3 className="text-2xl font-black text-[var(--color-text)] mb-3">
+          <T en="Message received!" es="¡Mensaje recibido!" />
+        </h3>
+        <p className="text-[var(--color-muted)] text-sm leading-relaxed max-w-[360px] mb-8">
+          <T
+            en="Thanks for reaching out. We review your request and get back to you within 24 hours."
+            es="Gracias por escribirnos. Revisamos tu solicitud y te respondemos dentro de 24 horas."
+          />
         </p>
         <button
           onClick={() => setStatus('idle')}
-          className="px-6 py-3 rounded-xl text-sm font-bold border border-[rgba(91,140,255,0.2)] text-[#f0f8ff] hover:border-[var(--color-accent)] hover:bg-[rgba(91,140,255,0.05)] transition-all duration-200 cursor-pointer"
+          className="px-6 py-3 rounded-xl text-sm font-bold border border-[var(--color-border)] text-[var(--color-text)] transition-all duration-200 cursor-pointer hover:border-[var(--color-accent)]"
         >
-          Send another message
+          <T en="Send another message" es="Enviar otro mensaje" />
         </button>
       </div>
     );
@@ -102,64 +195,63 @@ export default function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
-      {/* Row 1: Name + Email */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      {/* Nombre + correo */}
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         <div>
           <label htmlFor="name" className={labelClass}>
-            Full Name <span className="text-[var(--color-accent)]">*</span>
+            <T en="Full name" es="Nombre completo" />{' '}
+            <span className="text-[var(--color-accent)]">*</span>
           </label>
           <input
             id="name"
             type="text"
-            placeholder="Ana García"
+            placeholder={t.namePlaceholder}
             autoComplete="name"
             className={inputClass}
             {...register('name')}
           />
           {errors.name && (
             <p className={errorClass} role="alert">
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <circle cx="6" cy="6" r="5" stroke="#ff6b6b" strokeWidth="1.2"/>
-                <path d="M6 4v3M6 8.5v.5" stroke="#ff6b6b" strokeWidth="1.2" strokeLinecap="round"/>
-              </svg>
+              <IconoError />
               {errors.name.message}
             </p>
           )}
         </div>
         <div>
           <label htmlFor="email" className={labelClass}>
-            Work Email <span className="text-[var(--color-accent)]">*</span>
+            <T en="Work email" es="Correo de trabajo" />{' '}
+            <span className="text-[var(--color-accent)]">*</span>
           </label>
           <input
             id="email"
             type="email"
-            placeholder="ana@company.com"
+            placeholder={t.emailPlaceholder}
             autoComplete="email"
             className={inputClass}
             {...register('email')}
           />
           {errors.email && (
             <p className={errorClass} role="alert">
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <circle cx="6" cy="6" r="5" stroke="#ff6b6b" strokeWidth="1.2"/>
-                <path d="M6 4v3M6 8.5v.5" stroke="#ff6b6b" strokeWidth="1.2" strokeLinecap="round"/>
-              </svg>
+              <IconoError />
               {errors.email.message}
             </p>
           )}
         </div>
       </div>
 
-      {/* Row 2: Company + Service */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      {/* Empresa + servicio */}
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         <div>
           <label htmlFor="company" className={labelClass}>
-            Company Name <span className="text-[#4a6a8a] font-normal">(optional)</span>
+            <T en="Company name" es="Empresa" />{' '}
+            <span className={opcional}>
+              <T en="(optional)" es="(opcional)" />
+            </span>
           </label>
           <input
             id="company"
             type="text"
-            placeholder="Empresa S.A. de C.V."
+            placeholder={t.companyPlaceholder}
             autoComplete="organization"
             className={inputClass}
             {...register('company')}
@@ -167,7 +259,8 @@ export default function ContactForm() {
         </div>
         <div>
           <label htmlFor="service" className={labelClass}>
-            Service Needed <span className="text-[var(--color-accent)]">*</span>
+            <T en="Service needed" es="Servicio que necesitás" />{' '}
+            <span className="text-[var(--color-accent)]">*</span>
           </label>
           <select
             id="service"
@@ -175,33 +268,31 @@ export default function ContactForm() {
             {...register('service')}
             defaultValue=""
           >
-            <option value="" disabled>Select a service...</option>
-            <option value="Web Applications">Web Application</option>
-            <option value="Mobile Apps">Mobile App</option>
-            <option value="Billing Systems">Billing System</option>
-            <option value="Payment Platforms">Payment Platform</option>
-            <option value="AI Automation">AI Automation</option>
-            <option value="Digital Integrations">Digital Integrations</option>
-            <option value="Computer Repair">Computer Repair</option>
-            <option value="Security Cameras">Security Cameras</option>
-            <option value="Other">Other / Not sure yet</option>
+            <option value="" disabled>
+              {t.servicePlaceholder}
+            </option>
+            {SERVICIOS.map((clave) => (
+              <option key={clave} value={clave}>
+                {t.services[clave]}
+              </option>
+            ))}
           </select>
           {errors.service && (
             <p className={errorClass} role="alert">
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <circle cx="6" cy="6" r="5" stroke="#ff6b6b" strokeWidth="1.2"/>
-                <path d="M6 4v3M6 8.5v.5" stroke="#ff6b6b" strokeWidth="1.2" strokeLinecap="round"/>
-              </svg>
+              <IconoError />
               {errors.service.message}
             </p>
           )}
         </div>
       </div>
 
-      {/* Budget */}
+      {/* Presupuesto */}
       <div>
         <label htmlFor="budget" className={labelClass}>
-          Estimated Budget <span className="text-[#4a6a8a] font-normal">(optional)</span>
+          <T en="Estimated budget" es="Presupuesto estimado" />{' '}
+          <span className={opcional}>
+            <T en="(optional)" es="(opcional)" />
+          </span>
         </label>
         <select
           id="budget"
@@ -209,58 +300,67 @@ export default function ContactForm() {
           {...register('budget')}
           defaultValue=""
         >
-          <option value="">Prefer not to say / Not sure</option>
-          <option value="under-5k">Under $5,000</option>
+          <option value="">{t.budgetNone}</option>
+          <option value="under-5k">{t.budgetUnder}</option>
           <option value="5k-15k">$5,000 – $15,000</option>
           <option value="15k-50k">$15,000 – $50,000</option>
           <option value="50k-plus">$50,000+</option>
-          <option value="retainer">Monthly retainer preferred</option>
+          <option value="retainer">{t.budgetRetainer}</option>
         </select>
       </div>
 
-      {/* Message */}
+      {/* Mensaje */}
       <div>
         <label htmlFor="message" className={labelClass}>
-          Tell us about your project <span className="text-[var(--color-accent)]">*</span>
+          <T en="Tell us about your project" es="Contanos de tu proyecto" />{' '}
+          <span className="text-[var(--color-accent)]">*</span>
         </label>
         <textarea
           id="message"
           rows={5}
-          placeholder="Describe your current challenge, what you want to build, and any relevant technical details..."
+          placeholder={t.messagePlaceholder}
           className={`${inputClass} resize-none`}
           {...register('message')}
         />
         {errors.message && (
           <p className={errorClass} role="alert">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <circle cx="6" cy="6" r="5" stroke="#ff6b6b" strokeWidth="1.2"/>
-              <path d="M6 4v3M6 8.5v.5" stroke="#ff6b6b" strokeWidth="1.2" strokeLinecap="round"/>
-            </svg>
+            <IconoError />
             {errors.message.message}
           </p>
         )}
       </div>
 
-      {/* API error */}
+      {/* Error de la API */}
       {status === 'error' && (
         <div
-          className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm"
-          style={{ background: 'rgba(255,107,107,0.08)', border: '1px solid rgba(255,107,107,0.2)', color: '#ff6b6b' }}
+          className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm"
+          style={{
+            background: 'rgba(255,107,107,0.08)',
+            border: '1px solid rgba(255,107,107,0.2)',
+            color: '#ff6b6b',
+          }}
           role="alert"
         >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ flexShrink: 0 }}>
-            <circle cx="8" cy="8" r="6.5" stroke="currentColor" strokeWidth="1.3"/>
-            <path d="M8 5v4M8 10.5v1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            style={{ flexShrink: 0 }}
+            aria-hidden="true"
+          >
+            <circle cx="8" cy="8" r="6.5" stroke="currentColor" strokeWidth="1.3" />
+            <path d="M8 5v4M8 10.5v1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
           </svg>
           {errorMsg}
         </div>
       )}
 
-      {/* Submit */}
+      {/* Enviar */}
       <button
         type="submit"
         disabled={status === 'loading'}
-        className="w-full py-4 rounded-xl font-bold text-[15px] text-white transition-all duration-200 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+        className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-xl py-4 text-[15px] font-bold text-white transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60"
         style={{
           background: 'linear-gradient(135deg, var(--color-accent), var(--color-accent-strong))',
           boxShadow: '0 4px 24px rgba(91,140,255,0.3)',
@@ -274,24 +374,35 @@ export default function ContactForm() {
               viewBox="0 0 18 18"
               fill="none"
               className="animate-spin"
+              aria-hidden="true"
             >
-              <circle cx="9" cy="9" r="7" stroke="rgba(4,13,24,0.3)" strokeWidth="2"/>
-              <path d="M9 2a7 7 0 017 7" stroke="#fff" strokeWidth="2" strokeLinecap="round"/>
+              <circle cx="9" cy="9" r="7" stroke="rgba(255,255,255,0.3)" strokeWidth="2" />
+              <path d="M9 2a7 7 0 017 7" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
             </svg>
-            Sending...
+            <T en="Sending..." es="Enviando..." />
           </>
         ) : (
           <>
-            Send Message
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M2 8l12-6-6 12V8H2z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" fill="currentColor" fillOpacity="0.2"/>
+            <T en="Send message" es="Enviar mensaje" />
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path
+                d="M2 8l12-6-6 12V8H2z"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinejoin="round"
+                fill="currentColor"
+                fillOpacity="0.2"
+              />
             </svg>
           </>
         )}
       </button>
 
-      <p className="text-center text-[#4a6a8a] text-xs">
-        We respond within 24 hours. No spam, ever.
+      <p className="text-center text-xs text-[var(--color-muted-2)]">
+        <T
+          en="We respond within 24 hours. No spam, ever."
+          es="Respondemos dentro de 24 horas. Nada de spam."
+        />
       </p>
     </form>
   );
