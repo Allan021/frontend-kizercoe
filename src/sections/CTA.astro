@@ -90,6 +90,18 @@ import ContactForm from '@/components/ContactForm';
       </div>
 
       <!-- Right: Form -->
+      <script>
+        // El enlace /#contact?proyecto=x no coincide con ningún id, así que el
+        // navegador no hace scroll solo. Se hace a mano, al cargar y cada vez
+        // que el hash cambia (venir de una tarjeta estando ya en la página).
+        const irAlContacto = () => {
+          if (location.hash.startsWith('#contact?')) {
+            document.getElementById('contact')?.scrollIntoView();
+          }
+        };
+        irAlContacto();
+        window.addEventListener('hashchange', irAlContacto);
+      </script>
       <div
         class="rounded-2xl p-7 border border-border-soft"
         style="background: var(--color-card);"

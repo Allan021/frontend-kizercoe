@@ -1,6 +1,17 @@
 'use client';
 import { useEffect, useMemo, useState } from 'react';
 import {
+  FolderKanban,
+  ImageIcon,
+  LogOut,
+  MessageSquareQuote,
+  Pencil,
+  Plus,
+  Trash2,
+} from 'lucide-react';
+import { SubirImagen } from '@/components/SubirImagen';
+import { miniatura } from '@/lib/upload';
+import {
   clearPanelToken,
   getPanelToken,
   panelDeleteProject,
@@ -116,32 +127,46 @@ function Escritorio({ user, onSalir }: { user: PanelUser; onSalir: () => void })
 
           <div className="flex items-center gap-3">
             <span
-              className="hidden rounded-full border px-3 py-1.5 text-[13px] sm:inline"
+              className="hidden items-center gap-2 rounded-full border px-3 py-1.5 text-[13px] sm:inline-flex"
               style={{ borderColor: 'var(--color-border)', color: 'var(--color-muted)' }}
             >
+              <span className="kz-latido" />
               {user.name}
             </span>
             <button
               onClick={onSalir}
-              className="rounded-lg border px-3 py-1.5 text-[13px] transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-[13px] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-text)]"
               style={{ borderColor: 'var(--color-border)', color: 'var(--color-muted)' }}
             >
+              <LogOut size={13} />
               Salir
             </button>
           </div>
         </div>
 
         <nav aria-label="Secciones del panel" className="mt-4 flex gap-2">
-          {(['proyectos', 'testimonios'] as const).map((p) => (
+          {(
+            [
+              ['proyectos', FolderKanban],
+              ['testimonios', MessageSquareQuote],
+            ] as const
+          ).map(([p, Icono]) => (
             <button
               key={p}
               onClick={() => setPestana(p)}
               aria-current={pestana === p ? 'page' : undefined}
-              className={`kz-tab capitalize ${pestana === p ? 'kz-tab-activa' : ''}`}
+              className={`kz-tab inline-flex items-center gap-2 capitalize ${pestana === p ? 'kz-tab-activa' : ''}`}
             >
+              <Icono size={15} strokeWidth={1.75} />
               {p}
               {conteos[p] !== null && (
-                <span className="ml-2 text-[11.5px]" style={{ color: 'var(--color-muted-2)' }}>
+                <span
+                  className="rounded-full px-1.5 font-mono text-[11px]"
+                  style={{
+                    background: 'color-mix(in srgb, var(--color-accent) 14%, transparent)',
+                    color: 'var(--color-accent-soft)',
+                  }}
+                >
                   {conteos[p]}
                 </span>
               )}
@@ -256,6 +281,7 @@ function Vacio({ titulo, texto, onCrear, cta }: { titulo: string; texto: string;
         {texto}
       </p>
       <button onClick={onCrear} className="kz-btn kz-btn-primario mt-6">
+        <Plus size={16} />
         {cta}
       </button>
     </div>
@@ -320,17 +346,33 @@ function Fila({
   titulo,
   detalle,
   etiquetas,
+  imagen,
   onEditar,
   onBorrar,
 }: {
   titulo: React.ReactNode;
-  detalle: string;
+  detalle: React.ReactNode;
   etiquetas: React.ReactNode;
+  /** URL de imagen (proyectos). undefined = fila sin columna de imagen. */
+  imagen?: string | null;
   onEditar: () => void;
   onBorrar: () => void;
 }) {
   return (
     <li className="kz-card flex flex-wrap items-center gap-4 p-4">
+      {imagen !== undefined && (
+        <span
+          aria-hidden="true"
+          className="grid h-14 w-20 shrink-0 place-items-center overflow-hidden rounded-lg border"
+          style={{ borderColor: 'var(--color-border)', background: 'var(--color-bg-2)', color: 'var(--color-muted-2)' }}
+        >
+          {imagen ? (
+            <img src={miniatura(imagen, 160) ?? imagen} alt="" className="h-full w-full object-cover" loading="lazy" />
+          ) : (
+            <ImageIcon size={18} strokeWidth={1.5} />
+          )}
+        </span>
+      )}
       <div className="min-w-0 flex-1">
         <p className="flex flex-wrap items-center gap-2 font-semibold">
           {titulo}
@@ -343,12 +385,19 @@ function Fila({
       <div className="flex gap-2 text-sm">
         <button
           onClick={onEditar}
-          className="rounded-lg border px-3 py-1.5 transition-colors"
+          className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 transition-colors hover:border-[var(--color-accent)]"
           style={{ borderColor: 'var(--color-border)' }}
         >
+          <Pencil size={13} />
           Editar
         </button>
-        <button onClick={onBorrar} className="rounded-lg px-3 py-1.5" style={{ color: '#ff6b6b' }}>
+        <button
+          onClick={onBorrar}
+          aria-label="Borrar"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-transparent px-3 py-1.5 transition-colors hover:border-[rgba(255,107,107,0.4)]"
+          style={{ color: '#ff6b6b' }}
+        >
+          <Trash2 size={13} />
           Borrar
         </button>
       </div>
@@ -376,6 +425,7 @@ function Encabezado({
         </p>
       </div>
       <button onClick={onCrear} className="kz-btn kz-btn-primario">
+        <Plus size={16} />
         {cta}
       </button>
     </div>
@@ -554,15 +604,6 @@ function Proyectos({ onConteo }: { onConteo: (n: number) => void }) {
                   style={INPUT_STYLE}
                 />
               </Campo>
-              <Campo etiqueta="Imagen (URL)">
-                <input
-                  value={editando.imageUrl ?? ''}
-                  onChange={(e) => setEditando({ ...editando, imageUrl: e.target.value })}
-                  placeholder="https://…"
-                  className={INPUT}
-                  style={INPUT_STYLE}
-                />
-              </Campo>
               <Campo etiqueta="Ver en vivo (URL)">
                 <input
                   value={editando.liveUrl ?? ''}
@@ -570,6 +611,17 @@ function Proyectos({ onConteo }: { onConteo: (n: number) => void }) {
                   placeholder="https://…"
                   className={INPUT}
                   style={INPUT_STYLE}
+                />
+              </Campo>
+            </div>
+
+            <div className="mt-4">
+              <Campo etiqueta="Imagen" ayuda="Es la que se ve en la tarjeta del proyecto.">
+                <SubirImagen
+                  url={editando.imageUrl ?? null}
+                  onSubida={(url) => setEditando({ ...editando, imageUrl: url })}
+                  onQuitar={() => setEditando({ ...editando, imageUrl: null })}
+                  etiqueta="Subí la imagen del proyecto"
                 />
               </Campo>
             </div>
@@ -646,7 +698,15 @@ function Proyectos({ onConteo }: { onConteo: (n: number) => void }) {
             <Fila
               key={p.id}
               titulo={p.title}
-              detalle={`/${p.slug} · ${p.summary}`}
+              imagen={p.imageUrl}
+              detalle={
+                <>
+                  <span className="font-mono text-[12px]" style={{ color: 'var(--color-muted-2)' }}>
+                    /{p.slug}
+                  </span>{' '}
+                  · {p.summary}
+                </>
+              }
               etiquetas={!p.published && <Etiqueta texto="borrador" tono="borrador" />}
               onEditar={() => {
                 setError(null);

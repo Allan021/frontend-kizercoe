@@ -106,10 +106,17 @@ export default function ContactForm() {
 
   useEffect(() => {
     // El enlace es /#contact?proyecto=slug: el parámetro viaja en el hash, así
-    // que no está en location.search sino después del "?" del fragmento.
-    const hash = window.location.hash;
-    const query = hash.includes('?') ? hash.slice(hash.indexOf('?')) : window.location.search;
-    setProjectSlug(new URLSearchParams(query).get('proyecto'));
+    // que no está en location.search sino después del "?" del fragmento. Se
+    // vuelve a leer en cada hashchange: al hacer clic en una tarjeta estando
+    // ya en la página no hay recarga, solo cambia el hash.
+    const leer = () => {
+      const hash = window.location.hash;
+      const query = hash.includes('?') ? hash.slice(hash.indexOf('?')) : window.location.search;
+      setProjectSlug(new URLSearchParams(query).get('proyecto'));
+    };
+    leer();
+    window.addEventListener('hashchange', leer);
+    return () => window.removeEventListener('hashchange', leer);
   }, []);
 
   // El esquema se rearma al cambiar de idioma: los mensajes viven adentro.
@@ -195,6 +202,19 @@ export default function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
+      {projectSlug && (
+        <p
+          className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 font-mono text-[11.5px] uppercase tracking-wider"
+          style={{
+            borderColor: 'color-mix(in srgb, var(--color-accent) 35%, transparent)',
+            background: 'color-mix(in srgb, var(--color-accent) 10%, transparent)',
+            color: 'var(--color-accent-soft)',
+          }}
+        >
+          <span className="kz-latido" />
+          <T en={`about: ${projectSlug}`} es={`sobre: ${projectSlug}`} />
+        </p>
+      )}
       {/* Nombre + correo */}
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         <div>
