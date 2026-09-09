@@ -26,7 +26,9 @@ const rutas = [
 ];
 
 const garantias = [
-  { en: 'Reply in under 24 h', es: 'Respuesta en menos de 24 h' },
+  { en: '24/7 support, we stay with you', es: 'Acompañamiento 24/7' },
+  { en: 'Delivered in weeks, not months', es: 'Entregas en semanas, no meses' },
+  { en: 'Built for your business, no templates', es: 'Hecho para tu negocio, sin plantillas' },
   { en: 'Fixed price', es: 'Precio fijo' },
   { en: 'Code under your name', es: 'Código a tu nombre' },
 ];
@@ -69,8 +71,8 @@ const garantias = [
         id="hero-title"
         class="kz-rise kz-rise-1 mt-5 text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl"
       >
-        <span class="en">We take your business<br /><span class="kz-degradado">to the next level.</span></span>
-        <span class="es">Llevamos tu negocio<br /><span class="kz-degradado">al siguiente nivel.</span></span>
+        <span class="en">Your business, online and under control<br /><span class="kz-degradado">without spending a fortune.</span></span>
+        <span class="es">Tu negocio, en línea y bajo control<br /><span class="kz-degradado">sin gastar una millonada.</span></span>
       </h1>
 
       <p
@@ -93,8 +95,16 @@ const garantias = [
           <span class="en">Quote my project</span><span class="es">Cotizar mi proyecto</span>
           <Icon name="lucide:arrow-right" size={17} aria-hidden="true" />
         </a>
-        <a href="#proyectos" class="kz-btn kz-btn-secundario">
-          <span class="en">See cases</span><span class="es">Ver casos</span>
+        <!-- La puerta que todo el mundo sabe usar: en Honduras se escribe por
+             WhatsApp, no se llenan formularios. -->
+        <a
+          href="https://wa.me/50498622160?text=Hola!%20Quiero%20hacer%20una%20cita%20con%20Kizercode."
+          target="_blank"
+          rel="noopener noreferrer"
+          class="kz-btn kz-btn-secundario"
+        >
+          <Icon name="lucide:message-circle" size={17} aria-hidden="true" style="color: #25d366" />
+          <span class="en">WhatsApp us</span><span class="es">Escribinos al WhatsApp</span>
         </a>
       </div>
 

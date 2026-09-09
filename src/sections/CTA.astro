@@ -4,7 +4,7 @@ import ContactForm from '@/components/ContactForm';
 
 <section
   id="contact"
-  class="relative overflow-hidden px-5 py-24 sm:py-32 md:px-[60px]"
+  class="relative overflow-hidden px-5 py-16 sm:py-24 md:px-[60px]"
   aria-labelledby="contact-title"
 >
   <!-- Resplandor de fondo. aria-hidden: es decoración. -->
@@ -29,7 +29,7 @@ import ContactForm from '@/components/ContactForm';
         </h2>
         <p class="text-muted text-lg leading-relaxed mb-8 max-w-[480px]" data-gsap="fade-up">
           <span class="en">Tell us what you're building. We'll get back to you within 24 hours with a tailored plan — no generic proposals, no pressure.</span>
-          <span class="es">Cuéntanos qué estás construyendo. Te respondemos en 24 horas con un plan personalizado — sin propuestas genéricas, sin presión.</span>
+          <span class="es">Contanos qué estás construyendo. Te respondemos en 24 horas con un plan personalizado, sin propuestas genéricas y sin presión.</span>
         </p>
 
         <!-- Contact details -->
@@ -61,6 +61,28 @@ import ContactForm from '@/components/ContactForm';
               <a href="https://wa.me/50498622160" target="_blank" rel="noopener noreferrer" class="text-primary font-semibold hover:text-brand-electric transition-colors duration-200 cursor-pointer">
                 +504 9862-2160
               </a>
+            </div>
+          </div>
+
+          <!-- Llamar por teléfono: la puerta de quien no usa formularios.
+               El tel: abre el marcador con el número puesto. -->
+          <div class="flex items-center gap-4" data-gsap-child>
+            <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style="background: rgba(91,140,255,0.1); border: 1px solid rgba(91,140,255,0.2);">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style="color: var(--color-accent);">
+                <path d="M3.5 2h3l1.5 3.5-2 1.5c.8 1.8 2.2 3.2 4 4l1.5-2L15 10.5v3c0 .8-.7 1.5-1.5 1.5C7.6 15 3 10.4 3 4.5 3 3.7 3.7 3 4.5 3z" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-[11px] text-muted font-mono uppercase tracking-widest mb-0.5">
+                <span class="en">Call us</span><span class="es">Llamanos</span>
+              </p>
+              <a href="tel:+50498622160" class="text-primary font-semibold hover:text-brand-cyan transition-colors duration-200 cursor-pointer">
+                +504 9862-2160
+              </a>
+              <p class="text-[12px]" style="color: var(--color-muted-2)">
+                <span class="en">We answer and book your appointment.</span>
+                <span class="es">Te contestamos y hacemos tu cita.</span>
+              </p>
             </div>
           </div>
 
@@ -108,7 +130,7 @@ import ContactForm from '@/components/ContactForm';
         data-gsap="fade-up"
       >
         <h3 class="text-xl font-bold text-primary mb-1.5">
-          <span class="en">Send us a message</span><span class="es">Envíanos un mensaje</span>
+          <span class="en">Send us a message</span><span class="es">Envianos un mensaje</span>
         </h3>
         <p class="text-muted text-sm mb-6">
           <span class="en">We'll respond with a personalized plan within 24 hours.</span>

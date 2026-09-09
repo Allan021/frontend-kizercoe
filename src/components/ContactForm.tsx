@@ -244,7 +244,7 @@ export default function ContactForm() {
         </div>
         <div>
           <label htmlFor="email" className={labelClass}>
-            <T en="Work email" es="Correo de trabajo" />{' '}
+            <T en="Your email" es="Tu correo" />{' '}
             <span className="text-[var(--color-accent)]">*</span>
           </label>
           <input
