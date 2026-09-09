@@ -9,7 +9,9 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
-  site: 'https://kizercode.com',
+  // Con www: el apex redirige (308) a www, y el canonical debe apuntar a la
+  // URL final, no a la que redirige.
+  site: 'https://www.kizercode.com',
   integrations: [
     react(),
     tailwind({ applyBaseStyles: false }),
