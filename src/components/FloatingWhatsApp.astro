@@ -66,6 +66,12 @@ const msgs = {
 <script>
   const fab = document.getElementById('wa-fab') as HTMLAnchorElement | null;
   if (fab) {
+    // Un clic al WhatsApp también es un prospecto: cuenta para Analytics/Ads.
+    fab.addEventListener('click', () => {
+      (window as { gtag?: (...a: unknown[]) => void }).gtag?.('event', 'generate_lead', {
+        method: 'whatsapp',
+      });
+    });
     const num = fab.dataset.waNumber;
     const msgs: Record<string, string> = {
       en: fab.dataset.waEn ?? '',

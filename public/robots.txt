@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+# El panel no aporta nada a Google y gasta presupuesto de rastreo.
+Disallow: /panel/
 
 Sitemap: https://kizercode.com/sitemap-index.xml

@@ -156,6 +156,11 @@ export default function ContactForm() {
         ...(projectSlug ? { projectSlug } : {}),
       };
       await submitContact(payload);
+      // Conversión para Analytics/Ads: un mensaje enviado es un prospecto.
+      (window as { gtag?: (...a: unknown[]) => void }).gtag?.('event', 'generate_lead', {
+        service: data.service,
+        ...(projectSlug ? { project: projectSlug } : {}),
+      });
       setStatus('success');
       reset();
     } catch (err) {

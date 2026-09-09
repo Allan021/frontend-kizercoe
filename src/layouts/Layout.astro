@@ -18,7 +18,7 @@ const {
   description = 'Custom software, web & mobile apps, branding, digital marketing and billing systems for enterprises in Honduras and Latin America.',
   image = '/og-image.png',
   imageAlt = 'Kizercode — Software & Branding Agency in Honduras',
-  keywords = 'software development Honduras, web apps, mobile apps, branding, marketing digital, billing systems, digital transformation, enterprise software, El Progreso Yoro',
+  keywords = 'software development Honduras, web apps, mobile apps, branding, marketing digital, billing systems, digital transformation, enterprise software, reparación de computadoras El Progreso, reparación de celulares Honduras, compra y venta de computadoras, El Progreso Yoro',
   locale = 'en_US',
   type = 'website',
   noindex = false,
@@ -26,6 +26,11 @@ const {
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImageURL = new URL(image, Astro.site);
+
+// Herramientas de Google, activadas por env para no ensuciar el desarrollo:
+// GA_ID viene de Analytics (G-XXXXXXX) y la verificación de Search Console.
+const GA_ID = import.meta.env.PUBLIC_GA_ID;
+const GOOGLE_VERIFICATION = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 ---
 <!doctype html>
 <html lang="en" data-theme="dark" class="scroll-smooth">
@@ -40,6 +45,21 @@ const ogImageURL = new URL(image, Astro.site);
   <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
   <meta name="theme-color" content="#0a0a0a" />
   <link rel="canonical" href={canonicalURL} />
+  {GOOGLE_VERIFICATION && <meta name="google-site-verification" content={GOOGLE_VERIFICATION} />}
+
+  {/* Google Analytics 4. Solo si hay ID: en local no mide nada. */}
+  {GA_ID && (
+    <>
+      <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>
+      <script is:inline define:vars={{ GA_ID }}>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', GA_ID, { anonymize_ip: true });
+      </script>
+    </>
+  )}
 
   <!-- Open Graph -->
   <meta property="og:type" content={type} />
@@ -131,6 +151,13 @@ const ogImageURL = new URL(image, Astro.site);
           "email": "hello@kizercode.com",
           "availableLanguage": ["English", "Spanish"]
         },
+        "makesOffer": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Custom software and web applications" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "AI automation and integrations" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Digital marketing and SEO" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Reparación de computadoras y teléfonos" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Compra y venta de equipos" } }
+        ],
         "sameAs": [
           "https://www.linkedin.com/company/kizercode",
           "https://github.com/kizercode"
