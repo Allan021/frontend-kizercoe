@@ -35,7 +35,7 @@ const garantias = [
 ---
 
 <section
-  class="relative overflow-hidden pb-20 pt-32 sm:pb-28 sm:pt-40"
+  class="relative overflow-hidden pb-16 pt-24 sm:pb-20 sm:pt-28"
   aria-labelledby="hero-title"
 >
   <!-- Resplandor azul detrás del titular. Es lo que separa el fondo plano de
@@ -71,8 +71,10 @@ const garantias = [
         id="hero-title"
         class="kz-rise kz-rise-1 mt-5 text-balance text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl"
       >
-        <span class="en">Your business, online<br /><span class="kz-degradado">without spending a fortune.</span></span>
-        <span class="es">Tu negocio, en línea<br /><span class="kz-degradado">sin gastar una millonada.</span></span>
+        <!-- Sin <br/> forzado: text-balance reparte las líneas parejo en los
+             dos idiomas; un quiebre a mano deja una palabra huérfana en uno. -->
+        <span class="en">Your business, online <span class="kz-degradado">without spending a fortune.</span></span>
+        <span class="es">Tu negocio, en línea <span class="kz-degradado">sin gastar una millonada.</span></span>
       </h1>
 
       <p
