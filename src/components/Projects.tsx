@@ -41,34 +41,83 @@ function iconoDeRed(url: string): { Icono: LucideIcon; nombre: string } {
  * que estas tarjetas no las indexa el buscador — cuando el portafolio importe
  * para SEO, esto se pasa a build-time con un redeploy por publicación.
  */
+/** Cuántos proyectos se vieron la última vez: para pintar esa misma cantidad
+ *  de skeletons y que la sección no brinque cuando conteste la API. */
+const N_KEY = 'kz_proyectos_n';
+
+/** Con 1 o 2 proyectos la grilla se centra: sin columna fantasma a la derecha. */
+function clasesDeGrilla(n: number): string {
+  if (n <= 1) return 'mx-auto grid max-w-sm gap-6';
+  if (n === 2) return 'mx-auto grid max-w-4xl gap-6 sm:grid-cols-2';
+  return 'grid gap-6 sm:grid-cols-2 lg:grid-cols-3';
+}
+
+/** Mismo esqueleto que la tarjeta real: misma imagen 16/10, mismo padding.
+ *  Si mide igual, no hay layout shift cuando llega el contenido. */
+function TarjetaFantasma() {
+  return (
+    <div
+      className="overflow-hidden rounded-2xl border"
+      style={{ background: 'var(--color-card)', borderColor: 'var(--color-border)' }}
+    >
+      <div className="aspect-[16/10] animate-pulse" style={{ background: 'var(--color-card-2)' }} />
+      <div className="animate-pulse space-y-3 p-6">
+        <div className="h-5 w-2/3 rounded" style={{ background: 'var(--color-card-2)' }} />
+        <div className="h-3 w-1/3 rounded" style={{ background: 'var(--color-card-2)' }} />
+        <div className="h-3 w-full rounded" style={{ background: 'var(--color-card-2)' }} />
+        <div className="h-3 w-5/6 rounded" style={{ background: 'var(--color-card-2)' }} />
+        <div className="h-10 w-44 rounded-lg" style={{ background: 'var(--color-card-2)' }} />
+      </div>
+    </div>
+  );
+}
+
 export default function Projects() {
   const [projects, setProjects] = useState<Project[] | null>(null);
   const [fallo, setFallo] = useState(false);
+  // 3 por defecto; si ya se visitó, la cantidad real de la última vez.
+  const [esperadas, setEsperadas] = useState(3);
 
   useEffect(() => {
-    fetchProjects().then(setProjects).catch(() => setFallo(true));
+    try {
+      const n = Number(localStorage.getItem(N_KEY));
+      if (Number.isFinite(n) && n > 0) setEsperadas(Math.min(n, 6));
+    } catch {
+      /* modo incógnito o similar: quedan las 3 por defecto */
+    }
+    fetchProjects()
+      .then((p) => {
+        setProjects(p);
+        try {
+          localStorage.setItem(N_KEY, String(p.length));
+        } catch {
+          /* sin storage no pasa nada */
+        }
+      })
+      .catch(() => setFallo(true));
   }, []);
 
-  // Si la API no responde, la sección desaparece en vez de mostrar un error:
-  // es un portafolio, no una función crítica del sitio.
-  if (fallo || (projects && projects.length === 0)) return null;
+  // Si la API no responde o no hay nada, se esconde la sección entera —
+  // encabezado incluido, que vive en el .astro de afuera.
+  const vacio = fallo || (projects !== null && projects.length === 0);
+  useEffect(() => {
+    const seccion = document.getElementById('proyectos');
+    if (seccion) seccion.hidden = vacio;
+  }, [vacio]);
+  if (vacio) return null;
 
   if (!projects) {
     return (
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {[0, 1, 2].map((i) => (
-          <div
-            key={i}
-            className="h-72 animate-pulse rounded-2xl border"
-            style={{ background: 'var(--color-card)', borderColor: 'var(--color-border)' }}
-          />
+      <div className={clasesDeGrilla(esperadas)}>
+        {Array.from({ length: esperadas }, (_, i) => (
+          <TarjetaFantasma key={i} />
         ))}
       </div>
     );
   }
 
   return (
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div className={clasesDeGrilla(projects.length)}>
       {projects.map((p) => (
         <article
           key={p.slug}
