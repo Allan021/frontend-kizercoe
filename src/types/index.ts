@@ -33,6 +33,8 @@ export interface Project {
   imageUrl: string | null;
   liveUrl: string | null;
   tags: string[];
+  /** Redes del cliente (URLs): la referencia de quién es el que contrató. */
+  socials: string[];
   published: boolean;
   position: number;
 }

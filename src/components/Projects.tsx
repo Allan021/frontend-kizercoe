@@ -1,8 +1,37 @@
 'use client';
 import { useEffect, useState } from 'react';
+import {
+  Facebook,
+  Globe,
+  Instagram,
+  Linkedin,
+  MessageCircle,
+  Music2,
+  Twitter,
+  Youtube,
+  type LucideIcon,
+} from 'lucide-react';
 import { fetchProjects } from '@/lib/api';
 import { T } from '@/lib/lang';
 import type { Project } from '@/types';
+
+/** Qué icono le toca a cada red, mirando el dominio. Lo raro cae en el globo. */
+function iconoDeRed(url: string): { Icono: LucideIcon; nombre: string } {
+  let host = '';
+  try {
+    host = new URL(url).hostname.replace(/^www\./, '');
+  } catch {
+    /* URL rara: globo */
+  }
+  if (host.includes('instagram')) return { Icono: Instagram, nombre: 'Instagram' };
+  if (host.includes('facebook') || host === 'fb.com') return { Icono: Facebook, nombre: 'Facebook' };
+  if (host.includes('linkedin')) return { Icono: Linkedin, nombre: 'LinkedIn' };
+  if (host.includes('youtube') || host === 'youtu.be') return { Icono: Youtube, nombre: 'YouTube' };
+  if (host === 'x.com' || host.includes('twitter')) return { Icono: Twitter, nombre: 'X' };
+  if (host === 'wa.me' || host.includes('whatsapp')) return { Icono: MessageCircle, nombre: 'WhatsApp' };
+  if (host.includes('tiktok')) return { Icono: Music2, nombre: 'TikTok' };
+  return { Icono: Globe, nombre: host || 'sitio' };
+}
 
 /**
  * Los proyectos, leídos de la API en el navegador.
@@ -69,10 +98,31 @@ export default function Projects() {
               )}
             </div>
 
-            {p.client && (
-              <p className="mt-1 text-xs" style={{ color: 'var(--color-muted-2)' }}>
-                {p.client}
-              </p>
+            {(p.client || (p.socials ?? []).length > 0) && (
+              <div className="mt-1 flex items-center gap-2">
+                {p.client && (
+                  <p className="text-xs" style={{ color: 'var(--color-muted-2)' }}>
+                    {p.client}
+                  </p>
+                )}
+                {/* Las redes del cliente: la referencia de que es gente real. */}
+                {(p.socials ?? []).map((s) => {
+                  const { Icono, nombre } = iconoDeRed(s);
+                  return (
+                    <a
+                      key={s}
+                      href={s}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${nombre} — ${p.client ?? p.title}`}
+                      className="transition-colors hover:text-[var(--color-accent)]"
+                      style={{ color: 'var(--color-muted-2)' }}
+                    >
+                      <Icono size={14} strokeWidth={1.75} />
+                    </a>
+                  );
+                })}
+              </div>
             )}
 
             <p className="mt-3 flex-1 text-sm leading-relaxed" style={{ color: 'var(--color-muted)' }}>

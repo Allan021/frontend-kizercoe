@@ -510,6 +510,7 @@ const VACIO: Partial<Project> = {
   imageUrl: null,
   liveUrl: null,
   tags: [],
+  socials: [],
   published: false,
   position: 0,
 };
@@ -609,6 +610,18 @@ function Proyectos({ onConteo }: { onConteo: (n: number) => void }) {
                   value={editando.liveUrl ?? ''}
                   onChange={(e) => setEditando({ ...editando, liveUrl: e.target.value })}
                   placeholder="https://…"
+                  className={INPUT}
+                  style={INPUT_STYLE}
+                />
+              </Campo>
+              <Campo
+                etiqueta="Redes del cliente"
+                ayuda="URLs separadas por coma. Salen en la tarjeta como referencia de quién es."
+              >
+                <input
+                  value={(editando.socials ?? []).join(', ')}
+                  onChange={(e) => setEditando({ ...editando, socials: e.target.value.split(',') })}
+                  placeholder="https://instagram.com/…, https://facebook.com/…"
                   className={INPUT}
                   style={INPUT_STYLE}
                 />
