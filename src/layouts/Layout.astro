@@ -58,6 +58,24 @@ const GOOGLE_VERIFICATION = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
         window.gtag = gtag;
         gtag('js', new Date());
         gtag('config', GA_ID, { anonymize_ip: true });
+
+        // Un solo listener mide todos los caminos de contacto y los clics a
+        // productos: agregar un botón nuevo de WhatsApp no obliga a acordarse
+        // de medirlo. Delegación: también cubre lo que React monta después.
+        document.addEventListener('click', (e) => {
+          const a = e.target instanceof Element ? e.target.closest('a') : null;
+          if (!a) return;
+          const href = a.getAttribute('href') || '';
+          if (href.includes('wa.me')) {
+            gtag('event', 'generate_lead', { method: 'whatsapp' });
+          } else if (href.startsWith('tel:')) {
+            gtag('event', 'generate_lead', { method: 'phone' });
+          } else if (href.startsWith('mailto:')) {
+            gtag('event', 'generate_lead', { method: 'email' });
+          } else if (a.closest('#productos') && href.startsWith('http')) {
+            gtag('event', 'select_content', { content_type: 'product', item_id: href });
+          }
+        });
       </script>
     </>
   )}
