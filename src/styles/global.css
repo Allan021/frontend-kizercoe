@@ -376,7 +376,7 @@ html[lang="es"] .en { display: none !important; }
 }
 
 /* ─── Performance: content-visibility for off-screen sections ───────── */
-#services, #why, #process, #reviews, #pricing, #proyectos {
+#services, #why, #process, #reviews, #pricing, #proyectos, #productos {
   content-visibility: auto;
   contain-intrinsic-size: 0 700px;
 }
