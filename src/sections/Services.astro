@@ -242,6 +242,21 @@ const pasos = [
   </div>
 </section>
 
+<script>
+  // Los chips del hero enlazan #software/#ia/#marketing/#taller: se marca la
+  // pestaña que corresponde y se lleva a la sección. Sin esto el hash no
+  // coincide con ningún id y el clic no hace nada.
+  const abrirPractica = () => {
+    const id = location.hash.slice(1);
+    if (!['software', 'ia', 'marketing', 'taller'].includes(id)) return;
+    const radio = document.getElementById(`practica-${id}`) as HTMLInputElement | null;
+    if (radio) radio.checked = true;
+    document.getElementById('services')?.scrollIntoView();
+  };
+  abrirPractica();
+  window.addEventListener('hashchange', abrirPractica);
+</script>
+
 <style>
   .kz-practicas { border: 0; padding: 0; margin: 0; }
 

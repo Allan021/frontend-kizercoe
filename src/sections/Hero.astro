@@ -7,6 +7,22 @@ const practicas = [
   { icon: 'lucide:box', en: 'Custom software', es: 'Software a la medida' },
   { icon: 'lucide:bot', en: 'AI automation', es: 'Automatización con IA' },
   { icon: 'lucide:megaphone', en: 'Digital marketing', es: 'Marketing digital' },
+  { icon: 'lucide:wrench', en: 'Device repair', es: 'Reparación de equipos' },
+];
+
+/**
+ * El mapa de "¿qué buscás?": cada chip lleva a la pestaña exacta de servicios
+ * (el hash lo resuelve un script en Services.astro) o a productos. Es la ruta
+ * corta para quien llegó buscando UNA cosa y no quiere leer toda la página.
+ */
+const rutas = [
+  { icon: 'lucide:globe', en: 'A website', es: 'Una página web', href: '#software' },
+  { icon: 'lucide:smartphone', en: 'A mobile app', es: 'Una app móvil', href: '#software' },
+  { icon: 'lucide:boxes', en: 'A system for my business', es: 'Un sistema para mi negocio', href: '#software' },
+  { icon: 'lucide:bot', en: 'Automate with AI', es: 'Automatizar con IA', href: '#ia' },
+  { icon: 'lucide:megaphone', en: 'Ads and marketing', es: 'Publicidad y marketing', href: '#marketing' },
+  { icon: 'lucide:wrench', en: 'Fix my computer or phone', es: 'Reparar mi compu o teléfono', href: '#taller' },
+  { icon: 'lucide:rocket', en: 'Ready-to-use software', es: 'Software listo para usar', href: '#productos' },
 ];
 
 const garantias = [
@@ -45,8 +61,8 @@ const garantias = [
       <!-- Pastilla con el punto que late: dice "estamos abiertos" sin escribirlo. -->
       <p class="kz-rise kz-pastilla">
         <span class="kz-latido" aria-hidden="true"></span>
-        <span class="en">Software, AI and marketing agency</span>
-        <span class="es">Agencia de software, IA y marketing</span>
+        <span class="en">Software · AI · Marketing · Repairs</span>
+        <span class="es">Software · IA · Marketing · Reparaciones</span>
       </p>
 
       <h1
@@ -62,13 +78,13 @@ const garantias = [
         style="color: var(--color-muted)"
       >
         <span class="en">
-          We handle your entire digitalization: custom software, AI automation, digital marketing
-          and the team to run it. All tailored, with one person accountable.
+          Websites of every kind, mobile apps, custom systems, AI automation, digital marketing,
+          and computer and phone repair. One team, one person accountable.
         </span>
         <span class="es">
-          Nos encargamos de toda la digitalización de tu negocio: software a la medida,
-          automatizaciones con inteligencia artificial, marketing digital y el equipo necesario para
-          operarlo. Todo a la medida, con un solo responsable.
+          Páginas web de todo tipo, apps móviles, sistemas a la medida, automatización con IA,
+          marketing digital y reparación de computadoras y teléfonos. Un solo equipo, un solo
+          responsable.
         </span>
       </p>
 
@@ -82,9 +98,26 @@ const garantias = [
         </a>
       </div>
 
+      <!-- La ruta corta: quien llegó buscando UNA cosa, la toca y cae donde es. -->
+      <nav class="kz-rise kz-rise-4 mt-9" aria-label="Qué buscás">
+        <p class="kz-eyebrow">// <span class="en">what do you need?</span><span class="es">¿qué buscás?</span></p>
+        <ul class="mt-3 flex list-none flex-wrap gap-2">
+          {
+            rutas.map((r) => (
+              <li>
+                <a href={r.href} class="kz-ruta">
+                  <Icon name={r.icon} size={14} aria-hidden="true" />
+                  <span class="en">{r.en}</span><span class="es">{r.es}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
       <!-- Lista de verdad, no divs: son tres cosas enumerables. -->
       <ul
-        class="kz-rise kz-rise-4 mt-9 flex list-none flex-wrap gap-x-6 gap-y-2 font-mono text-[12.5px]"
+        class="kz-rise kz-rise-4 mt-8 flex list-none flex-wrap gap-x-6 gap-y-2 font-mono text-[12.5px]"
         style="color: var(--color-muted-2)"
       >
         {
@@ -124,7 +157,7 @@ const garantias = [
             </p>
           </div>
 
-          <ul class="mt-8 grid list-none grid-cols-3 gap-3">
+          <ul class="mt-8 grid list-none grid-cols-2 gap-3">
             {
               practicas.map((p) => (
                 <li
@@ -152,6 +185,26 @@ const garantias = [
 </section>
 
 <style>
+  .kz-ruta {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 13px;
+    border-radius: 999px;
+    border: 1px solid var(--color-border);
+    background: var(--color-card);
+    font-size: 13px;
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  }
+  .kz-ruta:hover {
+    color: var(--color-text);
+    border-color: var(--color-accent);
+    background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+  }
+  .kz-ruta svg { color: var(--color-accent); flex-shrink: 0; }
+
   .kz-degradado {
     background: linear-gradient(120deg, var(--color-accent-soft), var(--color-accent-strong));
     -webkit-background-clip: text;
