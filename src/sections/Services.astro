@@ -2,7 +2,7 @@
 import { Icon } from 'astro-icon/components';
 
 /**
- * Servicios: tres prácticas con pestañas.
+ * Servicios: cuatro prácticas con pestañas.
  *
  * Van fijos acá y no en el panel a propósito: cada práctica trae su propio
  * panel ilustrativo (barras, lista de pasos, gráfico) y eso es diseño, no
@@ -77,6 +77,27 @@ const practicas = [
       { icon: 'lucide:palette', tag_en: 'BRAND', tag_es: 'MARCA', t_en: 'Visual identity', t_es: 'Identidad visual', d_en: 'Logo, colors and pieces consistent across everything your business publishes.', d_es: 'Logo, colores y piezas coherentes en todo lo que publica tu negocio.' },
     ],
   },
+  {
+    id: 'taller',
+    tab_en: 'Repairs and devices',
+    tab_es: 'Reparación y equipos',
+    n: '04',
+    t_en: 'Your devices, fixed by the same team that builds systems',
+    t_es: 'Tus equipos, reparados por el mismo equipo que construye sistemas',
+    d_en: 'We repair computers and phones, and we buy and sell equipment. Clear diagnosis first, then a price, then the fix.',
+    d_es: 'Reparamos computadoras y teléfonos, y compramos y vendemos equipo. Primero un diagnóstico claro, después el precio, después el arreglo.',
+    chips_en: ['Computers', 'Phones', 'Buy and sell'],
+    chips_es: ['Computadoras', 'Teléfonos', 'Compra y venta'],
+    visual: 'barras',
+    visual_en: 'DEVICES IN THE SHOP',
+    visual_es: 'EQUIPOS EN TALLER',
+    cards: [
+      { icon: 'lucide:monitor', tag_en: 'PC · LAPTOP', tag_es: 'PC · LAPTOP', t_en: 'Computer repair', t_es: 'Reparación de computadoras', d_en: 'Hardware, formatting, upgrades and cleanup so it runs like new.', d_es: 'Hardware, formateo, mejoras y limpieza para que corra como nueva.' },
+      { icon: 'lucide:smartphone', tag_en: 'PHONES', tag_es: 'TELÉFONOS', t_en: 'Phone repair', t_es: 'Reparación de teléfonos', d_en: 'Screens, batteries, ports and software, with diagnosis before you pay.', d_es: 'Pantallas, baterías, puertos y software, con diagnóstico antes de pagar.' },
+      { icon: 'lucide:refresh-ccw', tag_en: 'BUY · SELL', tag_es: 'COMPRA · VENTA', t_en: 'Buy and sell devices', t_es: 'Compra y venta de equipos', d_en: 'We buy your used equipment and sell tested, working devices.', d_es: 'Compramos tu equipo usado y vendemos equipos probados y funcionando.' },
+      { icon: 'lucide:wrench', tag_en: 'MAINTENANCE', tag_es: 'MANTENIMIENTO', t_en: 'Preventive maintenance', t_es: 'Mantenimiento preventivo', d_en: 'Scheduled service for business equipment before it fails.', d_es: 'Servicio programado para el equipo de tu negocio antes de que falle.' },
+    ],
+  },
 ];
 
 const pasos = [
@@ -98,8 +119,8 @@ const pasos = [
         </h2>
       </div>
       <p class="leading-relaxed" style="color: var(--color-muted)">
-        <span class="en">Three practices, one team end to end. Switch tabs to see what each delivers.</span>
-        <span class="es">Tres prácticas, un mismo equipo de principio a fin. Cambiá de pestaña para ver qué entrega cada una.</span>
+        <span class="en">Four practices, one team end to end. Switch tabs to see what each delivers.</span>
+        <span class="es">Cuatro prácticas, un mismo equipo de principio a fin. Cambiá de pestaña para ver qué entrega cada una.</span>
       </p>
     </header>
 
@@ -228,7 +249,8 @@ const pasos = [
   .kz-practica-panel { display: none; }
   .kz-practicas:has(#practica-software:checked) [data-practica='software'],
   .kz-practicas:has(#practica-ia:checked) [data-practica='ia'],
-  .kz-practicas:has(#practica-marketing:checked) [data-practica='marketing'] {
+  .kz-practicas:has(#practica-marketing:checked) [data-practica='marketing'],
+  .kz-practicas:has(#practica-taller:checked) [data-practica='taller'] {
     display: block;
   }
 
