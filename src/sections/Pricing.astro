@@ -180,19 +180,50 @@ const cosas = [
       }
     </ul>
 
-    <p class="mt-8 font-mono text-[12.5px]" style="color: var(--color-muted-2)">
-      <span class="en">
-        "From" prices in USD before taxes; in Spanish they show in lempiras at an approximate
-        rate. The one-time payment covers what we agreed on plus 30 days of warranty on defects.
-        New changes or ongoing support are quoted separately — or with a monthly plan, just ask.
-      </span>
-      <span class="es">
-        Precios "desde" en lempiras redondeados con tasa aproximada; el precio exacto va en tu
-        cotización por escrito. El pago único cubre lo acordado más 30 días de garantía por
-        fallas de lo entregado. Cambios nuevos o soporte continuo se cotizan aparte — o con un
-        plan mensual, preguntanos.
-      </span>
-    </p>
+    <!-- Las condiciones, en tres piezas que se leen de un vistazo: un párrafo
+         corrido de letra chica se ve a "términos y condiciones" y nadie lo lee. -->
+    <ul class="mt-8 grid list-none gap-3 sm:grid-cols-3">
+      {
+        [
+          {
+            icon: 'lucide:file-check',
+            t_en: 'Exact price in writing',
+            t_es: 'Precio exacto por escrito',
+            d_en: '"From" prices are the floor; your quote states the fixed amount, in lempiras or dollars.',
+            d_es: 'Los "desde" son el piso; tu cotización trae el monto fijo, en lempiras o dólares.',
+          },
+          {
+            icon: 'lucide:shield-check',
+            t_en: '30-day warranty',
+            t_es: '30 días de garantía',
+            d_en: 'If what we delivered fails, we fix it free for 30 days.',
+            d_es: 'Si lo entregado falla, lo corregimos gratis por 30 días.',
+          },
+          {
+            icon: 'lucide:calendar-clock',
+            t_en: 'Ongoing support, monthly plan',
+            t_es: 'Soporte continuo, plan mensual',
+            d_en: 'New changes are quoted; continuous care comes as a monthly plan.',
+            d_es: 'Los cambios nuevos se cotizan; el cuidado continuo va en plan mensual.',
+          },
+        ].map((n) => (
+          <li
+            class="flex items-start gap-3 rounded-xl border p-4"
+            style="border-color: var(--color-border); background: var(--color-bg-2)"
+          >
+            <Icon name={n.icon} size={18} class="mt-0.5 shrink-0" style="color: var(--color-accent)" aria-hidden="true" />
+            <span class="text-sm leading-snug">
+              <span class="font-semibold">
+                <span class="en">{n.t_en}</span><span class="es">{n.t_es}</span>
+              </span>
+              <span class="mt-0.5 block text-[13px]" style="color: var(--color-muted)">
+                <span class="en">{n.d_en}</span><span class="es">{n.d_es}</span>
+              </span>
+            </span>
+          </li>
+        ))
+      }
+    </ul>
   </div>
 </section>
 
