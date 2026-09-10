@@ -8,13 +8,23 @@ import { Icon } from 'astro-icon/components';
  * "quiero mi página" o "que la compu encienda". Cada tarjeta es una de esas
  * frases, con su "desde" y un botón que abre el formulario con el servicio ya
  * elegido (#contact?servicio=...).
+ *
+ * Moneda: en inglés se ve USD y en español lempiras. Se renderizan las dos y
+ * el CSS de idioma muestra la que toca — cambiar de idioma cambia la moneda
+ * al instante, sin JavaScript.
  */
+
+// Tasa de cambio aproximada HNL por USD. Actualizala cuando se mueva; el
+// precio en lempiras se redondea a los 500 para que se lea como precio de
+// verdad y no como cálculo de calculadora.
+const TASA = 26.5;
+const lps = (usd: number) => `L ${(Math.round((usd * TASA) / 500) * 500).toLocaleString('es-HN')}`;
 const cosas = [
   {
     icon: 'lucide:globe',
     t_en: 'A website for your business',
     t_es: 'Una página web para tu negocio',
-    precio: '$150',
+    usd: 150,
     unica: true,
     servicio: 'Web Applications',
     en: ['Designed for your brand, not a template', 'WhatsApp button and map included', 'Ready in about a week'],
@@ -24,7 +34,7 @@ const cosas = [
     icon: 'lucide:shopping-cart',
     t_en: 'An online store',
     t_es: 'Una tienda en línea',
-    precio: '$400',
+    usd: 400,
     unica: true,
     servicio: 'Online Store',
     en: ['Catalog, cart and payments', 'A panel to upload your products', 'Connected to your inventory if you have one'],
@@ -34,7 +44,7 @@ const cosas = [
     icon: 'lucide:boxes',
     t_en: 'A system for your business',
     t_es: 'Un sistema para tu negocio',
-    precio: '$600',
+    usd: 600,
     unica: true,
     servicio: 'Business System',
     en: ['Inventory, billing, orders: what you run', 'Roles for your team and live reports', 'Built on your real process'],
@@ -44,7 +54,7 @@ const cosas = [
     icon: 'lucide:smartphone',
     t_en: 'A mobile app',
     t_es: 'Una app móvil',
-    precio: '$900',
+    usd: 900,
     unica: true,
     servicio: 'Mobile Apps',
     en: ['iOS and Android, one codebase', 'Connected to your system or store', 'Published in the stores'],
@@ -54,7 +64,7 @@ const cosas = [
     icon: 'lucide:bot',
     t_en: 'AI that answers for you',
     t_es: 'Una IA que atienda por vos',
-    precio: '$200',
+    usd: 200,
     unica: true,
     servicio: 'AI Automation',
     en: ['Answers and quotes on WhatsApp 24/7', 'Uses your real prices and catalog', 'Everything it does gets logged'],
@@ -64,7 +74,7 @@ const cosas = [
     icon: 'lucide:wrench',
     t_en: 'Fix my computer or phone',
     t_es: 'Reparar mi compu o teléfono',
-    precio: null,
+    usd: null,
     gratis_en: 'Free diagnosis',
     gratis_es: 'Diagnóstico gratis',
     servicio: 'Computer Repair',
@@ -110,12 +120,14 @@ const cosas = [
               </h3>
 
               <p class="mt-3 flex items-baseline gap-1.5">
-                {c.precio ? (
+                {c.usd ? (
                   <>
                     <span class="font-mono text-[11.5px] uppercase tracking-wider" style="color: var(--color-muted-2)">
                       <span class="en">from</span><span class="es">desde</span>
                     </span>
-                    <span class="text-3xl font-bold tracking-tight">{c.precio}</span>
+                    <span class="text-3xl font-bold tracking-tight">
+                      <span class="en">${c.usd}</span><span class="es">{lps(c.usd)}</span>
+                    </span>
                     {c.unica && (
                       <span class="font-mono text-xs" style="color: var(--color-muted-2)">
                         <span class="en">one-time</span><span class="es">pago único</span>
@@ -160,12 +172,13 @@ const cosas = [
 
     <p class="mt-8 font-mono text-[12.5px]" style="color: var(--color-muted-2)">
       <span class="en">
-        "From" prices in USD before taxes; we also quote in lempiras. Need a dedicated team every
-        month? We have monthly plans too, just ask.
+        "From" prices in USD before taxes; in Spanish they show in lempiras at an approximate
+        rate. Need a dedicated team every month? We have monthly plans too, just ask.
       </span>
       <span class="es">
-        Precios "desde" en USD antes de impuestos; también cotizamos en lempiras. ¿Necesitás un
-        equipo dedicado todos los meses? También hay planes mensuales, preguntanos.
+        Precios "desde" en lempiras redondeados con tasa aproximada; el precio exacto va en tu
+        cotización por escrito. ¿Necesitás un equipo dedicado todos los meses? También hay planes
+        mensuales, preguntanos.
       </span>
     </p>
   </div>
