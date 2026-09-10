@@ -1,77 +1,75 @@
 ---
 import { Icon } from 'astro-icon/components';
 
-const planes = [
+/**
+ * Precios por lo que el cliente quiere, no por horas de developer.
+ *
+ * Nadie llega pensando "quiero 20 h/semana de un programador": llega pensando
+ * "quiero mi página" o "que la compu encienda". Cada tarjeta es una de esas
+ * frases, con su "desde" y un botón que abre el formulario con el servicio ya
+ * elegido (#contact?servicio=...).
+ */
+const cosas = [
   {
-    nombre: 'Starter',
-    precio: '$750',
-    en_sub: 'A part-time developer, for a first system',
-    es_sub: 'Un desarrollador medio tiempo, para un primer sistema',
-    en: [
-      'Developer 20 h/week',
-      'Site or system with 3 to 5 screens',
-      'Content admin panel',
-      '1 round of revisions per month',
-      'Support in under 24 h',
-    ],
-    es: [
-      'Desarrollador 20 h/semana',
-      'Sitio o sistema de 3 a 5 pantallas',
-      'Panel de administración de contenido',
-      '1 ronda de revisiones al mes',
-      'Soporte en menos de 24 h',
-    ],
-    en_cta: 'Start',
-    es_cta: 'Empezar',
+    icon: 'lucide:globe',
+    t_en: 'A website for your business',
+    t_es: 'Una página web para tu negocio',
+    precio: '$150',
+    unica: true,
+    servicio: 'Web Applications',
+    en: ['Designed for your brand, not a template', 'WhatsApp button and map included', 'Ready in about a week'],
+    es: ['Diseñada para tu marca, no una plantilla', 'Con botón de WhatsApp y mapa', 'Lista en más o menos una semana'],
   },
   {
-    nombre: 'Growth',
-    precio: '$1,900',
-    destacado: true,
-    en_sub: 'A senior developer full time on your project',
-    es_sub: 'Un desarrollador senior a tiempo completo en tu proyecto',
-    en: [
-      'Senior developer 40 h/week',
-      'Custom web or mobile app',
-      'UX/UI design and prototype',
-      'Payments, billing and CRM integrations',
-      '2 rounds of revisions per month',
-      'Priority support in under 4 h',
-    ],
-    es: [
-      'Desarrollador senior 40 h/semana',
-      'Aplicación web o móvil a la medida',
-      'Diseño UX/UI y prototipo',
-      'Integraciones con pagos, facturación y CRM',
-      '2 rondas de revisiones al mes',
-      'Soporte prioritario en menos de 4 h',
-    ],
-    en_cta: 'Start',
-    es_cta: 'Empezar',
+    icon: 'lucide:shopping-cart',
+    t_en: 'An online store',
+    t_es: 'Una tienda en línea',
+    precio: '$400',
+    unica: true,
+    servicio: 'Online Store',
+    en: ['Catalog, cart and payments', 'A panel to upload your products', 'Connected to your inventory if you have one'],
+    es: ['Catálogo, carrito y pagos', 'Panel para subir tus productos vos mismo', 'Conectada a tu inventario si tenés uno'],
   },
   {
-    nombre: 'Scale',
-    precio: '$3,500',
-    en_sub: 'A full team for platforms with hardware in the field',
-    es_sub: 'Equipo completo para plataformas con equipo en campo',
-    en: [
-      'Developer + designer + QA',
-      'Complete platform, web and mobile',
-      'Hardware supply and on-site installation',
-      'Data migration and training',
-      'Unlimited revisions',
-      'Same-day support and weekly calls',
-    ],
-    es: [
-      'Desarrollador + diseñador + QA',
-      'Plataforma completa, web y móvil',
-      'Suministro de equipo e instalación en sitio',
-      'Migración de datos y capacitación',
-      'Revisiones ilimitadas',
-      'Soporte el mismo día y llamadas semanales',
-    ],
-    en_cta: 'Talk to sales',
-    es_cta: 'Hablar con ventas',
+    icon: 'lucide:boxes',
+    t_en: 'A system for your business',
+    t_es: 'Un sistema para tu negocio',
+    precio: '$600',
+    unica: true,
+    servicio: 'Business System',
+    en: ['Inventory, billing, orders: what you run', 'Roles for your team and live reports', 'Built on your real process'],
+    es: ['Inventario, facturación, pedidos: lo tuyo', 'Roles para tu equipo y reportes en vivo', 'Construido sobre tu proceso real'],
+  },
+  {
+    icon: 'lucide:smartphone',
+    t_en: 'A mobile app',
+    t_es: 'Una app móvil',
+    precio: '$900',
+    unica: true,
+    servicio: 'Mobile Apps',
+    en: ['iOS and Android, one codebase', 'Connected to your system or store', 'Published in the stores'],
+    es: ['iOS y Android con una sola base', 'Conectada a tu sistema o tienda', 'Publicada en las tiendas'],
+  },
+  {
+    icon: 'lucide:bot',
+    t_en: 'AI that answers for you',
+    t_es: 'Una IA que atienda por vos',
+    precio: '$200',
+    unica: true,
+    servicio: 'AI Automation',
+    en: ['Answers and quotes on WhatsApp 24/7', 'Uses your real prices and catalog', 'Everything it does gets logged'],
+    es: ['Responde y cotiza en WhatsApp 24/7', 'Usa tus precios y catálogo reales', 'Todo lo que hace queda registrado'],
+  },
+  {
+    icon: 'lucide:wrench',
+    t_en: 'Fix my computer or phone',
+    t_es: 'Reparar mi compu o teléfono',
+    precio: null,
+    gratis_en: 'Free diagnosis',
+    gratis_es: 'Diagnóstico gratis',
+    servicio: 'Computer Repair',
+    en: ['We tell you what it has and what it costs', 'You approve before we touch anything', 'We also buy and sell equipment'],
+    es: ['Te decimos qué tiene y cuánto cuesta', 'Vos aprobás antes de que toquemos nada', 'También compramos y vendemos equipo'],
   },
 ];
 ---
@@ -81,68 +79,76 @@ const planes = [
     <header class="mb-12 max-w-2xl">
       <p class="kz-eyebrow">// <span class="en">pricing</span><span class="es">precios</span></p>
       <h2 id="pricing-title" class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
-        <span class="en">Monthly plans with<br />a dedicated team.</span>
-        <span class="es">Planes mensuales con<br />equipo dedicado.</span>
+        <span class="en">What you need,<br />and what it costs.</span>
+        <span class="es">Lo que necesitás,<br />y lo que cuesta.</span>
       </h2>
       <p class="mt-4 leading-relaxed" style="color: var(--color-muted)">
         <span class="en">
-          For businesses that need continuous development. One-off projects are quoted separately
-          by scope.
+          One-time payment for what you need. Before starting you get the exact fixed price in
+          writing, and it doesn't move.
         </span>
         <span class="es">
-          Para negocios que necesitan desarrollo continuo. Los proyectos puntuales se cotizan
-          aparte por alcance.
+          Pagás una vez por lo que necesitás. Antes de empezar te damos el precio fijo exacto por
+          escrito, y no se mueve.
         </span>
       </p>
     </header>
 
-    <ul class="grid list-none items-start gap-5 lg:grid-cols-3">
+    <ul class="grid list-none items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3">
       {
-        planes.map((p) => (
+        cosas.map((c) => (
           <li>
-            <article
-              class={`kz-card flex h-full flex-col p-7 ${p.destacado ? 'kz-card-principal' : ''}`}
-            >
-              {p.destacado && (
-                <p class="kz-eyebrow mb-3">
-                  <span class="en">most chosen</span><span class="es">el más elegido</span>
-                </p>
-              )}
+            <article class="kz-card flex h-full flex-col p-6 sm:p-7">
+              <span class="kz-precio-icono">
+                <Icon name={c.icon} size={20} aria-hidden="true" />
+              </span>
 
-              <h3 class="text-xl font-bold">{p.nombre}</h3>
-              <p class="mt-1.5 text-sm leading-snug" style="color: var(--color-muted)">
-                <span class="en">{p.en_sub}</span><span class="es">{p.es_sub}</span>
+              <h3 class="mt-4 text-lg font-bold leading-snug">
+                <span class="en">{c.t_en}</span><span class="es">{c.t_es}</span>
+              </h3>
+
+              <p class="mt-3 flex items-baseline gap-1.5">
+                {c.precio ? (
+                  <>
+                    <span class="font-mono text-[11.5px] uppercase tracking-wider" style="color: var(--color-muted-2)">
+                      <span class="en">from</span><span class="es">desde</span>
+                    </span>
+                    <span class="text-3xl font-bold tracking-tight">{c.precio}</span>
+                    {c.unica && (
+                      <span class="font-mono text-xs" style="color: var(--color-muted-2)">
+                        <span class="en">one-time</span><span class="es">pago único</span>
+                      </span>
+                    )}
+                  </>
+                ) : (
+                  <span class="text-2xl font-bold tracking-tight" style="color: var(--color-accent)">
+                    <span class="en">{c.gratis_en}</span><span class="es">{c.gratis_es}</span>
+                  </span>
+                )}
               </p>
 
-              <p class="mt-6 flex items-baseline gap-1.5">
-                <span class="text-4xl font-bold tracking-tight">{p.precio}</span>
-                <span class="font-mono text-sm" style="color: var(--color-muted-2)">
-                  <span class="en">/mo</span><span class="es">/mes</span>
-                </span>
-              </p>
-
-              <ul class="mt-7 flex-1 list-none space-y-2.5 text-sm">
-                {p.es.map((item, i) => (
+              <ul class="mt-5 flex-1 list-none space-y-2 text-sm">
+                {c.es.map((item, i) => (
                   <li class="flex gap-2.5">
                     <Icon
                       name="lucide:check"
-                      size={16}
+                      size={15}
                       class="mt-0.5 shrink-0"
                       style="color: var(--color-accent)"
                       aria-hidden="true"
                     />
                     <span style="color: var(--color-muted)">
-                      <span class="en">{p.en[i]}</span><span class="es">{item}</span>
+                      <span class="en">{c.en[i]}</span><span class="es">{item}</span>
                     </span>
                   </li>
                 ))}
               </ul>
 
               <a
-                href="#contact"
-                class={`kz-btn mt-8 w-full justify-center ${p.destacado ? 'kz-btn-primario' : 'kz-btn-secundario'}`}
+                href={`#contact?servicio=${encodeURIComponent(c.servicio)}`}
+                class="kz-btn kz-btn-secundario mt-6 w-full justify-center"
               >
-                <span class="en">{p.en_cta}</span><span class="es">{p.es_cta}</span>
+                <span class="en">Get my exact price</span><span class="es">Quiero mi precio exacto</span>
               </a>
             </article>
           </li>
@@ -152,12 +158,27 @@ const planes = [
 
     <p class="mt-8 font-mono text-[12.5px]" style="color: var(--color-muted-2)">
       <span class="en">
-        Prices in USD, before taxes. Hardware is quoted separately based on what each project needs.
+        "From" prices in USD before taxes; we also quote in lempiras. Need a dedicated team every
+        month? We have monthly plans too, just ask.
       </span>
       <span class="es">
-        Precios en USD, antes de impuestos. El equipo se cotiza aparte según lo que requiera cada
-        proyecto.
+        Precios "desde" en USD antes de impuestos; también cotizamos en lempiras. ¿Necesitás un
+        equipo dedicado todos los meses? También hay planes mensuales, preguntanos.
       </span>
     </p>
   </div>
 </section>
+
+<style>
+  .kz-precio-icono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 11px;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-2);
+    color: var(--color-accent);
+  }
+</style>

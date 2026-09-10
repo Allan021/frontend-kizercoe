@@ -36,6 +36,8 @@ const COPY = {
       'Describe your current challenge, what you want to build, and any relevant technical details...',
     services: {
       'Web Applications': 'Web Application',
+      'Online Store': 'Online Store',
+      'Business System': 'System for my business',
       'Mobile Apps': 'Mobile App',
       'Billing Systems': 'Billing System',
       'Payment Platforms': 'Payment Platform',
@@ -62,7 +64,9 @@ const COPY = {
     messagePlaceholder:
       'Contanos qué problema tenés hoy, qué querés construir y cualquier detalle técnico que sirva...',
     services: {
-      'Web Applications': 'Aplicación web',
+      'Web Applications': 'Página web',
+      'Online Store': 'Tienda en línea',
+      'Business System': 'Sistema para mi negocio',
       'Mobile Apps': 'App móvil',
       'Billing Systems': 'Sistema de facturación',
       'Payment Platforms': 'Plataforma de pagos',
@@ -139,8 +143,23 @@ export default function ContactForm() {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<FormValues>({ resolver: zodResolver(schema) });
+
+  // Venir de una tarjeta de precios (#contact?servicio=...) deja el servicio
+  // ya elegido: el cliente solo escribe su nombre y qué necesita.
+  useEffect(() => {
+    const leerServicio = () => {
+      const hash = window.location.hash;
+      const query = hash.includes('?') ? hash.slice(hash.indexOf('?')) : window.location.search;
+      const s = new URLSearchParams(query).get('servicio');
+      if (s && SERVICIOS.includes(s as (typeof SERVICIOS)[number])) setValue('service', s);
+    };
+    leerServicio();
+    window.addEventListener('hashchange', leerServicio);
+    return () => window.removeEventListener('hashchange', leerServicio);
+  }, [setValue]);
 
   const onSubmit = async (data: FormValues) => {
     setStatus('loading');
