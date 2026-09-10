@@ -36,6 +36,7 @@ const COPY = {
       'Describe your current challenge, what you want to build, and any relevant technical details...',
     services: {
       'Web Applications': 'Web Application',
+      'Site Modernization': 'Modernize my old website',
       'Online Store': 'Online Store',
       'Business System': 'System for my business',
       'Mobile Apps': 'Mobile App',
@@ -65,6 +66,7 @@ const COPY = {
       'Contanos qué problema tenés hoy, qué querés construir y cualquier detalle técnico que sirva...',
     services: {
       'Web Applications': 'Página web',
+      'Site Modernization': 'Modernizar mi sitio viejo',
       'Online Store': 'Tienda en línea',
       'Business System': 'Sistema para mi negocio',
       'Mobile Apps': 'App móvil',
