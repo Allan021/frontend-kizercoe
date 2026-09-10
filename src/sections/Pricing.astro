@@ -126,7 +126,7 @@ const cosas = [
                       <span class="en">from</span><span class="es">desde</span>
                     </span>
                     <span class="text-3xl font-bold tracking-tight">
-                      <span class="en">${c.usd}</span><span class="es">{lps(c.usd)}</span>
+                      <span class="en">${c.usd.toLocaleString('en-US')}</span><span class="es">{lps(c.usd)}</span>
                     </span>
                     {c.unica && (
                       <span class="font-mono text-xs" style="color: var(--color-muted-2)">
