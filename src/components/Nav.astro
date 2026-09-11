@@ -135,7 +135,7 @@ const enlaces = [
 
   <!-- Menú desplegable de servicios -->
   <div id="menu-servicios" hidden class="border-t" style="border-color: var(--line); background: var(--bg); box-shadow: 0 20px 40px rgba(11,26,51,.10)">
-    <div class="mx-auto grid max-w-[1200px] gap-6 px-6 pb-7 pt-6" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))">
+    <div class="mx-auto grid max-w-[1200px] gap-8 px-6 pb-9 pt-8" style="grid-template-columns: repeat(auto-fit, minmax(230px, 1fr))">
       <!-- Enlaces principales, solo en móvil (el nav de arriba está oculto) -->
       <div class="col-[1/-1] flex flex-wrap gap-2 lg:hidden">
         {enlaces.map((l) => (
@@ -147,13 +147,13 @@ const enlaces = [
 
       {grupos.map((g) => (
         <div class="flex flex-col gap-1.5">
-          <span class="px-2.5 pb-1.5 text-[11px] font-semibold uppercase tracking-[0.08em]" style="color: var(--green2)">
+          <span class="px-3 pb-2 text-xs font-semibold uppercase tracking-[0.08em]" style="color: var(--green2)">
             <span class="en">{g.g_en}</span><span class="es">{g.g_es}</span>
           </span>
           {g.items.map((it) => (
             <a href={it.href} class="kz-menuitem">
-              <span class="text-sm font-semibold"><span class="en">{it.t_en}</span><span class="es">{it.t_es}</span></span>
-              <span class="text-xs" style="color: var(--mute)"><span class="en">{it.d_en}</span><span class="es">{it.d_es}</span></span>
+              <span class="text-[15px] font-semibold"><span class="en">{it.t_en}</span><span class="es">{it.t_es}</span></span>
+              <span class="text-[13px]" style="color: var(--mute)"><span class="en">{it.d_en}</span><span class="es">{it.d_es}</span></span>
             </a>
           ))}
         </div>
@@ -206,8 +206,8 @@ const enlaces = [
   .kz-menuitem {
     display: flex;
     flex-direction: column;
-    gap: 1px;
-    padding: 9px 10px;
+    gap: 2px;
+    padding: 11px 12px;
     border-radius: 10px;
     color: var(--ink);
     transition: background-color 0.2s ease;
@@ -247,9 +247,24 @@ const enlaces = [
   document.getElementById('theme-toggle')?.addEventListener('click', () => {
     const actual = document.documentElement.getAttribute('data-theme') || 'light';
     const siguiente = actual === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', siguiente);
-    localStorage.setItem('kz-theme', siguiente);
-    pintarTema(siguiente);
+    const aplicar = () => {
+      document.documentElement.setAttribute('data-theme', siguiente);
+      localStorage.setItem('kz-theme', siguiente);
+      pintarTema(siguiente);
+    };
+    // La cortina: el tema nuevo baja revelándose con un clip-path. Donde no
+    // hay View Transitions (o se pidió menos movimiento), cambia y ya.
+    const reducido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!document.startViewTransition || reducido) {
+      aplicar();
+      return;
+    }
+    document.startViewTransition(aplicar).ready.then(() => {
+      document.documentElement.animate(
+        { clipPath: ['inset(0 0 100% 0)', 'inset(0)'] },
+        { pseudoElement: '::view-transition-new(root)', duration: 600, easing: 'ease-in-out' },
+      );
+    });
   });
   pintarTema(document.documentElement.getAttribute('data-theme') || 'light');
 

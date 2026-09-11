@@ -211,6 +211,15 @@ html[lang='es'] .en { display: none !important; }
 html:not([data-moneda='usd']) .usd { display: none !important; }
 html[data-moneda='usd'] .lps { display: none !important; }
 
+/* ─── Cambio de tema con cortina (View Transitions) ────────────────────
+   Se apaga el crossfade por defecto: la animación la dirige el JS del
+   toggle con un clip-path que baja como cortina. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
 /* ─── Performance ──────────────────────────────────────────────────── */
 #servicios, #productos, #casos, #como, #taller, #precios, #faq,
 #integraciones, #comparativa, #garantias, #recursos {
