@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import Analitica from '@/components/Analitica.astro';
 
 interface Props {
   title?: string;
@@ -57,37 +58,10 @@ const GOOGLE_VERIFICATION = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
   <link rel="canonical" href={canonicalURL} />
   {GOOGLE_VERIFICATION && <meta name="google-site-verification" content={GOOGLE_VERIFICATION} />}
 
-  {/* Google Analytics 4. Solo si hay ID: en local no mide nada. */}
-  {GA_ID && (
-    <>
-      <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>
-      <script is:inline define:vars={{ GA_ID }}>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        window.gtag = gtag;
-        gtag('js', new Date());
-        gtag('config', GA_ID, { anonymize_ip: true });
-
-        // Un solo listener mide todos los caminos de contacto y los clics a
-        // productos: agregar un botón nuevo de WhatsApp no obliga a acordarse
-        // de medirlo. Delegación: también cubre lo que React monta después.
-        document.addEventListener('click', (e) => {
-          const a = e.target instanceof Element ? e.target.closest('a') : null;
-          if (!a) return;
-          const href = a.getAttribute('href') || '';
-          if (href.includes('wa.me')) {
-            gtag('event', 'generate_lead', { method: 'whatsapp' });
-          } else if (href.startsWith('tel:')) {
-            gtag('event', 'generate_lead', { method: 'phone' });
-          } else if (href.startsWith('mailto:')) {
-            gtag('event', 'generate_lead', { method: 'email' });
-          } else if (a.closest('#productos') && href.startsWith('http')) {
-            gtag('event', 'select_content', { content_type: 'product', item_id: href });
-          }
-        });
-      </script>
-    </>
-  )}
+  {/* Google Analytics 4 con el etiquetado de todo el sitio. Sin ID (local)
+      no carga, y en páginas noindex (el panel) tampoco: las visitas propias
+      no deben ensuciar los datos. */}
+  {GA_ID && !noindex && <Analitica gaId={GA_ID} />}
 
   <!-- Open Graph -->
   <meta property="og:type" content={type} />

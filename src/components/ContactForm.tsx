@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -86,6 +86,18 @@ export default function ContactForm() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
   const [industria, setIndustria] = useState('');
+
+  // form_start una sola vez: el primer campo tocado dice que alguien empezó
+  // a escribir, aunque después no envíe. Es el embudo del formulario.
+  const iniciado = useRef(false);
+  const marcarInicio = () => {
+    if (iniciado.current) return;
+    iniciado.current = true;
+    (window as { gtag?: (...a: unknown[]) => void }).gtag?.('event', 'form_start', {
+      form_id: 'contacto',
+      pagina: window.location.pathname,
+    });
+  };
   // De qué proyecto vino, si llegó desde una tarjeta del portafolio.
   const [projectSlug, setProjectSlug] = useState<string | null>(null);
 
@@ -152,6 +164,7 @@ export default function ContactForm() {
       await submitContact(payload);
       // Conversión para Analytics/Ads: un mensaje enviado es un prospecto.
       (window as { gtag?: (...a: unknown[]) => void }).gtag?.('event', 'generate_lead', {
+        method: 'formulario',
         service: data.service,
         ...(projectSlug ? { project: projectSlug } : {}),
       });
@@ -159,6 +172,7 @@ export default function ContactForm() {
       reset();
     } catch (err) {
       setStatus('error');
+      (window as { gtag?: (...a: unknown[]) => void }).gtag?.('event', 'form_error', { form_id: 'contacto' });
       setErrorMsg(err instanceof Error ? err.message : t.genericError);
     }
   };
@@ -195,7 +209,7 @@ export default function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit(onSubmit)} onFocus={marcarInicio} noValidate className="flex flex-col gap-4">
       {projectSlug && (
         <p
           className="inline-flex items-center gap-2 self-start rounded-full border px-3 py-1.5 text-xs font-semibold"

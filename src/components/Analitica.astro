@@ -1,0 +1,120 @@
+---
+/**
+ * Google Analytics 4 con el etiquetado de todo el sitio.
+ *
+ * Un solo listener delegado (en fase de captura, para ver también los clics
+ * que otros scripts detienen, como el cambio de idioma de las páginas /en)
+ * mide todo lo que se puede tocar. Agregar un botón nuevo no obliga a
+ * acordarse de medirlo: si es un enlace, ya queda contado.
+ *
+ * Eventos:
+ *   generate_lead    WhatsApp, llamada, correo (y el formulario, en ContactForm)
+ *   cta_cotizar      clic a /contacto sin servicio elegido
+ *   elegir_servicio  clic con ?servicio= (precios, páginas de servicio)
+ *   abrir_producto   clic a KizerPOS, Resto, Cobros, Check o ClínicoSalud
+ *   clic_navegacion  cualquier otro enlace interno
+ *   abrir_menu       clic en Servicios / Industrias / Nosotros / Menú
+ *   faq_abierta      pregunta frecuente desplegada
+ *   ver_seccion      sección de la página que entró en pantalla
+ *   cambiar_idioma, cambiar_tema, cambiar_moneda
+ *   form_start / form_error  (en ContactForm)
+ * Los enlaces externos y el scroll los mide la medición mejorada de GA.
+ */
+interface Props {
+  gaId: string;
+}
+const { gaId } = Astro.props;
+---
+
+<script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
+<script is:inline define:vars={{ GA_ID: gaId }}>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  window.gtag = gtag;
+  gtag('js', new Date());
+
+  // Grupo de contenido: en GA se ve qué parte del sitio trae las visitas.
+  var ruta = location.pathname;
+  var grupo =
+    ruta === '/' ? 'Portada' :
+    /^\/(en\/)?(servicios|services)\//.test(ruta) ? 'Servicios' :
+    /^\/(en\/)?(industrias|industries)\//.test(ruta) ? 'Industrias' :
+    /^\/(en\/)?(productos|products)\//.test(ruta) ? 'Productos' :
+    /^\/(nosotros|proyectos|trabaja-con-nosotros)\//.test(ruta) ? 'Nosotros' :
+    /^\/precios\//.test(ruta) ? 'Precios' :
+    /^\/contacto\//.test(ruta) ? 'Contacto' : 'Otras';
+  var idioma = 'es';
+  try { idioma = localStorage.getItem('kz-lang') || document.documentElement.lang || 'es'; } catch (e) {}
+  gtag('config', GA_ID, { anonymize_ip: true, content_group: grupo });
+  gtag('set', 'user_properties', { idioma: idioma });
+
+  function evento(nombre, params) { gtag('event', nombre, params || {}); }
+  // innerText y no textContent: el sitio tiene los dos idiomas en el DOM y
+  // solo interesa el que el visitante está viendo.
+  function visible(el) { return ((el && el.innerText) || '').replace(/\s+/g, ' ').trim().slice(0, 100); }
+  function zonaDe(el) {
+    if (el.closest('#wa-fab')) return 'boton-flotante';
+    if (el.closest('header')) return 'menu';
+    if (el.closest('footer')) return 'footer';
+    var s = el.closest('section[id]');
+    if (s) return s.id;
+    return el.closest('main') ? 'contenido' : 'barra-superior';
+  }
+
+  document.addEventListener('click', function (e) {
+    var t = e.target instanceof Element ? e.target : null;
+    if (!t) return;
+    var zona = zonaDe(t);
+
+    var a = t.closest('a');
+    if (a) {
+      var href = a.getAttribute('href') || '';
+      if (href.indexOf('wa.me') !== -1) return evento('generate_lead', { method: 'whatsapp', seccion: zona });
+      if (href.indexOf('tel:') === 0) return evento('generate_lead', { method: 'phone', seccion: zona });
+      if (href.indexOf('mailto:') === 0) return evento('generate_lead', { method: 'email', seccion: zona });
+      if (/(pos|cobros|check)\.kizercode\.com|dentalosweb/.test(href)) return evento('abrir_producto', { producto: href, seccion: zona });
+      var s = href.match(/[?&]servicio=([^&#]+)/);
+      if (s) return evento('elegir_servicio', { servicio: decodeURIComponent(s[1]), seccion: zona });
+      if (/^\/contacto\/?$|#contacto$/.test(href)) return evento('cta_cotizar', { seccion: zona, texto: visible(a) });
+      if (/^[\/#]/.test(href)) return evento('clic_navegacion', { seccion: zona, destino: href, texto: visible(a) });
+      return;
+    }
+
+    var b = t.closest('button');
+    if (!b) return;
+    var raiz = document.documentElement;
+    // En captura el botón todavía no cambió nada: se mide el valor siguiente.
+    if (b.id === 'lang-toggle') return evento('cambiar_idioma', { idioma: (raiz.lang || 'es') === 'es' ? 'en' : 'es' });
+    if (b.id === 'theme-toggle') return evento('cambiar_tema', { tema: raiz.getAttribute('data-theme') === 'dark' ? 'light' : 'dark' });
+    if (b.id === 'btn-lps' || b.id === 'btn-usd') return evento('cambiar_moneda', { moneda: b.id === 'btn-lps' ? 'lps' : 'usd' });
+    if (b.id === 'menu-movil-btn') return evento('abrir_menu', { menu: 'movil' });
+    if (b.dataset && b.dataset.menuBtn) return evento('abrir_menu', { menu: b.dataset.menuBtn });
+  }, true);
+
+  // "toggle" no burbujea, pero la captura en document sí lo ve.
+  document.addEventListener('toggle', function (e) {
+    var d = e.target;
+    if (d && d.tagName === 'DETAILS' && d.open) {
+      evento('faq_abierta', { pregunta: visible(d.querySelector('summary')), grupo: grupo });
+    }
+  }, true);
+
+  // Secciones vistas: una vez por sección, cuando su borde superior pasa
+  // el 65 % de la pantalla. Así se sabe hasta dónde llega la gente.
+  if ('IntersectionObserver' in window) {
+    var vistas = {};
+    var io = new IntersectionObserver(function (entradas) {
+      entradas.forEach(function (en) {
+        var id = en.target.id;
+        if (en.isIntersecting && !vistas[id]) {
+          vistas[id] = true;
+          evento('ver_seccion', { seccion: id, grupo: grupo });
+          io.unobserve(en.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -35% 0px' });
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('main section[id]').forEach(function (sec) { io.observe(sec); });
+    });
+  }
+</script>
