@@ -10,7 +10,7 @@ const servicios = [
   { num: '03', t_en: 'Custom systems', t_es: 'Sistemas a la medida', d_en: 'Inventory, billing, orders and approvals as one system, with roles and live reports.', d_es: 'Inventario, facturación, pedidos y aprobaciones como un solo sistema, con roles y reportes en vivo.', href: '/servicios/sistemas-a-la-medida/', c_en: 'Learn more', c_es: 'Ver más' },
   { num: '04', t_en: 'Mobile apps', t_es: 'Apps móviles', d_en: 'iOS and Android from one codebase, connected to your system or store.', d_es: 'iOS y Android con una sola base de código, conectada a tu sistema o tienda.', href: '/servicios/apps-moviles/', c_en: 'Learn more', c_es: 'Ver más' },
   { num: '05', t_en: 'AI automation', t_es: 'Automatización con IA', d_en: 'Agents that answer, quote and log everything in your system. Clear rules, fully audited.', d_es: 'Agentes que atienden, cotizan y registran todo en tu sistema. Con reglas claras y todo auditado.', href: '/servicios/automatizacion-ia/', c_en: 'Learn more', c_es: 'Ver más' },
-  { num: '06', t_en: 'Ads and SEO', t_es: 'Anuncios y SEO', d_en: 'Google and Meta campaigns with real tracking, and structure to show up when they search for you.', d_es: 'Campañas en Google y Meta con seguimiento real, y estructura para aparecer cuando te buscan.', href: '/servicios/anuncios/', c_en: 'Learn more', c_es: 'Ver más' },
+  { num: '06', t_en: 'Custom CRM', t_es: 'CRM a la medida', d_en: 'Customers, follow-ups and quotes in one place, connected to WhatsApp and with no per-user licenses.', d_es: 'Clientes, seguimientos y cotizaciones en un solo lugar, conectado a WhatsApp y sin licencias por usuario.', href: '/servicios/crm-a-la-medida/', c_en: 'Learn more', c_es: 'Ver más' },
   { num: '07', t_en: 'Visual identity', t_es: 'Identidad visual', d_en: 'Logo, colors and pieces consistent across everything your business publishes.', d_es: 'Logo, colores y piezas coherentes en todo lo que publica tu negocio.', href: '/servicios/identidad-visual/', c_en: 'Learn more', c_es: 'Ver más' },
   { num: '08', t_en: 'Cameras and repair shop', t_es: 'Cámaras y taller', d_en: 'Security cameras installed, and computer and phone repair with a free diagnosis.', d_es: 'Instalación de cámaras de seguridad, y reparación de computadoras y celulares con diagnóstico gratis.', href: '/servicios/instalacion-camaras/', c_en: 'Learn more', c_es: 'Ver más' },
 ];
@@ -58,6 +58,30 @@ const industrias = [
         </li>
       ))}
     </ul>
+
+    <!-- El marketing no es un servicio aparte: viene de serie en todo lo que
+         construimos. Se dice acá una vez, claro, en vez de venderlo suelto. -->
+    <div class="flex flex-col gap-3 rounded-2xl border p-6 sm:flex-row sm:items-center sm:justify-between" style="background: var(--bg); border-color: var(--line)">
+      <div class="flex flex-col gap-1">
+        <strong class="text-[16px] font-bold">
+          <span class="en">Included in all our software</span><span class="es">Incluido en todo nuestro software</span>
+        </strong>
+        <span class="text-sm leading-relaxed" style="color: var(--ink2)">
+          <span class="en">Everything we build ships ready to sell — not billed separately.</span>
+          <span class="es">Todo lo que construimos sale listo para vender — sin cobrarlo aparte.</span>
+        </span>
+      </div>
+      <ul class="flex list-none flex-wrap gap-2">
+        {[
+          { en: 'Technical SEO', es: 'SEO técnico' },
+          { en: 'Google Analytics', es: 'Google Analytics' },
+          { en: 'Google Business', es: 'Google Business' },
+          { en: 'WhatsApp button', es: 'Botón de WhatsApp' },
+        ].map((x) => (
+          <li class="kz-badge"><span class="en">{x.en}</span><span class="es">{x.es}</span></li>
+        ))}
+      </ul>
+    </div>
 
     <div class="flex flex-col items-center gap-3 pt-2">
       <p class="text-[13px] font-medium" style="color: var(--mute)">

@@ -94,36 +94,6 @@ export const intros: Record<string, { es: string[]; en: string[] }> = {
       'We build complete identities: logo with variants, palette, typography and the pieces you actually use — sign, social media, invoice, uniform. All with a simple guide and editable files under your name, so any future printer or designer works without guessing.',
     ],
   },
-  seo: {
-    es: [
-      'Cuando alguien busca "reparación de computadoras cerca de mí" o "sistema para farmacia Honduras", Google decide quién existe. Aparecer ahí no es suerte: es estructura, contenido, velocidad y una ficha de Google Business bien trabajada. El que aparece se lleva al cliente que ya venía decidido a comprar.',
-      'Hacemos SEO sin humo: auditoría técnica, palabras clave de tu rubro y tu zona, contenido que responde lo que la gente pregunta, y reporte mensual de posiciones para que veás el avance con tus propios ojos. Nadie serio garantiza el primer lugar; nosotros garantizamos el trabajo que lo hace posible.',
-    ],
-    en: [
-      'When someone searches "computer repair near me" or "pharmacy system Honduras", Google decides who exists. Showing up there isn’t luck: it is structure, content, speed and a well-worked Google Business profile. Whoever shows up takes the customer who already came ready to buy.',
-      'We do SEO without smoke: technical audit, keywords for your industry and area, content answering what people ask, and a monthly ranking report so you see progress with your own eyes. Nobody serious guarantees #1; we guarantee the work that makes it possible.',
-    ],
-  },
-  anuncios: {
-    es: [
-      '"Puse anuncios y no sirvió" casi siempre significa "puse anuncios sin medir". Sin píxel ni conversiones configuradas, la publicidad es tirar billetes al aire: nadie sabe qué anuncio trajo clientes y cuál solo quemó presupuesto.',
-      'Nosotros armamos la medición antes de gastar un peso: cada mensaje, llamada y formulario se rastrea hasta el anuncio que lo generó. Después optimizamos cada semana — lo que no rinde se apaga, lo que rinde recibe más — y te lo contamos en un reporte en cristiano, no en métricas de vanidad.',
-    ],
-    en: [
-      '"I ran ads and it didn’t work" almost always means "I ran ads without measuring". Without a pixel and configured conversions, advertising is throwing bills in the air: nobody knows which ad brought customers and which just burned budget.',
-      'We set up measurement before spending a cent: every message, call and form is tracked to the ad that generated it. Then we optimize weekly — what underperforms gets turned off, what performs gets more — and we tell you in plain words, not vanity metrics.',
-    ],
-  },
-  'redes-sociales': {
-    es: [
-      'Un perfil abandonado con la última publicación de hace seis meses hace la misma pregunta que un local con el rótulo caído: ¿este negocio sigue abierto? La constancia en redes es señal de vida, y las respuestas a tiempo son ventas — porque en Honduras el inbox es el mostrador.',
-      'Nos encargamos del calendario, las piezas con tu marca, la publicación y las respuestas comunes, con contenido de tu negocio real: tus productos, tu gente, tus promociones. Vos vendés; tus redes trabajan solas y te pasan lo delicado.',
-    ],
-    en: [
-      'An abandoned profile with its last post from six months ago asks the same question as a shop with a fallen sign: is this business still open? Consistency on social media is a sign of life, and timely replies are sales — because the inbox is the counter.',
-      'We handle the calendar, on-brand pieces, posting and common replies, with content from your real business: your products, your people, your promos. You sell; your accounts work on their own and hand you the sensitive stuff.',
-    ],
-  },
   'reparacion-computadoras': {
     es: [
       'Una computadora que no enciende, que tarda cinco minutos en abrir o que se reinicia sola frena todo el negocio: la factura no sale, el correo no llega y el día se pierde. La mayoría de las veces tiene arreglo, y más barato de lo que pensás.',

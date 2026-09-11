@@ -3,6 +3,20 @@
   "outputDirectory": "dist",
   "installCommand": "npm install",
   "framework": "astro",
+  "redirects": [
+    { "source": "/servicios/seo", "destination": "/servicios/paginas-web/", "permanent": true },
+    { "source": "/servicios/seo/", "destination": "/servicios/paginas-web/", "permanent": true },
+    { "source": "/servicios/anuncios", "destination": "/servicios/paginas-web/", "permanent": true },
+    { "source": "/servicios/anuncios/", "destination": "/servicios/paginas-web/", "permanent": true },
+    { "source": "/servicios/redes-sociales", "destination": "/servicios/paginas-web/", "permanent": true },
+    { "source": "/servicios/redes-sociales/", "destination": "/servicios/paginas-web/", "permanent": true },
+    { "source": "/en/services/seo", "destination": "/en/services/websites/", "permanent": true },
+    { "source": "/en/services/seo/", "destination": "/en/services/websites/", "permanent": true },
+    { "source": "/en/services/ads", "destination": "/en/services/websites/", "permanent": true },
+    { "source": "/en/services/ads/", "destination": "/en/services/websites/", "permanent": true },
+    { "source": "/en/services/social-media", "destination": "/en/services/websites/", "permanent": true },
+    { "source": "/en/services/social-media/", "destination": "/en/services/websites/", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/_astro/(.*)",
