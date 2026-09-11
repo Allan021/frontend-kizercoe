@@ -1,0 +1,57 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Nav from '@/components/Nav.astro';
+import Footer from '@/components/Footer.astro';
+import FloatingWhatsApp from '@/components/FloatingWhatsApp.astro';
+
+/** Carreras: candidatura abierta por correo. Sin vacantes inventadas. */
+const perfiles = [
+  { t_en: 'Development', t_es: 'Desarrollo', d_en: 'Frontend, backend or mobile. We value shipped work over titles.', d_es: 'Frontend, backend o móvil. Valoramos lo entregado más que los títulos.' },
+  { t_en: 'Design', t_es: 'Diseño', d_en: 'UX/UI and brand. Show us screens real people use.', d_es: 'UX/UI y marca. Enseñanos pantallas que use gente de verdad.' },
+  { t_en: 'Marketing', t_es: 'Marketing', d_en: 'Ads, SEO and social media measured in customers, not likes.', d_es: 'Anuncios, SEO y redes medidos en clientes, no en likes.' },
+  { t_en: 'Technical support', t_es: 'Soporte técnico', d_en: 'Repair shop, installation and on-site support.', d_es: 'Taller, instalación y soporte en sitio.' },
+];
+const mailto = 'mailto:hello@kizercode.com?subject=' + encodeURIComponent('Quiero trabajar en Kizercode');
+---
+<Layout
+  title="Trabajá con nosotros — Carreras en Kizercode"
+  description="¿Desarrollás, diseñás, hacés marketing o soporte técnico? Mandanos tu portafolio y conocé cómo trabajamos en Kizercode, Honduras."
+>
+  <Nav />
+  <main id="contenido">
+    <section class="relative overflow-hidden" style="background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%)">
+      <div class="relative mx-auto flex max-w-[760px] flex-col items-center gap-4 px-6 pb-12 pt-16 text-center">
+        <p class="kz-eyebrow"><span class="en">Careers</span><span class="es">Trabajá con nosotros</span></p>
+        <h1 class="font-bold" style="font-size: clamp(34px, 4.6vw, 54px); line-height: 1.1; letter-spacing: -0.02em; text-wrap: balance">
+          <span class="en">Build software people actually use.</span>
+          <span class="es">Construí software que la gente usa de verdad.</span>
+        </h1>
+        <p class="max-w-[580px] text-lg leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+          <span class="en">We are a small, direct team. If you are good at what you do and like seeing it work in real businesses, send us your portfolio.</span>
+          <span class="es">Somos un equipo pequeño y directo. Si sos bueno en lo tuyo y te gusta verlo funcionando en negocios reales, mandanos tu portafolio.</span>
+        </p>
+        <a href={mailto} class="kz-btn kz-btn-primario mt-2"><span class="en">Send my portfolio</span><span class="es">Mandar mi portafolio</span></a>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-[1200px] px-6 py-16">
+      <h2 class="kz-h2 mb-8 text-center" style="font-size: clamp(24px, 2.6vw, 32px)">
+        <span class="en">Profiles we like to meet</span><span class="es">Perfiles que nos gusta conocer</span>
+      </h2>
+      <ul class="grid list-none gap-4" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr))">
+        {perfiles.map((p) => (
+          <li class="kz-card flex flex-col gap-2 p-6">
+            <strong class="text-[16px] font-bold"><span class="en">{p.t_en}</span><span class="es">{p.t_es}</span></strong>
+            <span class="text-sm leading-relaxed" style="color: var(--ink2)"><span class="en">{p.d_en}</span><span class="es">{p.d_es}</span></span>
+          </li>
+        ))}
+      </ul>
+      <p class="mx-auto mt-10 max-w-[620px] rounded-[14px] border p-5 text-center text-sm leading-relaxed" style="background: var(--green-soft); border-color: color-mix(in srgb, var(--green) 30%, transparent); color: var(--ink2)">
+        <span class="en">Write to <strong>hello@kizercode.com</strong> with the subject "I want to work at Kizercode": who you are, what you have built and a link to your work.</span>
+        <span class="es">Escribí a <strong>hello@kizercode.com</strong> con el asunto "Quiero trabajar en Kizercode": quién sos, qué has construido y un enlace a tu trabajo.</span>
+      </p>
+    </section>
+  </main>
+  <Footer />
+  <FloatingWhatsApp />
+</Layout>

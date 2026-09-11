@@ -1,11 +1,7 @@
 ---
-/** Productos propios, al estilo del rediseño: tag mono, nombre, texto, Abrir. */
-const productos = [
-  { tag_en: 'RETAIL', tag_es: 'TIENDAS', nombre: 'KizerPOS', url: 'https://pos.kizercode.com/', d_en: 'Inventory and point of sale with AI for pharmacies, hardware stores, boutiques. Works offline.', d_es: 'Inventario y punto de venta con IA para farmacias, ferreterías, boutiques. Funciona sin internet.' },
-  { tag_en: 'RESTAURANTS', tag_es: 'RESTAURANTES', nombre: 'KizerResto', url: 'https://pos.kizercode.com/resto', d_en: 'Tables, orders, kitchen and shift close with a printed report.', d_es: 'Mesas, comandas, cocina y cierre de turno con papel impreso.' },
-  { tag_en: 'LENDERS', tag_es: 'PRESTAMISTAS', nombre: 'Kizer Cobros', url: 'https://cobros.kizercode.com/', d_en: 'Portfolio, installments, due dates and who owes what today.', d_es: 'Cartera, cuotas, vencimientos y quién debe qué hoy.' },
-  { tag_en: 'STAFF', tag_es: 'EMPLEADOS', nombre: 'Kizer Check', url: 'https://check.kizercode.com/', d_en: 'Time clock, payroll and attendance without spreadsheets.', d_es: 'Marcaje, planilla y asistencia sin hojas de cálculo.' },
-];
+import { productos } from '@/lib/productos';
+
+/** Productos propios en la portada: cada tarjeta lleva a su página. */
 ---
 
 <section id="productos" class="mx-auto flex w-full max-w-[1200px] flex-col gap-9 px-6 py-20">
@@ -17,25 +13,24 @@ const productos = [
         <span class="es">Productos propios, corriendo hoy en negocios reales.</span>
       </h2>
     </div>
-    <p class="max-w-[320px] text-[15px]" style="color: var(--mute); text-wrap: pretty">
-      <span class="en">No months of development: you sign up and start.</span>
-      <span class="es">Sin meses de desarrollo: te registrás y empezás.</span>
-    </p>
+    <a href="/productos/" class="text-[15px] font-semibold" style="color: var(--green2)">
+      <span class="en">See all products</span><span class="es">Ver todos los productos</span> →
+    </a>
   </div>
 
-  <ul class="grid list-none gap-4" style="grid-template-columns: repeat(auto-fit, minmax(230px, 1fr))">
+  <ul class="grid list-none gap-4" style="grid-template-columns: repeat(auto-fit, minmax(210px, 1fr))">
     {productos.map((p) => (
       <li>
-        <a href={p.url} target="_blank" rel="noopener noreferrer" class="kz-card flex h-full flex-col gap-3 rounded-2xl p-6" style="color: var(--ink)">
-          <span class="text-[11px] tracking-[0.06em]" style="font-family: ui-monospace, Menlo, monospace; color: var(--green2)">
-            <span class="en">{p.tag_en}</span><span class="es">{p.tag_es}</span>
+        <a href={`/productos/${p.slug}/`} class="kz-card flex h-full flex-col gap-3 rounded-2xl p-6" style="color: var(--ink)">
+          <span class="text-[11px] uppercase tracking-[0.06em]" style="font-family: ui-monospace, Menlo, monospace; color: var(--green2)">
+            <span class="en">{p.tagEn}</span><span class="es">{p.tagEs}</span>
           </span>
           <strong class="text-xl font-bold">{p.nombre}</strong>
           <span class="text-sm leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
-            <span class="en">{p.d_en}</span><span class="es">{p.d_es}</span>
+            <span class="en">{p.taglineEn}</span><span class="es">{p.taglineEs}</span>
           </span>
           <span class="mt-auto text-[13px] font-semibold" style="color: var(--green2)">
-            <span class="en">Open</span><span class="es">Abrir</span> →
+            <span class="en">View more</span><span class="es">Ver más</span> →
           </span>
         </a>
       </li>

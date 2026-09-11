@@ -1,0 +1,196 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Nav from '@/components/Nav.astro';
+import Footer from '@/components/Footer.astro';
+import FloatingWhatsApp from '@/components/FloatingWhatsApp.astro';
+
+/**
+ * Nosotros (estilo codebrand /history): historia, fundador, ADN, números,
+ * países y cómo nos organizamos. Solo datos reales: la trayectoria sale del
+ * portafolio público del fundador y los países de proyectos entregados.
+ * Sin nombres ni fotos de equipo inventados.
+ */
+const historia = [
+  { anio: '2021', t_en: 'The beginnings', t_es: 'Los inicios', d_en: 'Allan starts as a frontend developer at Signscloud in San Pedro Sula, building fast web apps with React and TypeScript.', d_es: 'Allan arranca como desarrollador frontend en Signscloud, San Pedro Sula, construyendo web apps rápidas con React y TypeScript.' },
+  { anio: '2022', t_en: 'Banking scale', t_es: 'Escala bancaria', d_en: 'At Banco Ficohsa he builds a microfrontends platform for customer-facing banking products: software that cannot go down.', d_es: 'En Banco Ficohsa construye una plataforma de microfrontends para productos bancarios de cara al cliente: software que no se puede caer.' },
+  { anio: '2024', t_en: 'Technology for the US', t_es: 'Tecnología para EE. UU.', d_en: 'He leads all technology at Sweepstouch (US): kiosk apps on thousands of in-store tablets, SMS/MMS campaigns and real-time operations.', d_es: 'Dirige toda la tecnología de Sweepstouch (EE. UU.): apps de kiosko en miles de tablets en tiendas, campañas SMS/MMS y operaciones en tiempo real.' },
+  { anio_en: 'Today', anio: 'Hoy', t_en: 'Kizercode', t_es: 'Kizercode', d_en: 'All of that, at the service of Honduran businesses: our own products, custom software, marketing and a repair shop in El Progreso, Yoro.', d_es: 'Todo eso, al servicio de negocios hondureños: productos propios, software a la medida, marketing y taller de reparación en El Progreso, Yoro.' },
+];
+
+const adn = [
+  { t_en: 'Honesty in writing', t_es: 'Honradez por escrito', d_en: 'Fixed price before starting, a 30-day warranty and the frank advice even when it means a smaller project.', d_es: 'Precio fijo antes de empezar, 30 días de garantía y el consejo franco aunque signifique un proyecto más pequeño.' },
+  { t_en: 'Speed', t_es: 'Velocidad', d_en: 'Weeks, not months: a simple website can be live in 3 days, with weekly demos on bigger projects.', d_es: 'Semanas, no meses: una página sencilla puede estar en línea en 3 días, con demos semanales en los proyectos grandes.' },
+  { t_en: 'It is yours', t_es: 'Es tuyo', d_en: 'Code, domain, hosting and design files under your name. You never stay tied to us.', d_es: 'Código, dominio, hosting y archivos de diseño a tu nombre. Nunca quedás amarrado a nosotros.' },
+  { t_en: 'Built to last', t_es: 'Hecho para durar', d_en: 'Our products keep working when the internet drops. That is the standard we apply to everything.', d_es: 'Nuestros productos siguen funcionando cuando se va el internet. Ese es el estándar que aplicamos a todo.' },
+];
+
+const paises = [
+  { t_en: 'Honduras', t_es: 'Honduras', d_en: 'Headquarters in El Progreso, Yoro. Our products, AA Bienes and the repair shop.', d_es: 'Sede en El Progreso, Yoro. Nuestros productos, AA Bienes y el taller.' },
+  { t_en: 'United States', t_es: 'Estados Unidos', d_en: 'Sweepstouch: kiosks, loyalty and SMS/MMS campaigns for US retail.', d_es: 'Sweepstouch: kioscos, fidelización y campañas SMS/MMS para comercios de EE. UU.' },
+  { t_en: 'Colombia', t_es: 'Colombia', d_en: 'Feria del Millón: e-commerce for emerging artists.', d_es: 'Feria del Millón: e-commerce para artistas emergentes.' },
+  { t_en: 'Anywhere, remotely', t_es: 'Donde estés, a distancia', d_en: 'All of Central America and beyond, in Spanish or English.', d_es: 'Toda Centroamérica y más, en español o inglés.' },
+];
+
+const areas = [
+  { t_en: 'Software and AI', t_es: 'Software e IA', d_en: 'Systems, apps, websites, automation and our own products. Led directly by the founder.', d_es: 'Sistemas, apps, páginas, automatización y nuestros productos. Liderado directamente por el fundador.' },
+  { t_en: 'Design and marketing', t_es: 'Diseño y marketing', d_en: 'Brand, UX/UI, ads, SEO and social media, measured in customers.', d_es: 'Marca, UX/UI, anuncios, SEO y redes, medidos en clientes.' },
+  { t_en: 'Repair shop and hardware', t_es: 'Taller y equipos', d_en: 'Computer and phone repair, on-site installation and support.', d_es: 'Reparación de computadoras y teléfonos, instalación en sitio y soporte.' },
+];
+---
+<Layout
+  title="Nosotros — Historia, fundador y equipo | Kizercode"
+  description="Kizercode es una agencia de software, IA, marketing y taller de El Progreso, Yoro, Honduras. Más de 5 años construyendo software para bancos, empresas de EE. UU. y negocios locales."
+>
+  <Nav />
+  <main id="contenido">
+    <!-- Hero -->
+    <section class="relative overflow-hidden" style="background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%)">
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0" style="background-image: linear-gradient(color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1px); background-size: 56px 56px; mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 100%); -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 100%)"></div>
+      <div class="relative mx-auto flex max-w-[820px] flex-col items-center gap-5 px-6 pb-14 pt-16 text-center">
+        <p class="kz-eyebrow"><span class="en">About us</span><span class="es">Nosotros</span></p>
+        <h1 class="font-bold" style="font-size: clamp(36px, 5vw, 58px); line-height: 1.08; letter-spacing: -0.02em; text-wrap: balance">
+          <span class="en">We build software that works in <span style="color: var(--green)">real businesses.</span></span>
+          <span class="es">Hacemos software que funciona en <span style="color: var(--green)">negocios de verdad.</span></span>
+        </h1>
+        <p class="max-w-[640px] text-lg leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+          <span class="en">Kizercode is a software, AI, marketing and repair agency from El Progreso, Yoro, Honduras — born from over 5 years building systems for a bank, a US company and local businesses.</span>
+          <span class="es">Kizercode es una agencia de software, IA, marketing y taller de El Progreso, Yoro, Honduras — nacida de más de 5 años construyendo sistemas para un banco, una empresa de EE. UU. y negocios locales.</span>
+        </p>
+        <ul class="grid w-full max-w-[760px] list-none gap-3 pt-2" style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr))">
+          {[
+            { n: '5+', en: 'Years of experience', es: 'Años de experiencia' },
+            { n: '5', en: 'Own products', es: 'Productos propios' },
+            { n: '3', en: 'Countries with delivered projects', es: 'Países con proyectos entregados' },
+            { n: '< 24 h', en: 'Response time', es: 'Tiempo de respuesta' },
+          ].map((s) => (
+            <li class="flex flex-col gap-1 rounded-[14px] border p-4" style="background: var(--bg); border-color: var(--line)">
+              <span class="text-3xl font-bold" style="letter-spacing: -0.02em; color: var(--green)">{s.n}</span>
+              <span class="text-[13px] font-medium" style="color: var(--ink2)"><span class="en">{s.en}</span><span class="es">{s.es}</span></span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- Historia -->
+    <section id="historia" class="mx-auto max-w-[1200px] px-6 py-20">
+      <div class="mx-auto mb-10 flex max-w-[560px] flex-col items-center gap-2.5 text-center">
+        <p class="kz-eyebrow"><span class="en">Our journey</span><span class="es">Nuestra historia</span></p>
+        <h2 class="kz-h2"><span class="en">From the bank to your business.</span><span class="es">Del banco a tu negocio.</span></h2>
+      </div>
+      <ol class="grid list-none gap-4" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr))">
+        {historia.map((h) => (
+          <li class="kz-card flex flex-col gap-2.5 p-6">
+            <span class="text-2xl font-bold" style="color: var(--green); letter-spacing: -0.02em">
+              {h.anio_en ? <><span class="en">{h.anio_en}</span><span class="es">{h.anio}</span></> : h.anio}
+            </span>
+            <strong class="text-lg font-bold"><span class="en">{h.t_en}</span><span class="es">{h.t_es}</span></strong>
+            <p class="text-sm leading-relaxed" style="color: var(--ink2)"><span class="en">{h.d_en}</span><span class="es">{h.d_es}</span></p>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <!-- Fundador y equipo -->
+    <section id="equipo" class="border-y" style="background: var(--bg2); border-color: var(--line)">
+      <div class="mx-auto grid max-w-[1200px] items-start gap-12 px-6 py-20" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))">
+        <article class="flex flex-col gap-4 rounded-[20px] border p-7" style="background: var(--bg); border-color: var(--line)">
+          <div class="flex items-center gap-4">
+            <span class="flex h-16 w-16 shrink-0 items-center justify-center rounded-full text-xl font-bold" style="background: var(--navy); color: var(--green-bright)">AA</span>
+            <div class="flex flex-col">
+              <strong class="text-xl font-bold">Allan Aceituno</strong>
+              <span class="text-sm font-semibold" style="color: var(--green2)"><span class="en">Founder · Fullstack developer</span><span class="es">Fundador · Desarrollador fullstack</span></span>
+            </div>
+          </div>
+          <p class="text-[15px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+            <span class="en">Fullstack developer with 5+ years turning business problems into software that converts and sells. He designs and ships end to end — from interfaces and design systems to microservices, CMS platforms and cloud infrastructure.</span>
+            <span class="es">Desarrollador fullstack con +5 años convirtiendo problemas de negocio en software que convierte y vende. Diseña y entrega de punta a punta — desde interfaces y sistemas de diseño hasta microservicios, plataformas CMS e infraestructura cloud.</span>
+          </p>
+          <ul class="flex list-none flex-wrap gap-1.5">
+            {['Next.js', 'Node.js', 'TypeScript', 'MongoDB', 'PostgreSQL', 'IA / WhatsApp'].map((t) => (
+              <li class="kz-badge" style="padding: 4px 10px; font-size: 12px">{t}</li>
+            ))}
+          </ul>
+          <div class="flex flex-wrap gap-3 pt-1">
+            <a href="https://www.linkedin.com/in/allan-castro-1055b4150/" target="_blank" rel="noopener noreferrer" class="kz-btn kz-btn-secundario text-sm" style="padding: 10px 16px; border-radius: 10px">LinkedIn</a>
+            <a href="https://frontend-portafolio-delta.vercel.app/" target="_blank" rel="noopener noreferrer" class="kz-btn kz-btn-secundario text-sm" style="padding: 10px 16px; border-radius: 10px">
+              <span class="en">Portfolio</span><span class="es">Portafolio</span>
+            </a>
+          </div>
+        </article>
+
+        <div class="flex flex-col gap-4">
+          <p class="kz-eyebrow"><span class="en">How we are organized</span><span class="es">Cómo nos organizamos</span></p>
+          <h2 class="kz-h2" style="text-wrap: initial">
+            <span class="en">You talk to whoever designs and codes your project.</span>
+            <span class="es">Hablás con quien diseña y programa tu proyecto.</span>
+          </h2>
+          <p class="text-[16px] leading-relaxed" style="color: var(--ink2)">
+            <span class="en">A small, direct team: no account executives relaying messages.</span>
+            <span class="es">Un equipo pequeño y directo: sin ejecutivos de cuenta que trasladan mensajes.</span>
+          </p>
+          <ul class="flex list-none flex-col gap-3">
+            {areas.map((a) => (
+              <li class="rounded-[14px] border p-4" style="background: var(--bg); border-color: var(--line)">
+                <strong class="block text-[15px] font-semibold"><span class="en">{a.t_en}</span><span class="es">{a.t_es}</span></strong>
+                <span class="text-sm" style="color: var(--ink2)"><span class="en">{a.d_en}</span><span class="es">{a.d_es}</span></span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ADN -->
+    <section class="mx-auto max-w-[1200px] px-6 py-20">
+      <div class="mx-auto mb-10 flex max-w-[560px] flex-col items-center gap-2.5 text-center">
+        <p class="kz-eyebrow"><span class="en">Our DNA</span><span class="es">Nuestro ADN</span></p>
+        <h2 class="kz-h2"><span class="en">What we never negotiate.</span><span class="es">Lo que no negociamos.</span></h2>
+      </div>
+      <ul class="grid list-none gap-4" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr))">
+        {adn.map((v) => (
+          <li class="kz-card flex flex-col gap-2 p-6">
+            <strong class="text-[16px] font-bold"><span class="en">{v.t_en}</span><span class="es">{v.t_es}</span></strong>
+            <span class="text-sm leading-relaxed" style="color: var(--ink2)"><span class="en">{v.d_en}</span><span class="es">{v.d_es}</span></span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <!-- Países -->
+    <section id="paises" style="background: var(--navy); color: var(--bg)">
+      <div class="mx-auto flex max-w-[1200px] flex-col gap-8 px-6 py-[72px]">
+        <div class="flex max-w-[640px] flex-col gap-2.5">
+          <p class="text-[13px] font-semibold uppercase tracking-[0.08em]" style="color: var(--green-bright)">
+            <span class="en">Countries we serve</span><span class="es">Países donde trabajamos</span>
+          </p>
+          <h2 class="kz-h2"><span class="en">From Honduras to the world.</span><span class="es">De Honduras al mundo.</span></h2>
+        </div>
+        <ul class="grid list-none gap-3.5" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))">
+          {paises.map((p) => (
+            <li class="flex flex-col gap-2 rounded-2xl border p-5" style="background: color-mix(in srgb, var(--bg) 8%, transparent); border-color: color-mix(in srgb, var(--bg) 14%, transparent)">
+              <strong class="text-lg font-bold" style="color: var(--green-bright)"><span class="en">{p.t_en}</span><span class="es">{p.t_es}</span></strong>
+              <span class="text-[13px] leading-relaxed" style="color: color-mix(in srgb, var(--bg) 75%, transparent)"><span class="en">{p.d_en}</span><span class="es">{p.d_es}</span></span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-6 px-6 py-16">
+      <div class="flex max-w-[600px] flex-col gap-2">
+        <h2 class="kz-h2" style="font-size: clamp(24px, 2.8vw, 34px)">
+          <span class="en">Want to work with us — or at Kizercode?</span>
+          <span class="es">¿Querés trabajar con nosotros — o en Kizercode?</span>
+        </h2>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <a href="/contacto/" class="kz-btn kz-btn-primario"><span class="en">Start a project</span><span class="es">Iniciar proyecto</span></a>
+        <a href="/trabaja-con-nosotros/" class="kz-btn kz-btn-secundario"><span class="en">Careers</span><span class="es">Trabajá con nosotros</span></a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+  <FloatingWhatsApp />
+</Layout>

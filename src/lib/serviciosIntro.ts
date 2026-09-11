@@ -139,7 +139,7 @@ export const intros: Record<string, { es: string[]; en: string[] }> = {
 /** Tarjetas de números que acompañan la intro (mismas en todas las páginas). */
 export const statsServicio = [
   { n: '5+', es: 'Años de experiencia', en: 'Years of experience' },
-  { n: '4', es: 'Productos propios en producción', en: 'Own products in production' },
+  { n: '5', es: 'Productos propios en producción', en: 'Own products in production' },
   { n: '100 %', es: 'Código y archivos a tu nombre', en: 'Code and files under your name' },
   { n: '< 24 h', es: 'Tiempo de respuesta', en: 'Response time' },
 ];

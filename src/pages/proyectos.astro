@@ -1,0 +1,35 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Nav from '@/components/Nav.astro';
+import Footer from '@/components/Footer.astro';
+import FloatingWhatsApp from '@/components/FloatingWhatsApp.astro';
+import Projects from '@/sections/Projects.astro';
+import Reviews from '@/sections/Reviews.astro';
+
+/** Proyectos: los casos reales que se cargan desde el panel, en página propia. */
+---
+<Layout
+  title="Proyectos — Casos de éxito de Kizercode"
+  description="Proyectos reales de Kizercode: plataformas, tiendas en línea y sistemas corriendo hoy en negocios de Honduras, Estados Unidos y Colombia."
+>
+  <Nav />
+  <main id="contenido">
+    <section class="relative overflow-hidden" style="background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%)">
+      <div class="relative mx-auto flex max-w-[760px] flex-col items-center gap-4 px-6 pb-2 pt-16 text-center">
+        <p class="kz-eyebrow"><span class="en">Projects</span><span class="es">Proyectos</span></p>
+        <h1 class="font-bold" style="font-size: clamp(34px, 4.6vw, 54px); line-height: 1.1; letter-spacing: -0.02em; text-wrap: balance">
+          <span class="en">Work you can open and use today.</span>
+          <span class="es">Trabajo que podés abrir y usar hoy.</span>
+        </h1>
+        <p class="max-w-[560px] text-lg leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+          <span class="en">Every project here is live, with its link. No mockups.</span>
+          <span class="es">Cada proyecto de aquí está en línea, con su enlace. Nada de maquetas.</span>
+        </p>
+      </div>
+    </section>
+    <Projects />
+    <Reviews />
+  </main>
+  <Footer />
+  <FloatingWhatsApp />
+</Layout>

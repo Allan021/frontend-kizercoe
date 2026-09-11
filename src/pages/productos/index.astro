@@ -1,0 +1,97 @@
+---
+import { Icon } from 'astro-icon/components';
+import Layout from '@/layouts/Layout.astro';
+import Nav from '@/components/Nav.astro';
+import Footer from '@/components/Footer.astro';
+import FloatingWhatsApp from '@/components/FloatingWhatsApp.astro';
+import { productos } from '@/lib/productos';
+
+/** Catálogo de productos propios, al estilo del /products de codebrand. */
+const lang = (Astro.url.pathname.startsWith('/en/') ? 'en' : 'es') as 'es' | 'en';
+const es = lang === 'es';
+---
+<Layout
+  title={es ? 'Productos de Kizercode: software listo para usar | Honduras' : 'Kizercode products: ready-to-use software | Honduras'}
+  description={es
+    ? 'KizerPOS, KizerResto, Kizer Cobros, Kizer Check y ClínicoSalud: software propio, hecho en Honduras y corriendo en negocios reales. Te registrás y empezás.'
+    : 'KizerPOS, KizerResto, Kizer Cobros, Kizer Check and ClínicoSalud: our own software, made in Honduras and running in real businesses. Sign up and start.'}
+  forzarLang={lang}
+  urlEs="/productos/"
+  urlEn="/en/products/"
+>
+  <Nav />
+  <main id="contenido">
+    <section class="relative overflow-hidden" style="background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%)">
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0" style="background-image: linear-gradient(color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1px); background-size: 56px 56px; mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 100%); -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 100%)"></div>
+      <div class="relative mx-auto flex max-w-[760px] flex-col items-center gap-4 px-6 pb-6 pt-16 text-center">
+        <p class="kz-eyebrow">{es ? 'Productos' : 'Products'}</p>
+        <h1 class="font-bold" style="font-size: clamp(36px, 5vw, 58px); line-height: 1.08; letter-spacing: -0.02em; text-wrap: balance">
+          {es ? 'Nuestros productos' : 'Our products'}
+        </h1>
+        <p class="max-w-[580px] text-lg leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+          {es
+            ? 'Software propio, hecho en Honduras y corriendo hoy en negocios reales. Sin meses de desarrollo: te registrás y empezás.'
+            : 'Our own software, made in Honduras and running today in real businesses. No months of development: sign up and start.'}
+        </p>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-[1200px] px-6 pb-20 pt-8">
+      <ul class="grid list-none gap-6" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))">
+        {productos.map((p) => (
+          <li>
+            <article class="kz-card flex h-full flex-col overflow-hidden">
+              <a href={es ? `/productos/${p.slug}/` : `/en/products/${p.slugEn}/`} class="relative flex aspect-[16/9] items-center justify-center overflow-hidden" style="background: var(--navy)" aria-label={p.nombre}>
+                <div aria-hidden="true" class="absolute inset-0" style="background-image: linear-gradient(color-mix(in srgb, var(--bg) 7%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--bg) 7%, transparent) 1px, transparent 1px); background-size: 28px 28px"></div>
+                <div aria-hidden="true" class="absolute" style="width: 70%; height: 70%; background: radial-gradient(closest-side, color-mix(in srgb, var(--green) 35%, transparent), transparent)"></div>
+                <span class="relative flex flex-col items-center gap-3" style="color: var(--bg)">
+                  <span class="flex h-16 w-16 items-center justify-center rounded-2xl" style="background: color-mix(in srgb, var(--green-bright) 16%, transparent); color: var(--green-bright)">
+                    <Icon name={p.icon} size={32} aria-hidden="true" />
+                  </span>
+                  <strong class="text-2xl font-bold" style="letter-spacing: -0.02em">{p.nombre}</strong>
+                </span>
+              </a>
+              <div class="flex flex-1 flex-col gap-3 p-6">
+                <span class="kz-badge self-start" style="padding: 4px 10px; font-size: 12px">{es ? p.tagEs : p.tagEn}</span>
+                <h2 class="text-lg font-bold leading-snug" style="text-wrap: balance">{es ? p.taglineEs : p.taglineEn}</h2>
+                <p class="text-sm leading-relaxed" style="color: var(--ink2); text-wrap: pretty">{es ? p.descEs : p.descEn}</p>
+                <div class="mt-auto flex items-center justify-between gap-3 pt-2">
+                  <span class="inline-flex items-center gap-2 text-[13px] font-semibold" style="color: var(--green2)">
+                    <span class="kz-latido"></span>{es ? 'Disponible' : 'Available'}
+                  </span>
+                  <a href={es ? `/productos/${p.slug}/` : `/en/products/${p.slugEn}/`} class="text-[13px] font-semibold" style="color: var(--green2)">
+                    {es ? 'Ver más' : 'View more'} →
+                  </a>
+                </div>
+              </div>
+            </article>
+          </li>
+        ))}
+      </ul>
+
+      <div class="mt-10 flex flex-col items-center gap-3 rounded-2xl border p-8 text-center" style="background: var(--bg2); border-color: var(--line)">
+        <strong class="text-lg font-bold">{es ? '¿Ninguno calza exacto con tu negocio?' : 'None fits your business exactly?'}</strong>
+        <p class="max-w-[520px] text-sm leading-relaxed" style="color: var(--ink2)">
+          {es
+            ? 'Construimos a la medida sobre las mismas bases, con precio fijo por escrito y el código a tu nombre.'
+            : 'We build custom on the same foundations, with a fixed written price and the code under your name.'}
+        </p>
+        <a href="/contacto/" class="kz-btn kz-btn-primario text-sm" style="padding: 12px 22px">{es ? 'Cotizar a la medida' : 'Get a custom quote'}</a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+  <FloatingWhatsApp />
+
+  <script is:inline define:vars={{ otra: lang === 'es' ? '/en/products/' : '/productos/' }}>
+    document.getElementById('lang-toggle')?.addEventListener(
+      'click',
+      (e) => {
+        e.stopImmediatePropagation();
+        localStorage.setItem('kz-lang', otra.startsWith('/en/') ? 'en' : 'es');
+        location.href = otra;
+      },
+      { capture: true },
+    );
+  </script>
+</Layout>

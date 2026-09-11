@@ -2,7 +2,7 @@
  * Industrias con página propia (/industrias/x y /en/industries/x).
  *
  * La gracia: cada industria enlaza el producto YA HECHO que le sirve
- * (KizerPOS, KizerResto, Cobros, Dentalos…) y deja abierta la puerta de lo
+ * (KizerPOS, KizerResto, Cobros, ClínicoSalud…) y deja abierta la puerta de lo
  * a la medida. Una fila = dos páginas (ES y EN).
  */
 export type Industria = {
@@ -198,21 +198,21 @@ export const industrias: Industria[] = [
     name: 'Clinics and healthcare',
     titleEs: 'Software para clínicas y consultorios en Honduras | Kizercode',
     titleEn: 'Clinic and practice software in Honduras | Kizercode',
-    descEs: 'Software para clínicas: expediente del paciente, citas, tratamientos y cobros. Dentalos para clínicas dentales, listo para usar, o a la medida de tu especialidad.',
-    descEn: 'Clinic software: patient records, appointments, treatments and billing. Dentalos for dental clinics, ready to use, or custom for your specialty.',
+    descEs: 'Software para clínicas: expediente del paciente, historia clínica por voz, citas en línea y finanzas. ClínicoSalud, listo para usar en cualquier especialidad, o a la medida.',
+    descEn: 'Clinic software: patient records, voice clinical history, online booking and finances. ClínicoSalud, ready to use for any specialty, or custom-built.',
     h1Es: 'El expediente completo del paciente, a un clic.',
     h1En: "The patient's complete record, one click away.",
     intro: {
       es: [
         'Una clínica que agenda en cuaderno y guarda expedientes en folders pierde tiempo en cada consulta: buscar el historial, descifrar el tratamiento anterior, cuadrar los abonos del paciente. Y una cita olvidada es un espacio vacío que nadie paga.',
-        'Construimos Dentalos, nuestro sistema para clínicas dentales: expediente con odontograma, citas con recordatorio, planes de tratamiento y control de pagos. Si tu clínica es de otra especialidad, adaptamos la misma base a tu consulta — expediente, agenda y cobros calzados a cómo trabajás.',
+        'Construimos ClínicoSalud, nuestro sistema para clínicas de toda especialidad: pacientes, expediente, historia clínica dictada por voz, laboratorio, agenda con citas en línea y finanzas en un solo panel. Y si tu consulta necesita algo propio, lo ajustamos sobre la misma base.',
       ],
       en: [
         'A clinic that schedules in a notebook and keeps records in folders loses time on every visit: finding the history, deciphering the last treatment, reconciling the patient’s payments. And a forgotten appointment is an empty slot nobody pays for.',
-        'We built Dentalos, our system for dental clinics: records with odontogram, appointments with reminders, treatment plans and payment control. If your clinic is another specialty, we adapt the same base to your practice — records, schedule and billing fitted to how you work.',
+        'We built ClínicoSalud, our system for clinics of every specialty: patients, records, voice-dictated clinical history, lab, schedule with online booking and finances in one panel. And if your practice needs something of its own, we adjust it on the same base.',
       ],
     },
-    producto: { nombre: 'Dentalos', url: 'https://dentalosweb-production.up.railway.app/', dEs: 'Sistema para clínicas dentales: expediente, citas y tratamientos.', dEn: 'Dental clinic system: records, appointments and treatments.' },
+    producto: { nombre: 'ClínicoSalud', url: 'https://dentalosweb-production.up.railway.app/', dEs: 'Pacientes, expediente, historia clínica por voz, agenda y finanzas en un solo panel.', dEn: 'Patients, records, voice clinical history, schedule and finances in one panel.' },
     dolores: [
       { tEs: 'Expediente al instante', tEn: 'Instant records', dEs: 'Historial, tratamientos y notas del paciente sin buscar folders.', dEn: 'History, treatments and notes without hunting folders.' },
       { tEs: 'Citas que no se olvidan', tEn: 'Appointments that are not forgotten', dEs: 'Agenda con recordatorios al paciente por WhatsApp.', dEn: 'Schedule with WhatsApp reminders to the patient.' },
@@ -220,7 +220,7 @@ export const industrias: Industria[] = [
       { tEs: 'Privacidad en serio', tEn: 'Privacy taken seriously', dEs: 'Datos de pacientes con roles, respaldo y acceso controlado.', dEn: 'Patient data with roles, backup and controlled access.' },
     ],
     faq: [
-      { qEs: 'No soy dentista, ¿me sirve?', qEn: "I'm not a dentist, does this work for me?", aEs: 'Sí: la base (expediente, agenda, cobros) se adapta a cualquier consulta. El diagnóstico gratis define qué necesita tu especialidad.', aEn: 'Yes: the base (records, schedule, billing) adapts to any practice. The free diagnosis defines what your specialty needs.' },
+      { qEs: '¿Sirve para mi especialidad?', qEn: 'Does it work for my specialty?', aEs: 'Sí: ClínicoSalud está hecho para clínicas de toda especialidad, y lo que tu consulta tenga de particular lo ajustamos.', aEn: 'Yes: ClínicoSalud is built for clinics of every specialty, and whatever is particular to your practice we adjust.' },
       { qEs: '¿Los datos de mis pacientes están seguros?', qEn: 'Is my patient data safe?', aEs: 'Sí: acceso por roles, respaldos automáticos y todo queda a nombre de tu clínica, no del proveedor.', aEn: 'Yes: role-based access, automatic backups and everything under your clinic’s name, not the vendor’s.' },
     ],
   },

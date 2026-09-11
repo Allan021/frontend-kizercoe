@@ -23,7 +23,7 @@ const grupos = [
       { href: '/servicios/sistemas-a-la-medida/', t_en: 'Custom systems', t_es: 'Sistemas a la medida', d_en: 'Inventory, billing, orders', d_es: 'Inventario, facturación, pedidos' },
       { href: '/servicios/automatizacion-ia/', t_en: 'AI automation', t_es: 'Automatización con IA', d_en: 'Answers and quotes 24/7', d_es: 'Atiende y cotiza 24/7' },
       { href: '/servicios/crm-a-la-medida/', t_en: 'Custom CRM', t_es: 'CRM a la medida', d_en: 'Customers and follow-ups', d_es: 'Clientes y seguimientos' },
-      { href: '/#productos', t_en: 'Ready-to-use software', t_es: 'Software listo para usar', d_en: 'KizerPOS, Resto, Cobros, Check', d_es: 'KizerPOS, Resto, Cobros, Check' },
+      { href: '/productos/', t_en: 'Ready-to-use software', t_es: 'Software listo para usar', d_en: 'KizerPOS, Resto, Cobros, Check, ClínicoSalud', d_es: 'KizerPOS, Resto, Cobros, Check, ClínicoSalud' },
     ],
   },
   {
@@ -61,7 +61,7 @@ const gruposIndustrias = [
     g_en: 'Food and service', g_es: 'Comida y servicio',
     items: [
       { href: '/industrias/restaurantes/', t_en: 'Restaurants', t_es: 'Restaurantes', d_en: 'Tables and kitchen with KizerResto', d_es: 'Mesas y cocina con KizerResto' },
-      { href: '/industrias/clinicas/', t_en: 'Clinics and healthcare', t_es: 'Clínicas y salud', d_en: 'Records and appointments (Dentalos)', d_es: 'Expediente y citas (Dentalos)' },
+      { href: '/industrias/clinicas/', t_en: 'Clinics and healthcare', t_es: 'Clínicas y salud', d_en: 'Records and booking with ClínicoSalud', d_es: 'Expediente y citas con ClínicoSalud' },
       { href: '/industrias/talleres/', t_en: 'Auto shops', t_es: 'Talleres', d_en: 'Work orders and parts', d_es: 'Órdenes de trabajo y repuestos' },
     ],
   },
@@ -76,9 +76,28 @@ const gruposIndustrias = [
 ];
 
 // Anchors absolutos: funcionan desde la portada y desde cualquier página.
+const gruposNosotros = [
+  {
+    g_en: 'The company', g_es: 'La empresa',
+    items: [
+      { href: '/nosotros/', t_en: 'History', t_es: 'Historia', d_en: 'From the bank to your business', d_es: 'Del banco a tu negocio' },
+      { href: '/nosotros/#equipo', t_en: 'Founder and team', t_es: 'Fundador y equipo', d_en: 'Who designs and codes your project', d_es: 'Quién diseña y programa tu proyecto' },
+      { href: '/nosotros/#paises', t_en: 'Countries we serve', t_es: 'Países donde trabajamos', d_en: 'Honduras, US, Colombia and remote', d_es: 'Honduras, EE. UU., Colombia y a distancia' },
+    ],
+  },
+  {
+    g_en: 'Our work', g_es: 'Nuestro trabajo',
+    items: [
+      { href: '/proyectos/', t_en: 'Projects', t_es: 'Proyectos', d_en: 'Live work you can open', d_es: 'Trabajo en línea que podés abrir' },
+      { href: '/productos/', t_en: 'Products', t_es: 'Productos', d_en: 'Our own ready-to-use software', d_es: 'Software propio listo para usar' },
+      { href: '/trabaja-con-nosotros/', t_en: 'Careers', t_es: 'Trabajá con nosotros', d_en: 'Send us your portfolio', d_es: 'Mandanos tu portafolio' },
+    ],
+  },
+];
+
+// Anchors absolutos: funcionan desde la portada y desde cualquier página.
 const enlaces = [
-  { href: '/#casos', en: 'Cases', es: 'Casos' },
-  { href: '/#productos', en: 'Products', es: 'Productos' },
+  { href: '/productos/', en: 'Products', es: 'Productos' },
   { href: '/precios/', en: 'Pricing', es: 'Precios' },
   { href: '/#faq', en: 'FAQ', es: 'Preguntas' },
 ];
@@ -136,6 +155,10 @@ const enlaces = [
         <span class="en">Industries</span><span class="es">Industrias</span>
         <span class="text-[10px]" aria-hidden="true">▾</span>
       </button>
+      <button data-menu-btn="menu-nosotros" class="kz-navlink inline-flex cursor-pointer items-center gap-1.5 border-0 bg-transparent" aria-expanded="false" aria-controls="menu-nosotros">
+        <span class="en">About us</span><span class="es">Nosotros</span>
+        <span class="text-[10px]" aria-hidden="true">▾</span>
+      </button>
       {enlaces.map((l) => (
         <a href={l.href} class="kz-navlink"><span class="en">{l.en}</span><span class="es">{l.es}</span></a>
       ))}
@@ -173,8 +196,11 @@ const enlaces = [
         {enlaces.map((l) => (
           <a href={l.href} class="kz-menupill"><span class="en">{l.en}</span><span class="es">{l.es}</span></a>
         ))}
+        <a href="/industrias/" class="kz-menupill"><span class="en">Industries</span><span class="es">Industrias</span></a>
+        <a href="/nosotros/" class="kz-menupill"><span class="en">About us</span><span class="es">Nosotros</span></a>
+        <a href="/proyectos/" class="kz-menupill"><span class="en">Projects</span><span class="es">Proyectos</span></a>
         <a href="/#taller" class="kz-menupill"><span class="en">Repair shop</span><span class="es">Taller</span></a>
-        <a href="/#contacto" class="kz-menupill" style="border-color: var(--green); color: var(--green2)"><span class="en">Get a quote</span><span class="es">Cotizar</span></a>
+        <a href="/contacto/" class="kz-menupill" style="border-color: var(--green); color: var(--green2)"><span class="en">Get a quote</span><span class="es">Cotizar</span></a>
       </div>
 
       {grupos.map((g) => (
@@ -243,6 +269,38 @@ const enlaces = [
       </div>
     </div>
   </div>
+
+  <!-- Menú desplegable de nosotros -->
+  <div id="menu-nosotros" hidden class="border-t" style="border-color: var(--line); background: var(--bg); box-shadow: 0 20px 40px rgba(11,26,51,.10)">
+    <div class="mx-auto grid max-w-[1200px] gap-8 px-6 pb-9 pt-8" style="grid-template-columns: repeat(auto-fit, minmax(230px, 1fr))">
+      {gruposNosotros.map((g) => (
+        <div class="flex flex-col gap-1.5">
+          <span class="px-3 pb-2 text-xs font-semibold uppercase tracking-[0.08em]" style="color: var(--green2)">
+            <span class="en">{g.g_en}</span><span class="es">{g.g_es}</span>
+          </span>
+          {g.items.map((it) => (
+            <a href={it.href} class="kz-menuitem">
+              <span class="text-[15px] font-semibold"><span class="en">{it.t_en}</span><span class="es">{it.t_es}</span></span>
+              <span class="text-[13px]" style="color: var(--mute)"><span class="en">{it.d_en}</span><span class="es">{it.d_es}</span></span>
+            </a>
+          ))}
+        </div>
+      ))}
+
+      <div class="flex flex-col gap-2.5 rounded-[14px] p-5" style="background: var(--navy); color: var(--bg)">
+        <span class="text-[11px] font-semibold uppercase tracking-[0.08em]" style="color: var(--green-bright)">
+          <span class="en">5+ years building software</span><span class="es">+5 años construyendo software</span>
+        </span>
+        <strong class="text-base font-semibold leading-snug">
+          <span class="en">For a bank, a US company and Honduran businesses.</span>
+          <span class="es">Para un banco, una empresa de EE. UU. y negocios hondureños.</span>
+        </strong>
+        <a href="/nosotros/" class="mt-auto self-start rounded-[9px] px-4 py-2.5 text-[13px] font-semibold text-white transition-colors" style="background: #16a36c" onmouseover="this.style.background='#3ed39a'; this.style.color='#0b1a33'" onmouseout="this.style.background='#16a36c'; this.style.color='#fff'">
+          <span class="en">Meet us</span><span class="es">Conocernos</span>
+        </a>
+      </div>
+    </div>
+  </div>
 </header>
 
 <style>
@@ -287,7 +345,7 @@ const enlaces = [
   //    abrir uno cierra el otro; cierran al salir del header, al hacer clic
   //    en un enlace o con Escape. ──
   const header = document.getElementById('main-nav')!;
-  const menus = ['menu-servicios', 'menu-industrias']
+  const menus = ['menu-servicios', 'menu-industrias', 'menu-nosotros']
     .map((id) => document.getElementById(id))
     .filter((m): m is HTMLElement => m !== null);
   const btnMovil = document.getElementById('menu-movil-btn');
