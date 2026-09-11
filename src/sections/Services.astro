@@ -15,12 +15,18 @@ const servicios = [
   { num: '08', t_en: 'Hardware and installation', t_es: 'Equipo e instalación', d_en: 'Terminals, scanners, printers and servers, installed and configured at your place.', d_es: 'Terminales, lectores, impresoras y servidores, instalados y configurados en tu local.', href: '/servicios/reparacion-computadoras/', c_en: 'Learn more', c_es: 'Ver más' },
 ];
 
+// Cada industria tiene página propia: el chip lleva ahí.
 const industrias = [
-  { en: 'Pharmacies', es: 'Farmacias' }, { en: 'Hardware stores', es: 'Ferreterías' },
-  { en: 'Boutiques', es: 'Boutiques' }, { en: 'Restaurants', es: 'Restaurantes' },
-  { en: 'Lenders', es: 'Prestamistas' }, { en: 'Clinics', es: 'Clínicas' },
-  { en: 'Law firms', es: 'Abogados' }, { en: 'Real estate', es: 'Bienes raíces' },
-  { en: 'Distributors', es: 'Distribuidoras' }, { en: 'Workshops', es: 'Talleres' },
+  { en: 'Pharmacies', es: 'Farmacias', href: '/industrias/farmacias/' },
+  { en: 'Hardware stores', es: 'Ferreterías', href: '/industrias/ferreterias/' },
+  { en: 'Boutiques', es: 'Boutiques', href: '/industrias/boutiques/' },
+  { en: 'Restaurants', es: 'Restaurantes', href: '/industrias/restaurantes/' },
+  { en: 'Lenders', es: 'Prestamistas', href: '/industrias/prestamistas/' },
+  { en: 'Clinics', es: 'Clínicas', href: '/industrias/clinicas/' },
+  { en: 'Law firms', es: 'Abogados', href: '/industrias/abogados/' },
+  { en: 'Real estate', es: 'Bienes raíces', href: '/industrias/bienes-raices/' },
+  { en: 'Distributors', es: 'Distribuidoras', href: '/industrias/distribuidoras/' },
+  { en: 'Workshops', es: 'Talleres', href: '/industrias/talleres/' },
 ];
 ---
 
@@ -59,7 +65,11 @@ const industrias = [
       </p>
       <ul class="flex list-none flex-wrap justify-center gap-2">
         {industrias.map((i) => (
-          <li class="kz-chip" style="padding: 7px 13px"><span class="en">{i.en}</span><span class="es">{i.es}</span></li>
+          <li>
+            <a href={i.href} class="kz-chip inline-block transition-colors hover:border-[var(--green)] hover:text-[var(--green2)]" style="padding: 7px 13px">
+              <span class="en">{i.en}</span><span class="es">{i.es}</span>
+            </a>
+          </li>
         ))}
       </ul>
     </div>

@@ -1,0 +1,65 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Nav from '@/components/Nav.astro';
+import Footer from '@/components/Footer.astro';
+import FloatingWhatsApp from '@/components/FloatingWhatsApp.astro';
+import { industrias } from '@/lib/industrias';
+
+/** Índice de industrias: una tarjeta por rubro, con su producto si lo hay. */
+const lang = (Astro.url.pathname.startsWith('/en/') ? 'en' : 'es') as 'es' | 'en';
+const es = lang === 'es';
+---
+<Layout
+  title={es ? 'Industrias: software para tu rubro | Kizercode' : 'Industries: software for your trade | Kizercode'}
+  description={es
+    ? 'Software por industria: farmacias, ferreterías, boutiques, restaurantes, prestamistas, clínicas, bienes raíces, abogados, distribuidoras y talleres.'
+    : 'Software by industry: pharmacies, hardware stores, boutiques, restaurants, lenders, clinics, real estate, law firms, distributors and workshops.'}
+  forzarLang={lang}
+  urlEs="/industrias/"
+  urlEn="/en/industries/"
+>
+  <Nav />
+  <main id="contenido" class="mx-auto max-w-[1200px] px-6 py-16">
+    <div class="mx-auto mb-10 flex max-w-[640px] flex-col items-center gap-3 text-center">
+      <p class="kz-eyebrow">{es ? 'Industrias' : 'Industries'}</p>
+      <h1 class="kz-h2" style="font-size: clamp(32px, 4vw, 48px)">
+        {es ? 'Conocemos tu rubro, no solo el código.' : 'We know your trade, not just the code.'}
+      </h1>
+      <p class="text-base" style="color: var(--mute); text-wrap: pretty">
+        {es
+          ? 'Para varios rubros ya tenemos el producto hecho: te registrás y empezás. Para el resto, construimos a la medida sobre la misma base.'
+          : 'For several trades the product is already built: sign up and start. For the rest, we build custom on the same base.'}
+      </p>
+    </div>
+    <ul class="grid list-none gap-4" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr))">
+      {industrias.map((i) => (
+        <li>
+          <a href={es ? `/industrias/${i.slug}/` : `/en/industries/${i.slugEn}/`} class="kz-card flex h-full flex-col gap-2.5 p-6" style="color: var(--ink)">
+            <strong class="text-lg font-bold">{es ? i.nombre : i.name}</strong>
+            <span class="text-sm leading-relaxed" style="color: var(--ink2); text-wrap: pretty">{es ? i.h1Es : i.h1En}</span>
+            {(i.producto ?? i.caso) && (
+              <span class="kz-badge self-start" style="padding: 4px 10px; font-size: 12px">
+                {i.producto ? (es ? `Listo: ${i.producto.nombre}` : `Ready: ${i.producto.nombre}`) : (es ? `Caso: ${i.caso!.nombre}` : `Case: ${i.caso!.nombre}`)}
+              </span>
+            )}
+            <span class="mt-auto text-[13px] font-semibold" style="color: var(--green2)">{es ? 'Ver industria' : 'View industry'} →</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </main>
+  <Footer />
+  <FloatingWhatsApp />
+
+  <script is:inline define:vars={{ otra: lang === 'es' ? '/en/industries/' : '/industrias/' }}>
+    document.getElementById('lang-toggle')?.addEventListener(
+      'click',
+      (e) => {
+        e.stopImmediatePropagation();
+        localStorage.setItem('kz-lang', otra.startsWith('/en/') ? 'en' : 'es');
+        location.href = otra;
+      },
+      { capture: true },
+    );
+  </script>
+</Layout>

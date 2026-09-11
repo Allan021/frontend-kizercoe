@@ -1,0 +1,10 @@
+---
+import IndustriaPage from '@/components/IndustriaPage.astro';
+import { industrias } from '@/lib/industrias';
+
+export function getStaticPaths() {
+  return industrias.map((i) => ({ params: { slug: i.slug }, props: { industria: i } }));
+}
+const { industria } = Astro.props;
+---
+<IndustriaPage industria={industria} lang="es" />

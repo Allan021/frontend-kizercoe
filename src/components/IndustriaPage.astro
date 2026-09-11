@@ -1,0 +1,217 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Nav from '@/components/Nav.astro';
+import Footer from '@/components/Footer.astro';
+import FloatingWhatsApp from '@/components/FloatingWhatsApp.astro';
+import { statsServicio } from '@/lib/serviciosIntro';
+import type { Industria } from '@/lib/industrias';
+
+/**
+ * Plantilla de páginas de industria: la historia del rubro, el producto YA
+ * HECHO que le calza (o el caso real), los dolores que resuelve y su FAQ.
+ * El camino "a la medida" siempre queda abierto al final.
+ */
+interface Props {
+  industria: Industria;
+  lang: 'es' | 'en';
+}
+const { industria: ind, lang } = Astro.props;
+const es = lang === 'es';
+
+const urlEs = `/industrias/${ind.slug}/`;
+const urlEn = `/en/industries/${ind.slugEn}/`;
+const propia = es ? urlEs : urlEn;
+const otra = es ? urlEn : urlEs;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Service',
+      name: es ? `Software para ${ind.nombre.toLowerCase()}` : `Software for ${ind.name.toLowerCase()}`,
+      description: es ? ind.descEs : ind.descEn,
+      url: new URL(propia, Astro.site).href,
+      areaServed: { '@type': 'Country', name: 'Honduras' },
+      provider: { '@id': 'https://www.kizercode.com/#business' },
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: ind.faq.map((f) => ({
+        '@type': 'Question',
+        name: es ? f.qEs : f.qEn,
+        acceptedAnswer: { '@type': 'Answer', text: es ? f.aEs : f.aEn },
+      })),
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Kizercode', item: 'https://www.kizercode.com/' },
+        { '@type': 'ListItem', position: 2, name: es ? 'Industrias' : 'Industries', item: new URL(es ? '/industrias/' : '/en/industries/', Astro.site).href },
+        { '@type': 'ListItem', position: 3, name: es ? ind.nombre : ind.name, item: new URL(propia, Astro.site).href },
+      ],
+    },
+  ],
+};
+
+const destacado = ind.producto ?? ind.caso;
+---
+
+<Layout
+  title={es ? ind.titleEs : ind.titleEn}
+  description={es ? ind.descEs : ind.descEn}
+  locale={es ? 'es_HN' : 'en_US'}
+  forzarLang={lang}
+  urlEs={urlEs}
+  urlEn={urlEn}
+>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+  <Nav />
+  <main id="contenido">
+    <!-- Hero: historia a la izquierda, producto/caso + stats a la derecha -->
+    <section class="relative overflow-hidden" style="background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%)">
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0" style="background-image: linear-gradient(color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1px); background-size: 56px 56px; mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 100%); -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 100%)"></div>
+      <div class="relative mx-auto grid max-w-[1200px] items-start gap-12 px-6 pb-14 pt-14" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))">
+        <div class="flex max-w-[640px] flex-col gap-6">
+          <nav aria-label="breadcrumb" class="text-[13px] font-medium" style="color: var(--mute)">
+            <a href="/" class="transition-colors hover:text-[var(--green2)]" style="color: var(--mute)">Kizercode</a>
+            <span aria-hidden="true"> / </span>
+            <a href={es ? '/industrias/' : '/en/industries/'} class="transition-colors hover:text-[var(--green2)]" style="color: var(--mute)">{es ? 'Industrias' : 'Industries'}</a>
+            <span aria-hidden="true"> / </span>
+            <span style="color: var(--ink2)">{es ? ind.nombre : ind.name}</span>
+          </nav>
+          <h1 class="font-bold" style="font-size: clamp(34px, 4.2vw, 52px); line-height: 1.1; letter-spacing: -0.02em; text-wrap: balance">
+            {es ? ind.h1Es : ind.h1En}
+          </h1>
+          {(es ? ind.intro.es : ind.intro.en).map((p) => (
+            <p class="text-[17px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">{p}</p>
+          ))}
+          <div class="flex flex-wrap gap-3">
+            <a href="/#contacto" class="kz-btn kz-btn-primario" style="padding: 15px 26px; font-size: 16px">
+              {es ? 'Cotización gratis' : 'Free quote'}
+            </a>
+            <a href="https://wa.me/50488091744" target="_blank" rel="noopener noreferrer" class="kz-btn kz-btn-secundario" style="padding: 15px 26px; font-size: 16px">
+              <img src="/whatsapp.svg" alt="" width="18" height="18" class="block" />
+              WhatsApp
+            </a>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-3.5 lg:pt-10">
+          {destacado && (
+            <a href={destacado.url} target="_blank" rel="noopener noreferrer" class="flex flex-col gap-2 rounded-2xl p-6 transition-colors" style="background: var(--navy); color: var(--bg); box-shadow: 0 12px 30px rgba(11,26,51,.18)">
+              <span class="text-[11px] font-semibold uppercase tracking-[0.08em]" style="color: var(--green-bright)">
+                {ind.producto ? (es ? 'Producto listo para usar' : 'Ready-to-use product') : (es ? 'Caso real en producción' : 'Real case in production')}
+              </span>
+              <strong class="text-2xl font-bold">{destacado.nombre}</strong>
+              <span class="text-sm leading-relaxed" style="color: color-mix(in srgb, var(--bg) 75%, transparent)">{es ? destacado.dEs : destacado.dEn}</span>
+              <span class="mt-1 text-[13px] font-semibold" style="color: var(--green-bright)">{es ? 'Verlo funcionando' : 'See it working'} →</span>
+            </a>
+          )}
+          {statsServicio.slice(0, 3).map((st) => (
+            <div class="flex items-center gap-4 rounded-2xl border p-5" style="background: var(--bg); border-color: var(--line); box-shadow: 0 12px 30px rgba(11,26,51,.06)">
+              <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-lg font-bold" style="background: var(--green-soft); color: var(--green2)">✓</span>
+              <span class="flex flex-col">
+                <strong class="text-2xl font-bold" style="letter-spacing: -0.02em; color: var(--green)">{st.n}</strong>
+                <span class="text-[14px] font-medium" style="color: var(--ink2)">{es ? st.es : st.en}</span>
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Dolores que resuelve -->
+    <section class="mx-auto max-w-[1200px] px-6 py-16">
+      <ul class="grid list-none gap-4" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr))">
+        {ind.dolores.map((d) => (
+          <li class="kz-card flex flex-col gap-2 p-6">
+            <strong class="text-[15px] font-semibold">{es ? d.tEs : d.tEn}</strong>
+            <span class="text-sm leading-relaxed" style="color: var(--ink2)">{es ? d.dEs : d.dEn}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <!-- Listo o a la medida + FAQ -->
+    <section class="border-y" style="background: var(--bg2); border-color: var(--line)">
+      <div class="mx-auto grid max-w-[1200px] gap-12 px-6 py-16" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))">
+        <div class="flex flex-col gap-4">
+          <h2 class="kz-h2" style="font-size: clamp(24px, 2.6vw, 32px)">
+            {es ? '¿Listo para usar o a la medida?' : 'Ready-to-use or custom?'}
+          </h2>
+          <p class="text-[15px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+            {es
+              ? 'Si nuestro producto calza con tu operación, te registrás y empezás en días. Si tu negocio tiene su propia forma de trabajar, construimos sobre la misma base un sistema a tu medida: mismo equipo, precio fijo por escrito y código a tu nombre.'
+              : 'If our product fits your operation, you sign up and start in days. If your business works its own way, we build a custom system on the same base: same team, fixed price in writing and code under your name.'}
+          </p>
+          <p class="rounded-[14px] border p-4 text-sm leading-relaxed" style="background: var(--green-soft); border-color: color-mix(in srgb, var(--green) 30%, transparent); color: var(--ink2)">
+            {es
+              ? 'La llamada de diagnóstico es gratis y te decimos con franqueza cuál de los dos caminos te conviene — aunque sea el más barato.'
+              : 'The diagnosis call is free and we tell you frankly which path suits you — even if it is the cheaper one.'}
+          </p>
+          <div class="flex flex-wrap gap-3">
+            {ind.producto && (
+              <a href={ind.producto.url} target="_blank" rel="noopener noreferrer" class="kz-btn kz-btn-navy text-sm" style="padding: 12px 20px; border-radius: 10px">
+                {es ? `Probar ${ind.producto.nombre}` : `Try ${ind.producto.nombre}`}
+              </a>
+            )}
+            <a href="/#contacto" class="kz-btn kz-btn-secundario text-sm" style="padding: 12px 20px; border-radius: 10px">
+              {es ? 'Quiero algo a la medida' : 'I want something custom'}
+            </a>
+          </div>
+        </div>
+        <div class="flex flex-col gap-2">
+          <h2 class="kz-h2 mb-2" style="font-size: clamp(24px, 2.6vw, 32px)">{es ? 'Preguntas frecuentes' : 'FAQ'}</h2>
+          {ind.faq.map((f) => (
+            <details class="kz-ifaq border-b" style="border-color: var(--line)">
+              <summary class="flex cursor-pointer items-center justify-between gap-4 py-3.5 text-[15px] font-semibold">
+                <span>{es ? f.qEs : f.qEn}</span>
+                <span class="kz-ifaq-signo shrink-0" aria-hidden="true">+</span>
+              </summary>
+              <p class="pb-4 text-sm leading-relaxed" style="color: var(--ink2); text-wrap: pretty">{es ? f.aEs : f.aEn}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA final -->
+    <section style="background: var(--navy); color: var(--bg)">
+      <div class="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-6 px-6 py-14">
+        <div class="flex max-w-[600px] flex-col gap-2">
+          <h2 class="font-bold" style="font-size: clamp(24px, 2.8vw, 34px); line-height: 1.15; letter-spacing: -0.02em; text-wrap: balance">
+            {es ? `¿Tenés un negocio de ${ind.nombre.toLowerCase()}? Hablemos.` : `Run a ${ind.name.toLowerCase()} business? Let's talk.`}
+          </h2>
+          <p class="text-base" style="color: color-mix(in srgb, var(--bg) 70%, transparent)">
+            {es ? 'Diagnóstico gratis y precio fijo por escrito en menos de 24 horas.' : 'Free diagnosis and a fixed written price in under 24 hours.'}
+          </p>
+        </div>
+        <a href="/#contacto" class="rounded-xl px-6 py-3.5 text-[15px] font-semibold text-white transition-colors" style="background: #16a36c" onmouseover="this.style.background='#3ed39a'; this.style.color='#0b1a33'" onmouseout="this.style.background='#16a36c'; this.style.color='#fff'">
+          {es ? 'Iniciar proyecto' : 'Start a project'}
+        </a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+  <FloatingWhatsApp />
+
+  <script is:inline define:vars={{ otra }}>
+    // El toggle ES/EN navega a la versión del otro idioma de esta industria.
+    document.getElementById('lang-toggle')?.addEventListener(
+      'click',
+      (e) => {
+        e.stopImmediatePropagation();
+        localStorage.setItem('kz-lang', otra.startsWith('/en/') ? 'en' : 'es');
+        location.href = otra;
+      },
+      { capture: true },
+    );
+  </script>
+</Layout>
+
+<style>
+  .kz-ifaq summary { list-style: none; }
+  .kz-ifaq summary::-webkit-details-marker { display: none; }
+  .kz-ifaq-signo { font-size: 18px; line-height: 1; color: var(--green); transition: transform 0.2s ease; }
+  .kz-ifaq[open] .kz-ifaq-signo { transform: rotate(45deg); }
+</style>
