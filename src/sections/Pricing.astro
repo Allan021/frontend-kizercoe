@@ -26,6 +26,9 @@ const cosas = [
   { t_en: 'Fix my computer or phone', t_es: 'Reparar mi compu o teléfono', gratis: true, servicio: 'Computer Repair',
     en: ['We tell you what it has and what it costs', 'You approve before we touch anything', 'We also buy and sell equipment'],
     es: ['Te decimos qué tiene y cuánto cuesta', 'Vos aprobás antes de que toquemos nada', 'También compramos y vendemos equipo'] },
+  { t_en: 'Install security cameras', t_es: 'Instalar cámaras de seguridad', sinPrecio_en: 'Written quote', sinPrecio_es: 'Cotización por escrito', servicio: 'Security Cameras',
+    en: ['HD cameras with night vision', 'Watch them live from your phone', 'Wiring, recorder and setup included'],
+    es: ['Cámaras HD con visión nocturna', 'Las ves en vivo desde tu celular', 'Cableado, grabador y configuración'] },
 ];
 ---
 
@@ -58,9 +61,9 @@ const cosas = [
             <span class="en">{c.t_en}</span><span class="es">{c.t_es}</span>
           </h3>
           <p class="flex flex-wrap items-baseline gap-2">
-            {c.gratis ? (
+            {c.gratis || c.sinPrecio_es ? (
               <span class="text-2xl font-bold" style="letter-spacing: -0.02em; color: var(--green)">
-                <span class="en">Free diagnosis</span><span class="es">Diagnóstico gratis</span>
+                <span class="en">{c.sinPrecio_en ?? 'Free diagnosis'}</span><span class="es">{c.sinPrecio_es ?? 'Diagnóstico gratis'}</span>
               </span>
             ) : (
               <>

@@ -126,12 +126,32 @@ export const intros: Record<string, { es: string[]; en: string[] }> = {
   },
   'reparacion-computadoras': {
     es: [
-      'Cuando la compu del negocio no enciende o el teléfono quedó con la pantalla estrellada, lo último que necesitás es un taller que te cobre por mirar, te dé un precio al aire y te tenga el equipo secuestrado dos semanas. Por eso trabajamos al revés: diagnóstico gratis, precio por escrito y ni un tornillo tocado sin tu sí.',
-      'Somos el mismo equipo que construye software: sabemos de hardware, de datos y de dejar todo funcionando. Reparamos computadoras y teléfonos en El Progreso, Yoro, hacemos mantenimiento para negocios y también compramos y vendemos equipo probado.',
+      'Una computadora que no enciende, que tarda cinco minutos en abrir o que se reinicia sola frena todo el negocio: la factura no sale, el correo no llega y el día se pierde. La mayoría de las veces tiene arreglo, y más barato de lo que pensás.',
+      'Revisamos tu computadora o laptop gratis, te decimos qué tiene y cuánto cuesta, y no tocamos nada hasta que digás que sí. Formateo, disco SSD, memoria, pantallas, teclados, limpieza y respaldo de tus archivos, en El Progreso, Yoro.',
     ],
     en: [
-      'When the business computer won’t turn on or the phone screen is shattered, the last thing you need is a shop that charges you for looking, throws out a random price and holds your device hostage for two weeks. So we work the other way: free diagnosis, written price, and not one screw touched without your yes.',
-      'We are the same team that builds software: we know hardware, data, and leaving everything running. We repair computers and phones in El Progreso, Yoro, run maintenance plans for businesses, and also buy and sell tested equipment.',
+      'A computer that won’t turn on, takes five minutes to start or restarts on its own stalls the whole business: invoices don’t go out, email doesn’t arrive and the day is lost. Most of the time it can be fixed, and for less than you think.',
+      'We check your computer or laptop for free, tell you what it has and what it costs, and touch nothing until you say yes. Formatting, SSD, memory, screens, keyboards, cleaning and file backup, in El Progreso, Yoro.',
+    ],
+  },
+  'reparacion-telefonos': {
+    es: [
+      'Para muchísimos negocios el celular es la caja, el catálogo y la línea con los clientes. Una pantalla estrellada o una batería que no aguanta el día no pueden esperar dos semanas en un taller que ni contesta.',
+      'Te hacemos el diagnóstico gratis, te damos el precio por escrito y lo reparamos: pantallas, baterías, puertos de carga, bocinas y software. Antes de devolvértelo, lo probamos completo.',
+    ],
+    en: [
+      'For so many businesses the phone is the register, the catalog and the line to customers. A shattered screen or a battery that can’t last the day can’t wait two weeks in a shop that won’t even answer.',
+      'We run a free diagnosis, give you the price in writing and repair it: screens, batteries, charging ports, speakers and software. Before handing it back, we test it fully.',
+    ],
+  },
+  'instalacion-camaras': {
+    es: [
+      'Un negocio sin cámaras depende de la buena fe de todos: del cliente, del empleado y del que pasa por la calle. Con cámaras bien puestas ves tu local en vivo desde el celular y, si algo pasa, tenés el video.',
+      'Revisamos el lugar, te recomendamos cuántas cámaras necesitás y dónde ponerlas — sin venderte de más — y las instalamos con cableado ordenado, grabador y la app configurada en tu teléfono. Para negocios y casas en El Progreso, Yoro.',
+    ],
+    en: [
+      'A business without cameras depends on everyone’s good faith: customers, employees and whoever walks by. With well-placed cameras you watch your place live from your phone and, if something happens, you have the video.',
+      'We check the place, recommend how many cameras you need and where — without overselling — and install them with tidy wiring, a recorder and the app set up on your phone. For businesses and homes in El Progreso, Yoro.',
     ],
   },
 };

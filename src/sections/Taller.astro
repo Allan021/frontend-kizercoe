@@ -1,5 +1,8 @@
 ---
-/** Taller: la sección para quien llegó con la compu arruinada, no con un proyecto. */
+/**
+ * Taller: reparación de computadoras y celulares, cámaras de seguridad y
+ * compra y venta. Cada servicio lleva a su página propia.
+ */
 const pasos = [
   { num: '1', t_en: 'Send us a photo on WhatsApp', t_es: 'Mandanos una foto por WhatsApp', d_en: "Tell us what's wrong and we coordinate the drop-off.", d_es: 'Contanos qué le pasa al equipo y coordinamos la recepción.' },
   { num: '2', t_en: 'Free diagnosis', t_es: 'Diagnóstico gratis', d_en: 'We tell you what it has and what the fix costs.', d_es: 'Te decimos qué tiene y cuánto cuesta arreglarlo.' },
@@ -8,10 +11,10 @@ const pasos = [
 ];
 
 const servicios = [
-  { en: 'Screens and batteries', es: 'Pantallas y baterías' },
-  { en: 'Formatting and upgrades', es: 'Formateo y mejoras' },
-  { en: 'Hardware and ports', es: 'Hardware y puertos' },
-  { en: 'Buy and sell', es: 'Compra y venta' },
+  { href: '/servicios/reparacion-computadoras/', en: 'Computer repair', es: 'Reparación de computadoras', d_en: 'Formatting, SSD, RAM, screens', d_es: 'Formateo, SSD, memoria, pantallas' },
+  { href: '/servicios/reparacion-telefonos/', en: 'Phone repair', es: 'Reparación de celulares', d_en: 'Screens, batteries, charging ports', d_es: 'Pantallas, baterías, puertos de carga' },
+  { href: '/servicios/instalacion-camaras/', en: 'Security cameras', es: 'Cámaras de seguridad', d_en: 'Installed and on your phone', d_es: 'Instaladas y en tu celular' },
+  { href: '/contacto/?servicio=Computer%20Repair', en: 'Buy and sell', es: 'Compra y venta', d_en: 'Tested, working devices', d_es: 'Equipo probado y funcionando' },
 ];
 ---
 
@@ -20,17 +23,20 @@ const servicios = [
     <div class="flex flex-col gap-4">
       <p class="kz-eyebrow"><span class="en">Repair shop</span><span class="es">Taller</span></p>
       <h2 class="kz-h2" style="text-wrap: initial">
-        <span class="en">Computer or phone broke down? Write to us.</span>
-        <span class="es">¿Se te arruinó la compu o el teléfono? Escribinos.</span>
+        <span class="en">We fix your devices and install your cameras.</span>
+        <span class="es">Reparamos tu equipo e instalamos tus cámaras.</span>
       </h2>
       <p class="text-[17px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
-        <span class="en">Free diagnosis. We tell you what it has and what it costs, and you approve before we touch anything. We also buy and sell tested equipment.</span>
-        <span class="es">Diagnóstico gratis. Te decimos qué tiene y cuánto cuesta, y vos aprobás antes de que toquemos nada. También compramos y vendemos equipo probado.</span>
+        <span class="en">Computers, laptops and phones with a free diagnosis: we tell you what it has and what it costs, and you approve before we touch anything. We also install security cameras you can watch from your phone, and buy and sell tested equipment.</span>
+        <span class="es">Computadoras, laptops y celulares con diagnóstico gratis: te decimos qué tiene y cuánto cuesta, y vos aprobás antes de que toquemos nada. También instalamos cámaras de seguridad que ves desde el celular, y compramos y vendemos equipo probado.</span>
       </p>
-      <ul class="grid list-none gap-2.5" style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr))">
+      <ul class="grid list-none gap-2.5" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))">
         {servicios.map((s) => (
-          <li class="rounded-xl border px-3.5 py-3 text-sm font-medium" style="background: var(--bg); border-color: var(--line)">
-            <span class="en">{s.en}</span><span class="es">{s.es}</span>
+          <li>
+            <a href={s.href} class="kz-card flex h-full flex-col gap-0.5 rounded-xl px-4 py-3" style="color: var(--ink)">
+              <span class="text-[15px] font-semibold"><span class="en">{s.en}</span><span class="es">{s.es}</span> <span style="color: var(--green2)">→</span></span>
+              <span class="text-[13px]" style="color: var(--mute)"><span class="en">{s.d_en}</span><span class="es">{s.d_es}</span></span>
+            </a>
           </li>
         ))}
       </ul>
@@ -46,7 +52,7 @@ const servicios = [
 
     <div class="flex flex-col rounded-[18px] border p-6" style="background: var(--bg); border-color: var(--line)">
       <span class="mb-2 text-xs" style="font-family: ui-monospace, Menlo, monospace; color: var(--mute)">
-        <span class="en">how it works</span><span class="es">cómo funciona</span>
+        <span class="en">how repairs work</span><span class="es">cómo funciona una reparación</span>
       </span>
       {pasos.map((p) => (
         <div class="grid gap-3.5 border-t py-3.5" style="grid-template-columns: 32px 1fr; border-color: var(--line)">

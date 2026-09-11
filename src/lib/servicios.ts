@@ -24,10 +24,30 @@ export type Servicio = {
   usd?: string;
   /** Con qué valor del formulario llega preseleccionado. */
   formServicio: string;
+  /** Números de la columna derecha; si faltan, van los de software. */
+  stats?: { n: string; nEn?: string; es: string; en: string }[];
+  /** Nota verde bajo el bloque de lo que incluye; si falta, la de software (30 días). */
+  notaEs?: string;
+  notaEn?: string;
   beneficios: { tEs: string; tEn: string; dEs: string; dEn: string }[];
   incluye: { es: string; en: string }[];
   faq: { qEs: string; qEn: string; aEs: string; aEn: string }[];
 };
+
+/** Números del taller: nada de código a tu nombre en una reparación. */
+const statsTaller = [
+  { n: 'Gratis', nEn: 'Free', es: 'Diagnóstico de tu equipo', en: 'Device diagnosis' },
+  { n: 'Por escrito', nEn: 'In writing', es: 'El precio, antes de tocar nada', en: 'The price, before touching anything' },
+  { n: 'Probado', nEn: 'Tested', es: 'Cada equipo antes de entregarlo', en: 'Every device before handing it back' },
+  { n: 'El Progreso', es: 'Yoro, Honduras', en: 'Yoro, Honduras' },
+];
+
+const statsCamaras = [
+  { n: 'En vivo', nEn: 'Live', es: 'Desde tu celular', en: 'From your phone' },
+  { n: 'Por escrito', nEn: 'In writing', es: 'Cotización antes de instalar', en: 'Quote before installing' },
+  { n: 'Completa', nEn: 'Complete', es: 'Cableado, grabador y configuración', en: 'Wiring, recorder and setup' },
+  { n: 'El Progreso', es: 'Yoro, Honduras', en: 'Yoro, Honduras' },
+];
 
 export const servicios: Servicio[] = [
   {
@@ -453,35 +473,114 @@ export const servicios: Servicio[] = [
   {
     slug: 'reparacion-computadoras',
     slugEn: 'computer-repair',
-    nombre: 'Reparación de equipos',
-    name: 'Device repair',
-    titleEs: 'Reparación de computadoras y teléfonos en El Progreso | Kizercode',
-    titleEn: 'Computer and phone repair in El Progreso, Honduras | Kizercode',
-    descEs: 'Reparación de computadoras y teléfonos en El Progreso, Yoro. Diagnóstico gratis: te decimos qué tiene y cuánto cuesta antes de tocar nada.',
-    descEn: 'Computer and phone repair in El Progreso, Yoro. Free diagnosis: we tell you what it has and what it costs before touching anything.',
-    h1Es: 'Reparación de computadoras y teléfonos, con diagnóstico gratis.',
-    h1En: 'Computer and phone repair, with free diagnosis.',
-    subEs: 'Te decimos qué tiene y cuánto cuesta, y vos aprobás antes de que toquemos nada. En El Progreso, Yoro. También compramos y vendemos equipo probado.',
-    subEn: 'We tell you what it has and what it costs, and you approve before we touch anything. In El Progreso, Yoro. We also buy and sell tested equipment.',
+    nombre: 'Reparación de computadoras',
+    name: 'Computer repair',
+    titleEs: 'Reparación de computadoras y laptops en El Progreso, Yoro | Kizercode',
+    titleEn: 'Computer and laptop repair in El Progreso, Honduras | Kizercode',
+    descEs: 'Reparación de computadoras y laptops en El Progreso, Yoro: diagnóstico gratis, formateo, cambio a disco SSD, memoria RAM, pantallas y teclados. Precio por escrito antes de tocar nada.',
+    descEn: 'Computer and laptop repair in El Progreso, Yoro: free diagnosis, formatting, SSD upgrades, RAM, screens and keyboards. A written price before touching anything.',
+    h1Es: 'Tu computadora funcionando otra vez, con diagnóstico gratis.',
+    h1En: 'Your computer working again, with a free diagnosis.',
+    subEs: 'Formateo, disco SSD, memoria, pantallas, teclados y limpieza, con diagnóstico gratis y precio por escrito antes de tocar nada.',
+    subEn: 'Formatting, SSD, memory, screens, keyboards and cleaning, with a free diagnosis and a written price before touching anything.',
     formServicio: 'Computer Repair',
+    stats: statsTaller,
+    notaEs: 'Diagnóstico gratis y precio por escrito antes de tocar nada. Cada computadora sale probada y con garantía sobre el arreglo.',
+    notaEn: 'Free diagnosis and a written price before touching anything. Every computer leaves tested, with a warranty on the repair.',
     beneficios: [
-      { tEs: 'Diagnóstico gratis', tEn: 'Free diagnosis', dEs: 'Saber qué tiene tu equipo no cuesta nada. Cobramos por arreglarlo.', dEn: 'Knowing what your device has costs nothing. We charge to fix it.' },
-      { tEs: 'Vos aprobás primero', tEn: 'You approve first', dEs: 'Precio por escrito antes de abrir nada. Sin sorpresas al recoger.', dEn: 'Written price before opening anything. No surprises at pickup.' },
-      { tEs: 'Entrega probada', tEn: 'Delivered tested', dEs: 'El equipo se va funcionando y con garantía sobre el arreglo.', dEn: 'The device leaves working, with warranty on the fix.' },
-      { tEs: 'Compra y venta', tEn: 'Buy and sell', dEs: 'Recibimos tu equipo usado y vendemos equipo revisado y funcionando.', dEn: 'We take your used device and sell reviewed, working equipment.' },
+      { tEs: 'Diagnóstico gratis', tEn: 'Free diagnosis', dEs: 'Saber qué tiene tu computadora no cuesta nada. Cobramos por arreglarla, no por mirarla.', dEn: 'Knowing what your computer has costs nothing. We charge to fix it, not to look at it.' },
+      { tEs: 'Vos aprobás primero', tEn: 'You approve first', dEs: 'Precio por escrito antes de abrir nada. Sin sorpresas al recogerla.', dEn: 'A written price before opening anything. No surprises at pickup.' },
+      { tEs: 'De lenta a rápida', tEn: 'From slow to fast', dEs: 'Un disco SSD y una limpieza a fondo le devuelven la vida a una compu que parecía perdida.', dEn: 'An SSD and a deep clean bring back to life a computer that seemed lost.' },
+      { tEs: 'Tus archivos, cuidados', tEn: 'Your files, protected', dEs: 'No borramos ni revisamos tu información. Si un arreglo la pone en riesgo, te avisamos antes.', dEn: 'We never delete or browse your data. If a repair puts it at risk, we tell you first.' },
     ],
     incluye: [
-      { es: 'Pantallas, baterías y puertos', en: 'Screens, batteries and ports' },
-      { es: 'Formateo, limpieza y mejoras (RAM/SSD)', en: 'Formatting, cleanup and upgrades (RAM/SSD)' },
-      { es: 'Recuperación de datos cuando se puede', en: 'Data recovery when possible' },
-      { es: 'Mantenimiento para negocios', en: 'Business maintenance plans' },
-      { es: 'Compra y venta de equipo probado', en: 'Buy and sell of tested equipment' },
-      { es: 'Garantía sobre el arreglo', en: 'Warranty on the repair' },
+      { es: 'Formateo e instalación de Windows y programas', en: 'Formatting and Windows and software installation' },
+      { es: 'Cambio a disco SSD y ampliación de memoria RAM', en: 'SSD upgrade and RAM expansion' },
+      { es: 'Limpieza interna y cambio de pasta térmica', en: 'Internal cleaning and thermal paste replacement' },
+      { es: 'Pantallas, teclados, cargadores y puertos de laptop', en: 'Laptop screens, keyboards, chargers and ports' },
+      { es: 'Eliminación de virus y respaldo de información', en: 'Virus removal and data backup' },
+      { es: 'Mantenimiento para las computadoras de tu negocio', en: 'Maintenance for your business computers' },
     ],
     faq: [
-      { qEs: '¿Cuánto cuesta el diagnóstico?', qEn: 'How much is the diagnosis?', aEs: 'Nada. Te decimos qué tiene y cuánto costaría arreglarlo, y vos decidís.', aEn: 'Nothing. We tell you what it has and what fixing costs, and you decide.' },
-      { qEs: '¿Cuánto tardan?', qEn: 'How long do repairs take?', aEs: 'Lo común (pantalla, batería, formateo) suele estar de un día para otro; si hay que pedir repuesto te avisamos de una.', aEn: 'Common fixes (screen, battery, formatting) are usually next-day; if a part must be ordered we tell you upfront.' },
-      { qEs: '¿Mis archivos están seguros?', qEn: 'Are my files safe?', aEs: 'Sí. No tocamos tus datos sin avisarte, y si hay riesgo te lo decimos antes.', aEn: 'Yes. We never touch your data without telling you, and we flag any risk beforehand.' },
+      { qEs: '¿Cuánto cuesta el diagnóstico?', qEn: 'How much is the diagnosis?', aEs: 'Nada. Te decimos qué tiene y cuánto costaría arreglarla, y vos decidís.', aEn: 'Nothing. We tell you what it has and what fixing it would cost, and you decide.' },
+      { qEs: '¿Cuánto tardan?', qEn: 'How long does it take?', aEs: 'Lo común (formateo, disco SSD, limpieza) suele estar de un día para otro. Si hay que pedir un repuesto, te avisamos de una con el tiempo estimado.', aEn: 'Common jobs (formatting, SSD, cleaning) are usually ready the next day. If a part must be ordered, we tell you upfront with an estimated time.' },
+      { qEs: '¿Conviene repararla o comprar otra?', qEn: 'Repair it or buy a new one?', aEs: 'Te lo decimos con franqueza: si el arreglo sale casi como una nueva, te lo decimos. Y si toca cambiarla, también vendemos equipo probado.', aEn: 'We tell you frankly: if the repair costs almost as much as a new one, we say so. And if it is time to replace it, we also sell tested equipment.' },
+      { qEs: '¿Mis archivos están seguros?', qEn: 'Are my files safe?', aEs: 'Sí. No tocamos tu información sin avisarte, y si hay riesgo te lo decimos antes.', aEn: 'Yes. We never touch your data without telling you, and we flag any risk beforehand.' },
+    ],
+  },
+  {
+    slug: 'reparacion-telefonos',
+    slugEn: 'phone-repair',
+    nombre: 'Reparación de celulares',
+    name: 'Phone repair',
+    titleEs: 'Reparación de celulares en El Progreso, Yoro | Kizercode',
+    titleEn: 'Phone repair in El Progreso, Honduras | Kizercode',
+    descEs: 'Reparación de celulares en El Progreso, Yoro: cambio de pantalla, batería, puerto de carga, bocina y software. Diagnóstico gratis y precio por escrito antes de reparar.',
+    descEn: 'Phone repair in El Progreso, Yoro: screen, battery, charging port, speaker and software. Free diagnosis and a written price before repairing.',
+    h1Es: 'Tu celular reparado, sin sorpresas en el precio.',
+    h1En: 'Your phone repaired, with no surprises in the price.',
+    subEs: 'Pantallas, baterías, puertos de carga, bocinas y software, con diagnóstico gratis y probado completo antes de devolvértelo.',
+    subEn: 'Screens, batteries, charging ports, speakers and software, with a free diagnosis and fully tested before we hand it back.',
+    formServicio: 'Computer Repair',
+    stats: statsTaller,
+    notaEs: 'Diagnóstico gratis y precio por escrito antes de reparar. Antes de devolvértelo revisamos llamadas, carga, cámara y pantalla.',
+    notaEn: 'Free diagnosis and a written price before repairing. Before handing it back we check calls, charging, camera and screen.',
+    beneficios: [
+      { tEs: 'Diagnóstico gratis', tEn: 'Free diagnosis', dEs: 'Te decimos qué tiene tu celular y cuánto cuesta arreglarlo, sin cobrarte por revisarlo.', dEn: 'We tell you what your phone has and what fixing it costs, without charging to check it.' },
+      { tEs: 'Precio antes de reparar', tEn: 'Price before repairing', dEs: 'El monto va por escrito y no se mueve cuando llegás a recogerlo.', dEn: 'The amount goes in writing and does not change when you pick it up.' },
+      { tEs: 'Probado antes de entregarlo', tEn: 'Tested before delivery', dEs: 'Llamadas, carga, cámara y pantalla revisadas antes de que te lo llevés.', dEn: 'Calls, charging, camera and screen checked before you take it.' },
+      { tEs: 'Tus datos se respetan', tEn: 'Your data is respected', dEs: 'No revisamos tu información. Si el arreglo la pone en riesgo, te avisamos antes.', dEn: 'We never look through your data. If the repair puts it at risk, we tell you first.' },
+    ],
+    incluye: [
+      { es: 'Cambio de pantalla y táctil', en: 'Screen and touch replacement' },
+      { es: 'Cambio de batería', en: 'Battery replacement' },
+      { es: 'Puerto de carga, micrófono y bocina', en: 'Charging port, microphone and speaker' },
+      { es: 'Botones y cámaras', en: 'Buttons and cameras' },
+      { es: 'Software: actualizaciones, lentitud y respaldo', en: 'Software: updates, slowness and backup' },
+      { es: 'Compra y venta de equipo probado', en: 'Buy and sell of tested equipment' },
+    ],
+    faq: [
+      { qEs: '¿Cuánto cuesta cambiar la pantalla?', qEn: 'How much is a screen replacement?', aEs: 'Depende de la marca y el modelo. Con el diagnóstico gratis te damos el precio exacto por escrito.', aEn: 'It depends on brand and model. With the free diagnosis we give you the exact price in writing.' },
+      { qEs: '¿Cuánto tardan?', qEn: 'How long does it take?', aEs: 'Los cambios comunes (pantalla, batería) suelen estar de un día para otro si hay repuesto. Si hay que pedirlo, te avisamos de una.', aEn: 'Common swaps (screen, battery) are usually ready the next day if the part is in stock. If it must be ordered, we tell you right away.' },
+      { qEs: '¿Mi celular todavía tiene garantía de fábrica?', qEn: 'Is my phone still under factory warranty?', aEs: 'Si todavía la tiene, te lo decimos antes de abrirlo: a veces conviene ir primero con la marca.', aEn: 'If it still has one, we tell you before opening it: sometimes it is better to go to the brand first.' },
+    ],
+  },
+  {
+    slug: 'instalacion-camaras',
+    slugEn: 'security-cameras',
+    nombre: 'Cámaras de seguridad',
+    name: 'Security cameras',
+    titleEs: 'Instalación de cámaras de seguridad en El Progreso, Yoro | Kizercode',
+    titleEn: 'Security camera installation in El Progreso, Honduras | Kizercode',
+    descEs: 'Instalación de cámaras de seguridad para negocios y casas en El Progreso, Yoro: cámaras HD, visión nocturna, grabación y acceso en vivo desde el celular. Cotización por escrito.',
+    descEn: 'Security camera installation for businesses and homes in El Progreso, Yoro: HD cameras, night vision, recording and live access from your phone. Written quote.',
+    h1Es: 'Cámaras de seguridad que ves desde tu celular.',
+    h1En: 'Security cameras you can watch from your phone.',
+    subEs: 'Te recomendamos cuántas cámaras y dónde, las instalamos con cableado ordenado y grabador, y te dejamos la app lista en tu teléfono.',
+    subEn: 'We recommend how many cameras and where, install them with tidy wiring and a recorder, and leave the app ready on your phone.',
+    formServicio: 'Security Cameras',
+    stats: statsCamaras,
+    notaEs: 'Revisamos el lugar, te recomendamos cuántas cámaras y dónde, y te damos el precio por escrito antes de instalar.',
+    notaEn: 'We check the place, recommend how many cameras and where, and give you the price in writing before installing.',
+    beneficios: [
+      { tEs: 'Tu negocio a la vista', tEn: 'Your business in view', dEs: 'Mirás tu local en vivo desde el celular, estés donde estés, de día y de noche.', dEn: 'Watch your place live from your phone, wherever you are, day and night.' },
+      { tEs: 'Grabación que sirve', tEn: 'Recording that helps', dEs: 'Cuando algo pasa, tenés el video guardado en el grabador para revisarlo.', dEn: 'When something happens, the video is saved on the recorder to review.' },
+      { tEs: 'Bien ubicadas', tEn: 'Well placed', dEs: 'Cubrimos entradas, caja y bodega con las cámaras justas, sin venderte de más.', dEn: 'We cover entrances, register and storage with just the cameras needed, without overselling.' },
+      { tEs: 'Instaladas en serio', tEn: 'Properly installed', dEs: 'Cableado ordenado, configuración completa y te enseñamos a usarlas.', dEn: 'Tidy wiring, full setup, and we teach you how to use them.' },
+    ],
+    incluye: [
+      { es: 'Revisión del lugar y recomendación de ubicación', en: 'Site review and placement recommendation' },
+      { es: 'Cámaras HD para interior y exterior', en: 'HD cameras for indoors and outdoors' },
+      { es: 'Visión nocturna', en: 'Night vision' },
+      { es: 'Grabador (DVR/NVR) con disco', en: 'Recorder (DVR/NVR) with a hard drive' },
+      { es: 'Cableado e instalación', en: 'Wiring and installation' },
+      { es: 'App configurada para verlas en tu celular', en: 'App set up to watch them on your phone' },
+    ],
+    faq: [
+      { qEs: '¿Puedo ver las cámaras desde el celular?', qEn: 'Can I watch the cameras from my phone?', aEs: 'Sí. Te dejamos la app configurada y te enseñamos a verlas en vivo y a revisar grabaciones.', aEn: 'Yes. We leave the app set up and show you how to watch live and review recordings.' },
+      { qEs: '¿Cuántas cámaras necesito?', qEn: 'How many cameras do I need?', aEs: 'Depende del lugar. Te recomendamos lo justo para cubrir entradas, caja y áreas importantes, sin venderte de más.', aEn: 'It depends on the place. We recommend just enough to cover entrances, the register and key areas, without overselling.' },
+      { qEs: '¿Cuánto cuesta?', qEn: 'How much does it cost?', aEs: 'Depende del número de cámaras, del tipo y del cableado. Te damos la cotización por escrito antes de instalar.', aEn: 'It depends on the number of cameras, the type and the wiring. We give you a written quote before installing.' },
+      { qEs: '¿Graban de noche?', qEn: 'Do they record at night?', aEs: 'Sí. Instalamos cámaras con visión nocturna para que el video sirva a cualquier hora.', aEn: 'Yes. We install cameras with night vision so the video is useful at any hour.' },
     ],
   },
 ];

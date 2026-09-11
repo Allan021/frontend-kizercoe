@@ -20,6 +20,7 @@ interface Props {
 const { servicio: s, lang } = Astro.props;
 const es = lang === 'es';
 const intro = intros[s.slug];
+const stats: { n: string; nEn?: string; es: string; en: string }[] = s.stats ?? statsServicio;
 
 const urlEs = `/servicios/${s.slug}/`;
 const urlEn = `/en/services/${s.slugEn}/`;
@@ -109,11 +110,11 @@ const jsonLd = {
         </div>
 
         <div class="flex flex-col gap-3.5 lg:pt-10">
-          {statsServicio.map((st) => (
+          {stats.map((st) => (
             <div class="flex items-center gap-4 rounded-2xl border p-5" style="background: var(--bg); border-color: var(--line); box-shadow: 0 12px 30px rgba(11,26,51,.06)">
               <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-lg font-bold" style="background: var(--green-soft); color: var(--green2)">✓</span>
               <span class="flex flex-col">
-                <strong class="text-2xl font-bold" style="letter-spacing: -0.02em; color: var(--green)">{st.n}</strong>
+                <strong class="text-2xl font-bold" style="letter-spacing: -0.02em; color: var(--green)">{es ? st.n : (st.nEn ?? st.n)}</strong>
                 <span class="text-[14px] font-medium" style="color: var(--ink2)">{es ? st.es : st.en}</span>
               </span>
             </div>
@@ -149,8 +150,8 @@ const jsonLd = {
           </ul>
           <p class="mt-2 rounded-[14px] border p-4 text-sm leading-relaxed" style="background: var(--green-soft); border-color: color-mix(in srgb, var(--green) 30%, transparent); color: var(--ink2)">
             {es
-              ? 'Precio fijo por escrito antes de empezar y 30 días de garantía por fallas de lo entregado.'
-              : 'Fixed price in writing before starting and a 30-day warranty on defects of what we deliver.'}
+              ? (s.notaEs ?? 'Precio fijo por escrito antes de empezar y 30 días de garantía por fallas de lo entregado.')
+              : (s.notaEn ?? 'Fixed price in writing before starting and a 30-day warranty on defects of what we deliver.')}
           </p>
         </div>
         <div class="flex flex-col gap-2">
