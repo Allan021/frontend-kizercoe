@@ -2,22 +2,22 @@
 import ProjectsGrid from '@/components/Projects.tsx';
 ---
 
-<section id="proyectos" class="py-16 sm:py-24" aria-labelledby="projects-title">
-  <div class="mx-auto max-w-6xl px-6">
-    <header class="mb-10 max-w-2xl">
-      <p class="kz-eyebrow">// <span class="en">work</span><span class="es">trabajo</span></p>
-      <h2 id="projects-title" class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
-        <span class="en">What we have <span class="gradient-text">built</span></span>
-        <span class="es">Lo que hemos <span class="gradient-text">construido</span></span>
+<section id="casos" class="border-y" style="background: var(--bg2); border-color: var(--line)">
+  <div class="mx-auto max-w-[1200px] px-6 py-20">
+    <div class="mx-auto mb-9 flex max-w-[560px] flex-col items-center gap-2.5 text-center">
+      <p class="kz-eyebrow"><span class="en">Real results</span><span class="es">Resultados reales</span></p>
+      <h2 id="projects-title" class="kz-h2">
+        <span class="en">Success cases</span>
+        <span class="es">Casos de éxito</span>
       </h2>
-      <p class="mt-4 leading-relaxed" style="color: var(--color-muted)">
-        <span class="en">Systems running today in real businesses in Honduras.</span>
-        <span class="es">Sistemas que hoy están corriendo en negocios reales de Honduras.</span>
+      <p class="text-base" style="color: var(--mute); text-wrap: pretty">
+        <span class="en">Systems running today in real businesses.</span>
+        <span class="es">Sistemas que hoy están corriendo en negocios reales.</span>
       </p>
-    </header>
+    </div>
 
     <!-- client:visible: no se pide nada a la API hasta que la sección entra
-         en pantalla. Así el portafolio no pesa en la carga inicial. -->
+         en pantalla. Los casos se administran desde /panel. -->
     <ProjectsGrid client:visible />
   </div>
 </section>

@@ -1,0 +1,34 @@
+---
+/** El bloque navy de compromisos: números grandes, promesas firmables. */
+const garantias = [
+  { n: '0', t_en: 'Price surprises', t_es: 'Sorpresas en el precio', d_en: "If the delay is ours, the price doesn't move. Changes you request are quoted separately and you decide.", d_es: 'Si el retraso es nuestro, el precio no se mueve. Los cambios que pidas se cotizan aparte y vos decidís.' },
+  { n: '30', t_en: 'Days of warranty', t_es: 'Días de garantía', d_en: 'If what we delivered fails, we fix it free. No arguing.', d_es: 'Si lo entregado falla, lo corregimos gratis. Sin discusión.' },
+  { n: '100 %', t_en: 'Under your name', t_es: 'A tu nombre', d_en: 'Code, domain, hosting, database and design files registered to your company.', d_es: 'Código, dominio, hosting, base de datos y archivos de diseño registrados a tu empresa.' },
+  { n: '24 h', t_en: 'To get back to you', t_es: 'Para responderte', d_en: 'By WhatsApp, call or email. One contact from start to finish.', d_es: 'Por WhatsApp, llamada o correo. Un solo contacto de principio a fin.' },
+];
+---
+
+<section id="garantias" style="background: var(--navy); color: var(--bg)">
+  <div class="mx-auto flex max-w-[1200px] flex-col gap-8 px-6 py-[72px]">
+    <div class="flex max-w-[640px] flex-col gap-2.5">
+      <p class="text-[13px] font-semibold uppercase tracking-[0.08em]" style="color: var(--green-bright)">
+        <span class="en">What we sign</span><span class="es">Lo que firmamos</span>
+      </p>
+      <h2 class="kz-h2">
+        <span class="en">Commitments in writing, not sales promises.</span>
+        <span class="es">Compromisos por escrito, no promesas de venta.</span>
+      </h2>
+    </div>
+    <ul class="grid list-none gap-3.5" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))">
+      {garantias.map((g) => (
+        <li class="flex flex-col gap-2 rounded-2xl border p-5" style="background: color-mix(in srgb, var(--bg) 8%, transparent); border-color: color-mix(in srgb, var(--bg) 14%, transparent)">
+          <span class="text-[26px] font-bold" style="color: var(--green-bright); letter-spacing: -0.02em">{g.n}</span>
+          <strong class="text-[15px] font-semibold"><span class="en">{g.t_en}</span><span class="es">{g.t_es}</span></strong>
+          <span class="text-[13px] leading-relaxed" style="color: color-mix(in srgb, var(--bg) 70%, transparent)">
+            <span class="en">{g.d_en}</span><span class="es">{g.d_es}</span>
+          </span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

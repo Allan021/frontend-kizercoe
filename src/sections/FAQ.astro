@@ -1,102 +1,62 @@
 ---
-/**
- * Preguntas frecuentes con <details>/<summary>.
- *
- * Sin JavaScript: el navegador ya sabe abrir y cerrar, ya lo anuncia como
- * botón expandible y ya responde a Enter y Espacio. Un acordeón hecho con divs
- * y onClick cuesta cincuenta líneas para quedar peor.
- */
+/** FAQ en dos columnas con <details>: el navegador ya sabe abrir y cerrar. */
 const preguntas = [
-  {
-    en_q: 'How much does it cost?',
-    es_q: '¿Cuánto cuesta?',
-    en_a: 'The price list above has the starting point for each thing: a website from $150, an online store from $550, a business system from $950. After a free diagnosis you get the exact fixed price in writing, and it does not move.',
-    es_a: 'La lista de precios de arriba tiene el punto de partida de cada cosa: una página web desde L 4,000, una tienda en línea desde L 14,500, un sistema desde L 25,000. Después de un diagnóstico gratis recibís el precio fijo exacto por escrito, y no se mueve.',
-  },
-  {
-    en_q: 'How long does it take?',
-    es_q: '¿Cuánto tiempo toma?',
-    en_a: 'A simple website can be live in 3 days to a week. An online store, one to two weeks. A business system, 3 to 6 weeks depending on how much it covers. We set milestones from day one and show progress every week.',
-    es_a: 'Una página web sencilla puede estar en línea en 3 días a una semana. Una tienda en línea, de una a dos semanas. Un sistema, de 3 a 6 semanas según lo que cubra. Fijamos hitos desde el primer día y mostramos avances cada semana.',
-  },
-  {
-    en_q: 'Do you repair computers and phones?',
-    es_q: '¿Reparan computadoras y teléfonos?',
-    en_a: 'Yes. You bring it, we diagnose it for free and tell you what it has and what it costs. You approve before we touch anything. We also buy and sell tested equipment.',
-    es_a: 'Sí. Lo traés, lo diagnosticamos gratis y te decimos qué tiene y cuánto cuesta. Vos aprobás antes de que toquemos nada. También compramos y vendemos equipo probado.',
-  },
-  {
-    en_q: 'Do you have anything ready to use?',
-    es_q: '¿Tienen algo ya hecho, listo para usar?',
-    en_a: 'Yes, four products of our own running in real businesses: KizerPOS for stores, KizerResto for restaurants, Kizer Cobros for lenders and Kizer Check for staff and payroll. No months of development: you sign up and start.',
-    es_a: 'Sí, cuatro productos propios corriendo en negocios reales: KizerPOS para tiendas, KizerResto para restaurantes, Kizer Cobros para prestamistas y Kizer Check para empleados y planilla. Sin meses de desarrollo: te registrás y empezás.',
-  },
-  {
-    en_q: 'Do you also sell the hardware?',
-    es_q: '¿También venden el equipo?',
-    en_a: 'Yes. We supply terminals, scanners, printers and servers, install them at your place and configure them with the system, quoted in the same proposal.',
-    es_a: 'Sí. Suministramos terminales, lectores, impresoras y servidores, los instalamos en tu local y los configuramos con el sistema, cotizados en la misma propuesta.',
-  },
-  {
-    en_q: 'Is the source code mine?',
-    es_q: '¿El código fuente es mío?',
+  { en_q: 'How much does it cost?', es_q: '¿Cuánto cuesta?',
+    en_a: 'The price list has the starting point for each thing: a website from $150, an online store from $550, a system from $950. After a free diagnosis you get the exact fixed price in writing, and it does not move.',
+    es_a: 'La lista de precios tiene el punto de partida de cada cosa: una página web desde L 4,000, una tienda en línea desde L 14,500, un sistema desde L 25,000. Después de un diagnóstico gratis recibís el precio fijo exacto por escrito, y no se mueve.' },
+  { en_q: 'How long does it take?', es_q: '¿Cuánto tiempo toma?',
+    en_a: 'A simple website can be live in 3 days to a week. An online store, one to two weeks. A system, 3 to 6 weeks depending on how much it covers. We set milestones from day one and show progress every week.',
+    es_a: 'Una página web sencilla puede estar en línea en 3 días a una semana. Una tienda en línea, de una a dos semanas. Un sistema, de 3 a 6 semanas según lo que cubra. Fijamos hitos desde el primer día y mostramos avances cada semana.' },
+  { en_q: 'Is the source code mine?', es_q: '¿El código fuente es mío?',
     en_a: 'Yes, all of it. Code, domain, hosting, database and design files are registered to your company. If you change providers you take everything with you.',
-    es_a: 'Sí, todo. Código, dominio, hosting, base de datos y archivos de diseño quedan registrados a nombre de tu empresa. Si cambiás de proveedor te llevás todo.',
-  },
-  {
-    en_q: 'What happens after launch?',
-    es_q: '¿Qué pasa después del lanzamiento?',
-    en_a: 'The one-time payment covers what we agreed plus 30 days of warranty on defects of what we delivered. New changes or ongoing support are quoted separately, or with a monthly plan for improvements, backups and monitoring.',
-    es_a: 'El pago único cubre lo acordado más 30 días de garantía por fallas de lo entregado. Cambios nuevos o soporte continuo se cotizan aparte, o con un plan mensual de mejoras, respaldos y monitoreo.',
-  },
-  {
-    en_q: 'Can I pay in lempiras?',
-    es_q: '¿Puedo pagar en lempiras?',
+    es_a: 'Sí, todo. Código, dominio, hosting, base de datos y archivos de diseño quedan registrados a nombre de tu empresa. Si cambiás de proveedor te llevás todo.' },
+  { en_q: 'Do you also sell the hardware?', es_q: '¿También venden el equipo?',
+    en_a: 'Yes. We supply terminals, scanners, printers and servers, install them at your place and configure them with the system, quoted in the same proposal.',
+    es_a: 'Sí. Suministramos terminales, lectores, impresoras y servidores, los instalamos en tu local y los configuramos con el sistema, cotizados en la misma propuesta.' },
+  { en_q: 'What happens after launch?', es_q: '¿Qué pasa después del lanzamiento?',
+    en_a: 'The one-time payment covers what we agreed plus 30 days of warranty on defects of what we delivered. New changes or ongoing support are quoted separately, or with a monthly plan of improvements, backups and monitoring.',
+    es_a: 'El pago único cubre lo acordado más 30 días de garantía por fallas de lo entregado. Cambios nuevos o soporte continuo se cotizan aparte, o con un plan mensual de mejoras, respaldos y monitoreo.' },
+  { en_q: 'Can I pay in lempiras?', es_q: '¿Puedo pagar en lempiras?',
     en_a: 'Yes. We quote in lempiras or dollars, whichever works for you, and the written quote states the exact amount in your currency.',
-    es_a: 'Sí. Cotizamos en lempiras o en dólares, como te convenga, y la cotización escrita trae el monto exacto en tu moneda.',
-  },
+    es_a: 'Sí. Cotizamos en lempiras o en dólares, como te convenga, y la cotización escrita trae el monto exacto en tu moneda.' },
+  { en_q: 'Do you work with clients outside Honduras?', es_q: '¿Trabajan con clientes fuera de Honduras?',
+    en_a: 'Yes. We work in Central time and serve in Spanish and English. We quote in dollars and deliver with the same process.',
+    es_a: 'Sí. Trabajamos en zona horaria Central y atendemos en español e inglés. Cotizamos en dólares y entregamos con el mismo proceso.' },
+  { en_q: 'I already have a website, do we start from zero?', es_q: '¿Ya tengo una página, hay que empezar de cero?',
+    en_a: 'Not always. We review what exists and tell you frankly whether to redesign, migrate or just fix. If a fix is enough, we say so even if it means a smaller project.',
+    es_a: 'No siempre. Revisamos lo que existe y te decimos con franqueza si conviene rediseñar, migrar o solo corregir. Si con corregir alcanza, te lo decimos aunque sea un proyecto más pequeño.' },
 ];
 ---
 
-<section id="faq" class="py-16 sm:py-24" aria-labelledby="faq-title">
-  <div class="mx-auto max-w-3xl px-6">
-    <header class="mb-10">
-      <p class="kz-eyebrow">// <span class="en">faq</span><span class="es">preguntas frecuentes</span></p>
-      <h2 id="faq-title" class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
+<section id="faq" class="border-y" style="background: var(--bg2); border-color: var(--line)">
+  <div class="mx-auto grid max-w-[1200px] gap-12 px-6 py-[72px]" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))">
+    <div class="flex flex-col gap-2.5">
+      <p class="kz-eyebrow"><span class="en">FAQ</span><span class="es">Preguntas frecuentes</span></p>
+      <h2 id="faq-title" class="kz-h2" style="text-wrap: initial">
         <span class="en">Answered before you ask.</span>
         <span class="es">Resueltas antes de que preguntes.</span>
       </h2>
-    </header>
+    </div>
 
-    <div class="space-y-3">
-      {
-        preguntas.map((p) => (
-          <details class="kz-faq kz-card px-6">
-            <summary class="flex cursor-pointer items-center justify-between gap-4 py-5 font-semibold">
-              <span class="en">{p.en_q}</span><span class="es">{p.es_q}</span>
-              <span class="kz-faq-signo shrink-0" aria-hidden="true">+</span>
-            </summary>
-            <p class="pb-5 text-sm leading-relaxed" style="color: var(--color-muted)">
-              <span class="en">{p.en_a}</span><span class="es">{p.es_a}</span>
-            </p>
-          </details>
-        ))
-      }
+    <div class="flex flex-col">
+      {preguntas.map((p) => (
+        <details class="kz-faq border-b" style="border-color: var(--line)">
+          <summary class="flex cursor-pointer items-center justify-between gap-4 py-4 text-base font-semibold">
+            <span><span class="en">{p.en_q}</span><span class="es">{p.es_q}</span></span>
+            <span class="kz-faq-signo shrink-0" aria-hidden="true">+</span>
+          </summary>
+          <p class="pb-5 text-[15px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+            <span class="en">{p.en_a}</span><span class="es">{p.es_a}</span>
+          </p>
+        </details>
+      ))}
     </div>
   </div>
 </section>
 
 <style>
-  /* El triángulo por defecto se quita en los dos motores. */
   .kz-faq summary { list-style: none; }
   .kz-faq summary::-webkit-details-marker { display: none; }
-
-  .kz-faq-signo {
-    font-family: 'IBM Plex Mono', ui-monospace, monospace;
-    font-size: 20px;
-    line-height: 1;
-    color: var(--color-accent);
-    transition: transform 0.2s ease;
-  }
+  .kz-faq-signo { font-size: 20px; line-height: 1; color: var(--green); transition: transform 0.2s ease; }
   .kz-faq[open] .kz-faq-signo { transform: rotate(45deg); }
 </style>

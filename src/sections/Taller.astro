@@ -1,0 +1,62 @@
+---
+/** Taller: la sección para quien llegó con la compu arruinada, no con un proyecto. */
+const pasos = [
+  { num: '1', t_en: 'Send us a photo on WhatsApp', t_es: 'Mandanos una foto por WhatsApp', d_en: "Tell us what's wrong and we coordinate the drop-off.", d_es: 'Contanos qué le pasa al equipo y coordinamos la recepción.' },
+  { num: '2', t_en: 'Free diagnosis', t_es: 'Diagnóstico gratis', d_en: 'We tell you what it has and what the fix costs.', d_es: 'Te decimos qué tiene y cuánto cuesta arreglarlo.' },
+  { num: '3', t_en: 'You approve', t_es: 'Vos aprobás', d_en: "We don't touch anything until you say yes.", d_es: 'No tocamos nada hasta que digás que sí.' },
+  { num: '4', t_en: 'Fix and delivery', t_es: 'Arreglo y entrega', d_en: 'Tested and working, with warranty.', d_es: 'Probado y funcionando, con garantía.' },
+];
+
+const servicios = [
+  { en: 'Screens and batteries', es: 'Pantallas y baterías' },
+  { en: 'Formatting and upgrades', es: 'Formateo y mejoras' },
+  { en: 'Hardware and ports', es: 'Hardware y puertos' },
+  { en: 'Buy and sell', es: 'Compra y venta' },
+];
+---
+
+<section id="taller" class="border-y" style="background: var(--bg2); border-color: var(--line)">
+  <div class="mx-auto grid max-w-[1200px] items-center gap-12 px-6 py-[72px]" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))">
+    <div class="flex flex-col gap-4">
+      <p class="kz-eyebrow"><span class="en">Repair shop</span><span class="es">Taller</span></p>
+      <h2 class="kz-h2" style="text-wrap: initial">
+        <span class="en">Computer or phone broke down? Write to us.</span>
+        <span class="es">¿Se te arruinó la compu o el teléfono? Escribinos.</span>
+      </h2>
+      <p class="text-[17px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+        <span class="en">Free diagnosis. We tell you what it has and what it costs, and you approve before we touch anything. We also buy and sell tested equipment.</span>
+        <span class="es">Diagnóstico gratis. Te decimos qué tiene y cuánto cuesta, y vos aprobás antes de que toquemos nada. También compramos y vendemos equipo probado.</span>
+      </p>
+      <ul class="grid list-none gap-2.5" style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr))">
+        {servicios.map((s) => (
+          <li class="rounded-xl border px-3.5 py-3 text-sm font-medium" style="background: var(--bg); border-color: var(--line)">
+            <span class="en">{s.en}</span><span class="es">{s.es}</span>
+          </li>
+        ))}
+      </ul>
+      <div class="flex flex-wrap items-center gap-3">
+        <a href="https://wa.me/50488091744?text=Hola!%20Necesito%20reparar%20mi%20equipo." target="_blank" rel="noopener noreferrer" class="kz-btn kz-btn-primario" style="padding: 14px 24px">
+          <span class="en">Send us a photo on WhatsApp</span><span class="es">Mandanos una foto por WhatsApp</span>
+        </a>
+        <a href="tel:+50488091744" class="text-[15px] font-semibold transition-colors hover:text-[var(--green2)]" style="color: var(--ink)">
+          <span class="en">or call +504 8809-1744</span><span class="es">o llamá al +504 8809-1744</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="flex flex-col rounded-[18px] border p-6" style="background: var(--bg); border-color: var(--line)">
+      <span class="mb-2 text-xs" style="font-family: ui-monospace, Menlo, monospace; color: var(--mute)">
+        <span class="en">how it works</span><span class="es">cómo funciona</span>
+      </span>
+      {pasos.map((p) => (
+        <div class="grid gap-3.5 border-t py-3.5" style="grid-template-columns: 32px 1fr; border-color: var(--line)">
+          <span class="flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold" style="background: var(--green-soft); color: var(--green2)">{p.num}</span>
+          <div class="flex flex-col gap-0.5">
+            <strong class="text-[15px] font-semibold"><span class="en">{p.t_en}</span><span class="es">{p.t_es}</span></strong>
+            <span class="text-[13px] leading-relaxed" style="color: var(--ink2)"><span class="en">{p.d_en}</span><span class="es">{p.d_es}</span></span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

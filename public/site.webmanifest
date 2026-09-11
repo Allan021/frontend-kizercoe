@@ -4,8 +4,8 @@
   "description": "Software a la medida, apps web y móviles, IA, marketing y reparación de equipos en Honduras.",
   "start_url": "/",
   "display": "browser",
-  "background_color": "#06080d",
-  "theme_color": "#2e5bff",
+  "background_color": "#ffffff",
+  "theme_color": "#16a36c",
   "icons": [
     {
       "src": "/apple-touch-icon.png",

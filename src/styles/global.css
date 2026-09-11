@@ -1,218 +1,82 @@
-/* Fuentes autoalojadas: sin ir a fonts.googleapis.com no hay conexión a otro
-   dominio ni CLS esperando la hoja de estilos externa. Cuenta para el 100 de
-   rendimiento. */
-@import '@fontsource-variable/instrument-sans';
-@import '@fontsource/ibm-plex-mono/400.css';
-@import '@fontsource/ibm-plex-mono/500.css';
+/* Fuente del rediseño: Poppins autoalojada (sin ir a Google Fonts). */
+@import '@fontsource/poppins/400.css';
+@import '@fontsource/poppins/500.css';
+@import '@fontsource/poppins/600.css';
+@import '@fontsource/poppins/700.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ─── Theme tokens ─────────────────────────────────────────────────── */
-/**
- * Paleta del rediseño v2: azul royal sobre casi-negro.
- *
- * El cyan/verde anterior se leía como plantilla de agencia genérica. Este azul
- * es más serio y deja el degradado para acentos puntuales, no para todo.
- *
- * Los nombres de las variables NO cambiaron: así todo el sitio adopta la
- * paleta nueva sin tocar un solo componente.
- */
+/* ─── Tokens del design system (DESIGN-SYSTEM.md) ──────────────────────
+   Claro por defecto: blanco + verde + navy. El oscuro invierte sobre navy.
+   Los nombres viejos --color-* se mapean a la paleta nueva para que el
+   panel y cualquier pieza sin tocar hereden el rediseño sin editarse. */
 :root {
-  --color-bg: #06080d;
-  --color-bg-2: #080b12;
-  --color-bg-3: #0b0f19;
-  --color-card: #0d1220;
-  --color-card-2: #161c29;
-  --color-text: #f3f5f8;
-  --color-muted: #a7b0c0;
-  --color-muted-2: #6b7688;
-  --color-nav-bg: rgba(6,8,13,0.82);
-  --color-nav-bg-scrolled: rgba(6,8,13,0.96);
-  --color-border: #1b2334;
-  --color-border-soft: #161c29;
-  /* Acentos de marca: se usan tal cual, no con opacidades inventadas. */
-  --color-accent: #5b8cff;
-  --color-accent-strong: #2e5bff;
-  --color-accent-soft: #8fb0ff;
-  --color-accent-deep: #1b3fd1;
-  color-scheme: dark;
-}
+  --bg: #ffffff;
+  --bg2: #f4f7f9;
+  --bg3: #e6ede9;
+  --line: #e1e7ec;
+  --ink: #0b1a33;
+  --ink2: #3d4a63;
+  --mute: #74809a;
+  --green: #16a36c;
+  --green2: #0f8a5a;
+  --green-soft: #e6f6ef;
+  --navy: #0b1a33;
+  --green-bright: #3ed39a;
 
-[data-theme="light"] {
-  --color-bg: #ffffff;
-  --color-bg-2: #f6f8fc;
-  --color-bg-3: #eef2f9;
-  --color-card: #ffffff;
-  --color-card-2: #f6f8fc;
-  --color-text: #0b0f19;
-  --color-muted: #5b6577;
-  --color-muted-2: #7d8798;
-  --color-nav-bg: rgba(255,255,255,0.82);
-  --color-nav-bg-scrolled: rgba(255,255,255,0.96);
-  --color-border: #e3e8f0;
-  --color-border-soft: #eef2f9;
-  --color-accent: #2e5bff;
-  --color-accent-strong: #1b3fd1;
-  --color-accent-soft: #5b8cff;
-  --color-accent-deep: #1b3fd1;
+  /* Alias heredados (panel y componentes viejos). */
+  --color-bg: var(--bg);
+  --color-bg-2: var(--bg2);
+  --color-bg-3: var(--bg3);
+  --color-card: var(--bg);
+  --color-card-2: var(--bg2);
+  --color-text: var(--ink);
+  --color-muted: var(--ink2);
+  --color-muted-2: var(--mute);
+  --color-nav-bg: color-mix(in srgb, var(--bg) 92%, transparent);
+  --color-nav-bg-scrolled: color-mix(in srgb, var(--bg) 96%, transparent);
+  --color-border: var(--line);
+  --color-border-soft: var(--line);
+  --color-accent: var(--green);
+  --color-accent-strong: var(--green2);
+  --color-accent-soft: var(--green-bright);
+  --color-accent-deep: var(--green2);
   color-scheme: light;
 }
 
-/* ─── Base ─────────────────────────────────────────────────────────── */
-/* Piezas compartidas del rediseño v2: una tarjeta se ve igual venga de
-   servicios, proyectos o testimonios. */
-@layer components {
-  /* Etiqueta monoespaciada "01 · CORE": es la firma visual del sistema. */
-  .kz-eyebrow {
-    font-family: 'IBM Plex Mono', ui-monospace, monospace;
-    font-size: 11.5px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-accent);
-  }
-
-  .kz-card {
-    background: var(--color-card);
-    border: 1px solid var(--color-border);
-    border-radius: 16px;
-    transition: border-color 0.25s ease, transform 0.25s ease;
-  }
-  .kz-card:hover { border-color: var(--color-accent); }
-
-  /* La tarjeta grande nace con el borde de acento y su anillo, que es lo que
-     la hace verse elevada sobre el fondo. */
-  .kz-card-principal {
-    border-color: var(--color-accent);
-    box-shadow: 0 0 0 1px rgba(46, 91, 255, 0.25);
-  }
-
-  .kz-chip {
-    font-size: 13px;
-    padding: 6px 12px;
-    border-radius: 999px;
-    border: 1px solid var(--color-border);
-    background: var(--color-bg-2);
-    color: var(--color-muted);
-  }
-
-  .kz-tab {
-    font-size: 14px;
-    padding: 9px 16px;
-    border-radius: 999px;
-    border: 1px solid var(--color-border);
-    color: var(--color-muted);
-    transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
-  }
-  .kz-tab:hover { color: var(--color-text); }
-  .kz-tab-activa {
-    color: var(--color-text);
-    font-weight: 600;
-    border-color: var(--color-accent);
-    background: color-mix(in srgb, var(--color-accent) 12%, transparent);
-  }
-
-  /* Botones. Alto mínimo 44px: es el tamaño que un dedo acierta sin pelear. */
-  .kz-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    min-height: 46px;
-    padding: 0 22px;
-    border-radius: 12px;
-    font-size: 15px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
-  }
-  .kz-btn:hover { transform: translateY(-1px); }
-
-  .kz-btn-primario {
-    background: var(--color-accent-strong);
-    color: #fff;
-    /* Anillo de 1px en vez de sombra difusa: sobre fondo casi negro una sombra
-       no se ve, pero el borde luminoso sí despega el botón del fondo. */
-    box-shadow: 0 0 0 1px rgba(91, 140, 255, 0.35);
-  }
-  .kz-btn-primario:hover {
-    background: var(--color-accent);
-    box-shadow: 0 0 0 1px rgba(91, 140, 255, 0.55), 0 8px 28px rgba(46, 91, 255, 0.28);
-  }
-
-  /* Pastilla del hero, con el punto que late. */
-  .kz-pastilla {
-    display: inline-flex;
-    align-items: center;
-    gap: 9px;
-    height: 32px;
-    padding: 0 14px;
-    border-radius: 999px;
-    border: 1px solid var(--color-border);
-    background: var(--color-card);
-    font-family: 'IBM Plex Mono', ui-monospace, monospace;
-    font-size: 11.5px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--color-accent-soft);
-    white-space: nowrap;
-  }
-
-  .kz-latido {
-    width: 6px;
-    height: 6px;
-    border-radius: 999px;
-    background: var(--color-accent);
-    flex-shrink: 0;
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    .kz-latido { animation: kz-latir 2s ease-in-out infinite; }
-  }
-  @keyframes kz-latir {
-    50% { opacity: 0.35; transform: scale(0.8); }
-  }
-
-  .kz-btn-secundario {
-    border: 1px solid var(--color-border);
-    color: var(--color-text);
-  }
-  .kz-btn-secundario:hover { border-color: var(--color-accent); }
-
-  .kz-skeleton {
-    background: var(--color-card);
-    border: 1px solid var(--color-border);
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    .kz-skeleton { animation: kz-pulse 1.6s ease-in-out infinite; }
-  }
-  @keyframes kz-pulse { 50% { opacity: 0.55; } }
-
-  /* Salto al contenido, para quien navega con teclado. */
-  .kz-skip {
-    position: absolute;
-    left: -9999px;
-    z-index: 999;
-    padding: 12px 20px;
-    background: var(--color-accent);
-    color: #fff;
-    border-radius: 0 0 8px 0;
-  }
-  .kz-skip:focus { left: 0; top: 0; }
+[data-theme='dark'] {
+  --bg: #0b1a33;
+  --bg2: #11233f;
+  --bg3: #182c4c;
+  --line: rgba(255, 255, 255, 0.12);
+  --ink: #ffffff;
+  --ink2: #b9c3d8;
+  --mute: #8592ac;
+  --green: #1fbf80;
+  --green2: #16a36c;
+  --green-soft: rgba(31, 191, 128, 0.14);
+  --navy: #ffffff;
+  color-scheme: dark;
 }
 
+/* El logo correcto según el tema: dos <img>, se muestra una. */
+[data-logo-dark] { display: none; }
+[data-theme='dark'] [data-logo-light] { display: none; }
+[data-theme='dark'] [data-logo-dark] { display: block; }
+
+/* ─── Base ─────────────────────────────────────────────────────────── */
 @layer base {
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
 
-  /* Foco visible en todo lo enfocable: sin esto no hay accesibilidad que
-     valga, por más contraste que tengan los colores. */
   :where(a, button, input, select, textarea, [tabindex]):focus-visible {
-    outline: 2px solid var(--color-accent);
+    outline: 2px solid var(--green);
     outline-offset: 3px;
     border-radius: 6px;
   }
 
-  /* Quien pidió menos movimiento, recibe menos movimiento. */
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
       animation-duration: 0.01ms !important;
@@ -223,205 +87,133 @@
   }
 
   body {
-    background-color: var(--color-bg);
-    color: var(--color-text);
-    font-family: 'Instrument Sans Variable', system-ui, -apple-system, sans-serif;
-    overflow-x: hidden;
-    cursor: default;
+    background-color: var(--bg);
+    color: var(--ink);
+    font-family: 'Poppins', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.4;
-  }
+  input, select, textarea, button { font-family: inherit; }
+  input::placeholder, textarea::placeholder { color: var(--mute); }
 
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: var(--color-bg); }
-  ::-webkit-scrollbar-thumb { background: var(--color-accent); border-radius: 2px; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg2); }
+  ::-webkit-scrollbar-thumb { background: var(--green); border-radius: 3px; }
 }
 
-/* ─── LCP fix: CSS fallback animation for hero chars ───────────────── */
-@keyframes kzCharFallback {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* When GSAP takes over, it sets inline styles directly, which override
-   the animation. We also kill the CSS animation to prevent conflicts. */
-.gsap-ready .kz-char {
-  animation: none !important;
-}
-
-/* ─── Utilities ────────────────────────────────────────────────────── */
-@layer utilities {
-  .gradient-text {
-    background: linear-gradient(135deg, var(--color-accent), var(--color-accent-strong));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+/* ─── Piezas compartidas del design system ─────────────────────────── */
+@layer components {
+  /* Eyebrow verde: la etiqueta de cada sección. */
+  .kz-eyebrow {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--green2);
   }
-  .glass {
-    background: rgba(13, 31, 53, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(0, 200, 255, 0.12);
+
+  .kz-h2 {
+    font-size: clamp(28px, 3.2vw, 40px);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    text-wrap: balance;
   }
-  .section-tag {
+
+  .kz-card {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    transition: border-color 0.2s ease;
+  }
+  .kz-card:hover { border-color: var(--green); }
+  /* La "principal" del panel viejo: mismo trato, borde verde. */
+  .kz-card-principal { border-color: var(--green); }
+
+  .kz-chip {
+    border: 1px solid var(--line);
+    background: var(--bg);
+    color: var(--ink2);
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .kz-badge {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    font-family: 'IBM Plex Mono', ui-monospace, monospace;
-    font-size: 12px;
-    letter-spacing: 3px;
-    color: var(--color-accent);
-    text-transform: uppercase;
+    gap: 8px;
+    background: var(--green-soft);
+    color: var(--green2);
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 600;
   }
-  .section-tag::before {
-    content: '';
-    width: 24px;
-    height: 2px;
-    background: var(--color-accent);
-    display: inline-block;
+
+  .kz-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   }
-  .section-tag.center::before { display: none; }
-  .text-primary { color: var(--color-text); }
+  /* Regla de hover del sistema: nunca blanco/azul. */
+  .kz-btn-primario { background: var(--green); color: #fff; border: 0; }
+  .kz-btn-primario:hover { background: var(--green2); color: #fff; }
+  .kz-btn-secundario { background: transparent; color: var(--ink); border: 1.5px solid var(--line); }
+  .kz-btn-secundario:hover { border-color: var(--green); color: var(--green2); }
+  .kz-btn-navy { background: var(--navy); color: var(--bg); border: 0; }
+  .kz-btn-navy:hover { background: var(--green); color: #fff; }
+
+  .kz-tab {
+    font-size: 14px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    color: var(--ink2);
+    transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  }
+  .kz-tab:hover { color: var(--green2); border-color: var(--green); }
+  .kz-tab-activa { color: var(--green2); font-weight: 600; border-color: var(--green); background: var(--green-soft); }
+
+  .kz-latido { width: 7px; height: 7px; border-radius: 999px; background: var(--green); flex-shrink: 0; }
+  @media (prefers-reduced-motion: no-preference) {
+    .kz-latido { animation: kz-latir 2s ease-in-out infinite; }
+  }
+  @keyframes kz-latir { 50% { opacity: 0.35; transform: scale(0.8); } }
+
+  .kz-skip {
+    position: absolute;
+    left: -9999px;
+    z-index: 999;
+    padding: 12px 20px;
+    background: var(--green);
+    color: #fff;
+    border-radius: 0 0 8px 0;
+  }
+  .kz-skip:focus { left: 0; top: 0; }
 }
 
-/* ─── i18n visibility ──────────────────────────────────────────────── */
-html:not([lang="es"]) .es { display: none !important; }
-html[lang="es"] .en { display: none !important; }
+/* ─── Idioma: ES por defecto, EN al cambiar ────────────────────────── */
+html:not([lang='es']) .es { display: none !important; }
+html[lang='es'] .en { display: none !important; }
 
-/* ─── View Transition ───────────────────────────────────────────────── */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
-  mix-blend-mode: normal;
-}
+/* ─── Moneda: lempiras u dólares, cambiables con el toggle ─────────── */
+html:not([data-moneda='usd']) .usd { display: none !important; }
+html[data-moneda='usd'] .lps { display: none !important; }
 
-/* ─── Hero background title glitch ─────────────────────────────────── */
-.kz-bg-title {
-  position: relative;
-  display: block;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(91,140,255,0.12);
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-weight: 900;
-  letter-spacing: 0.06em;
-  user-select: none;
-  will-change: transform;
-}
-
-.kz-bg-title .kz-glitch-a,
-.kz-bg-title .kz-glitch-b {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  color: transparent;
-  font: inherit;
-  letter-spacing: inherit;
-  pointer-events: none;
-}
-.kz-bg-title .kz-glitch-a {
-  -webkit-text-stroke: 1px rgba(91,140,255,0.18);
-  animation: kzGlitchA 9s steps(1) infinite;
-}
-.kz-bg-title .kz-glitch-b {
-  -webkit-text-stroke: 1px rgba(46,91,255,0.14);
-  animation: kzGlitchB 9s steps(1) infinite;
-}
-
-@keyframes kzGlitchA {
-  0%, 84%, 100% { clip-path: none; transform: none; opacity: 0; }
-  85%  { clip-path: inset(8% 0 72% 0);  transform: translateX(-10px); opacity: 1; }
-  87%  { clip-path: inset(60% 0 12% 0); transform: translateX(10px);  opacity: 1; }
-  89%  { clip-path: inset(30% 0 45% 0); transform: translateX(-6px);  opacity: 1; }
-  91%  { clip-path: inset(80% 0 4% 0);  transform: translateX(6px);   opacity: 1; }
-  93%  { opacity: 0; }
-}
-@keyframes kzGlitchB {
-  0%, 86%, 100% { clip-path: none; transform: none; opacity: 0; }
-  87%  { clip-path: inset(45% 0 30% 0); transform: translateX(12px);  opacity: 1; }
-  89%  { clip-path: inset(15% 0 65% 0); transform: translateX(-8px);  opacity: 1; }
-  91%  { clip-path: inset(70% 0 8% 0);  transform: translateX(4px);   opacity: 1; }
-  93%  { opacity: 0; }
-}
-
-/* Scan line */
-.kz-scan {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-.kz-scan::after {
-  content: '';
-  position: absolute;
-  left: -100%;
-  top: 0;
-  bottom: 0;
-  width: 60%;
-  background: linear-gradient(90deg, transparent, rgba(91,140,255,0.06) 40%, rgba(91,140,255,0.12) 50%, rgba(91,140,255,0.06) 60%, transparent);
-  animation: kzScan 5s ease-in-out infinite;
-  animation-delay: 3s;
-}
-@keyframes kzScan {
-  0%   { left: -60%; }
-  100% { left: 150%; }
-}
-
-/* ─── Performance: content-visibility for off-screen sections ───────── */
-#services, #why, #process, #reviews, #pricing, #proyectos, #productos {
+/* ─── Performance ──────────────────────────────────────────────────── */
+#servicios, #productos, #casos, #como, #taller, #precios, #faq,
+#integraciones, #comparativa, #garantias, #recursos {
   content-visibility: auto;
   contain-intrinsic-size: 0 700px;
-}
-
-/* ─── Light mode contrast corrections ──────────────────────────────── */
-[data-theme="light"] .text-brand-cyan  { color: #005f99; }
-[data-theme="light"] .text-brand-electric { color: #00763e; }
-[data-theme="light"] .metric-num { filter: brightness(0.5); }
-[data-theme="light"] .process-dur-badge { filter: brightness(0.5) saturate(0.9); }
-[data-theme="light"] .why-num-box { filter: brightness(0.55); }
-
-/* ─── Light mode specific overrides ────────────────────────────────── */
-[data-theme="light"] .glass {
-  background: rgba(255,255,255,0.85);
-  border-color: rgba(0,100,200,0.12);
-}
-[data-theme="light"] .kz-bg-title {
-  -webkit-text-stroke: 1px rgba(0,100,200,0.07);
-}
-[data-theme="light"] .kz-bg-title .kz-glitch-a {
-  -webkit-text-stroke: 1px rgba(0,100,200,0.10);
-}
-[data-theme="light"] .kz-bg-title .kz-glitch-b {
-  -webkit-text-stroke: 1px rgba(0,150,100,0.08);
-}
-
-/* ─── Hero title cursor blink (added by GSAP after chars finish) ─── */
-.kz-cursor-blink {
-  animation: kzCursorBlink 0.65s step-end infinite;
-}
-@keyframes kzCursorBlink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0; }
-}
-
-
-/* GSAP will-change hints */
-.gsap-target { will-change: transform, opacity; }
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-  .kz-scan::after { display: none; }
 }

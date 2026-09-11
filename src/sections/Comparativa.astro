@@ -1,0 +1,39 @@
+---
+/** La tabla que responde "¿y por qué no un freelancer o una agencia grande?" */
+const filas = [
+  { c_en: 'Fixed price in writing', c_es: 'Precio fijo por escrito', f_en: 'Sometimes', f_es: 'A veces', a_en: 'With fine print', a_es: 'Con letra chica', k_en: 'Always', k_es: 'Siempre' },
+  { c_en: 'You talk to who codes', c_es: 'Hablás con quien programa', f_en: 'Yes', f_es: 'Sí', a_en: 'No, an account exec', a_es: 'No, con ejecutivo', k_en: 'Yes', k_es: 'Sí' },
+  { c_en: 'Delivery in weeks', c_es: 'Entrega en semanas', f_en: 'Depends', f_es: 'Depende', a_en: 'Months', a_es: 'Meses', k_en: '1–6 weeks', k_es: '1–6 semanas' },
+  { c_en: 'Hardware installed on site', c_es: 'Equipo instalado en sitio', f_en: 'No', f_es: 'No', a_en: 'Rarely', a_es: 'Rara vez', k_en: 'Yes, same proposal', k_es: 'Sí, misma propuesta' },
+  { c_en: 'Code and domain under your name', c_es: 'Código y dominio a tu nombre', f_en: 'Sometimes', f_es: 'A veces', a_en: 'Sometimes', a_es: 'A veces', k_en: 'Always', k_es: 'Siempre' },
+  { c_en: 'Support after delivery', c_es: 'Soporte después de entregar', f_en: 'Disappears', f_es: 'Desaparece', a_en: 'Ticket and wait', a_es: 'Ticket y espera', k_en: '30 days + monthly plan', k_es: '30 días + plan mensual' },
+  { c_en: 'Price for a Honduran business', c_es: 'Precio para negocio hondureño', f_en: 'Low', f_es: 'Bajo', a_en: 'High', a_es: 'Alto', k_en: 'From $150', k_es: 'Desde L 4,000' },
+];
+---
+
+<section id="comparativa" class="mx-auto flex w-full max-w-[1200px] flex-col gap-9 px-6 py-20">
+  <div class="mx-auto flex flex-col items-center gap-2.5 text-center">
+    <p class="kz-eyebrow"><span class="en">Comparison</span><span class="es">Comparativa</span></p>
+    <h2 class="kz-h2">
+      <span class="en">Freelancer, big agency or Kizercode?</span>
+      <span class="es">¿Freelancer, agencia grande o Kizercode?</span>
+    </h2>
+  </div>
+
+  <div class="overflow-x-auto">
+    <div class="grid min-w-[640px] overflow-hidden rounded-[18px] border" style="grid-template-columns: 1.4fr 1fr 1fr 1fr; background: var(--bg); border-color: var(--line)">
+      <div class="px-5 py-4 text-[13px] font-semibold" style="background: var(--bg2); color: var(--mute)"></div>
+      <div class="px-5 py-4 text-center text-sm font-semibold" style="background: var(--bg2)">Freelancer</div>
+      <div class="px-5 py-4 text-center text-sm font-semibold" style="background: var(--bg2)"><span class="en">Big agency</span><span class="es">Agencia grande</span></div>
+      <div class="px-5 py-4 text-center text-sm font-bold text-white" style="background: var(--green)">Kizercode</div>
+      {filas.map((r) => (
+        <>
+          <div class="border-t px-5 py-3.5 text-sm font-semibold" style="border-color: var(--line)"><span class="en">{r.c_en}</span><span class="es">{r.c_es}</span></div>
+          <div class="border-t px-5 py-3.5 text-center text-[13px]" style="border-color: var(--line); color: var(--ink2)"><span class="en">{r.f_en}</span><span class="es">{r.f_es}</span></div>
+          <div class="border-t px-5 py-3.5 text-center text-[13px]" style="border-color: var(--line); color: var(--ink2)"><span class="en">{r.a_en}</span><span class="es">{r.a_es}</span></div>
+          <div class="border-t px-5 py-3.5 text-center text-[13px] font-semibold" style="border-color: var(--line); color: var(--green2); background: var(--green-soft)"><span class="en">{r.k_en}</span><span class="es">{r.k_es}</span></div>
+        </>
+      ))}
+    </div>
+  </div>
+</section>

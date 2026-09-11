@@ -1,0 +1,62 @@
+---
+/** Guías: lo que se le explica a cada cliente en la primera llamada. Los
+ *  enlaces llevan al contacto mientras no existan como artículos. */
+const recursos = [
+  { tag_en: 'Guide', tag_es: 'Guía', t_en: 'How much does a website cost in Honduras in 2026?', t_es: '¿Cuánto cuesta una página web en Honduras en 2026?', d_en: 'Real ranges in lempiras, what each includes and what to ask before paying.', d_es: 'Rangos reales en lempiras, qué incluye cada uno y qué preguntar antes de pagar.' },
+  { tag_en: 'Checklist', tag_es: 'Checklist', t_en: 'Template or custom design? How to decide without regrets', t_es: '¿Plantilla o diseño propio? Cómo decidir sin arrepentirte', d_en: "When a template is enough and when it'll cost you more later.", d_es: 'Cuándo una plantilla alcanza y cuándo te va a costar más caro después.' },
+  { tag_en: 'Guide', tag_es: 'Guía', t_en: 'What hardware your business needs for a point of sale', t_es: 'Qué equipo necesita tu negocio para un punto de venta', d_en: 'Terminal, thermal printer, scanner and scale: what to buy and what not.', d_es: 'Terminal, impresora térmica, lector y báscula: qué comprar y qué no.' },
+];
+---
+
+<section id="recursos" class="mx-auto flex w-full max-w-[1200px] flex-col gap-9 px-6 py-20">
+  <div class="flex flex-wrap items-end justify-between gap-6">
+    <div class="flex max-w-[560px] flex-col gap-2.5">
+      <p class="kz-eyebrow"><span class="en">Resources</span><span class="es">Recursos</span></p>
+      <h2 class="kz-h2" style="text-wrap: initial">
+        <span class="en">Guides to decide before you spend.</span>
+        <span class="es">Guías para decidir antes de gastar.</span>
+      </h2>
+    </div>
+    <p class="max-w-[320px] text-[15px]" style="color: var(--mute); text-wrap: pretty">
+      <span class="en">What we explain to every client on the first call, in writing.</span>
+      <span class="es">Lo que le explicamos a cada cliente en la primera llamada, por escrito.</span>
+    </p>
+  </div>
+
+  <ul class="grid list-none gap-4" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr))">
+    {recursos.map((r) => (
+      <li>
+        <a href="#contacto" class="kz-card flex h-full flex-col gap-3 p-6" style="color: var(--ink)">
+          <span class="kz-badge self-start" style="padding: 4px 10px; font-size: 12px"><span class="en">{r.tag_en}</span><span class="es">{r.tag_es}</span></span>
+          <strong class="text-lg font-bold leading-snug" style="text-wrap: balance"><span class="en">{r.t_en}</span><span class="es">{r.t_es}</span></strong>
+          <span class="text-sm leading-relaxed" style="color: var(--ink2); text-wrap: pretty"><span class="en">{r.d_en}</span><span class="es">{r.d_es}</span></span>
+          <span class="mt-auto text-[13px] font-semibold" style="color: var(--green2)"><span class="en">Ask us</span><span class="es">Preguntanos</span> →</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<!-- CTA final navy -->
+<section style="background: var(--navy); color: var(--bg)">
+  <div class="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-6 px-6 py-16">
+    <div class="flex max-w-[600px] flex-col gap-2">
+      <h2 class="font-bold" style="font-size: clamp(26px, 3vw, 36px); line-height: 1.15; letter-spacing: -0.02em; text-wrap: balance">
+        <span class="en">Let's build something that actually works.</span>
+        <span class="es">Construyamos algo que sí funcione.</span>
+      </h2>
+      <p class="text-base" style="color: color-mix(in srgb, var(--bg) 70%, transparent); text-wrap: pretty">
+        <span class="en">Free consultation, fixed price, no surprises. Tell us what you need and we map the path.</span>
+        <span class="es">Consulta gratis, precio fijo, sin sorpresas. Contanos qué necesitás y te trazamos el camino.</span>
+      </p>
+    </div>
+    <div class="flex flex-wrap gap-3">
+      <a href="#contacto" class="rounded-xl px-6 py-3.5 text-[15px] font-semibold text-white transition-colors" style="background: #16a36c" onmouseover="this.style.background='#3ed39a'; this.style.color='#0b1a33'" onmouseout="this.style.background='#16a36c'; this.style.color='#fff'">
+        <span class="en">Start a project</span><span class="es">Iniciar proyecto</span>
+      </a>
+      <a href="#precios" class="rounded-xl border-[1.5px] bg-transparent px-6 py-3.5 text-[15px] font-semibold transition-colors" style="color: var(--bg); border-color: color-mix(in srgb, var(--bg) 30%, transparent)" onmouseover="this.style.borderColor='#3ed39a'; this.style.color='#3ed39a'" onmouseout="this.style.borderColor='color-mix(in srgb, var(--bg) 30%, transparent)'; this.style.color='var(--bg)'">
+        <span class="en">See pricing</span><span class="es">Ver precios</span>
+      </a>
+    </div>
+  </div>
+</section>

@@ -4,34 +4,41 @@ import Nav from '@/components/Nav.astro';
 import FloatingWhatsApp from '@/components/FloatingWhatsApp.astro';
 import Footer from '@/components/Footer.astro';
 import Hero from '@/sections/Hero.astro';
-import TechStrip from '@/sections/TechStrip.astro';
+import Reviews from '@/sections/Reviews.astro';
+import Projects from '@/sections/Projects.astro';
+import WhyUs from '@/sections/WhyUs.astro';
 import Services from '@/sections/Services.astro';
 import Productos from '@/sections/Productos.astro';
-import Projects from '@/sections/Projects.astro';
-import Implementacion from '@/sections/Implementacion.astro';
-import WhyUs from '@/sections/WhyUs.astro';
 import Process from '@/sections/Process.astro';
-import Reviews from '@/sections/Reviews.astro';
+import Taller from '@/sections/Taller.astro';
 import Pricing from '@/sections/Pricing.astro';
 import FAQ from '@/sections/FAQ.astro';
 import CTA from '@/sections/CTA.astro';
+import Integraciones from '@/sections/Integraciones.astro';
+import Comparativa from '@/sections/Comparativa.astro';
+import Garantias from '@/sections/Garantias.astro';
+import Recursos from '@/sections/Recursos.astro';
 ---
 <Layout>
   <Nav />
-  <!-- Un solo <main> por página, con el id al que apunta el salto de teclado. -->
+  <!-- Orden del DESIGN-SYSTEM.md. "Equipo" y logos de clientes quedan fuera
+       hasta tener fotos y nombres reales: placeholders no se publican. -->
   <main id="contenido">
     <Hero />
-    <TechStrip />
+    <Reviews />
+    <Projects />
+    <WhyUs />
     <Services />
     <Productos />
-    <Projects />
-    <Implementacion />
-    <WhyUs />
     <Process />
-    <Reviews />
+    <Taller />
     <Pricing />
     <FAQ />
     <CTA />
+    <Integraciones />
+    <Comparativa />
+    <Garantias />
+    <Recursos />
   </main>
   <Footer />
   <FloatingWhatsApp />

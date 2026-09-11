@@ -1,91 +1,45 @@
 ---
-// ← Cambia este número por el tuyo (formato internacional, sin + ni espacios)
+/**
+ * FAB de WhatsApp del rediseño: pastilla verde con texto siempre visible.
+ * El mensaje precargado cambia con el idioma (el script de abajo lo ajusta).
+ */
 const WA_NUMBER = '50488091744';
 const msgs = {
   en: 'Hi! I found Kizercode and would like to know more about your services.',
-  es: 'Hola! Vi Kizercode y me gustaría saber más sobre sus servicios.',
+  es: 'Hola! Encontré Kizercode y quiero saber más.',
 };
 ---
 
 <a
   id="wa-fab"
-  href={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msgs.en)}`}
+  href={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msgs.es)}`}
   data-wa-number={WA_NUMBER}
   data-wa-en={msgs.en}
   data-wa-es={msgs.es}
   target="_blank"
   rel="noopener noreferrer"
-  aria-label="Contact on WhatsApp"
-  class="fixed right-4 md:right-6 z-40 flex items-center group"
-  style="bottom: 24px;"
+  aria-label="WhatsApp"
+  class="fixed bottom-[22px] right-[22px] z-30 inline-flex items-center gap-2.5 rounded-full px-5 py-3.5 text-[15px] font-semibold text-white transition-colors"
+  style="background: var(--green); box-shadow: 0 10px 30px rgba(11,26,51,.25); border: 2px solid var(--bg)"
+  onmouseover="this.style.background='var(--green2)'"
+  onmouseout="this.style.background='var(--green)'"
 >
-  <!-- Etiqueta siempre visible en desktop: el que no reconoce el icono lee
-       "Escríbenos". En el celular queda solo el botón para no tapar contenido. -->
-  <span
-    class="hidden md:block text-xs font-semibold px-3 py-1.5 rounded-l-xl mr-0 pointer-events-none whitespace-nowrap"
-    style="background: #1faa54; color: #fff;"
-  >
-    <span class="en">Chat with us</span>
-    <span class="es">Escribinos</span>
-  </span>
-
-  <!-- FAB button. Verde de WhatsApp y no azul de marca: hasta quien nunca vio
-       este sitio sabe qué hace un botón verde con este icono. -->
-  <div
-    class="relative flex items-center justify-center rounded-2xl shrink-0 group-hover:scale-105 transition-transform duration-200"
-    style="width:54px;height:54px;background:linear-gradient(135deg,#2bd96c 0%,#25d366 55%,#1faa54 100%);box-shadow:0 4px 24px rgba(37,211,102,0.4),0 2px 10px rgba(0,0,0,0.3);"
-  >
-    <!-- Pulse ring -->
-    <span
-      class="absolute inset-0 rounded-2xl"
-      style="background:linear-gradient(135deg,#25d366,#1faa54);animation:waPulse 2.8s ease-out infinite;"
-    ></span>
-
-    <!-- WhatsApp SVG -->
-    <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" class="relative z-10">
-      <path fill="white" d="M16 2C8.268 2 2 8.268 2 16c0 2.478.648 4.804 1.782 6.82L2 30l7.376-1.754A13.92 13.92 0 0016 30c7.732 0 14-6.268 14-14S23.732 2 16 2z"/>
-      <path fill="#1faa54" d="M22.5 19.75c-.306.862-1.52 1.576-2.492 1.786-.663.14-1.53.252-4.444-1.028-3.73-1.614-6.138-5.374-6.326-5.624-.18-.25-1.52-2.02-1.52-3.854 0-1.834.96-2.728 1.3-3.098.34-.37.74-.462 1-.462.24 0 .48.002.69.012.22.01.52-.084.814.62.306.722 1.04 2.556 1.13 2.742.09.186.15.404.03.65-.11.254-.17.41-.34.63-.17.22-.356.492-.51.66-.17.186-.346.386-.148.756.198.37.878 1.448 1.886 2.346 1.296 1.154 2.39 1.512 2.726 1.68.336.17.532.142.728-.086.198-.228.846-.988 1.072-1.328.226-.34.452-.284.762-.17.31.112 1.966.928 2.304 1.096.338.17.562.254.646.396.084.142.084.818-.222 1.68z"/>
-    </svg>
-  </div>
+  <img src="/whatsapp.svg" alt="" width="22" height="22" class="block brightness-0 invert" />
+  <span class="en">Chat with us</span><span class="es">Escribinos</span>
 </a>
 
-<style>
-  @keyframes waPulse {
-    0%   { transform: scale(1); opacity: 0.55; }
-    70%  { transform: scale(1.5); opacity: 0; }
-    100% { transform: scale(1.5); opacity: 0; }
-  }
-
-  /* On mobile, consistent positioning */
-  @media (max-width: 767px) {
-    #wa-fab { bottom: 20px !important; }
-  }
-  @media (min-width: 768px) {
-    #wa-fab { bottom: 32px !important; }
-  }
-</style>
-
 <script>
+  // El texto precargado del wa.me acompaña al idioma elegido.
   const fab = document.getElementById('wa-fab') as HTMLAnchorElement | null;
   if (fab) {
-    // La medición del clic la hace el listener global de Layout (wa.me):
-    // acá no se mide nada para no contar doble.
     const num = fab.dataset.waNumber;
-    const msgs: Record<string, string> = {
-      en: fab.dataset.waEn ?? '',
-      es: fab.dataset.waEs ?? '',
+    const msgs: Record<string, string> = { en: fab.dataset.waEn ?? '', es: fab.dataset.waEs ?? '' };
+    const actualizar = () => {
+      const lang = document.documentElement.getAttribute('lang') || 'es';
+      fab.href = `https://wa.me/${num}?text=${encodeURIComponent(msgs[lang] ?? msgs.es)}`;
     };
-
-    function updateHref() {
-      const lang = document.documentElement.getAttribute('lang') || 'en';
-      fab!.href = `https://wa.me/${num}?text=${encodeURIComponent(msgs[lang] || msgs.en)}`;
-    }
-
-    new MutationObserver(updateHref).observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['lang'],
-    });
-
-    updateHref();
+    actualizar();
+    new MutationObserver(actualizar).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
   }
+  // La medición del clic la hace el listener global de Layout (wa.me).
 </script>

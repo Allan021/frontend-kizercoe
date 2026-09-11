@@ -1,242 +1,122 @@
 ---
-import { Icon } from 'astro-icon/components';
-
 /**
- * Precios por lo que el cliente quiere, no por horas de developer.
- *
- * Nadie llega pensando "quiero 20 h/semana de un programador": llega pensando
- * "quiero mi página" o "que la compu encienda". Cada tarjeta es una de esas
- * frases, con su "desde" y un botón que abre el formulario con el servicio ya
- * elegido (#contact?servicio=...).
- *
- * Moneda: en inglés se ve USD y en español lempiras. Se renderizan las dos y
- * el CSS de idioma muestra la que toca — cambiar de idioma cambia la moneda
- * al instante, sin JavaScript.
+ * Precios por lo que el cliente quiere, con toggle Lempiras/Dólares.
+ * Se renderizan las dos monedas y el CSS (html[data-moneda]) muestra una;
+ * el toggle solo cambia ese atributo y lo guarda. Cero re-render.
  */
-
-// Tasa de cambio aproximada HNL por USD. Actualizala cuando se mueva; el
-// precio en lempiras se redondea a los 500 para que se lea como precio de
-// verdad y no como cálculo de calculadora.
-const TASA = 26.5;
-const lps = (usd: number) => `L ${(Math.round((usd * TASA) / 500) * 500).toLocaleString('es-HN')}`;
 const cosas = [
-  {
-    icon: 'lucide:globe',
-    t_en: 'A website for your business',
-    t_es: 'Una página web para tu negocio',
-    usd: 150,
-    unica: true,
-    servicio: 'Web Applications',
+  { t_en: 'A website for your business', t_es: 'Una página web para tu negocio', lps: 'L 4,000', usd: '$150', servicio: 'Web Applications',
     en: ['Designed for your brand, not a template', 'WhatsApp button and map included', 'Ready in about a week'],
-    es: ['Diseñada para tu marca, no una plantilla', 'Con botón de WhatsApp y mapa', 'Lista en más o menos una semana'],
-  },
-  {
-    icon: 'lucide:refresh-ccw',
-    t_en: 'Modernize my old website',
-    t_es: 'Modernizar mi sitio viejo',
-    usd: 250,
-    unica: true,
-    servicio: 'Site Modernization',
+    es: ['Diseñada para tu marca, no una plantilla', 'Con botón de WhatsApp y mapa', 'Lista en más o menos una semana'] },
+  { t_en: 'Modernize my old website', t_es: 'Modernizar mi sitio viejo', lps: 'L 6,500', usd: '$250', servicio: 'Site Modernization',
     en: ["Today's design, without starting from zero", 'We add AI, WhatsApp and whatever is missing', 'Your content and domain stay yours'],
-    es: ['Diseño de hoy, sin empezar de cero', 'Le metemos IA, WhatsApp y lo que le falte', 'Tu contenido y tu dominio se quedan'],
-  },
-  {
-    icon: 'lucide:shopping-cart',
-    t_en: 'An online store',
-    t_es: 'Una tienda en línea',
-    usd: 550,
-    unica: true,
-    servicio: 'Online Store',
+    es: ['Diseño de hoy, sin empezar de cero', 'Le metemos IA, WhatsApp y lo que le falte', 'Tu contenido y tu dominio se quedan'] },
+  { t_en: 'An online store', t_es: 'Una tienda en línea', lps: 'L 14,500', usd: '$550', servicio: 'Online Store',
     en: ['Catalog, cart and payments', 'A panel to upload your products', 'Connected to your inventory if you have one'],
-    es: ['Catálogo, carrito y pagos', 'Panel para subir tus productos vos mismo', 'Conectada a tu inventario si tenés uno'],
-  },
-  {
-    icon: 'lucide:boxes',
-    t_en: 'A system for your business',
-    t_es: 'Un sistema para tu negocio',
-    usd: 950,
-    unica: true,
-    servicio: 'Business System',
+    es: ['Catálogo, carrito y pagos', 'Panel para subir tus productos vos mismo', 'Conectada a tu inventario si tenés uno'] },
+  { t_en: 'A system for your business', t_es: 'Un sistema para tu negocio', lps: 'L 25,000', usd: '$950', servicio: 'Business System',
     en: ['Inventory, billing, orders: what you run', 'Roles for your team and live reports', 'Built on your real process'],
-    es: ['Inventario, facturación, pedidos: lo tuyo', 'Roles para tu equipo y reportes en vivo', 'Construido sobre tu proceso real'],
-  },
-  {
-    icon: 'lucide:smartphone',
-    t_en: 'A mobile app',
-    t_es: 'Una app móvil',
-    usd: 1400,
-    unica: true,
-    servicio: 'Mobile Apps',
+    es: ['Inventario, facturación, pedidos: lo tuyo', 'Roles para tu equipo y reportes en vivo', 'Construido sobre tu proceso real'] },
+  { t_en: 'A mobile app', t_es: 'Una app móvil', lps: 'L 37,000', usd: '$1,400', servicio: 'Mobile Apps',
     en: ['iOS and Android, one codebase', 'Connected to your system or store', 'Published in the stores'],
-    es: ['iOS y Android con una sola base', 'Conectada a tu sistema o tienda', 'Publicada en las tiendas'],
-  },
-  {
-    icon: 'lucide:bot',
-    t_en: 'AI that answers for you',
-    t_es: 'Una IA que atienda por vos',
-    usd: 300,
-    unica: true,
-    servicio: 'AI Automation',
+    es: ['iOS y Android con una sola base', 'Conectada a tu sistema o tienda', 'Publicada en las tiendas'] },
+  { t_en: 'AI that answers for you', t_es: 'Una IA que atienda por vos', lps: 'L 8,000', usd: '$300', servicio: 'AI Automation',
     en: ['Answers and quotes on WhatsApp 24/7', 'Uses your real prices and catalog', 'Everything it does gets logged'],
-    es: ['Responde y cotiza en WhatsApp 24/7', 'Usa tus precios y catálogo reales', 'Todo lo que hace queda registrado'],
-  },
-  {
-    icon: 'lucide:wrench',
-    t_en: 'Fix my computer or phone',
-    t_es: 'Reparar mi compu o teléfono',
-    usd: null,
-    gratis_en: 'Free diagnosis',
-    gratis_es: 'Diagnóstico gratis',
-    servicio: 'Computer Repair',
+    es: ['Responde y cotiza en WhatsApp 24/7', 'Usa tus precios y catálogo reales', 'Todo lo que hace queda registrado'] },
+  { t_en: 'Fix my computer or phone', t_es: 'Reparar mi compu o teléfono', gratis: true, servicio: 'Computer Repair',
     en: ['We tell you what it has and what it costs', 'You approve before we touch anything', 'We also buy and sell equipment'],
-    es: ['Te decimos qué tiene y cuánto cuesta', 'Vos aprobás antes de que toquemos nada', 'También compramos y vendemos equipo'],
-  },
+    es: ['Te decimos qué tiene y cuánto cuesta', 'Vos aprobás antes de que toquemos nada', 'También compramos y vendemos equipo'] },
 ];
 ---
 
-<section id="pricing" class="py-16 sm:py-24" aria-labelledby="pricing-title">
-  <div class="mx-auto max-w-6xl px-6">
-    <header class="mb-12 max-w-2xl">
-      <p class="kz-eyebrow">// <span class="en">pricing</span><span class="es">precios</span></p>
-      <h2 id="pricing-title" class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
-        <span class="en">What you need,<br />and what it costs.</span>
-        <span class="es">Lo que necesitás,<br />y lo que cuesta.</span>
+<section id="precios" class="mx-auto flex w-full max-w-[1200px] flex-col gap-9 px-6 py-20">
+  <div class="flex flex-wrap items-end justify-between gap-6">
+    <div class="flex max-w-[560px] flex-col gap-2.5">
+      <p class="kz-eyebrow"><span class="en">Clear, transparent pricing</span><span class="es">Precios claros y transparentes</span></p>
+      <h2 id="pricing-title" class="kz-h2" style="text-wrap: initial">
+        <span class="en">What you need, and what it costs.</span>
+        <span class="es">Lo que necesitás, y lo que cuesta.</span>
       </h2>
-      <p class="mt-4 leading-relaxed" style="color: var(--color-muted)">
-        <span class="en">
-          Whether you run a small shop that's just starting or a big project, there's a starting
-          point for you. One-time payment, and before starting you get the exact fixed price in
-          writing — it doesn't move.
-        </span>
-        <span class="es">
-          Da igual si tenés un local que viene empezando o un proyecto grande: hay un punto de
-          partida para vos. Pagás una vez, y antes de empezar te damos el precio fijo exacto por
-          escrito — no se mueve.
-        </span>
+      <p class="text-[17px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+        <span class="en">The "from" prices are the floor. You pay once, and before starting you get the exact fixed price in writing. It doesn't move.</span>
+        <span class="es">Los "desde" son el piso. Pagás una vez, y antes de empezar te damos el precio fijo exacto por escrito. No se mueve.</span>
       </p>
-    </header>
+    </div>
+    <div class="inline-flex rounded-xl border p-1" style="background: var(--bg2); border-color: var(--line)" role="group" aria-label="Moneda">
+      <button id="btn-lps" class="kz-moneda-btn cursor-pointer rounded-[9px] border-0 px-4 py-2 text-[13px] font-semibold">Lempiras</button>
+      <button id="btn-usd" class="kz-moneda-btn cursor-pointer rounded-[9px] border-0 px-4 py-2 text-[13px] font-semibold">
+        <span class="en">Dollars</span><span class="es">Dólares</span>
+      </button>
+    </div>
+  </div>
 
-    <ul class="grid list-none items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3">
-      {
-        cosas.map((c) => (
-          <li>
-            <article class="kz-card flex h-full flex-col p-6 sm:p-7">
-              <span class="kz-precio-icono">
-                <Icon name={c.icon} size={20} aria-hidden="true" />
+  <ul class="grid list-none items-stretch gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr))">
+    {cosas.map((c) => (
+      <li>
+        <article class="kz-card flex h-full flex-col gap-3.5 p-6">
+          <h3 class="text-lg font-bold leading-snug" style="text-wrap: balance">
+            <span class="en">{c.t_en}</span><span class="es">{c.t_es}</span>
+          </h3>
+          <p class="flex flex-wrap items-baseline gap-2">
+            {c.gratis ? (
+              <span class="text-2xl font-bold" style="letter-spacing: -0.02em; color: var(--green)">
+                <span class="en">Free diagnosis</span><span class="es">Diagnóstico gratis</span>
               </span>
+            ) : (
+              <>
+                <span class="text-[13px]" style="color: var(--mute)"><span class="en">from</span><span class="es">desde</span></span>
+                <span class="text-3xl font-bold" style="letter-spacing: -0.02em; color: var(--green)">
+                  <span class="lps">{c.lps}</span><span class="usd">{c.usd}</span>
+                </span>
+                <span class="text-[13px]" style="color: var(--mute)"><span class="en">one-time</span><span class="es">pago único</span></span>
+              </>
+            )}
+          </p>
+          <ul class="flex list-none flex-col gap-2">
+            {c.es.map((item, i) => (
+              <li class="flex items-start gap-2.5 text-sm leading-normal" style="color: var(--ink2)">
+                <span class="shrink-0 font-bold" style="color: var(--green)">✓</span>
+                <span><span class="en">{c.en[i]}</span><span class="es">{item}</span></span>
+              </li>
+            ))}
+          </ul>
+          <a href={`#contacto?servicio=${encodeURIComponent(c.servicio)}`} class="kz-btn kz-btn-navy mt-auto w-full text-sm" style="padding: 12px 16px; border-radius: 10px">
+            <span class="en">Get my exact price</span><span class="es">Quiero mi precio exacto</span>
+          </a>
+        </article>
+      </li>
+    ))}
+  </ul>
 
-              <h3 class="mt-4 text-lg font-bold leading-snug">
-                <span class="en">{c.t_en}</span><span class="es">{c.t_es}</span>
-              </h3>
-
-              <p class="mt-3 flex items-baseline gap-1.5">
-                {c.usd ? (
-                  <>
-                    <span class="font-mono text-[11.5px] uppercase tracking-wider" style="color: var(--color-muted-2)">
-                      <span class="en">from</span><span class="es">desde</span>
-                    </span>
-                    <span class="text-3xl font-bold tracking-tight">
-                      <span class="en">${c.usd.toLocaleString('en-US')}</span><span class="es">{lps(c.usd)}</span>
-                    </span>
-                    {c.unica && (
-                      <span class="font-mono text-xs" style="color: var(--color-muted-2)">
-                        <span class="en">one-time</span><span class="es">pago único</span>
-                      </span>
-                    )}
-                  </>
-                ) : (
-                  <span class="text-2xl font-bold tracking-tight" style="color: var(--color-accent)">
-                    <span class="en">{c.gratis_en}</span><span class="es">{c.gratis_es}</span>
-                  </span>
-                )}
-              </p>
-
-              <ul class="mt-5 flex-1 list-none space-y-2 text-sm">
-                {c.es.map((item, i) => (
-                  <li class="flex gap-2.5">
-                    <Icon
-                      name="lucide:check"
-                      size={15}
-                      class="mt-0.5 shrink-0"
-                      style="color: var(--color-accent)"
-                      aria-hidden="true"
-                    />
-                    <span style="color: var(--color-muted)">
-                      <span class="en">{c.en[i]}</span><span class="es">{item}</span>
-                    </span>
-                  </li>
-                ))}
-              </ul>
-
-              <a
-                href={`#contact?servicio=${encodeURIComponent(c.servicio)}`}
-                class="kz-btn kz-btn-secundario mt-6 w-full justify-center"
-              >
-                <span class="en">Get my exact price</span><span class="es">Quiero mi precio exacto</span>
-              </a>
-            </article>
-          </li>
-        ))
-      }
-    </ul>
-
-    <!-- Las condiciones, en tres piezas que se leen de un vistazo: un párrafo
-         corrido de letra chica se ve a "términos y condiciones" y nadie lo lee. -->
-    <ul class="mt-8 grid list-none gap-3 sm:grid-cols-3">
-      {
-        [
-          {
-            icon: 'lucide:file-check',
-            t_en: 'Exact price in writing',
-            t_es: 'Precio exacto por escrito',
-            d_en: '"From" prices are the floor; your quote states the fixed amount, in lempiras or dollars.',
-            d_es: 'Los "desde" son el piso; tu cotización trae el monto fijo, en lempiras o dólares.',
-          },
-          {
-            icon: 'lucide:shield-check',
-            t_en: '30-day warranty',
-            t_es: '30 días de garantía',
-            d_en: 'If what we delivered fails, we fix it free for 30 days.',
-            d_es: 'Si lo entregado falla, lo corregimos gratis por 30 días.',
-          },
-          {
-            icon: 'lucide:calendar-clock',
-            t_en: 'Ongoing support, monthly plan',
-            t_es: 'Soporte continuo, plan mensual',
-            d_en: 'New changes are quoted; continuous care comes as a monthly plan.',
-            d_es: 'Los cambios nuevos se cotizan; el cuidado continuo va en plan mensual.',
-          },
-        ].map((n) => (
-          <li
-            class="flex items-start gap-3 rounded-xl border p-4"
-            style="border-color: var(--color-border); background: var(--color-bg-2)"
-          >
-            <Icon name={n.icon} size={18} class="mt-0.5 shrink-0" style="color: var(--color-accent)" aria-hidden="true" />
-            <span class="text-sm leading-snug">
-              <span class="font-semibold">
-                <span class="en">{n.t_en}</span><span class="es">{n.t_es}</span>
-              </span>
-              <span class="mt-0.5 block text-[13px]" style="color: var(--color-muted)">
-                <span class="en">{n.d_en}</span><span class="es">{n.d_es}</span>
-              </span>
-            </span>
-          </li>
-        ))
-      }
-    </ul>
+  <div class="grid gap-5 pt-2" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr))">
+    <div class="flex flex-col gap-1">
+      <strong class="text-[15px] font-semibold"><span class="en">Exact price in writing</span><span class="es">Precio exacto por escrito</span></strong>
+      <span class="text-sm leading-relaxed" style="color: var(--ink2)"><span class="en">Your quote states the fixed amount, in lempiras or dollars.</span><span class="es">Tu cotización trae el monto fijo, en lempiras o dólares.</span></span>
+    </div>
+    <div class="flex flex-col gap-1">
+      <strong class="text-[15px] font-semibold"><span class="en">30-day warranty</span><span class="es">30 días de garantía</span></strong>
+      <span class="text-sm leading-relaxed" style="color: var(--ink2)"><span class="en">If what we delivered fails, we fix it free.</span><span class="es">Si lo entregado falla, lo corregimos gratis.</span></span>
+    </div>
+    <div class="flex flex-col gap-1">
+      <strong class="text-[15px] font-semibold"><span class="en">Ongoing support, monthly plan</span><span class="es">Soporte continuo, plan mensual</span></strong>
+      <span class="text-sm leading-relaxed" style="color: var(--ink2)"><span class="en">New changes are quoted; continuous care comes as a monthly plan.</span><span class="es">Los cambios nuevos se cotizan; el cuidado continuo va en plan mensual.</span></span>
+    </div>
   </div>
 </section>
 
 <style>
-  .kz-precio-icono {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 42px;
-    height: 42px;
-    border-radius: 11px;
-    border: 1px solid var(--color-border);
-    background: var(--color-bg-2);
-    color: var(--color-accent);
-  }
+  .kz-moneda-btn { background: transparent; color: var(--ink2); transition: background-color 0.15s ease, color 0.15s ease; }
+  html:not([data-moneda='usd']) #btn-lps,
+  html[data-moneda='usd'] #btn-usd { background: var(--navy); color: var(--bg); }
 </style>
+
+<script>
+  // El toggle cambia el atributo del documento; el CSS hace el resto en toda
+  // la página (hero, comparativo y precios usan .lps/.usd).
+  const poner = (m: string) => {
+    document.documentElement.setAttribute('data-moneda', m);
+    localStorage.setItem('kz-moneda', m);
+  };
+  document.getElementById('btn-lps')?.addEventListener('click', () => poner('lps'));
+  document.getElementById('btn-usd')?.addEventListener('click', () => poner('usd'));
+</script>

@@ -1,0 +1,41 @@
+---
+/** Integraciones locales: lo que le dice al hondureño "esto sí es para acá". */
+const items = [
+  { t_en: 'SAR / CAI invoicing', t_es: 'Facturación SAR / CAI', d_en: 'Authorized ranges and correlatives', d_es: 'Correlativos y rangos autorizados' },
+  { t: 'WhatsApp Business', d_en: 'Orders, quotes and alerts', d_es: 'Pedidos, cotizaciones y avisos' },
+  { t_en: 'Banks and POS', t_es: 'Bancos y POS', d: 'BAC, Ficohsa, Atlántida, Tigo Money' },
+  { t_en: 'Google Maps and Reviews', t_es: 'Google Maps y Reseñas', d_en: 'Connected business profile', d_es: 'Ficha de negocio conectada' },
+  { t: 'Meta y Google Ads', t_en2: 'Meta and Google Ads', d_en: 'Pixel and measured conversions', d_es: 'Píxel y conversiones medidas' },
+  { t_en: 'Email and calendar', t_es: 'Correo y calendario', d_en: 'Gmail, Outlook, reminders', d_es: 'Gmail, Outlook, recordatorios' },
+  { t_en: 'Printers and scanners', t_es: 'Impresoras y lectores', d_en: 'Thermal, barcodes, scales', d_es: 'Térmicas, códigos de barra, básculas' },
+  { t_en: 'Excel and legacy systems', t_es: 'Excel y sistemas viejos', d_en: 'We migrate what you already have', d_es: 'Migramos lo que ya tenés' },
+];
+---
+
+<section id="integraciones" class="border-y" style="background: var(--bg2); border-color: var(--line)">
+  <div class="mx-auto grid max-w-[1200px] items-center gap-12 px-6 py-[72px]" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))">
+    <div class="flex flex-col gap-4">
+      <p class="kz-eyebrow"><span class="en">Integrations</span><span class="es">Integraciones</span></p>
+      <h2 class="kz-h2">
+        <span class="en">Connected with what you already use in Honduras.</span>
+        <span class="es">Conectado con lo que ya usás en Honduras.</span>
+      </h2>
+      <p class="text-[17px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+        <span class="en">CAI invoicing, local payments, WhatsApp and Google tools. Nothing lives on an island.</span>
+        <span class="es">Facturación con CAI, pagos locales, WhatsApp y las herramientas de Google. Nada queda en una isla.</span>
+      </p>
+    </div>
+    <ul class="grid list-none gap-2.5" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr))">
+      {items.map((i) => (
+        <li class="kz-card flex flex-col gap-0.5 rounded-xl px-4 py-3.5">
+          <strong class="text-sm font-semibold">
+            {i.t ? (i.t_en2 ? <><span class="en">{i.t_en2}</span><span class="es">{i.t}</span></> : i.t) : <><span class="en">{i.t_en}</span><span class="es">{i.t_es}</span></>}
+          </strong>
+          <span class="text-xs" style="color: var(--mute)">
+            {i.d ? i.d : <><span class="en">{i.d_en}</span><span class="es">{i.d_es}</span></>}
+          </span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

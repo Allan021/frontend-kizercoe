@@ -2,21 +2,17 @@
 import ReviewsList from '@/components/Reviews.tsx';
 ---
 
-<section id="reviews" class="py-28 bg-bg overflow-hidden">
-  <div class="px-6 md:px-[60px] max-w-[1200px] mx-auto mb-14">
-    <div class="text-center" data-gsap="fade-up">
-      <span class="section-tag center mb-5">
-        <span class="en">Client Reviews</span><span class="es">Reseñas de Clientes</span>
-      </span>
-      <h2 class="text-4xl md:text-5xl font-black tracking-tight mt-4 mb-5">
-        <span class="en">What our clients<br /><span class="gradient-text">actually say.</span></span>
-        <span class="es">Lo que dicen<br /><span class="gradient-text">nuestros clientes.</span></span>
-      </h2>
-      <p class="text-muted text-lg max-w-[500px] mx-auto leading-relaxed">
-        <span class="en">Don't take our word for it — here's what they say after going live.</span>
-        <span class="es">No lo decimos nosotros — esto es lo que dicen tras el lanzamiento.</span>
-      </p>
-    </div>
+<section id="resenas" class="mx-auto w-full max-w-[1200px] px-6 py-20">
+  <div class="mx-auto mb-9 flex max-w-[560px] flex-col items-center gap-2.5 text-center">
+    <p class="kz-eyebrow"><span class="en">Success stories</span><span class="es">Historias de éxito</span></p>
+    <h2 class="kz-h2">
+      <span class="en">What our clients say</span>
+      <span class="es">Lo que dicen nuestros clientes</span>
+    </h2>
+    <p class="text-base" style="color: var(--mute); text-wrap: pretty">
+      <span class="en">Businesses in Honduras that already have their system, website or devices running.</span>
+      <span class="es">Negocios en Honduras que ya tienen su sistema, su página o su equipo funcionando.</span>
+    </p>
   </div>
 
   <!-- Los testimonios se cargan de la API y se administran desde /panel.

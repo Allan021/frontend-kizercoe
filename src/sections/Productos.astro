@@ -1,139 +1,44 @@
 ---
-import { Icon } from 'astro-icon/components';
-
-/**
- * Productos propios de Kizercode: software que ya existe y se vende como
- * servicio, no proyectos a la medida. Van en duro porque son cuatro y cambian
- * cuando cambia el negocio, no cada semana.
- */
+/** Productos propios, al estilo del rediseño: tag mono, nombre, texto, Abrir. */
 const productos = [
-  {
-    icon: 'lucide:store',
-    nombre: 'KizerPOS',
-    url: 'https://pos.kizercode.com/',
-    tag_en: 'RETAIL',
-    tag_es: 'TIENDAS',
-    d_en: 'Inventory and point of sale with AI, for any store: pharmacies, perfumeries, hardware, boutiques.',
-    d_es: 'Inventario y punto de venta con IA, para todo tipo de tienda: farmacias, perfumerías, ferreterías, boutiques.',
-    chips_en: ['Inventory', 'AI', 'Offline-first'],
-    chips_es: ['Inventario', 'IA', 'Funciona sin internet'],
-  },
-  {
-    icon: 'lucide:utensils',
-    nombre: 'KizerResto',
-    url: 'https://pos.kizercode.com/resto',
-    tag_en: 'RESTAURANTS',
-    tag_es: 'RESTAURANTES',
-    d_en: 'Restaurant management: tables, orders, kitchen and shift close with a printed report.',
-    d_es: 'Gestión de restaurantes: mesas, comandas, cocina y cierre de turno con papel impreso.',
-    chips_en: ['Tables', 'Kitchen', 'Shift close'],
-    chips_es: ['Mesas', 'Cocina', 'Cierre de turno'],
-  },
-  {
-    icon: 'lucide:hand-coins',
-    nombre: 'Kizer Cobros',
-    url: 'https://cobros.kizercode.com/',
-    tag_en: 'LENDERS',
-    tag_es: 'PRESTAMISTAS',
-    d_en: 'Collections for lenders: portfolio, installments, dues and who owes what today.',
-    d_es: 'Cobros para prestamistas: cartera, cuotas, vencimientos y quién debe qué hoy.',
-    chips_en: ['Portfolio', 'Installments', 'Due dates'],
-    chips_es: ['Cartera', 'Cuotas', 'Vencimientos'],
-  },
-  {
-    icon: 'lucide:fingerprint',
-    nombre: 'Kizer Check',
-    url: 'https://check.kizercode.com/',
-    tag_en: 'STAFF',
-    tag_es: 'EMPLEADOS',
-    d_en: 'Employee management: clock-in and clock-out, payroll and attendance without spreadsheets.',
-    d_es: 'Gestión de empleados: hora de entrada y salida, planilla y asistencia sin hojas de cálculo.',
-    chips_en: ['Time clock', 'Payroll', 'Attendance'],
-    chips_es: ['Marcaje', 'Planilla', 'Asistencia'],
-  },
+  { tag_en: 'RETAIL', tag_es: 'TIENDAS', nombre: 'KizerPOS', url: 'https://pos.kizercode.com/', d_en: 'Inventory and point of sale with AI for pharmacies, hardware stores, boutiques. Works offline.', d_es: 'Inventario y punto de venta con IA para farmacias, ferreterías, boutiques. Funciona sin internet.' },
+  { tag_en: 'RESTAURANTS', tag_es: 'RESTAURANTES', nombre: 'KizerResto', url: 'https://pos.kizercode.com/resto', d_en: 'Tables, orders, kitchen and shift close with a printed report.', d_es: 'Mesas, comandas, cocina y cierre de turno con papel impreso.' },
+  { tag_en: 'LENDERS', tag_es: 'PRESTAMISTAS', nombre: 'Kizer Cobros', url: 'https://cobros.kizercode.com/', d_en: 'Portfolio, installments, due dates and who owes what today.', d_es: 'Cartera, cuotas, vencimientos y quién debe qué hoy.' },
+  { tag_en: 'STAFF', tag_es: 'EMPLEADOS', nombre: 'Kizer Check', url: 'https://check.kizercode.com/', d_en: 'Time clock, payroll and attendance without spreadsheets.', d_es: 'Marcaje, planilla y asistencia sin hojas de cálculo.' },
 ];
 ---
 
-<section id="productos" class="py-16 sm:py-24" aria-labelledby="productos-title">
-  <div class="mx-auto max-w-6xl px-6">
-    <header class="mb-10 max-w-2xl">
-      <p class="kz-eyebrow">// <span class="en">products</span><span class="es">productos</span></p>
-      <h2 id="productos-title" class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
-        <span class="en">Software we already built.<br /><span style="color: var(--color-muted-2)">Ready to use today.</span></span>
-        <span class="es">Software que ya construimos.<br /><span style="color: var(--color-muted-2)">Listo para usar hoy.</span></span>
+<section id="productos" class="mx-auto flex w-full max-w-[1200px] flex-col gap-9 px-6 py-20">
+  <div class="flex flex-wrap items-end justify-between gap-6">
+    <div class="flex max-w-[560px] flex-col gap-2.5">
+      <p class="kz-eyebrow"><span class="en">Ready-to-use software</span><span class="es">Software listo para usar</span></p>
+      <h2 id="productos-title" class="kz-h2" style="text-wrap: initial">
+        <span class="en">Our own products, running today in real businesses.</span>
+        <span class="es">Productos propios, corriendo hoy en negocios reales.</span>
       </h2>
-      <p class="mt-4 leading-relaxed" style="color: var(--color-muted)">
-        <span class="en">Our own products, running in real businesses. No months of development: you sign up and start.</span>
-        <span class="es">Productos propios, corriendo en negocios reales. Sin meses de desarrollo: te registrás y empezás.</span>
-      </p>
-    </header>
-
-    <ul class="grid list-none gap-5 sm:grid-cols-2">
-      {
-        productos.map((p) => (
-          <li>
-            <a
-              href={p.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="kz-card group flex h-full flex-col p-6 no-underline sm:p-7"
-              style="color: inherit"
-            >
-              <div class="flex items-start justify-between gap-3">
-                <span class="kz-prod-icono">
-                  <Icon name={p.icon} size={21} aria-hidden="true" />
-                </span>
-                <span class="kz-prod-tag">
-                  <span class="en">{p.tag_en}</span><span class="es">{p.tag_es}</span>
-                </span>
-              </div>
-
-              <h3 class="mt-5 text-xl font-bold tracking-tight">{p.nombre}</h3>
-              <p class="mt-2 flex-1 text-sm leading-relaxed" style="color: var(--color-muted)">
-                <span class="en">{p.d_en}</span><span class="es">{p.d_es}</span>
-              </p>
-
-              <div class="mt-5 flex flex-wrap items-center gap-2">
-                {p.chips_es.map((c, i) => (
-                  <span class="kz-chip text-xs">
-                    <span class="en">{p.chips_en[i]}</span><span class="es">{c}</span>
-                  </span>
-                ))}
-                <span
-                  class="ml-auto text-sm font-semibold transition-transform duration-200 group-hover:translate-x-1"
-                  style="color: var(--color-accent)"
-                >
-                  <span class="en">Open</span><span class="es">Abrir</span> →
-                </span>
-              </div>
-            </a>
-          </li>
-        ))
-      }
-    </ul>
+    </div>
+    <p class="max-w-[320px] text-[15px]" style="color: var(--mute); text-wrap: pretty">
+      <span class="en">No months of development: you sign up and start.</span>
+      <span class="es">Sin meses de desarrollo: te registrás y empezás.</span>
+    </p>
   </div>
-</section>
 
-<style>
-  .kz-prod-icono {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 11px;
-    border: 1px solid var(--color-border);
-    background: var(--color-bg-2);
-    color: var(--color-accent);
-  }
-  .kz-prod-tag {
-    font-family: 'IBM Plex Mono', ui-monospace, monospace;
-    font-size: 10.5px;
-    letter-spacing: 0.06em;
-    padding: 4px 9px;
-    border-radius: 999px;
-    border: 1px solid var(--color-border);
-    color: var(--color-accent-soft);
-    white-space: nowrap;
-  }
-</style>
+  <ul class="grid list-none gap-4" style="grid-template-columns: repeat(auto-fit, minmax(230px, 1fr))">
+    {productos.map((p) => (
+      <li>
+        <a href={p.url} target="_blank" rel="noopener noreferrer" class="kz-card flex h-full flex-col gap-3 rounded-2xl p-6" style="color: var(--ink)">
+          <span class="text-[11px] tracking-[0.06em]" style="font-family: ui-monospace, Menlo, monospace; color: var(--green2)">
+            <span class="en">{p.tag_en}</span><span class="es">{p.tag_es}</span>
+          </span>
+          <strong class="text-xl font-bold">{p.nombre}</strong>
+          <span class="text-sm leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+            <span class="en">{p.d_en}</span><span class="es">{p.d_es}</span>
+          </span>
+          <span class="mt-auto text-[13px] font-semibold" style="color: var(--green2)">
+            <span class="en">Open</span><span class="es">Abrir</span> →
+          </span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</section>

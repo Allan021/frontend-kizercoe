@@ -1,72 +1,65 @@
 ---
-import { Icon } from 'astro-icon/components';
-
-const razones = [
-  {
-    icon: 'lucide:server',
-    en_t: 'We run our own products in production',
-    es_t: 'Operamos nuestros propios productos en producción',
-    en_d: "We don't only build for others. Kizer Check and Kizer POS run every day with real clients, and that's where our standard for uptime, support and updates comes from.",
-    es_d: 'No solo construimos para terceros. Kizer Check y Kizer POS funcionan todos los días con clientes reales, y de ahí sale nuestro estándar de disponibilidad, soporte y actualizaciones.',
-    destacada: true,
-  },
-  {
-    icon: 'lucide:file-check',
-    en_t: 'Fixed price, written scope',
-    es_t: 'Precio fijo, alcance escrito',
-    en_d: 'You know what you pay and what you get before we start. If the delay is ours, the price does not move.',
-    es_d: 'Sabés qué pagás y qué recibís antes de empezar. Si el retraso es nuestro, el precio no se mueve.',
-  },
-  {
-    icon: 'lucide:key-round',
-    en_t: 'Everything under your name',
-    es_t: 'Todo a tu nombre',
-    en_d: 'Source code, domain, hosting and design files registered to your company. No strings attached.',
-    es_d: 'Código fuente, dominio, hosting y archivos de diseño a nombre de tu empresa. Sin ataduras.',
-  },
-  {
-    icon: 'lucide:message-square',
-    en_t: 'One direct contact',
-    es_t: 'Un contacto directo',
-    en_d: 'You talk to whoever designs and codes your project, not to a middleman relaying messages.',
-    es_d: 'Hablás con quien diseña y programa tu proyecto, no con un intermediario que traslada mensajes.',
-  },
-  {
-    icon: 'lucide:truck',
-    en_t: 'Hardware included',
-    es_t: 'Equipo incluido',
-    en_d: 'Few agencies hand over the machine installed and running. We do, and in the same proposal.',
-    es_d: 'Pocas agencias entregan la máquina instalada y funcionando. Nosotros sí, y en la misma propuesta.',
-  },
+/**
+ * "Honduras → el mundo": la razón de elegir un equipo local, con el
+ * comparativo de precio contra una agencia de afuera en tarjeta navy.
+ */
+const porque = [
+  { t_en: 'Local team', t_es: 'Equipo local', d_en: 'Same time zone, same language. Meetings on WhatsApp or in person.', d_es: 'Mismo horario, mismo idioma. Reuniones por WhatsApp o en persona.' },
+  { t_en: 'Pay in lempiras', t_es: 'Pago en lempiras', d_en: 'Transfer to Honduran banks, card or cash. No international fees.', d_es: 'Transferencia a bancos hondureños, tarjeta o efectivo. Sin comisiones internacionales.' },
+  { t_en: 'Export-grade quality', t_es: 'Calidad de exportación', d_en: 'The same technologies and standards foreign agencies use.', d_es: 'Las mismas tecnologías y estándares que usan las agencias de afuera.' },
+  { t_en: 'One person accountable', t_es: 'Un solo responsable', d_en: 'You talk to who designs and codes, not a middleman.', d_es: 'Hablás con quien diseña y programa, no con un intermediario.' },
 ];
 ---
 
-<section id="why" class="py-16 sm:py-24" aria-labelledby="why-title">
-  <div class="mx-auto max-w-6xl px-6">
-    <header class="mb-12 max-w-2xl">
-      <p class="kz-eyebrow">// <span class="en">why kizercode</span><span class="es">por qué kizercode</span></p>
-      <h2 id="why-title" class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
-        <span class="en">Reasons that hold up<br />when you ask.</span>
-        <span class="es">Razones que se sostienen<br />cuando preguntás.</span>
-      </h2>
-    </header>
+<section id="porque" class="mx-auto grid w-full max-w-[1200px] items-center gap-12 px-6 py-20" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))">
+  <div class="flex flex-col gap-5">
+    <p class="kz-eyebrow"><span class="en">Honduras → the world</span><span class="es">Honduras → el mundo</span></p>
+    <h2 class="kz-h2">
+      <span class="en">World-class software, made in Honduras.</span>
+      <span class="es">Software de clase mundial, hecho en Honduras.</span>
+    </h2>
+    <p class="text-[17px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+      <span class="en">The same technologies and standards foreign agencies use, with the advantage of being your local team: same schedule, same language, pay in lempiras.</span>
+      <span class="es">Las mismas tecnologías y estándares que usan las agencias de afuera, con la ventaja de ser tu equipo local: mismo horario, mismo idioma, pago en lempiras.</span>
+    </p>
+    <div class="grid gap-3" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))">
+      {porque.map((p) => (
+        <div class="flex flex-col gap-1.5 rounded-[14px] border p-4" style="background: var(--bg2); border-color: var(--line)">
+          <strong class="text-[15px] font-semibold"><span class="en">{p.t_en}</span><span class="es">{p.t_es}</span></strong>
+          <span class="text-[13px] leading-relaxed" style="color: var(--ink2)"><span class="en">{p.d_en}</span><span class="es">{p.d_es}</span></span>
+        </div>
+      ))}
+    </div>
+  </div>
 
-    <ul class="grid list-none gap-5 md:grid-cols-2 lg:grid-cols-3">
-      {
-        razones.map((r) => (
-          <li class={r.destacada ? 'md:col-span-2 lg:col-span-3' : ''}>
-            <article class={`kz-card h-full p-7 ${r.destacada ? 'kz-card-principal' : ''}`}>
-              <Icon name={r.icon} size={22} style="color: var(--color-accent)" aria-hidden="true" />
-              <h3 class="mt-4 text-lg font-bold leading-snug">
-                <span class="en">{r.en_t}</span><span class="es">{r.es_t}</span>
-              </h3>
-              <p class="mt-2.5 text-sm leading-relaxed" style="color: var(--color-muted)">
-                <span class="en">{r.en_d}</span><span class="es">{r.es_d}</span>
-              </p>
-            </article>
-          </li>
-        ))
-      }
-    </ul>
+  <div class="flex flex-col gap-5 rounded-[20px] p-7" style="background: var(--navy); color: var(--bg)">
+    <div class="flex flex-col gap-1">
+      <span class="text-xs font-semibold uppercase tracking-[0.08em]" style="color: var(--green-bright)">
+        <span class="en">Price comparison</span><span class="es">Comparación de precio</span>
+      </span>
+      <strong class="text-lg font-semibold"><span class="en">A system for your business</span><span class="es">Un sistema para tu negocio</span></strong>
+    </div>
+    <div class="grid items-center gap-3.5" style="grid-template-columns: 1fr auto 1fr">
+      <div class="flex flex-col gap-1 rounded-[14px] p-4" style="background: color-mix(in srgb, var(--bg) 8%, transparent)">
+        <span class="text-xs" style="color: color-mix(in srgb, var(--bg) 65%, transparent)"><span class="en">US agency</span><span class="es">Agencia en EE. UU.</span></span>
+        <strong class="text-2xl font-bold" style="letter-spacing: -0.02em">$10,000+</strong>
+        <span class="text-xs" style="color: color-mix(in srgb, var(--bg) 65%, transparent)"><span class="en">market average</span><span class="es">precio promedio del mercado</span></span>
+      </div>
+      <span class="text-xs font-bold" style="color: color-mix(in srgb, var(--bg) 50%, transparent)">VS</span>
+      <div class="flex flex-col gap-1 rounded-[14px] p-4 text-white" style="background: #16a36c">
+        <span class="text-xs" style="color: rgba(255,255,255,.8)">Kizercode Honduras</span>
+        <strong class="text-2xl font-bold" style="letter-spacing: -0.02em"><span class="lps">L 25,000</span><span class="usd">$950</span></strong>
+        <span class="text-xs" style="color: rgba(255,255,255,.8)"><span class="en">same quality, local team</span><span class="es">misma calidad, equipo local</span></span>
+      </div>
+    </div>
+    <div class="flex flex-wrap items-center justify-between gap-3 border-t pt-4" style="border-color: color-mix(in srgb, var(--bg) 15%, transparent)">
+      <span class="text-sm" style="color: color-mix(in srgb, var(--bg) 75%, transparent)">
+        <span class="en">You save over <strong style="color: var(--green-bright)">90%</strong> and the code stays under your name.</span>
+        <span class="es">Ahorrás más del <strong style="color: var(--green-bright)">90 %</strong> y el código queda a tu nombre.</span>
+      </span>
+      <a href="#contacto" class="rounded-[10px] px-4 py-2.5 text-sm font-semibold transition-colors" style="background: var(--bg); color: var(--navy)" onmouseover="this.style.background='#3ed39a'; this.style.color='#0b1a33'" onmouseout="this.style.background='var(--bg)'; this.style.color='var(--navy)'">
+        <span class="en">Free quote</span><span class="es">Cotización gratis</span>
+      </a>
+    </div>
   </div>
 </section>

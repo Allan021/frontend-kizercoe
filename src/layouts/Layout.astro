@@ -34,7 +34,7 @@ const GA_ID = import.meta.env.PUBLIC_GA_ID;
 const GOOGLE_VERIFICATION = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 ---
 <!doctype html>
-<html lang="es" data-theme="dark" class="scroll-smooth">
+<html lang="es" data-theme="light" data-moneda="lps" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -44,7 +44,7 @@ const GOOGLE_VERIFICATION = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
   <meta name="keywords" content={keywords} />
   <meta name="author" content="Kizercode" />
   <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
-  <meta name="theme-color" content="#0a0a0a" />
+  <meta name="theme-color" content="#16a36c" />
   <link rel="canonical" href={canonicalURL} />
   {GOOGLE_VERIFICATION && <meta name="google-site-verification" content={GOOGLE_VERIFICATION} />}
 
@@ -195,15 +195,19 @@ const GOOGLE_VERIFICATION = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
   <!-- Theme init — runs before paint to prevent flash -->
   <script is:inline>
     (function() {
-      const saved = localStorage.getItem('kz-theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const theme = saved || (prefersDark ? 'dark' : 'light');
+      // Claro por defecto: es el tema del rediseño. El oscuro es elección.
+      const theme = localStorage.getItem('kz-theme') || 'light';
       document.documentElement.setAttribute('data-theme', theme);
 
       // Español salvo que el visitante haya elegido otra cosa: el que llega
       // buscando "reparación de celulares El Progreso" no habla inglés.
       const lang = localStorage.getItem('kz-lang') || 'es';
       document.documentElement.setAttribute('lang', lang);
+
+      // Moneda: lempiras por defecto; en inglés, dólares. El toggle de la
+      // sección de precios la puede cambiar aparte y queda guardada.
+      const moneda = localStorage.getItem('kz-moneda') || (lang === 'es' ? 'lps' : 'usd');
+      document.documentElement.setAttribute('data-moneda', moneda);
     })();
   </script>
 </head>
@@ -215,37 +219,7 @@ const GOOGLE_VERIFICATION = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
     <span class="en">Skip to content</span><span class="es">Saltar al contenido</span>
   </a>
   <slot />
-  <script>
-    // Defer GSAP to after first paint — reduces forced reflows and LCP render delay
-    async function bootAnimations() {
-      const { initGSAP, animateHero, animateSections, initMagneticButtons, initNavScroll } =
-        await import('@/lib/animations/gsap');
-
-      initGSAP();
-      // Hero animates immediately (above the fold)
-      animateHero();
-      // Defer below-the-fold animations to idle time
-      if ('requestIdleCallback' in window) {
-        requestIdleCallback(() => {
-          animateSections();
-          initMagneticButtons();
-          initNavScroll();
-        });
-      } else {
-        setTimeout(() => {
-          animateSections();
-          initMagneticButtons();
-          initNavScroll();
-        }, 100);
-      }
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', bootAnimations);
-    } else {
-      // DOM already ready — schedule on next frame to avoid blocking paint
-      requestAnimationFrame(bootAnimations);
-    }
-  </script>
+  <!-- GSAP se fue con el rediseño: el diseño nuevo no anima secciones y el
+       sitio se ahorra ~126 KB de JavaScript. -->
 </body>
 </html>

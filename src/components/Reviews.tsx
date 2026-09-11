@@ -12,7 +12,7 @@ import type { Testimonial } from '@/types';
  * números que nadie podía sostener si se los preguntaban.
  */
 
-const COLORES = ['var(--color-accent)', 'var(--color-accent-strong)', '#ff6b35', '#c8a0ff'];
+const COLORES = ['var(--green)', 'var(--green2)', 'var(--green)', 'var(--green2)'];
 
 export default function Reviews() {
   const [lista, setLista] = useState<Testimonial[] | null>(null);

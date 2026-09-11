@@ -195,7 +195,7 @@ export default function Projects() {
             <div className="mt-5 flex items-center gap-3">
               {/* El slug viaja al formulario: el correo que llega dice de cuál vino. */}
               <a
-                href={`/#contact?proyecto=${encodeURIComponent(p.slug)}`}
+                href={`/#contacto?proyecto=${encodeURIComponent(p.slug)}`}
                 className="rounded-lg px-4 py-2 text-sm font-bold transition-opacity hover:opacity-90"
                 style={{ background: 'var(--color-accent-strong)', color: '#fff' }}
               >
