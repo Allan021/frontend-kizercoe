@@ -27,10 +27,11 @@ const grupos = [
     ],
   },
   {
-    g_en: 'Design', g_es: 'Diseño',
+    g_en: 'Marketing', g_es: 'Marketing',
     items: [
-      { href: '/servicios/diseno-ux-ui/', t_en: 'UX/UI design', t_es: 'Diseño UX/UI', d_en: 'Prototypes before code', d_es: 'Prototipos antes del código' },
-      { href: '/servicios/identidad-visual/', t_en: 'Branding', t_es: 'Identidad visual', d_en: 'Logo, colors and pieces', d_es: 'Logo, colores y piezas' },
+      { href: '/servicios/anuncios/', t_en: 'Ads and acquisition', t_es: 'Anuncios y captación', d_en: 'Google and Meta, weekly report', d_es: 'Google y Meta con reporte semanal' },
+      { href: '/servicios/seo/', t_en: 'SEO', t_es: 'Posicionamiento (SEO)', d_en: 'Show up when they search', d_es: 'Aparecer cuando te buscan' },
+      { href: '/servicios/redes-sociales/', t_en: 'Social media', t_es: 'Redes sociales', d_en: 'Consistent, on-brand posting', d_es: 'Publicación constante con tu marca' },
     ],
   },
   {
@@ -187,7 +188,7 @@ const enlaces = [
   </div>
 
   <!-- Menú desplegable de servicios -->
-  <div id="menu-servicios" hidden class="kz-mega" style="--kz-mega-w: 1120px">
+  <div id="menu-servicios" hidden class="kz-mega" style="--kz-mega-w: 1180px">
     <div class="kz-mega-card grid gap-6 p-6" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))">
       <!-- Enlaces principales, solo en móvil (el nav de arriba está oculto) -->
       <div class="col-[1/-1] flex flex-wrap gap-2 lg:hidden">
@@ -215,20 +216,12 @@ const enlaces = [
         </div>
       ))}
 
-      <div class="flex flex-col gap-2.5 rounded-[14px] p-5" style="background: var(--navy); color: var(--bg)">
-        <span class="text-[11px] font-semibold uppercase tracking-[0.08em]" style="color: var(--green-bright)">
-          <span class="en">Not sure what you need?</span><span class="es">¿No sabés qué necesitás?</span>
+      <div class="col-[1/-1] flex flex-wrap items-center justify-between gap-3 rounded-xl px-5 py-4" style="background: var(--bg2)">
+        <span class="text-sm leading-relaxed" style="color: var(--ink2)">
+          <strong class="font-semibold" style="color: var(--ink)"><span class="en">Not sure what you need?</span><span class="es">¿No sabés qué necesitás?</span></strong>
+          <span class="en">Free 30-minute diagnosis call: we tell you what suits you and what it costs, in writing.</span><span class="es">Llamada de diagnóstico gratis de 30 minutos: te decimos qué te conviene y cuánto cuesta, por escrito.</span>
         </span>
-        <strong class="text-base font-semibold leading-snug">
-          <span class="en">Free 30-minute diagnosis call.</span><span class="es">Llamada de diagnóstico gratis, 30 minutos.</span>
-        </strong>
-        <span class="text-[13px]" style="color: color-mix(in srgb, var(--bg) 70%, transparent)">
-          <span class="en">We tell you what suits you and what it costs, in writing.</span>
-          <span class="es">Te decimos qué te conviene y cuánto cuesta, por escrito.</span>
-        </span>
-        <a href="/contacto/" class="mt-auto self-start rounded-[9px] px-4 py-2.5 text-[13px] font-semibold text-white transition-colors" style="background: #16a36c" onmouseover="this.style.background='#3ed39a'; this.style.color='#0b1a33'" onmouseout="this.style.background='#16a36c'; this.style.color='#fff'">
-          <span class="en">Book the call</span><span class="es">Agendar llamada</span>
-        </a>
+        <a href="/contacto/" class="shrink-0 text-sm font-semibold" style="color: var(--green2)"><span class="en">Book the call</span><span class="es">Agendar llamada</span> →</a>
       </div>
     </div>
   </div>
@@ -250,20 +243,12 @@ const enlaces = [
         </div>
       ))}
 
-      <div class="flex flex-col gap-2.5 rounded-[14px] p-5" style="background: var(--navy); color: var(--bg)">
-        <span class="text-[11px] font-semibold uppercase tracking-[0.08em]" style="color: var(--green-bright)">
-          <span class="en">Your trade not listed?</span><span class="es">¿Tu rubro no está?</span>
+      <div class="col-[1/-1] flex flex-wrap items-center justify-between gap-3 rounded-xl px-5 py-4" style="background: var(--bg2)">
+        <span class="text-sm leading-relaxed" style="color: var(--ink2)">
+          <strong class="font-semibold" style="color: var(--ink)"><span class="en">Your trade not listed?</span><span class="es">¿Tu rubro no está?</span></strong>
+          <span class="en">We build for your business anyway, on the same proven base.</span><span class="es">Igual construimos para tu negocio, sobre la misma base probada.</span>
         </span>
-        <strong class="text-base font-semibold leading-snug">
-          <span class="en">We build for your business anyway.</span><span class="es">Igual construimos para tu negocio.</span>
-        </strong>
-        <span class="text-[13px]" style="color: color-mix(in srgb, var(--bg) 70%, transparent)">
-          <span class="en">Custom systems on the same proven base.</span>
-          <span class="es">Sistemas a la medida sobre la misma base probada.</span>
-        </span>
-        <a href="/industrias/" class="mt-auto self-start rounded-[9px] px-4 py-2.5 text-[13px] font-semibold text-white transition-colors" style="background: #16a36c" onmouseover="this.style.background='#3ed39a'; this.style.color='#0b1a33'" onmouseout="this.style.background='#16a36c'; this.style.color='#fff'">
-          <span class="en">See all industries</span><span class="es">Ver todas las industrias</span>
-        </a>
+        <a href="/industrias/" class="shrink-0 text-sm font-semibold" style="color: var(--green2)"><span class="en">See all industries</span><span class="es">Ver todas las industrias</span> →</a>
       </div>
     </div>
   </div>
@@ -285,17 +270,12 @@ const enlaces = [
         </div>
       ))}
 
-      <div class="flex flex-col gap-2.5 rounded-[14px] p-5" style="background: var(--navy); color: var(--bg)">
-        <span class="text-[11px] font-semibold uppercase tracking-[0.08em]" style="color: var(--green-bright)">
-          <span class="en">5+ years building software</span><span class="es">+5 años construyendo software</span>
+      <div class="col-[1/-1] flex flex-wrap items-center justify-between gap-3 rounded-xl px-5 py-4" style="background: var(--bg2)">
+        <span class="text-sm leading-relaxed" style="color: var(--ink2)">
+          <strong class="font-semibold" style="color: var(--ink)"><span class="en">5+ years building software</span><span class="es">+5 años construyendo software</span></strong>
+          <span class="en">For a bank, a US company and Honduran businesses.</span><span class="es">Para un banco, una empresa de EE. UU. y negocios hondureños.</span>
         </span>
-        <strong class="text-base font-semibold leading-snug">
-          <span class="en">For a bank, a US company and Honduran businesses.</span>
-          <span class="es">Para un banco, una empresa de EE. UU. y negocios hondureños.</span>
-        </strong>
-        <a href="/nosotros/" class="mt-auto self-start rounded-[9px] px-4 py-2.5 text-[13px] font-semibold text-white transition-colors" style="background: #16a36c" onmouseover="this.style.background='#3ed39a'; this.style.color='#0b1a33'" onmouseout="this.style.background='#16a36c'; this.style.color='#fff'">
-          <span class="en">Meet us</span><span class="es">Conocernos</span>
-        </a>
+        <a href="/nosotros/" class="shrink-0 text-sm font-semibold" style="color: var(--green2)"><span class="en">Meet us</span><span class="es">Conocernos</span> →</a>
       </div>
     </div>
   </div>
@@ -358,6 +338,9 @@ const enlaces = [
     max-height: calc(100vh - 150px);
     overflow-y: auto;
   }
+  /* Scroll discreto en el panel: la barra verde global se leía como otra tarjeta. */
+  .kz-mega-card { scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+  .kz-mega-card::-webkit-scrollbar-thumb { background: var(--line); }
   @media (prefers-reduced-motion: no-preference) {
     .kz-mega:not([hidden]) { animation: kz-mega-in 0.18s cubic-bezier(0.22, 1, 0.36, 1); }
   }

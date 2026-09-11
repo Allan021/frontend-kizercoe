@@ -4,18 +4,14 @@
   "installCommand": "npm install",
   "framework": "astro",
   "redirects": [
-    { "source": "/servicios/seo", "destination": "/servicios/paginas-web/", "permanent": true },
-    { "source": "/servicios/seo/", "destination": "/servicios/paginas-web/", "permanent": true },
-    { "source": "/servicios/anuncios", "destination": "/servicios/paginas-web/", "permanent": true },
-    { "source": "/servicios/anuncios/", "destination": "/servicios/paginas-web/", "permanent": true },
-    { "source": "/servicios/redes-sociales", "destination": "/servicios/paginas-web/", "permanent": true },
-    { "source": "/servicios/redes-sociales/", "destination": "/servicios/paginas-web/", "permanent": true },
-    { "source": "/en/services/seo", "destination": "/en/services/websites/", "permanent": true },
-    { "source": "/en/services/seo/", "destination": "/en/services/websites/", "permanent": true },
-    { "source": "/en/services/ads", "destination": "/en/services/websites/", "permanent": true },
-    { "source": "/en/services/ads/", "destination": "/en/services/websites/", "permanent": true },
-    { "source": "/en/services/social-media", "destination": "/en/services/websites/", "permanent": true },
-    { "source": "/en/services/social-media/", "destination": "/en/services/websites/", "permanent": true }
+    { "source": "/servicios/diseno-ux-ui", "destination": "/servicios/sistemas-a-la-medida/", "permanent": true },
+    { "source": "/servicios/diseno-ux-ui/", "destination": "/servicios/sistemas-a-la-medida/", "permanent": true },
+    { "source": "/servicios/identidad-visual", "destination": "/servicios/paginas-web/", "permanent": true },
+    { "source": "/servicios/identidad-visual/", "destination": "/servicios/paginas-web/", "permanent": true },
+    { "source": "/en/services/ux-ui-design", "destination": "/en/services/custom-software/", "permanent": true },
+    { "source": "/en/services/ux-ui-design/", "destination": "/en/services/custom-software/", "permanent": true },
+    { "source": "/en/services/branding", "destination": "/en/services/websites/", "permanent": true },
+    { "source": "/en/services/branding/", "destination": "/en/services/websites/", "permanent": true }
   ],
   "headers": [
     {

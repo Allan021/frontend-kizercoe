@@ -14,7 +14,7 @@ const historia = [
   { anio: '2021', t_en: 'The beginnings', t_es: 'Los inicios', d_en: 'Allan starts as a frontend developer at Signscloud in San Pedro Sula, building fast web apps with React and TypeScript.', d_es: 'Allan arranca como desarrollador frontend en Signscloud, San Pedro Sula, construyendo web apps rápidas con React y TypeScript.' },
   { anio: '2022', t_en: 'Banking scale', t_es: 'Escala bancaria', d_en: 'At Banco Ficohsa he builds a microfrontends platform for customer-facing banking products: software that cannot go down.', d_es: 'En Banco Ficohsa construye una plataforma de microfrontends para productos bancarios de cara al cliente: software que no se puede caer.' },
   { anio: '2024', t_en: 'Technology for the US', t_es: 'Tecnología para EE. UU.', d_en: 'He leads all technology at Sweepstouch (US): kiosk apps on thousands of in-store tablets, SMS/MMS campaigns and real-time operations.', d_es: 'Dirige toda la tecnología de Sweepstouch (EE. UU.): apps de kiosko en miles de tablets en tiendas, campañas SMS/MMS y operaciones en tiempo real.' },
-  { anio_en: 'Today', anio: 'Hoy', t_en: 'Kizercode', t_es: 'Kizercode', d_en: 'All of that, at the service of Honduran businesses: our own products, custom software, security cameras and a repair shop in El Progreso, Yoro.', d_es: 'Todo eso, al servicio de negocios hondureños: productos propios, software a la medida, cámaras de seguridad y taller de reparación en El Progreso, Yoro.' },
+  { anio_en: 'Today', anio: 'Hoy', t_en: 'Kizercode', t_es: 'Kizercode', d_en: 'All of that, at the service of Honduran businesses: our own products, custom software, marketing and a repair shop in El Progreso, Yoro.', d_es: 'Todo eso, al servicio de negocios hondureños: productos propios, software a la medida, marketing y taller de reparación en El Progreso, Yoro.' },
 ];
 
 const adn = [
@@ -33,13 +33,13 @@ const paises = [
 
 const areas = [
   { t_en: 'Software and AI', t_es: 'Software e IA', d_en: 'Systems, apps, websites, automation and our own products. Led directly by the founder.', d_es: 'Sistemas, apps, páginas, automatización y nuestros productos. Liderado directamente por el fundador.' },
-  { t_en: 'Design', t_es: 'Diseño', d_en: 'Brand and UX/UI: screens your team understands at first glance.', d_es: 'Marca y UX/UI: pantallas que tu equipo entiende a la primera.' },
+  { t_en: 'Marketing', t_es: 'Marketing', d_en: 'Ads, SEO and social media, measured in customers, not likes.', d_es: 'Anuncios, SEO y redes, medidos en clientes, no en likes.' },
   { t_en: 'Repair shop and hardware', t_es: 'Taller y equipos', d_en: 'Computer and phone repair, on-site installation and support.', d_es: 'Reparación de computadoras y teléfonos, instalación en sitio y soporte.' },
 ];
 ---
 <Layout
   title="Nosotros — Historia, fundador y equipo | Kizercode"
-  description="Kizercode es una agencia de software, IA, cámaras y taller de El Progreso, Yoro, Honduras. Más de 5 años construyendo software para bancos, empresas de EE. UU. y negocios locales."
+  description="Kizercode es una agencia de software, IA, marketing y taller de El Progreso, Yoro, Honduras. Más de 5 años construyendo software para bancos, empresas de EE. UU. y negocios locales."
 >
   <Nav />
   <main id="contenido">
@@ -53,8 +53,8 @@ const areas = [
           <span class="es">Hacemos software que funciona en <span style="color: var(--green)">negocios de verdad.</span></span>
         </h1>
         <p class="max-w-[640px] text-lg leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
-          <span class="en">Kizercode is a software, AI, security camera and repair agency from El Progreso, Yoro, Honduras — born from over 5 years building systems for a bank, a US company and local businesses.</span>
-          <span class="es">Kizercode es una agencia de software, IA, cámaras de seguridad y taller de El Progreso, Yoro, Honduras — nacida de más de 5 años construyendo sistemas para un banco, una empresa de EE. UU. y negocios locales.</span>
+          <span class="en">Kizercode is a software, AI, marketing and repair agency from El Progreso, Yoro, Honduras — born from over 5 years building systems for a bank, a US company and local businesses.</span>
+          <span class="es">Kizercode es una agencia de software, IA, marketing y taller de El Progreso, Yoro, Honduras — nacida de más de 5 años construyendo sistemas para un banco, una empresa de EE. UU. y negocios locales.</span>
         </p>
         <ul class="grid w-full max-w-[760px] list-none gap-3 pt-2" style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr))">
           {[
