@@ -88,7 +88,7 @@ function Marca({ size = 34 }: { size?: number }) {
         background: 'var(--color-accent-strong)',
         color: '#fff',
         fontSize: size * 0.42,
-        boxShadow: '0 0 0 1px rgba(91,140,255,0.35)',
+        boxShadow: '0 0 0 1px color-mix(in srgb, var(--green) 35%, transparent)',
       }}
     >
       K

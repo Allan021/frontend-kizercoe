@@ -85,7 +85,7 @@ export function SubirImagen({
             <ImagePlus size={26} strokeWidth={1.5} />
           )}
           {subiendo && (
-            <span className="absolute inset-0 grid place-items-center" style={{ background: 'rgba(6,8,13,0.75)' }}>
+            <span className="absolute inset-0 grid place-items-center" style={{ background: 'rgba(11,26,51,0.75)' }}>
               <Loader2 size={22} className="animate-spin" style={{ color: 'var(--color-accent)' }} />
             </span>
           )}

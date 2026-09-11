@@ -184,7 +184,7 @@ export default function Projects() {
                   <span
                     key={t}
                     className="rounded px-2 py-0.5 font-mono text-[11px]"
-                    style={{ background: 'rgba(91,140,255,0.1)', color: 'var(--color-accent)' }}
+                    style={{ background: 'var(--green-soft)', color: 'var(--green2)' }}
                   >
                     {t}
                   </span>

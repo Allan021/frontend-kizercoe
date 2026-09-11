@@ -29,15 +29,6 @@ export default defineConfig({
       },
     },
     build: {
-      // Split GSAP into its own chunk to reduce main bundle (~21 KiB savings)
-      rollupOptions: {
-        output: {
-          manualChunks: {
-            gsap: ['gsap', 'gsap/ScrollTrigger', 'gsap/SplitText'],
-          },
-        },
-      },
-      // Better minification
       cssMinify: true,
     },
   },
