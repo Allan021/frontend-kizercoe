@@ -190,8 +190,8 @@ const enlaces = [
   </div>
 
   <!-- Menú desplegable de servicios -->
-  <div id="menu-servicios" hidden class="border-t" style="border-color: var(--line); background: var(--bg); box-shadow: 0 20px 40px rgba(11,26,51,.10)">
-    <div class="mx-auto grid max-w-[1200px] gap-8 px-6 pb-9 pt-8" style="grid-template-columns: repeat(auto-fit, minmax(230px, 1fr))">
+  <div id="menu-servicios" hidden class="kz-mega" style="--kz-mega-w: 1120px">
+    <div class="kz-mega-card grid gap-6 p-6" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))">
       <!-- Enlaces principales, solo en móvil (el nav de arriba está oculto) -->
       <div class="col-[1/-1] flex flex-wrap gap-2 lg:hidden">
         {enlaces.map((l) => (
@@ -237,8 +237,8 @@ const enlaces = [
   </div>
 
   <!-- Menú desplegable de industrias -->
-  <div id="menu-industrias" hidden class="border-t" style="border-color: var(--line); background: var(--bg); box-shadow: 0 20px 40px rgba(11,26,51,.10)">
-    <div class="mx-auto grid max-w-[1200px] gap-8 px-6 pb-9 pt-8" style="grid-template-columns: repeat(auto-fit, minmax(230px, 1fr))">
+  <div id="menu-industrias" hidden class="kz-mega" style="--kz-mega-w: 940px">
+    <div class="kz-mega-card grid gap-6 p-6" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))">
       {gruposIndustrias.map((g) => (
         <div class="flex flex-col gap-1.5">
           <span class="px-3 pb-2 text-xs font-semibold uppercase tracking-[0.08em]" style="color: var(--green2)">
@@ -272,8 +272,8 @@ const enlaces = [
   </div>
 
   <!-- Menú desplegable de nosotros -->
-  <div id="menu-nosotros" hidden class="border-t" style="border-color: var(--line); background: var(--bg); box-shadow: 0 20px 40px rgba(11,26,51,.10)">
-    <div class="mx-auto grid max-w-[1200px] gap-8 px-6 pb-9 pt-8" style="grid-template-columns: repeat(auto-fit, minmax(230px, 1fr))">
+  <div id="menu-nosotros" hidden class="kz-mega" style="--kz-mega-w: 780px">
+    <div class="kz-mega-card grid gap-6 p-6" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))">
       {gruposNosotros.map((g) => (
         <div class="flex flex-col gap-1.5">
           <span class="px-3 pb-2 text-xs font-semibold uppercase tracking-[0.08em]" style="color: var(--green2)">
@@ -339,6 +339,35 @@ const enlaces = [
     transition: background-color 0.2s ease;
   }
   .kz-menuitem:hover { background: var(--bg2); }
+
+  /* Los desplegables flotan sobre la página en vez de empujarla: el header
+     es sticky (posicionado), así que sirve de referencia para el absolute.
+     El padding-top es el "puente" invisible entre el botón y la tarjeta:
+     es parte del elemento, así que pasar el mouse por ahí no lo cierra. */
+  .kz-mega {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(var(--kz-mega-w, 960px), calc(100vw - 24px));
+    padding-top: 10px;
+    z-index: 50;
+  }
+  .kz-mega-card {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    box-shadow: 0 24px 60px -12px rgba(11, 26, 51, 0.28);
+    max-height: calc(100vh - 150px);
+    overflow-y: auto;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .kz-mega:not([hidden]) { animation: kz-mega-in 0.18s cubic-bezier(0.22, 1, 0.36, 1); }
+  }
+  @keyframes kz-mega-in {
+    from { opacity: 0; transform: translate(-50%, -6px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+  }
 </style>
 
 <script>
