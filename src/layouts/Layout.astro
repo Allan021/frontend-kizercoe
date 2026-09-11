@@ -11,6 +11,12 @@ interface Props {
   type?: 'website' | 'article';
   /** Páginas que no van a Google (el panel, por ejemplo). */
   noindex?: boolean;
+  /** Idioma fijo por URL (/servicios = es, /en/... = en). Sin esto, el
+   *  visitante elige con el toggle y queda guardado. */
+  forzarLang?: 'es' | 'en';
+  /** Contrapartes para hreflang cuando la página tiene URL por idioma. */
+  urlEs?: string;
+  urlEn?: string;
 }
 
 const {
@@ -23,6 +29,9 @@ const {
   locale = 'es_HN',
   type = 'website',
   noindex = false,
+  forzarLang,
+  urlEs,
+  urlEn,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -34,7 +43,7 @@ const GA_ID = import.meta.env.PUBLIC_GA_ID;
 const GOOGLE_VERIFICATION = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 ---
 <!doctype html>
-<html lang="es" data-theme="light" data-moneda="lps" class="scroll-smooth">
+<html lang={forzarLang ?? 'es'} data-theme="light" data-moneda={forzarLang === 'en' ? 'usd' : 'lps'} class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -106,10 +115,10 @@ const GOOGLE_VERIFICATION = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
   <!-- Fuente: Poppins autoalojada en global.css. Sin conexiones externas
        antes del primer render. -->
 
-  <!-- hreflang — bilingual EN/ES -->
-  <link rel="alternate" hreflang="en" href={canonicalURL} />
-  <link rel="alternate" hreflang="es" href={canonicalURL} />
-  <link rel="alternate" hreflang="x-default" href={canonicalURL} />
+  <!-- hreflang — con URL propia por idioma cuando la página la tiene -->
+  <link rel="alternate" hreflang="es" href={urlEs ? new URL(urlEs, Astro.site) : canonicalURL} />
+  <link rel="alternate" hreflang="en" href={urlEn ? new URL(urlEn, Astro.site) : canonicalURL} />
+  <link rel="alternate" hreflang="x-default" href={urlEs ? new URL(urlEs, Astro.site) : canonicalURL} />
 
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="/kizercode-favicon.ico" />
@@ -190,16 +199,19 @@ const GOOGLE_VERIFICATION = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
     ]
   })} />
 
+  <!-- Metadatos extra por página (JSON-LD de servicios, por ejemplo) -->
+  <slot name="head" />
+
   <!-- Theme init — runs before paint to prevent flash -->
-  <script is:inline>
+  <script is:inline define:vars={{ forzarLang: forzarLang ?? null }}>
     (function() {
       // Claro por defecto: es el tema del rediseño. El oscuro es elección.
       const theme = localStorage.getItem('kz-theme') || 'light';
       document.documentElement.setAttribute('data-theme', theme);
 
-      // Español salvo que el visitante haya elegido otra cosa: el que llega
-      // buscando "reparación de celulares El Progreso" no habla inglés.
-      const lang = localStorage.getItem('kz-lang') || 'es';
+      // Las páginas con URL por idioma (/servicios, /en/...) fijan su lengua;
+      // el resto respeta lo que el visitante eligió con el toggle.
+      const lang = forzarLang || localStorage.getItem('kz-lang') || 'es';
       document.documentElement.setAttribute('lang', lang);
 
       // Moneda: lempiras por defecto; en inglés, dólares. El toggle de la

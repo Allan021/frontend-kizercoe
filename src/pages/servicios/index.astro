@@ -1,0 +1,63 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Nav from '@/components/Nav.astro';
+import Footer from '@/components/Footer.astro';
+import FloatingWhatsApp from '@/components/FloatingWhatsApp.astro';
+import { servicios } from '@/lib/servicios';
+
+/** Índice de servicios: una tarjeta por página dedicada. */
+const lang = (Astro.url.pathname.startsWith('/en/') ? 'en' : 'es') as 'es' | 'en';
+const es = lang === 'es';
+---
+<Layout
+  title={es ? 'Servicios de Kizercode: web, software, IA y taller | Honduras' : 'Kizercode services: web, software, AI and repair | Honduras'}
+  description={es
+    ? 'Todos los servicios de Kizercode: páginas web, tiendas en línea, sistemas, apps, IA, CRM, diseño, SEO, anuncios, redes y reparación de equipos.'
+    : 'All Kizercode services: websites, e-commerce, systems, apps, AI, CRM, design, SEO, ads, social media and device repair.'}
+  forzarLang={lang}
+  urlEs="/servicios/"
+  urlEn="/en/services/"
+>
+  <Nav />
+  <main id="contenido" class="mx-auto max-w-[1200px] px-6 py-16">
+    <div class="mx-auto mb-10 flex max-w-[640px] flex-col items-center gap-3 text-center">
+      <p class="kz-eyebrow">{es ? 'Servicios' : 'Services'}</p>
+      <h1 class="kz-h2" style="font-size: clamp(32px, 4vw, 48px)">
+        {es ? 'Todo lo que hacemos, con su precio.' : 'Everything we do, with its price.'}
+      </h1>
+      <p class="text-base" style="color: var(--mute); text-wrap: pretty">
+        {es ? 'Elegí lo que necesitás y mirá qué incluye, cuánto cuesta y cuánto tarda.' : 'Pick what you need and see what it includes, what it costs and how long it takes.'}
+      </p>
+    </div>
+    <ul class="grid list-none gap-4" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr))">
+      {servicios.map((s) => (
+        <li>
+          <a href={es ? `/servicios/${s.slug}/` : `/en/services/${s.slugEn}/`} class="kz-card flex h-full flex-col gap-2.5 p-6" style="color: var(--ink)">
+            <strong class="text-lg font-bold">{es ? s.nombre : s.name}</strong>
+            <span class="text-sm leading-relaxed" style="color: var(--ink2); text-wrap: pretty">{es ? s.subEs : s.subEn}</span>
+            {s.lps && (
+              <span class="text-sm font-semibold" style="color: var(--green)">
+                {es ? 'desde ' : 'from '}<span class="lps">{s.lps}</span><span class="usd">{s.usd}</span>
+              </span>
+            )}
+            <span class="mt-auto text-[13px] font-semibold" style="color: var(--green2)">{es ? 'Ver servicio' : 'View service'} →</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </main>
+  <Footer />
+  <FloatingWhatsApp />
+
+  <script is:inline define:vars={{ otra: lang === 'es' ? '/en/services/' : '/servicios/' }}>
+    document.getElementById('lang-toggle')?.addEventListener(
+      'click',
+      (e) => {
+        e.stopImmediatePropagation();
+        localStorage.setItem('kz-lang', otra.startsWith('/en/') ? 'en' : 'es');
+        location.href = otra;
+      },
+      { capture: true },
+    );
+  </script>
+</Layout>

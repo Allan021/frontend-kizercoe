@@ -6,47 +6,53 @@
  */
 const WA = 'https://wa.me/50488091744?text=Hola!%20Quiero%20cotizar%20con%20Kizercode.';
 
+// Cada servicio enlaza a su página dedicada: eso teje el SEO interno.
 const grupos = [
   {
     g_en: 'Development', g_es: 'Desarrollo',
     items: [
-      { href: '#precios', t_en: 'Websites', t_es: 'Páginas web', d_en: 'Own design, fast, with WhatsApp', d_es: 'Diseño propio, rápidas, con WhatsApp' },
-      { href: '#precios', t_en: 'Online stores', t_es: 'Tiendas en línea', d_en: 'Catalog, cart and payments', d_es: 'Catálogo, carrito y pagos' },
-      { href: '#precios', t_en: 'Mobile apps', t_es: 'Apps móviles', d_en: 'iOS and Android, one codebase', d_es: 'iOS y Android, una base' },
+      { href: '/servicios/paginas-web/', t_en: 'Websites', t_es: 'Páginas web', d_en: 'Own design, fast, with WhatsApp', d_es: 'Diseño propio, rápidas, con WhatsApp' },
+      { href: '/servicios/modernizacion-web/', t_en: 'Website redesign', t_es: 'Modernizar tu sitio', d_en: "Today's design, keep your content", d_es: 'Diseño de hoy, tu contenido se queda' },
+      { href: '/servicios/tiendas-en-linea/', t_en: 'E-commerce', t_es: 'Tiendas en línea', d_en: 'Catalog, cart and payments', d_es: 'Catálogo, carrito y pagos' },
+      { href: '/servicios/apps-moviles/', t_en: 'Mobile apps', t_es: 'Apps móviles', d_en: 'iOS and Android, one codebase', d_es: 'iOS y Android, una base' },
     ],
   },
   {
     g_en: 'AI and software', g_es: 'IA y software',
     items: [
-      { href: '#servicios', t_en: 'Custom systems', t_es: 'Sistemas a la medida', d_en: 'Inventory, billing, orders', d_es: 'Inventario, facturación, pedidos' },
-      { href: '#servicios', t_en: 'AI automation', t_es: 'Automatización con IA', d_en: 'Answers and quotes 24/7', d_es: 'Atiende y cotiza 24/7' },
-      { href: '#productos', t_en: 'Ready-to-use software', t_es: 'Software listo para usar', d_en: 'KizerPOS, Resto, Cobros, Check', d_es: 'KizerPOS, Resto, Cobros, Check' },
+      { href: '/servicios/sistemas-a-la-medida/', t_en: 'Custom systems', t_es: 'Sistemas a la medida', d_en: 'Inventory, billing, orders', d_es: 'Inventario, facturación, pedidos' },
+      { href: '/servicios/automatizacion-ia/', t_en: 'AI automation', t_es: 'Automatización con IA', d_en: 'Answers and quotes 24/7', d_es: 'Atiende y cotiza 24/7' },
+      { href: '/servicios/crm-a-la-medida/', t_en: 'Custom CRM', t_es: 'CRM a la medida', d_en: 'Customers and follow-ups', d_es: 'Clientes y seguimientos' },
+      { href: '/#productos', t_en: 'Ready-to-use software', t_es: 'Software listo para usar', d_en: 'KizerPOS, Resto, Cobros, Check', d_es: 'KizerPOS, Resto, Cobros, Check' },
     ],
   },
   {
-    g_en: 'Marketing', g_es: 'Marketing',
+    g_en: 'Marketing and design', g_es: 'Marketing y diseño',
     items: [
-      { href: '#servicios', t_en: 'Ads and acquisition', t_es: 'Anuncios y captación', d_en: 'Google and Meta, weekly report', d_es: 'Google y Meta con reporte semanal' },
-      { href: '#servicios', t_en: 'SEO', t_es: 'Posicionamiento (SEO)', d_en: 'Show up when they search', d_es: 'Aparecer cuando te buscan' },
-      { href: '#servicios', t_en: 'Visual identity', t_es: 'Identidad visual', d_en: 'Logo, colors and pieces', d_es: 'Logo, colores y piezas' },
+      { href: '/servicios/anuncios/', t_en: 'Ads and acquisition', t_es: 'Anuncios y captación', d_en: 'Google and Meta, weekly report', d_es: 'Google y Meta con reporte semanal' },
+      { href: '/servicios/seo/', t_en: 'SEO', t_es: 'Posicionamiento (SEO)', d_en: 'Show up when they search', d_es: 'Aparecer cuando te buscan' },
+      { href: '/servicios/redes-sociales/', t_en: 'Social media', t_es: 'Redes sociales', d_en: 'Consistent, on-brand posting', d_es: 'Publicación constante con tu marca' },
+      { href: '/servicios/diseno-ux-ui/', t_en: 'UX/UI design', t_es: 'Diseño UX/UI', d_en: 'Prototypes before code', d_es: 'Prototipos antes del código' },
+      { href: '/servicios/identidad-visual/', t_en: 'Branding', t_es: 'Identidad visual', d_en: 'Logo, colors and pieces', d_es: 'Logo, colores y piezas' },
     ],
   },
   {
     g_en: 'Repair shop', g_es: 'Taller',
     items: [
-      { href: '#taller', t_en: 'Computer repair', t_es: 'Reparación de computadoras', d_en: 'Free diagnosis', d_es: 'Diagnóstico gratis' },
-      { href: '#taller', t_en: 'Phone repair', t_es: 'Reparación de teléfonos', d_en: 'Screens, batteries, ports', d_es: 'Pantallas, baterías, puertos' },
-      { href: '#taller', t_en: 'Buy and sell devices', t_es: 'Compra y venta de equipo', d_en: 'Tested and working', d_es: 'Probado y funcionando' },
+      { href: '/servicios/reparacion-computadoras/', t_en: 'Computer repair', t_es: 'Reparación de computadoras', d_en: 'Free diagnosis', d_es: 'Diagnóstico gratis' },
+      { href: '/servicios/reparacion-computadoras/', t_en: 'Phone repair', t_es: 'Reparación de teléfonos', d_en: 'Screens, batteries, ports', d_es: 'Pantallas, baterías, puertos' },
+      { href: '/servicios/reparacion-computadoras/', t_en: 'Buy and sell devices', t_es: 'Compra y venta de equipo', d_en: 'Tested and working', d_es: 'Probado y funcionando' },
     ],
   },
 ];
 
+// Anchors absolutos: funcionan desde la portada y desde cualquier página.
 const enlaces = [
-  { href: '#casos', en: 'Cases', es: 'Casos' },
-  { href: '#resenas', en: 'Reviews', es: 'Reseñas' },
-  { href: '#productos', en: 'Products', es: 'Productos' },
-  { href: '#precios', en: 'Pricing', es: 'Precios' },
-  { href: '#faq', en: 'FAQ', es: 'Preguntas' },
+  { href: '/#casos', en: 'Cases', es: 'Casos' },
+  { href: '/#resenas', en: 'Reviews', es: 'Reseñas' },
+  { href: '/#productos', en: 'Products', es: 'Productos' },
+  { href: '/#precios', en: 'Pricing', es: 'Precios' },
+  { href: '/#faq', en: 'FAQ', es: 'Preguntas' },
 ];
 ---
 
@@ -88,7 +94,7 @@ const enlaces = [
 >
   <div class="h-[3px]" style="background: linear-gradient(90deg, var(--navy) 0%, var(--green) 55%, var(--green-bright) 100%)"></div>
   <div class="mx-auto flex max-w-[1200px] items-center justify-between gap-5 px-6 py-3">
-    <a href="#top" aria-label="Kizercode — inicio" class="flex shrink-0 items-center">
+    <a href="/" aria-label="Kizercode — inicio" class="flex shrink-0 items-center">
       <img data-logo-light="1" src="/kizercode-logo.png" alt="Kizercode" width="126" height="42" class="block h-[42px] w-[126px] object-contain" />
       <img data-logo-dark="1" src="/kizercode-logo-dark.png" alt="Kizercode" width="126" height="42" class="h-[42px] w-[126px] object-contain" />
     </a>
@@ -117,7 +123,7 @@ const enlaces = [
         <svg id="icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
         <svg id="icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" class="hidden"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
       </button>
-      <a href="#contacto" class="kz-btn-secundario hidden items-center rounded-[10px] px-4 py-2 text-sm font-semibold sm:inline-flex" style="border-width: 1.5px">
+      <a href="/#contacto" class="kz-btn-secundario hidden items-center rounded-[10px] px-4 py-2 text-sm font-semibold sm:inline-flex" style="border-width: 1.5px">
         <span class="en">Get a quote</span><span class="es">Cotizar</span>
       </a>
       <a href={WA} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-[10px] px-4 py-2.5 text-sm font-semibold text-white transition-colors" style="background: var(--green)" onmouseover="this.style.background='var(--green2)'" onmouseout="this.style.background='var(--green)'">
@@ -135,8 +141,8 @@ const enlaces = [
         {enlaces.map((l) => (
           <a href={l.href} class="kz-menupill"><span class="en">{l.en}</span><span class="es">{l.es}</span></a>
         ))}
-        <a href="#taller" class="kz-menupill"><span class="en">Repair shop</span><span class="es">Taller</span></a>
-        <a href="#contacto" class="kz-menupill" style="border-color: var(--green); color: var(--green2)"><span class="en">Get a quote</span><span class="es">Cotizar</span></a>
+        <a href="/#taller" class="kz-menupill"><span class="en">Repair shop</span><span class="es">Taller</span></a>
+        <a href="/#contacto" class="kz-menupill" style="border-color: var(--green); color: var(--green2)"><span class="en">Get a quote</span><span class="es">Cotizar</span></a>
       </div>
 
       {grupos.map((g) => (
@@ -164,7 +170,7 @@ const enlaces = [
           <span class="en">We tell you what suits you and what it costs, in writing.</span>
           <span class="es">Te decimos qué te conviene y cuánto cuesta, por escrito.</span>
         </span>
-        <a href="#contacto" class="mt-auto self-start rounded-[9px] px-4 py-2.5 text-[13px] font-semibold text-white transition-colors" style="background: #16a36c" onmouseover="this.style.background='#3ed39a'; this.style.color='#0b1a33'" onmouseout="this.style.background='#16a36c'; this.style.color='#fff'">
+        <a href="/#contacto" class="mt-auto self-start rounded-[9px] px-4 py-2.5 text-[13px] font-semibold text-white transition-colors" style="background: #16a36c" onmouseover="this.style.background='#3ed39a'; this.style.color='#0b1a33'" onmouseout="this.style.background='#16a36c'; this.style.color='#fff'">
           <span class="en">Book the call</span><span class="es">Agendar llamada</span>
         </a>
       </div>
