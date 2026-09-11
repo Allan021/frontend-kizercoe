@@ -98,7 +98,7 @@ const jsonLd = {
             </p>
           )}
           <div class="flex flex-wrap gap-3">
-            <a href={`/#contacto?servicio=${encodeURIComponent(s.formServicio)}`} class="kz-btn kz-btn-primario" style="padding: 15px 26px; font-size: 16px">
+            <a href={`/contacto/?servicio=${encodeURIComponent(s.formServicio)}`} class="kz-btn kz-btn-primario" style="padding: 15px 26px; font-size: 16px">
               {es ? 'Cotización gratis' : 'Free quote'}
             </a>
             <a href="https://wa.me/50488091744" target="_blank" rel="noopener noreferrer" class="kz-btn kz-btn-secundario" style="padding: 15px 26px; font-size: 16px">
@@ -179,7 +179,7 @@ const jsonLd = {
             {es ? 'Diagnóstico gratis y precio fijo por escrito en menos de 24 horas.' : 'Free diagnosis and a fixed written price in under 24 hours.'}
           </p>
         </div>
-        <a href={`/#contacto?servicio=${encodeURIComponent(s.formServicio)}`} class="rounded-xl px-6 py-3.5 text-[15px] font-semibold text-white transition-colors" style="background: #16a36c" onmouseover="this.style.background='#3ed39a'; this.style.color='#0b1a33'" onmouseout="this.style.background='#16a36c'; this.style.color='#fff'">
+        <a href={`/contacto/?servicio=${encodeURIComponent(s.formServicio)}`} class="rounded-xl px-6 py-3.5 text-[15px] font-semibold text-white transition-colors" style="background: #16a36c" onmouseover="this.style.background='#3ed39a'; this.style.color='#0b1a33'" onmouseout="this.style.background='#16a36c'; this.style.color='#fff'">
           {es ? 'Cotizar este servicio' : 'Get a quote for this'}
         </a>
       </div>

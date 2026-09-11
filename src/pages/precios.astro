@@ -1,0 +1,43 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Nav from '@/components/Nav.astro';
+import Footer from '@/components/Footer.astro';
+import FloatingWhatsApp from '@/components/FloatingWhatsApp.astro';
+import Pricing from '@/sections/Pricing.astro';
+import Comparativa from '@/sections/Comparativa.astro';
+import Garantias from '@/sections/Garantias.astro';
+
+/**
+ * Página dedicada de precios (estilo codebrand /quoter): encabezado, la lista
+ * completa de precios con su toggle L/$, la comparativa contra freelancer y
+ * agencia grande, y las garantías. El que llega aquí viene a decidir.
+ */
+---
+<Layout
+  title="Precios de páginas web, sistemas y apps en Honduras | Kizercode"
+  description="Precios claros en lempiras y dólares: página web desde L 4,000, tienda en línea desde L 14,500, sistema desde L 25,000. Precio fijo por escrito y 30 días de garantía."
+>
+  <Nav />
+  <main id="contenido">
+    <section class="relative overflow-hidden" style="background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%)">
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0" style="background-image: linear-gradient(color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1px); background-size: 56px 56px; mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 100%); -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 100%)"></div>
+      <div class="relative mx-auto flex max-w-[760px] flex-col items-center gap-4 px-6 pb-2 pt-16 text-center">
+        <p class="kz-eyebrow"><span class="en">Pricing</span><span class="es">Precios</span></p>
+        <h1 class="font-bold" style="font-size: clamp(34px, 4.6vw, 54px); line-height: 1.1; letter-spacing: -0.02em; text-wrap: balance">
+          <span class="en">Prices you can see before calling.</span>
+          <span class="es">Precios que podés ver antes de llamar.</span>
+        </h1>
+        <p class="max-w-[560px] text-lg leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+          <span class="en">In lempiras or dollars, with what each thing includes. The exact fixed price goes in your written quote.</span>
+          <span class="es">En lempiras o dólares, con lo que incluye cada cosa. El precio fijo exacto va en tu cotización por escrito.</span>
+        </p>
+      </div>
+    </section>
+
+    <Pricing />
+    <Comparativa />
+    <Garantias />
+  </main>
+  <Footer />
+  <FloatingWhatsApp />
+</Layout>

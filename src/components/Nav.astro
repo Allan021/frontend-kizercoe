@@ -46,12 +46,40 @@ const grupos = [
   },
 ];
 
+// Industrias del desplegable, agrupadas como en el mapa del negocio.
+const gruposIndustrias = [
+  {
+    g_en: 'Retail and distribution', g_es: 'Comercio',
+    items: [
+      { href: '/industrias/farmacias/', t_en: 'Pharmacies', t_es: 'Farmacias', d_en: 'Batches and expiry with KizerPOS', d_es: 'Lotes y vencimientos con KizerPOS' },
+      { href: '/industrias/ferreterias/', t_en: 'Hardware stores', t_es: 'Ferreterías', d_en: 'Units, measures and credit', d_es: 'Unidades, medidas y crédito' },
+      { href: '/industrias/boutiques/', t_en: 'Boutiques', t_es: 'Boutiques y tiendas', d_en: 'Sizes, colors, online store', d_es: 'Tallas, colores y tienda en línea' },
+      { href: '/industrias/distribuidoras/', t_en: 'Distributors', t_es: 'Distribuidoras', d_en: 'Field orders and warehouse', d_es: 'Pedidos en ruta y bodega' },
+    ],
+  },
+  {
+    g_en: 'Food and service', g_es: 'Comida y servicio',
+    items: [
+      { href: '/industrias/restaurantes/', t_en: 'Restaurants', t_es: 'Restaurantes', d_en: 'Tables and kitchen with KizerResto', d_es: 'Mesas y cocina con KizerResto' },
+      { href: '/industrias/clinicas/', t_en: 'Clinics and healthcare', t_es: 'Clínicas y salud', d_en: 'Records and appointments (Dentalos)', d_es: 'Expediente y citas (Dentalos)' },
+      { href: '/industrias/talleres/', t_en: 'Auto shops', t_es: 'Talleres', d_en: 'Work orders and parts', d_es: 'Órdenes de trabajo y repuestos' },
+    ],
+  },
+  {
+    g_en: 'Professional', g_es: 'Profesional',
+    items: [
+      { href: '/industrias/prestamistas/', t_en: 'Lenders', t_es: 'Prestamistas', d_en: 'Portfolio with Kizer Cobros', d_es: 'Cartera con Kizer Cobros' },
+      { href: '/industrias/bienes-raices/', t_en: 'Real estate', t_es: 'Bienes raíces', d_en: 'Portals like aabienes.com', d_es: 'Portales como aabienes.com' },
+      { href: '/industrias/abogados/', t_en: 'Law firms', t_es: 'Abogados', d_en: 'Case files and deadlines', d_es: 'Expedientes y plazos' },
+    ],
+  },
+];
+
 // Anchors absolutos: funcionan desde la portada y desde cualquier página.
 const enlaces = [
-  { href: '/industrias/', en: 'Industries', es: 'Industrias' },
   { href: '/#casos', en: 'Cases', es: 'Casos' },
   { href: '/#productos', en: 'Products', es: 'Productos' },
-  { href: '/#precios', en: 'Pricing', es: 'Precios' },
+  { href: '/precios/', en: 'Pricing', es: 'Precios' },
   { href: '/#faq', en: 'FAQ', es: 'Preguntas' },
 ];
 ---
@@ -100,8 +128,12 @@ const enlaces = [
     </a>
 
     <nav class="hidden items-center justify-center gap-1 text-sm font-medium lg:flex" aria-label="Principal">
-      <button id="menu-servicios-btn" class="kz-navlink inline-flex cursor-pointer items-center gap-1.5 border-0 bg-transparent" aria-expanded="false" aria-controls="menu-servicios">
+      <button id="menu-servicios-btn" data-menu-btn="menu-servicios" class="kz-navlink inline-flex cursor-pointer items-center gap-1.5 border-0 bg-transparent" aria-expanded="false" aria-controls="menu-servicios">
         <span class="en">Services</span><span class="es">Servicios</span>
+        <span class="text-[10px]" aria-hidden="true">▾</span>
+      </button>
+      <button data-menu-btn="menu-industrias" class="kz-navlink inline-flex cursor-pointer items-center gap-1.5 border-0 bg-transparent" aria-expanded="false" aria-controls="menu-industrias">
+        <span class="en">Industries</span><span class="es">Industrias</span>
         <span class="text-[10px]" aria-hidden="true">▾</span>
       </button>
       {enlaces.map((l) => (
@@ -123,7 +155,7 @@ const enlaces = [
         <svg id="icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
         <svg id="icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" class="hidden"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
       </button>
-      <a href="/#contacto" class="kz-btn-secundario hidden items-center rounded-[10px] px-4 py-2 text-sm font-semibold sm:inline-flex" style="border-width: 1.5px">
+      <a href="/contacto/" class="kz-btn-secundario hidden items-center rounded-[10px] px-4 py-2 text-sm font-semibold sm:inline-flex" style="border-width: 1.5px">
         <span class="en">Get a quote</span><span class="es">Cotizar</span>
       </a>
       <a href={WA} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-[10px] px-4 py-2.5 text-sm font-semibold text-white transition-colors" style="background: var(--green)" onmouseover="this.style.background='var(--green2)'" onmouseout="this.style.background='var(--green)'">
@@ -170,8 +202,43 @@ const enlaces = [
           <span class="en">We tell you what suits you and what it costs, in writing.</span>
           <span class="es">Te decimos qué te conviene y cuánto cuesta, por escrito.</span>
         </span>
-        <a href="/#contacto" class="mt-auto self-start rounded-[9px] px-4 py-2.5 text-[13px] font-semibold text-white transition-colors" style="background: #16a36c" onmouseover="this.style.background='#3ed39a'; this.style.color='#0b1a33'" onmouseout="this.style.background='#16a36c'; this.style.color='#fff'">
+        <a href="/contacto/" class="mt-auto self-start rounded-[9px] px-4 py-2.5 text-[13px] font-semibold text-white transition-colors" style="background: #16a36c" onmouseover="this.style.background='#3ed39a'; this.style.color='#0b1a33'" onmouseout="this.style.background='#16a36c'; this.style.color='#fff'">
           <span class="en">Book the call</span><span class="es">Agendar llamada</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menú desplegable de industrias -->
+  <div id="menu-industrias" hidden class="border-t" style="border-color: var(--line); background: var(--bg); box-shadow: 0 20px 40px rgba(11,26,51,.10)">
+    <div class="mx-auto grid max-w-[1200px] gap-8 px-6 pb-9 pt-8" style="grid-template-columns: repeat(auto-fit, minmax(230px, 1fr))">
+      {gruposIndustrias.map((g) => (
+        <div class="flex flex-col gap-1.5">
+          <span class="px-3 pb-2 text-xs font-semibold uppercase tracking-[0.08em]" style="color: var(--green2)">
+            <span class="en">{g.g_en}</span><span class="es">{g.g_es}</span>
+          </span>
+          {g.items.map((it) => (
+            <a href={it.href} class="kz-menuitem">
+              <span class="text-[15px] font-semibold"><span class="en">{it.t_en}</span><span class="es">{it.t_es}</span></span>
+              <span class="text-[13px]" style="color: var(--mute)"><span class="en">{it.d_en}</span><span class="es">{it.d_es}</span></span>
+            </a>
+          ))}
+        </div>
+      ))}
+
+      <div class="flex flex-col gap-2.5 rounded-[14px] p-5" style="background: var(--navy); color: var(--bg)">
+        <span class="text-[11px] font-semibold uppercase tracking-[0.08em]" style="color: var(--green-bright)">
+          <span class="en">Your trade not listed?</span><span class="es">¿Tu rubro no está?</span>
+        </span>
+        <strong class="text-base font-semibold leading-snug">
+          <span class="en">We build for your business anyway.</span><span class="es">Igual construimos para tu negocio.</span>
+        </strong>
+        <span class="text-[13px]" style="color: color-mix(in srgb, var(--bg) 70%, transparent)">
+          <span class="en">Custom systems on the same proven base.</span>
+          <span class="es">Sistemas a la medida sobre la misma base probada.</span>
+        </span>
+        <a href="/industrias/" class="mt-auto self-start rounded-[9px] px-4 py-2.5 text-[13px] font-semibold text-white transition-colors" style="background: #16a36c" onmouseover="this.style.background='#3ed39a'; this.style.color='#0b1a33'" onmouseout="this.style.background='#16a36c'; this.style.color='#fff'">
+          <span class="en">See all industries</span><span class="es">Ver todas las industrias</span>
         </a>
       </div>
     </div>
@@ -216,27 +283,52 @@ const enlaces = [
 </style>
 
 <script>
-  // ── Menú de servicios: abre por hover (desktop) o clic; cierra al salir
-  //    del header, al hacer clic en un enlace o con Escape. ──
-  const menu = document.getElementById('menu-servicios')!;
-  const btnServicios = document.getElementById('menu-servicios-btn');
-  const btnMovil = document.getElementById('menu-movil-btn');
+  // ── Menús desplegables (servicios e industrias): abren por hover o clic;
+  //    abrir uno cierra el otro; cierran al salir del header, al hacer clic
+  //    en un enlace o con Escape. ──
   const header = document.getElementById('main-nav')!;
+  const menus = ['menu-servicios', 'menu-industrias']
+    .map((id) => document.getElementById(id))
+    .filter((m): m is HTMLElement => m !== null);
+  const btnMovil = document.getElementById('menu-movil-btn');
 
-  function ponerMenu(abierto: boolean) {
-    menu.hidden = !abierto;
-    btnServicios?.setAttribute('aria-expanded', String(abierto));
-    btnMovil?.setAttribute('aria-expanded', String(abierto));
+  function cerrarTodos() {
+    menus.forEach((m) => (m.hidden = true));
+    document.querySelectorAll('[data-menu-btn]').forEach((b) => b.setAttribute('aria-expanded', 'false'));
+    btnMovil?.setAttribute('aria-expanded', 'false');
   }
-  btnServicios?.addEventListener('click', () => ponerMenu(menu.hidden));
-  btnServicios?.addEventListener('mouseenter', () => ponerMenu(true));
-  btnMovil?.addEventListener('click', () => ponerMenu(menu.hidden));
-  header.addEventListener('mouseleave', () => ponerMenu(false));
-  menu.addEventListener('click', (e) => {
-    if (e.target instanceof Element && e.target.closest('a')) ponerMenu(false);
+  function abrir(id: string) {
+    cerrarTodos();
+    const m = document.getElementById(id);
+    if (m) m.hidden = false;
+    document.querySelector(`[data-menu-btn="${id}"]`)?.setAttribute('aria-expanded', 'true');
+  }
+  document.querySelectorAll<HTMLElement>('[data-menu-btn]').forEach((btn) => {
+    const id = btn.dataset.menuBtn!;
+    btn.addEventListener('click', () => {
+      const m = document.getElementById(id);
+      m && m.hidden ? abrir(id) : cerrarTodos();
+    });
+    btn.addEventListener('mouseenter', () => abrir(id));
   });
+  // El botón móvil abre el menú de servicios (trae las pastillas de navegación).
+  btnMovil?.addEventListener('click', () => {
+    const m = document.getElementById('menu-servicios');
+    if (m && m.hidden) {
+      abrir('menu-servicios');
+      btnMovil.setAttribute('aria-expanded', 'true');
+    } else {
+      cerrarTodos();
+    }
+  });
+  header.addEventListener('mouseleave', cerrarTodos);
+  menus.forEach((m) =>
+    m.addEventListener('click', (e) => {
+      if (e.target instanceof Element && e.target.closest('a')) cerrarTodos();
+    }),
+  );
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') ponerMenu(false);
+    if (e.key === 'Escape') cerrarTodos();
   });
 
   // ── Tema ──
