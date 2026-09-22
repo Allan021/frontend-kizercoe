@@ -10,6 +10,8 @@ export type Producto = {
   nombre: string;
   icon: string;
   url: string;
+  /** Demo abierta para mirar sin cuenta, si el producto tiene una. */
+  demo?: string;
   tagEs: string;
   tagEn: string;
   taglineEs: string;
@@ -31,6 +33,7 @@ export const productos: Producto[] = [
     nombre: 'KizerPOS',
     icon: 'lucide:store',
     url: 'https://pos.kizercode.com/',
+    demo: 'https://pos.kizercode.com/demo',
     tagEs: 'Tiendas',
     tagEn: 'Retail',
     taglineEs: 'El punto de venta que no se cae cuando se va el internet.',
@@ -62,6 +65,7 @@ export const productos: Producto[] = [
     nombre: 'KizerResto',
     icon: 'lucide:utensils',
     url: 'https://pos.kizercode.com/resto',
+    demo: 'https://pos.kizercode.com/demo',
     tagEs: 'Restaurantes',
     tagEn: 'Restaurants',
     taglineEs: 'El programa que entiende cómo trabaja tu comedor.',

@@ -84,14 +84,23 @@ const jsonLd = {
             <p class="text-[17px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">{t}</p>
           ))}
           <div class="flex flex-wrap gap-3">
-            <a href={p.url} target="_blank" rel="noopener noreferrer" class="kz-btn kz-btn-primario" style="padding: 15px 26px; font-size: 16px">
-              {es ? `Abrir ${p.nombre}` : `Open ${p.nombre}`} ↗
-            </a>
-            <a href={waDemo} target="_blank" rel="noopener noreferrer" class="kz-btn kz-btn-secundario" style="padding: 15px 26px; font-size: 16px">
-              <img src="/whatsapp.svg" alt="" width="18" height="18" class="block" />
+            <a href={waDemo} target="_blank" rel="noopener noreferrer" class="kz-btn kz-btn-primario" style="padding: 15px 26px; font-size: 16px">
+              <img src="/whatsapp.svg" alt="" width="18" height="18" class="block brightness-0 invert" />
               {es ? 'Pedir una demo' : 'Ask for a demo'}
             </a>
+            <a href={p.demo ?? p.url} target="_blank" rel="noopener noreferrer" class="kz-btn kz-btn-secundario" style="padding: 15px 26px; font-size: 16px">
+              {p.demo
+                ? (es ? 'Ver la demo' : 'See the demo')
+                : (es ? `Abrir ${p.nombre}` : `Open ${p.nombre}`)} ↗
+            </a>
           </div>
+          {!p.demo && (
+            <span class="text-[13px]" style="color: var(--mute)">
+              {es
+                ? `El enlace abre ${p.nombre} en su propio sitio, donde se pide cuenta. Si solo querés verlo funcionando, escribinos y te lo mostramos.`
+                : `The link opens ${p.nombre} on its own site, where an account is required. If you just want to see it working, message us and we will show you.`}
+            </span>
+          )}
         </div>
 
         <div class="flex flex-col gap-3.5 lg:pt-10">
