@@ -3,7 +3,6 @@ import Layout from '@/layouts/Layout.astro';
 import Nav from '@/components/Nav.astro';
 import Footer from '@/components/Footer.astro';
 import FloatingWhatsApp from '@/components/FloatingWhatsApp.astro';
-import CamarasExtra from '@/components/CamarasExtra.astro';
 import type { Servicio } from '@/lib/servicios';
 import { intros, statsServicio } from '@/lib/serviciosIntro';
 
@@ -135,14 +134,6 @@ const jsonLd = {
         ))}
       </ul>
     </section>
-
-    <!-- Cuerpo largo de cámaras.
-
-         Va solo en esta página y no en las trece restantes: el que busca
-         "instalación de cámaras en El Progreso" llega con un portón y una
-         duda concreta —cuántas, de qué tipo, qué más hace falta— y eso no
-         cabe en la plantilla genérica de un servicio de software. -->
-    {s.slug === 'instalacion-camaras' && <CamarasExtra es={es} />}
 
     <!-- Qué incluye + FAQ -->
     <section class="border-y" style="background: var(--bg2); border-color: var(--line)">

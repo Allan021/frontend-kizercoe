@@ -1,10 +1,16 @@
 ---
 import ServicioPage from '@/components/ServicioPage.astro';
+import CamarasPage from '@/components/CamarasPage.astro';
 import { servicios } from '@/lib/servicios';
 
 export function getStaticPaths() {
   return servicios.map((s) => ({ params: { slug: s.slug }, props: { servicio: s } }));
 }
 const { servicio } = Astro.props;
+
+// Cámaras tiene plantilla propia: es la única página a la que llega gente
+// desde Google buscando un oficio, no software, y necesita contestar otras
+// preguntas. Las otras trece siguen con la plantilla de siempre.
+const esCamaras = servicio.slug === 'instalacion-camaras';
 ---
-<ServicioPage servicio={servicio} lang="es" />
+{esCamaras ? <CamarasPage servicio={servicio} lang="es" /> : <ServicioPage servicio={servicio} lang="es" />}

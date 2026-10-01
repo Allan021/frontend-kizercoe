@@ -1,0 +1,1258 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Nav from '@/components/Nav.astro';
+import Footer from '@/components/Footer.astro';
+import FloatingWhatsApp from '@/components/FloatingWhatsApp.astro';
+import type { Servicio } from '@/lib/servicios';
+
+/**
+ * La landing de cámaras de seguridad. Tiene plantilla propia y no la genérica
+ * de servicios por una razón de negocio: es la única página del sitio a la que
+ * llega gente desde Google buscando un oficio —"instalación de cámaras en El
+ * Progreso"— y no desde el sitio buscando software.
+ *
+ * Esa persona no viene a comparar tecnologías: viene a decidir a quién le deja
+ * entrar a su casa con un taladro. Entonces la página está ordenada como una
+ * visita: primero cómo trabajamos y el precio por escrito, después el catálogo
+ * técnico con sus limitaciones a la vista, y recién al final las fotos, que
+ * ahí ya son prueba y no publicidad.
+ *
+ * Diseño implementado desde la maqueta "Instalación Cámaras v2". Dos traducciones
+ * que la maqueta no podía hacer sola:
+ *
+ *  - Los colores van en tokens (`var(--ink)`, `var(--bg2)`…) y no en los hex de
+ *    la maqueta. Pegar los hex habría dejado la única página del sitio que no
+ *    responde al modo oscuro.
+ *  - La maqueta pide JetBrains Mono para los números y las etiquetas. No vamos
+ *    a traer una fuente entera para seis renglones: se usa la pila mono del
+ *    sistema, que es la que ya define el design system.
+ */
+interface Props {
+  servicio: Servicio;
+  lang: 'es' | 'en';
+}
+const { servicio: s, lang } = Astro.props;
+const es = lang === 'es';
+
+const urlEs = `/servicios/${s.slug}/`;
+const urlEn = `/en/services/${s.slugEn}/`;
+const propia = es ? urlEs : urlEn;
+const otra = es ? urlEn : urlEs;
+const cotizar = `/contacto/?servicio=${encodeURIComponent(s.formServicio)}`;
+const wa = 'https://wa.me/50488091744';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Service',
+      name: es ? s.nombre : s.name,
+      description: es ? s.descEs : s.descEn,
+      url: new URL(propia, Astro.site).href,
+      areaServed: [
+        { '@type': 'City', name: 'El Progreso' },
+        { '@type': 'City', name: 'San Pedro Sula' },
+        { '@type': 'AdministrativeArea', name: 'Yoro, Honduras' },
+      ],
+      provider: { '@id': 'https://www.kizercode.com/#business' },
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: s.faq.map((f) => ({
+        '@type': 'Question',
+        name: es ? f.qEs : f.qEn,
+        acceptedAnswer: { '@type': 'Answer', text: es ? f.aEs : f.aEn },
+      })),
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Kizercode', item: 'https://www.kizercode.com/' },
+        { '@type': 'ListItem', position: 2, name: es ? 'Servicios' : 'Services', item: new URL(es ? '/servicios/' : '/en/services/', Astro.site).href },
+        { '@type': 'ListItem', position: 3, name: es ? s.nombre : s.name, item: new URL(propia, Astro.site).href },
+      ],
+    },
+  ],
+};
+
+const pilares = [
+  { tEs: 'Se mide antes de cotizar', tEn: 'Measured before quoting', dEs: 'Caminamos el lugar y marcamos los puntos ciegos. La cantidad de cámaras sale del levantamiento, no de un paquete armado por teléfono.', dEn: 'We walk the property and mark the blind spots. The number of cameras comes from the survey, not from a package quoted over the phone.' },
+  { tEs: 'Video que identifica', tEn: 'Footage that identifies', dEs: 'Resolución, lente y altura elegidos para reconocer un rostro o una placa — no solo para ver que alguien pasó.', dEn: 'Resolution, lens and height chosen to recognize a face or a plate — not just to see that someone walked by.' },
+  { tEs: 'Instalación que aguanta', tEn: 'Installation that lasts', dEs: 'Cable canalizado, cajas selladas contra la lluvia y conectores ponchados. Lo que falla primero nunca es la cámara: es el cable.', dEn: 'Cable in conduit, boxes sealed against rain and crimped connectors. What fails first is never the camera: it is the cable.' },
+  { tEs: 'El sistema queda a tu nombre', tEn: 'The system stays yours', dEs: 'Usuarios, contraseñas y acceso al grabador en tus manos, y la app configurada en los celulares que indiqués.', dEn: 'Users, passwords and recorder access in your hands, with the app set up on the phones you choose.' },
+];
+
+const proceso = [
+  { tEs: 'Visita y levantamiento', tEn: 'Site visit and survey', dEs: 'Vamos al lugar, caminamos el perímetro y marcamos los puntos ciegos. Sale un plano simple con cuántas cámaras, de qué tipo y dónde va cada una. Sin costo y sin compromiso.', dEn: 'We walk the property, check the perimeter and mark the blind spots. The result is a simple plan: how many cameras, which type, and where each one goes. Free and with no commitment.' },
+  { tEs: 'Propuesta por escrito', tEn: 'Written proposal', dEs: 'Equipos con marca y modelo, metros de cable, accesorios y mano de obra, con el total. Lo que firmes es lo que pagás. Nada empieza hasta que la aprobás.', dEn: 'Equipment with brand and model, meters of cable, accessories and labor, with the total. What you sign is what you pay. Nothing starts until you approve it.' },
+  { tEs: 'Instalación', tEn: 'Installation', dEs: 'Cableado por canaleta o tubería, cajas de conexión selladas, grabador y switch montados en su gabinete, todo etiquetado. Dejamos el lugar limpio.', dEn: 'Cabling in conduit, sealed junction boxes, recorder and switch mounted in their cabinet, everything labeled. We leave the place clean.' },
+  { tEs: 'Entrega y capacitación', tEn: 'Handover and training', dEs: 'Probamos cámara por cámara con vos presente, configuramos la app en los celulares que indiqués y te enseñamos a buscar una fecha y exportar un video. Te queda la contraseña del sistema. Es tuyo.', dEn: 'We test camera by camera with you present, set up the app on the phones you choose, and teach you to find a date and export a clip. You keep the system password. It is yours.', destacado: true },
+];
+
+const tipos = [
+  { n: '01', tEs: 'Bala', tEn: 'Bullet', pEs: 'Cuerpo alargado y vista fija. Cubre distancias largas en una sola dirección y su presencia se nota, que es parte del trabajo.', pEn: 'Long body, fixed view. It covers long distances in one direction, and its presence is noticed — which is part of the job.', dEs: 'Portones, fachadas, pasillos y parqueos.', dEn: 'Gates, façades, corridors and parking lots.' },
+  { n: '02', tEs: 'Domo', tEn: 'Dome', pEs: 'Media esfera a ras de techo. Desde abajo no se distingue hacia dónde apunta, y la carcasa resiste golpes.', pEn: 'A half sphere flush with the ceiling. From below you cannot tell where it points, and the housing resists impact.', dEs: 'Caja, mostrador, salón, bodega y pasillos interiores.', dEn: 'Register, counter, dining room, storage and indoor aisles.' },
+  { n: '03', tEs: 'PTZ motorizada', tEn: 'Motorized PTZ', pEs: 'Gira, se inclina y acerca por control o por recorrido programado. Una sola cubre un área que exigiría tres cámaras fijas.', pEn: 'Pans, tilts and zooms by control or on a programmed tour. One covers an area that would need three fixed cameras.', dEs: 'Patios, predios, lotes y perímetros amplios.', dEn: 'Yards, lots, plots and wide perimeters.' },
+  { n: '04', tEs: 'IP con audio', tEn: 'IP with audio', pEs: 'Trabaja sobre red, con mayor resolución para identificar un rostro o una placa, y trae micrófono y bocina.', pEn: 'Runs over the network, with higher resolution to identify a face or a plate, and includes mic and speaker.', dEs: 'Casa, oficina, negocio pequeño y puntos de atención.', dEn: 'Home, office, small business and service counters.' },
+  { n: '05', tEs: 'Panorámica 180° / 360°', tEn: 'Panoramic 180° / 360°', pEs: 'Una lente abre el ambiente completo. Reduce el número de cámaras, de cables y de perforaciones.', pEn: 'One lens opens the whole room. It reduces the number of cameras, cables and drill holes.', dEs: 'Salones, bodegas abiertas y recepciones.', dEn: 'Halls, open warehouses and receptions.' },
+  { n: '06', tEs: 'Con reflector y sirena', tEn: 'With floodlight and siren', pEs: 'Detecta a una persona, enciende la luz y emite alarma. Deja de documentar el hecho y pasa a interrumpirlo.', pEn: 'Detects a person, turns on the light and sounds an alarm. It stops documenting the event and starts interrupting it.', dEs: 'Entradas traseras, techos y puntos ciegos nocturnos.', dEn: 'Back entrances, roofs and night blind spots.' },
+];
+
+/** La columna de limitaciones es la que hace creíbles a las otras tres. */
+const comparativa = [
+  { tEs: 'Bala', tEn: 'Bullet', mEs: 'Exteriores y distancias largas', mEn: 'Outdoors and long distances', aEs: '20 a 50 m de noche', aEn: '20 to 50 m at night', lEs: 'No gira: lo que queda fuera del encuadre, no se ve.', lEn: 'It does not move: whatever falls outside the frame is not seen.' },
+  { tEs: 'Domo', tEn: 'Dome', mEs: 'Interiores y techos bajos', mEn: 'Indoors and low ceilings', aEs: '10 a 25 m', aEn: '10 to 25 m', lEs: 'Menos alcance. En exterior se ensucia el domo y hay que limpiarlo.', lEn: 'Less reach. Outdoors the dome gets dirty and needs cleaning.' },
+  { tEs: 'PTZ', tEn: 'PTZ', mEs: 'Áreas amplias con vigilancia activa', mEn: 'Wide areas with active monitoring', aEs: '50 a 150 m con zoom', aEn: '50 to 150 m with zoom', lEs: 'Si está mirando a un lado, el otro queda sin grabar. Se combina con fijas.', lEn: 'While it looks one way, the other side is not recorded. Pair it with fixed cameras.' },
+  { tEs: 'IP con audio', tEn: 'IP with audio', mEs: 'Identificar personas de cerca', mEn: 'Identifying people up close', aEs: '8 a 20 m', aEn: '8 to 20 m', lEs: 'Consume más red y disco. Grabar audio de terceros tiene límites legales.', lEn: 'Uses more network and storage. Recording third-party audio has legal limits.' },
+  { tEs: 'Panorámica', tEn: 'Panoramic', mEs: 'Cubrir un ambiente completo', mEn: 'Covering an entire room', aEs: '6 a 15 m útiles', aEn: '6 to 15 m usable', lEs: 'A distancia pierde detalle: sirve para saber qué pasó, no quién fue.', lEn: 'It loses detail at a distance: good for what happened, not for who did it.' },
+  { tEs: 'Con reflector', tEn: 'With floodlight', mEs: 'Disuadir de noche', mEn: 'Deterrence at night', aEs: '10 a 30 m', aEn: '10 to 30 m', lEs: 'Mal configurada se dispara con animales y lluvia. Se ajusta en sitio.', lEn: 'Badly tuned it triggers on animals and rain. It gets adjusted on site.' },
+];
+
+const equipo = [
+  { tEs: 'Grabador DVR o NVR', tEn: 'DVR or NVR recorder', dEs: 'El centro del sistema: almacena, administra los accesos y publica el video hacia tu celular. DVR para cableado coaxial, NVR para cámaras IP sobre red.', dEn: 'The core of the system: it stores, manages access and publishes video to your phone. DVR for coaxial wiring, NVR for IP cameras over the network.' },
+  { tEs: 'Disco de vigilancia', tEn: 'Surveillance drive', dEs: 'Diseñado para escribir las 24 horas, a diferencia del disco de una computadora. Su capacidad define cuántos días podés revisar hacia atrás.', dEn: 'Built to write 24 hours a day, unlike a regular computer drive. Its capacity defines how many days you can review.' },
+  { tEs: 'Switch PoE', tEn: 'PoE switch', dEs: 'Entrega datos y alimentación por el mismo cable de red: una cámara en el poste del portón no necesita tomacorriente propio.', dEn: 'Delivers data and power over the same network cable: a camera on the gate post needs no outlet of its own.' },
+  { tEs: 'Gabinete o rack', tEn: 'Cabinet or rack', dEs: 'Grabador, switch y conexiones montados y etiquetados, bajo llave. Una falla se ubica en minutos y nadie desconecta nada por error.', dEn: 'Recorder, switch and connections mounted, labeled and locked. A fault is located in minutes and nobody unplugs anything by mistake.' },
+  { tEs: 'Respaldo de energía', tEn: 'Power backup', dEs: 'Una UPS mantiene grabador y red en línea durante el apagón. Sin ella, el corte de luz es exactamente el intervalo que nadie registra.', dEn: 'A UPS keeps recorder and network online during a blackout. Without it, the outage is exactly the interval nobody records.' },
+  { tEs: 'Cableado y canalización', tEn: 'Cabling and conduit', dEs: 'Cable certificado, protegido en canaleta o tubería, con conectores ponchados y prueba de continuidad. Es lo que decide si el sistema aguanta el invierno.', dEn: 'Certified cable, protected in conduit, with crimped connectors and a continuity test. It decides whether the system survives the rainy season.' },
+];
+
+const paquetes = [
+  { n: '4', tEs: 'Vivienda o local pequeño', tEn: 'Home or small shop', puntosEs: ['Portón y fachada', 'Entrada principal', 'Caja o sala', 'Patio o acceso trasero'], puntosEn: ['Gate and façade', 'Main entrance', 'Register or living room', 'Yard or back access'] },
+  { n: '8', tEs: 'Negocio con bodega', tEn: 'Business with storage', puntosEs: ['Todo lo del sistema de 4', 'Bodega y puerta de carga', 'Pasillos de venta', 'Área de personal'], puntosEn: ['Everything in the 4-camera system', 'Storage and loading door', 'Sales aisles', 'Staff area'] },
+  { n: '16', tEs: 'Local grande o varias plantas', tEn: 'Large premises or several floors', puntosEs: ['Cobertura por planta', 'Parqueo completo', 'Varias cajas', 'Perímetro con PTZ'], puntosEn: ['Coverage per floor', 'Full parking lot', 'Several registers', 'Perimeter with PTZ'] },
+];
+
+const reglas = [
+  { r: 'I', tEs: 'La visita no se cobra', tEn: 'The visit is free', dEs: 'Vamos, medimos y te entregamos la propuesta. Si decidís no hacerlo, no debés nada.', dEn: 'We come, measure and hand you the proposal. If you decide not to go ahead, you owe nothing.' },
+  { r: 'II', tEs: 'Si se puede reparar, se repara', tEn: 'If it can be repaired, we repair it', dEs: '¿Ya tenés cámaras? Revisamos qué equipo y qué cableado sirve, y cotizamos solo lo que falta.', dEn: 'Already have cameras? We check which equipment and wiring still work, and quote only what is missing.' },
+  { r: 'III', tEs: 'Marca y modelo a la vista', tEn: 'Brand and model stated', dEs: 'La propuesta dice exactamente qué equipo se instala. Nada de "cámaras HD" sin apellido.', dEn: 'The proposal states exactly which equipment is installed. No nameless "HD cameras".' },
+  { r: 'IV', tEs: 'El sistema queda a tu nombre', tEn: 'The system is yours', dEs: 'Usuarios, contraseñas y acceso al grabador quedan en tus manos. No dependés de nosotros para entrar.', dEn: 'Users, passwords and recorder access stay with you. You do not depend on us to get in.' },
+];
+
+const zonas = ['El Progreso', 'San Pedro Sula', 'La Lima', 'Villanueva', 'Santa Rita', 'Morazán', 'Tela', 'Yoro'];
+---
+
+<Layout
+  title={es ? s.titleEs : s.titleEn}
+  description={es ? s.descEs : s.descEn}
+  locale={es ? 'es_HN' : 'en_US'}
+  forzarLang={lang}
+  urlEs={urlEs}
+  urlEn={urlEn}
+>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+  <Nav />
+  <main id="contenido">
+    <!-- ── 01 · Hero ───────────────────────────────────────────────────── -->
+    <section class="kz-cam-hero">
+      <div class="kz-wrap kz-hero-grid">
+        <div>
+          <nav aria-label="breadcrumb" class="mb-7 text-[13px] font-medium" style="color: var(--mute)">
+            <a href="/" class="transition-colors hover:text-[var(--green2)]" style="color: var(--mute)">Kizercode</a>
+            <span aria-hidden="true"> / </span>
+            <a href={es ? '/servicios/' : '/en/services/'} class="transition-colors hover:text-[var(--green2)]" style="color: var(--mute)">{es ? 'Servicios' : 'Services'}</a>
+            <span aria-hidden="true"> / </span>
+            <span style="color: var(--green2)">{es ? s.nombre : s.name}</span>
+          </nav>
+
+          <h1 class="kz-cam-h1">{es ? s.h1Es : s.h1En}</h1>
+
+          <p class="mt-7 max-w-[580px] text-[19px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+            {es
+              ? 'Un negocio sin cámaras depende de la buena fe de todos: del cliente, del empleado y del que pasa por la calle. Con cámaras bien puestas ves tu local en vivo desde el celular y, si algo pasa, tenés el video.'
+              : 'A business without cameras depends on everyone’s good faith: the customer, the employee and whoever walks by. With cameras placed properly you watch your place live from your phone and, if something happens, you have the footage.'}
+          </p>
+          <p class="mt-4 max-w-[580px] text-[16px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+            {es ? s.subEs : s.subEn}
+          </p>
+
+          <div class="mt-9 flex flex-wrap gap-3">
+            <a href={cotizar} class="kz-cta-verde">{es ? 'Cotización gratis' : 'Free quote'}</a>
+            <a href={wa} target="_blank" rel="noopener noreferrer" class="kz-cta-borde">
+              <img src="/whatsapp.svg" alt="" width="18" height="18" class="block" />
+              WhatsApp
+            </a>
+          </div>
+
+          <div class="kz-stats mt-12">
+            {(s.stats ?? []).map((st) => (
+              <div class="kz-stat">
+                <div class="text-[15px] font-semibold">{es ? st.n : (st.nEn ?? st.n)}</div>
+                <div class="mt-0.5 text-[13px]" style="color: var(--ink2)">{es ? st.es : st.en}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- La foto con marco de cámara: lo que mira el visitante antes de leer
+             nada. El HUD no es decoración — dice dónde fue y qué es. -->
+        <figure class="kz-hud">
+          <img
+            src="/camaras/instalacion-el-progreso-1.jpg"
+            alt={es
+              ? 'Técnico de Kizercode montando una cámara bala en el poste de un portón en El Progreso, Yoro'
+              : 'Kizercode technician mounting a bullet camera on a gate post in El Progreso, Yoro'}
+            width="1200"
+            height="1600"
+            fetchpriority="high"
+            decoding="async"
+          />
+          <div class="kz-hud-velo" aria-hidden="true"></div>
+          <span class="kz-esq kz-esq-si" aria-hidden="true"></span>
+          <span class="kz-esq kz-esq-sd" aria-hidden="true"></span>
+          <span class="kz-esq kz-esq-ii" aria-hidden="true"></span>
+          <span class="kz-esq kz-esq-id" aria-hidden="true"></span>
+          <div class="kz-hud-fila kz-hud-arriba" aria-hidden="true">
+            <span class="flex items-center gap-2"><span class="kz-rec"></span>REC</span>
+            <span>{es ? 'CAM 01 · PORTÓN' : 'CAM 01 · GATE'}</span>
+          </div>
+          <div class="kz-hud-fila kz-hud-abajo" aria-hidden="true">
+            <span id="kz-reloj">--:--:--</span>
+            <span>EL PROGRESO, YORO</span>
+          </div>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ── 02 · Pilares ────────────────────────────────────────────────── -->
+    <section class="kz-pilares">
+      <div class="kz-wrap kz-pilares-grid">
+        {pilares.map((p, i) => (
+          <div class="kz-pilar">
+            <div class="kz-mono text-[12px]" style="color: var(--green)">{String(i + 1).padStart(2, '0')}</div>
+            <h3 class="mt-3.5 text-[18px] font-semibold">{es ? p.tEs : p.tEn}</h3>
+            <p class="mt-2.5 text-[15px] leading-relaxed" style="color: var(--ink2)">{es ? p.dEs : p.dEn}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ── 03 · Proceso ────────────────────────────────────────────────── -->
+    <section style="background: var(--bg2)">
+      <div class="kz-wrap kz-sec">
+        <div class="kz-encabe">
+          <div>
+            <div class="kz-eyebrow">{es ? 'Cómo trabajamos' : 'How we work'}</div>
+            <h2 class="kz-h2-cam">{es ? 'Cuatro pasos, y el precio antes del taladro' : 'Four steps, and the price before the drill'}</h2>
+          </div>
+          <p class="text-[18px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+            {es
+              ? 'Ninguna instalación empieza con una cotización por teléfono. Empieza con alguien parado en tu portón viendo por dónde entra la gente.'
+              : 'No installation starts with a quote over the phone. It starts with someone standing at your gate, seeing where people come in.'}
+          </p>
+        </div>
+
+        <div class="kz-grid-250">
+          {proceso.map((p, i) => (
+            <div class={p.destacado ? 'kz-paso kz-paso-fin' : 'kz-paso'}>
+              <div class="mb-7 flex items-center gap-3">
+                <span class="kz-paso-n">{i + 1}</span>
+                <span class="h-px flex-1" style="background: var(--line)"></span>
+              </div>
+              <h3 class="text-[19px] font-semibold">{es ? p.tEs : p.tEn}</h3>
+              <p class="mt-3 text-[15px] leading-relaxed" style="color: var(--ink2)">{es ? p.dEs : p.dEn}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 04 · Catálogo ───────────────────────────────────────────────── -->
+    <section style="background: var(--bg)">
+      <div class="kz-wrap kz-sec">
+        <div class="max-w-[760px]">
+          <div class="kz-eyebrow">{es ? 'Catálogo técnico' : 'Technical catalog'}</div>
+          <h2 class="kz-h2-cam">{es ? 'Cada cámara resuelve un problema distinto' : 'Each camera solves a different problem'}</h2>
+          <p class="mt-5 text-[18px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+            {es
+              ? 'La cámara equivocada en el lugar equivocado explica casi todos los casos de "tengo cámaras, pero no se reconoce a nadie". Esto es lo que instalamos y para qué sirve cada tipo.'
+              : 'The wrong camera in the wrong place explains nearly every case of "I have cameras, but nobody is recognizable". This is what we install and what each type is for.'}
+          </p>
+        </div>
+
+        <div class="kz-malla mt-14">
+          {tipos.map((t) => (
+            <article class="kz-celda">
+              <div class="flex items-baseline justify-between gap-4">
+                <h3 class="text-[21px] font-semibold">{es ? t.tEs : t.tEn}</h3>
+                <span class="kz-mono text-[12px]" style="color: var(--mute)">{t.n}</span>
+              </div>
+              <p class="mt-3.5 flex-1 text-[15px] leading-relaxed" style="color: var(--ink2)">{es ? t.pEs : t.pEn}</p>
+              <div class="mt-4 border-t border-dashed pt-3.5" style="border-color: var(--line)">
+                <div class="kz-mono text-[11px] uppercase" style="letter-spacing: .1em; color: var(--green2)">
+                  {es ? 'Dónde se instala' : 'Where it goes'}
+                </div>
+                <div class="mt-1.5 text-[14px] font-medium">{es ? t.dEs : t.dEn}</div>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <h3 class="mt-[88px] text-[24px] font-semibold" style="letter-spacing: -.01em">
+          {es ? 'Comparación, con las limitaciones incluidas' : 'Comparison, limitations included'}
+        </h3>
+        <div class="kz-tabla mt-6">
+          <table>
+            <thead>
+              <tr>
+                <th>{es ? 'Tipo' : 'Type'}</th>
+                <th>{es ? 'Mejor para' : 'Best for'}</th>
+                <th>{es ? 'Alcance útil' : 'Usable range'}</th>
+                <th>{es ? 'Lo que no hace' : 'What it does not do'}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {comparativa.map((c) => (
+                <tr>
+                  <td class="font-semibold whitespace-nowrap">{es ? c.tEs : c.tEn}</td>
+                  <td>{es ? c.mEs : c.mEn}</td>
+                  <td class="kz-mono whitespace-nowrap text-[13px]" style="color: var(--green2)">{es ? c.aEs : c.aEn}</td>
+                  <td style="color: var(--ink2)">{es ? c.lEs : c.lEn}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-4.5 text-[14px]" style="color: var(--mute)">
+          {es
+            ? 'El alcance es orientativo: depende del lente, de la luz disponible y de la altura de montaje. En la visita lo medimos en tu lugar.'
+            : 'Ranges are indicative: they depend on the lens, the available light and the mounting height. We measure it at your place during the visit.'}
+        </p>
+      </div>
+    </section>
+
+    <!-- ── 05 · El sistema ─────────────────────────────────────────────── -->
+    <section style="background: var(--bg2)">
+      <div class="kz-wrap kz-sec">
+        <div class="kz-encabe">
+          <div>
+            <div class="kz-eyebrow">{es ? 'La instalación completa' : 'The complete installation'}</div>
+            <h2 class="kz-h2-cam">{es ? 'Las cámaras son la mitad visible del sistema' : 'The cameras are the visible half of the system'}</h2>
+          </div>
+          <p class="text-[18px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+            {es
+              ? 'La otra mitad decide si el video sirve como prueba: el grabador, el disco, la alimentación y el cable. Es donde se recorta un presupuesto barato, y es lo primero que falla.'
+              : 'The other half decides whether the footage holds up as evidence: the recorder, the drive, the power and the cable. It is where a cheap budget cuts corners, and the first thing to fail.'}
+          </p>
+        </div>
+
+        <!-- El esquema es HTML y no una imagen: así se lee en el teléfono, se
+             puede copiar y no se ve borroso en una pantalla retina. -->
+        <div class="kz-esquema">
+          <div class="kz-esq-col" style="flex: 1 1 170px">
+            <div class="kz-mini">{es ? 'Cámaras' : 'Cameras'}</div>
+            <div class="kz-nodo">{es ? 'Bala · portón' : 'Bullet · gate'}</div>
+            <div class="kz-nodo">{es ? 'Domo · caja' : 'Dome · register'}</div>
+            <div class="kz-nodo">{es ? 'PTZ · patio' : 'PTZ · yard'}</div>
+          </div>
+          <div class="kz-cable-col" style="flex: 0 1 130px">
+            <div class="kz-cable"></div>
+            <div class="kz-mono text-center text-[11px]" style="color: var(--green2)">
+              {es ? 'Cable UTP / coaxial' : 'UTP / coaxial cable'}
+            </div>
+          </div>
+          <div class="kz-esq-col" style="flex: 1.4 1 240px">
+            <div class="kz-mini">{es ? 'Gabinete' : 'Cabinet'}</div>
+            <div class="kz-gabinete">
+              <span>{es ? 'Switch PoE' : 'PoE switch'}</span>
+              <span>{es ? 'Grabador DVR / NVR' : 'DVR / NVR recorder'}</span>
+              <span>{es ? 'Disco de vigilancia' : 'Surveillance drive'}</span>
+              <span>{es ? 'Respaldo UPS' : 'UPS backup'}</span>
+            </div>
+          </div>
+          <div class="kz-cable-col" style="flex: 0 1 90px">
+            <div class="kz-cable"></div>
+          </div>
+          <div class="kz-esq-col" style="flex: 1 1 150px">
+            <div class="kz-mini">{es ? 'Salida' : 'Output'}</div>
+            <div class="kz-nodo">{es ? 'Internet del local' : 'Local internet'}</div>
+            <div class="kz-nodo-verde">
+              <strong class="text-[15px] font-semibold">{es ? 'Tu celular' : 'Your phone'}</strong>
+              <span class="text-[13px]" style="opacity: .85">{es ? 'En vivo y grabaciones' : 'Live and recordings'}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="kz-partes">
+          {equipo.map((e) => (
+            <div class="kz-parte">
+              <h3 class="text-[18px] font-semibold">{es ? e.tEs : e.tEn}</h3>
+              <p class="mt-2.5 text-[15px] leading-relaxed" style="color: var(--ink2)">{es ? e.dEs : e.dEn}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 06 · Trabajo nuestro ────────────────────────────────────────── -->
+    <section style="background: var(--bg)">
+      <div class="kz-wrap kz-sec">
+        <div class="kz-encabe">
+          <div>
+            <div class="kz-eyebrow">{es ? 'Trabajo nuestro' : 'Our own work'}</div>
+            <h2 class="kz-h2-cam">{es ? 'Una instalación en El Progreso' : 'An installation in El Progreso'}</h2>
+          </div>
+          <p class="text-[18px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+            {es
+              ? 'Cámara bala sobre el poste del portón, caja de conexión sellada contra la lluvia y cable protegido hasta el gabinete. Son fotos del trabajo, no de un catálogo.'
+              : 'A bullet camera on the gate post, a junction box sealed against rain and protected cable all the way to the cabinet. These are photos of the work, not of a catalog.'}
+          </p>
+        </div>
+
+        <div class="kz-fotos">
+          <figure class="kz-foto">
+            <img
+              src="/camaras/instalacion-el-progreso-1.jpg"
+              alt={es
+                ? 'Montaje de una cámara bala sobre el poste del portón en El Progreso, Yoro'
+                : 'Mounting a bullet camera on the gate post in El Progreso, Yoro'}
+              width="1200"
+              height="1600"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>
+              <span>{es ? 'Montaje y alineación de la cámara sobre el poste.' : 'Mounting and aligning the camera on the post.'}</span>
+              <span class="kz-mono text-[11px] whitespace-nowrap" style="color: var(--green-bright, #3ed39a)">01 / 02</span>
+            </figcaption>
+          </figure>
+          <figure class="kz-foto">
+            <img
+              src="/camaras/instalacion-el-progreso-2.jpg"
+              alt={es
+                ? 'Cámara instalada sobre el muro con caja de conexión sellada y cableado ordenado'
+                : 'Camera installed on the wall with a sealed junction box and tidy cabling'}
+              width="1200"
+              height="1600"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>
+              <span>{es ? 'Caja de conexión sellada y bajada de cable protegida.' : 'Sealed junction box and protected cable run.'}</span>
+              <span class="kz-mono text-[11px] whitespace-nowrap" style="color: var(--green-bright, #3ed39a)">02 / 02</span>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 07 · Dimensionamiento ───────────────────────────────────────── -->
+    <section style="background: var(--bg2)">
+      <div class="kz-wrap kz-sec">
+        <div class="max-w-[760px]">
+          <div class="kz-eyebrow">{es ? 'Dimensionamiento' : 'Sizing'}</div>
+          <h2 class="kz-h2-cam">{es ? 'Sistemas de 4, 8 o 16 cámaras' : 'Systems of 4, 8 or 16 cameras'}</h2>
+          <p class="mt-5 text-[18px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+            {es
+              ? 'Una referencia para ubicar tu caso antes de llamarnos. La cantidad definitiva sale del levantamiento, y el precio va por escrito.'
+              : 'A reference to place your own case before calling us. The final count comes from the survey, and the price goes in writing.'}
+          </p>
+        </div>
+
+        <div class="kz-grid-320 mt-14">
+          {paquetes.map((p) => (
+            <div class="kz-tam">
+              <div class="flex items-baseline gap-2.5">
+                <span class="kz-tam-n">{p.n}</span>
+                <span class="text-[16px]" style="color: var(--mute)">{es ? 'cámaras' : 'cameras'}</span>
+              </div>
+              <h3 class="mt-3.5 border-b pb-5 text-[19px] font-semibold" style="border-color: var(--line)">
+                {es ? p.tEs : p.tEn}
+              </h3>
+              <div class="mt-5 flex flex-col gap-3.5">
+                {(es ? p.puntosEs : p.puntosEn).map((x) => (
+                  <div class="flex items-center gap-3 text-[15px]">
+                    <span class="kz-tick">✓</span>
+                    {x}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div class="kz-incluido mt-5">
+          <span class="kz-mono text-[11px] uppercase" style="letter-spacing: .1em; color: var(--green2)">
+            {es ? 'Incluido' : 'Included'}
+          </span>
+          <span class="min-w-[240px] flex-1 text-[15px] leading-relaxed">
+            {es
+              ? 'Todos incluyen grabador con disco, switch, cableado, configuración, app en tu celular y capacitación de entrega.'
+              : 'All of them include recorder with drive, switch, cabling, setup, the app on your phone and handover training.'}
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 08 · Reglas ─────────────────────────────────────────────────── -->
+    <section style="background: var(--bg)">
+      <div class="kz-wrap kz-sec">
+        <div class="kz-eyebrow">{es ? 'Cómo cotizamos' : 'How we quote'}</div>
+        <h2 class="kz-h2-cam mb-14">{es ? 'Cuatro reglas que no cambian' : 'Four rules that do not change'}</h2>
+        <div class="kz-grid-260">
+          {reglas.map((r) => (
+            <div class="kz-regla">
+              <div class="text-[15px] font-bold" style="color: var(--green)">{r.r}</div>
+              <h3 class="mt-5 text-[19px] font-semibold">{es ? r.tEs : r.tEn}</h3>
+              <p class="mt-3 text-[15px] leading-relaxed" style="color: var(--ink2)">{es ? r.dEs : r.dEn}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 09 · Qué incluye + cobertura ────────────────────────────────── -->
+    <section style="background: var(--bg2)">
+      <div class="kz-wrap kz-sec kz-dos-col">
+        <div>
+          <h2 class="text-[clamp(28px,3vw,38px)] font-bold" style="letter-spacing: -.02em">
+            {es ? 'Qué incluye' : "What's included"}
+          </h2>
+          <div class="mt-8 flex flex-col">
+            {s.incluye.map((i) => (
+              <div class="kz-incluye-fila">
+                <span class="kz-tick kz-tick-lleno">✓</span>
+                {es ? i.es : i.en}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-5">
+          <div class="kz-caja-cobertura">
+            <h2 class="text-[clamp(26px,2.6vw,32px)] font-bold" style="letter-spacing: -.02em">
+              {es ? 'Zona de cobertura' : 'Service area'}
+            </h2>
+            <p class="mt-4 text-[16px] leading-relaxed" style="color: var(--ink2)">
+              {es
+                ? 'Operamos desde El Progreso, Yoro, y cubrimos el valle de Sula. Si estás fuera de esta lista, escribinos: te decimos de una si llegamos y en qué condiciones.'
+                : 'We operate from El Progreso, Yoro, and cover the Sula valley. If you are outside this list, write to us: we will tell you straight whether we can get there and on what terms.'}
+            </p>
+            <div class="mt-7 flex flex-wrap gap-2">
+              {zonas.map((z, i) => (
+                <span class={i === 0 ? 'kz-zona kz-zona-base' : 'kz-zona'}>{z}</span>
+              ))}
+            </div>
+          </div>
+
+          <div class="kz-caja-cta">
+            <p class="text-[17px] font-medium leading-relaxed">
+              {es ? s.notaEs : s.notaEn}
+            </p>
+            <a href={cotizar} class="kz-cta-verde self-start">{es ? 'Agendar visita gratis' : 'Book a free visit'}</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 10 · Preguntas ──────────────────────────────────────────────── -->
+    <section id="faq" style="background: var(--bg); scroll-margin-top: 70px">
+      <div class="kz-wrap kz-sec kz-faq-grid">
+        <div class="kz-faq-lado">
+          <div class="kz-eyebrow">{s.faq.length} {es ? 'respuestas' : 'answers'}</div>
+          <h2 class="kz-h2-cam">{es ? 'Preguntas frecuentes' : 'Frequently asked questions'}</h2>
+          <p class="mt-5 text-[17px] leading-relaxed" style="color: var(--ink2)">
+            {es
+              ? 'Lo que más nos preguntan antes de instalar. Si la tuya no está, escribinos y te respondemos.'
+              : 'What we get asked most before installing. If yours is missing, write to us and we will answer.'}
+          </p>
+          <div class="kz-faq-caja">
+            <a href={wa} target="_blank" rel="noopener noreferrer" class="kz-cta-verde w-full justify-center">
+              <img src="/whatsapp.svg" alt="" width="18" height="18" class="block brightness-0 invert" />
+              {es ? 'Preguntar por WhatsApp' : 'Ask on WhatsApp'}
+            </a>
+            <a href="tel:+50488091744" class="text-center text-[14px]" style="color: var(--ink2)">
+              {es ? 'o llamá al ' : 'or call '}<strong style="color: var(--ink)">+504 8809-1744</strong>
+            </a>
+          </div>
+        </div>
+
+        <div class="min-w-0">
+          <div class="flex flex-col gap-2.5">
+            {s.faq.map((f, i) => (
+              <details class="kz-preg">
+                <summary>
+                  <span class="kz-mono w-6 shrink-0 text-[12px]" style="color: var(--mute)">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <span class="flex-1 text-[17px] font-semibold leading-snug">{es ? f.qEs : f.qEn}</span>
+                  <span class="kz-preg-signo" aria-hidden="true">+</span>
+                </summary>
+                <p>{es ? f.aEs : f.aEn}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 11 · Cierre ─────────────────────────────────────────────────── -->
+    <section style="background: var(--navy); color: var(--bg)">
+      <div class="kz-wrap kz-sec flex flex-wrap items-center justify-between gap-10">
+        <div class="max-w-[640px]">
+          <h2 class="text-[clamp(34px,4.4vw,56px)] font-bold" style="line-height: 1.05; letter-spacing: -.025em">
+            {es ? '¿Hablamos de tu proyecto?' : 'Shall we talk about your project?'}
+          </h2>
+          <p class="mt-4.5 text-[19px] leading-relaxed" style="color: color-mix(in srgb, var(--bg) 72%, transparent)">
+            {es ? 'Diagnóstico gratis y precio fijo por escrito en menos de 24 horas.' : 'Free diagnosis and a fixed written price in under 24 hours.'}
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <a href={cotizar} class="kz-cierre-verde">{es ? 'Cotizar este servicio' : 'Get a quote for this'}</a>
+          <a href={wa} target="_blank" rel="noopener noreferrer" class="kz-cierre-borde">
+            <img src="/whatsapp.svg" alt="" width="18" height="18" class="block brightness-0 invert" />
+            WhatsApp
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+  <FloatingWhatsApp />
+
+  <script is:inline>
+    // El reloj del HUD. Es el detalle que convierte un marco dibujado en algo
+    // que parece una cámara encendida — y cuesta seis líneas.
+    (function () {
+      var el = document.getElementById('kz-reloj');
+      if (!el) return;
+      var dos = function (n) { return String(n).padStart(2, '0'); };
+      var tic = function () {
+        var d = new Date();
+        el.textContent = dos(d.getHours()) + ':' + dos(d.getMinutes()) + ':' + dos(d.getSeconds());
+      };
+      tic();
+      setInterval(tic, 1000);
+    })();
+  </script>
+
+  <script is:inline define:vars={{ otra }}>
+    // En páginas con URL por idioma, el toggle ES/EN navega a la contraparte
+    // en vez de solo cambiar el CSS: así Google indexa las dos versiones.
+    document.getElementById('lang-toggle')?.addEventListener(
+      'click',
+      (e) => {
+        e.stopImmediatePropagation();
+        localStorage.setItem('kz-lang', otra.startsWith('/en/') ? 'en' : 'es');
+        location.href = otra;
+      },
+      { capture: true },
+    );
+  </script>
+</Layout>
+
+<style>
+  /* La maqueta pide JetBrains Mono. Traer una fuente completa para seis
+     renglones de etiquetas no se paga: la pila del sistema es la que el
+     design system ya define para números y tags. */
+  .kz-mono {
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+  }
+
+  .kz-wrap {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+  .kz-sec {
+    padding-top: clamp(64px, 8vw, 112px);
+    padding-bottom: clamp(64px, 8vw, 112px);
+  }
+
+  .kz-eyebrow {
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--green2);
+    margin-bottom: 18px;
+  }
+  .kz-h2-cam {
+    font-weight: 700;
+    font-size: clamp(32px, 3.8vw, 48px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  /* Encabezado a dos columnas: el título manda y el párrafo lo acompaña al
+     mismo ras de base. */
+  .kz-encabe {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+    gap: 32px 64px;
+    align-items: end;
+    margin-bottom: 56px;
+  }
+
+  /* ── Hero ─────────────────────────────────────────────────────────── */
+  .kz-cam-hero {
+    background-color: var(--bg);
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--ink) 4%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--ink) 4%, transparent) 1px, transparent 1px);
+    background-size: 56px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kz-hero-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 480px), 1fr));
+    gap: 64px;
+    align-items: center;
+    padding-top: 72px;
+    padding-bottom: 88px;
+  }
+  .kz-cam-h1 {
+    font-weight: 700;
+    font-size: clamp(38px, 5vw, 64px);
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  .kz-cta-verde,
+  .kz-cta-borde {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 26px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 16px;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+  .kz-cta-verde {
+    background: var(--green);
+    color: #fff;
+    box-shadow: 0 10px 30px -10px color-mix(in srgb, var(--green) 70%, transparent);
+  }
+  .kz-cta-verde:hover {
+    background: var(--green2);
+    color: #fff;
+  }
+  .kz-cta-borde {
+    border: 1px solid var(--line);
+    color: var(--ink);
+  }
+  .kz-cta-borde:hover {
+    background: var(--bg2);
+    border-color: var(--green);
+  }
+
+  /* Rejilla de números: un solo borde compartido, como la maqueta. */
+  .kz-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .kz-stat {
+    background: var(--bg2);
+    padding: 16px 18px;
+  }
+
+  /* ── El marco de cámara sobre la foto ─────────────────────────────── */
+  .kz-hud {
+    position: relative;
+    margin: 0;
+    border-radius: 20px;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    background: #111;
+    border: 1px solid var(--line);
+    box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.55);
+  }
+  .kz-hud img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .kz-hud-velo {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, transparent 22%, transparent 70%, rgba(0, 0, 0, 0.6) 100%);
+    pointer-events: none;
+  }
+  .kz-esq {
+    position: absolute;
+    width: 34px;
+    height: 34px;
+    border-color: rgba(255, 255, 255, 0.85);
+    border-style: solid;
+    border-width: 0;
+  }
+  .kz-esq-si { top: 18px; left: 18px; border-top-width: 2px; border-left-width: 2px; }
+  .kz-esq-sd { top: 18px; right: 18px; border-top-width: 2px; border-right-width: 2px; }
+  .kz-esq-ii { bottom: 18px; left: 18px; border-bottom-width: 2px; border-left-width: 2px; }
+  .kz-esq-id { bottom: 18px; right: 18px; border-bottom-width: 2px; border-right-width: 2px; }
+  .kz-hud-fila {
+    position: absolute;
+    left: 64px;
+    right: 64px;
+    display: flex;
+    justify-content: space-between;
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: #fff;
+  }
+  .kz-hud-arriba { top: 30px; }
+  .kz-hud-abajo { bottom: 30px; }
+  .kz-rec {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #ff4d4d;
+    display: inline-block;
+    animation: kzparpadeo 1.6s infinite;
+  }
+  @keyframes kzparpadeo {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.25; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .kz-rec { animation: none; }
+  }
+
+  /* ── Pilares ──────────────────────────────────────────────────────── */
+  .kz-pilares {
+    background: var(--bg);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .kz-pilares-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  }
+  .kz-pilar {
+    padding: 44px 28px;
+    border-right: 1px solid var(--line);
+  }
+  .kz-pilar:first-child { padding-left: 0; }
+  .kz-pilar:last-child { padding-right: 0; border-right: 0; }
+
+  /* ── Proceso ──────────────────────────────────────────────────────── */
+  .kz-grid-250 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+    gap: 16px;
+  }
+  .kz-paso {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 32px 28px;
+  }
+  /* El último paso va en verde: es el que contesta "¿y después qué?", que es
+     la pregunta con la que la gente llama. */
+  .kz-paso-fin {
+    background: var(--green-soft);
+    border-color: color-mix(in srgb, var(--green) 35%, transparent);
+  }
+  .kz-paso-n {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--green);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* ── Catálogo ─────────────────────────────────────────────────────── */
+  .kz-malla {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  .kz-celda {
+    background: var(--bg);
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    transition: background-color 0.2s ease;
+  }
+  .kz-celda:hover { background: var(--bg2); }
+
+  .kz-tabla {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--bg);
+  }
+  .kz-tabla table {
+    width: 100%;
+    min-width: 820px;
+    border-collapse: collapse;
+    font-size: 15px;
+  }
+  .kz-tabla th {
+    text-align: left;
+    padding: 16px 22px;
+    background: var(--bg2);
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink2);
+    white-space: nowrap;
+  }
+  .kz-tabla td {
+    padding: 18px 22px;
+    border-top: 1px solid var(--line);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .kz-tabla th:first-child,
+  .kz-tabla td:first-child { width: 150px; }
+
+  /* ── Esquema del sistema ──────────────────────────────────────────── */
+  .kz-esquema {
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 36px;
+    background: var(--bg);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 14px;
+    margin-bottom: 56px;
+    font-size: 14px;
+  }
+  .kz-esq-col {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .kz-mini {
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mute);
+    margin-bottom: 4px;
+  }
+  .kz-nodo {
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+  }
+  .kz-nodo-verde {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    padding: 14px;
+    border-radius: 10px;
+    background: var(--green);
+    color: #fff;
+  }
+  .kz-cable-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding-top: 20px;
+  }
+  .kz-cable {
+    width: 100%;
+    height: 2px;
+    background: repeating-linear-gradient(90deg, var(--green) 0 8px, transparent 8px 14px);
+  }
+  .kz-gabinete {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    flex: 1;
+    padding: 10px;
+    border: 1px solid var(--green);
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--green) 8%, transparent);
+  }
+  .kz-gabinete span {
+    padding: 12px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+
+  .kz-partes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr));
+    gap: 40px 48px;
+  }
+  .kz-parte {
+    border-top: 1px solid var(--line);
+    padding-top: 22px;
+  }
+
+  /* ── Fotos ────────────────────────────────────────────────────────── */
+  .kz-fotos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr));
+    gap: 20px;
+  }
+  .kz-foto {
+    position: relative;
+    margin: 0;
+    border-radius: 20px;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    background: var(--bg2);
+  }
+  .kz-foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    /* El encuadre original es vertical y lo que importa está arriba: la
+       cámara y las manos, no la escalera. */
+    object-position: 50% 26%;
+  }
+  .kz-foto figcaption {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    background: rgba(7, 16, 13, 0.78);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #fff;
+    font-size: 14px;
+  }
+
+  /* ── Dimensionamiento ─────────────────────────────────────────────── */
+  .kz-grid-320 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: 20px;
+  }
+  .kz-tam {
+    display: flex;
+    flex-direction: column;
+    padding: 36px 32px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: var(--bg);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .kz-tam:hover {
+    border-color: var(--green);
+    box-shadow: 0 24px 48px -28px rgba(11, 20, 17, 0.35);
+  }
+  .kz-tam-n {
+    font-weight: 700;
+    font-size: 72px;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--ink);
+  }
+  .kz-tick {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--green-soft);
+    color: var(--green2);
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .kz-tick-lleno {
+    width: 22px;
+    height: 22px;
+    background: var(--green);
+    color: #fff;
+    margin-top: 1px;
+  }
+  .kz-incluido {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    padding: 20px 26px;
+    border-radius: 14px;
+    background: var(--green-soft);
+    border: 1px solid color-mix(in srgb, var(--green) 30%, transparent);
+  }
+
+  /* ── Reglas ───────────────────────────────────────────────────────── */
+  .kz-grid-260 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: 16px;
+  }
+  .kz-regla {
+    background: var(--bg2);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 32px 28px;
+  }
+
+  /* ── Incluye + cobertura ──────────────────────────────────────────── */
+  .kz-dos-col {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr));
+    gap: 56px;
+  }
+  .kz-incluye-fila {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .kz-caja-cobertura {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: 40px 36px;
+  }
+  .kz-zona {
+    padding: 9px 15px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    font-size: 14px;
+  }
+  .kz-zona-base {
+    background: var(--green);
+    border-color: var(--green);
+    color: #fff;
+    font-weight: 500;
+  }
+  .kz-caja-cta {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 30px 36px;
+    border-radius: 22px;
+    background: var(--green-soft);
+    border: 1px solid color-mix(in srgb, var(--green) 30%, transparent);
+  }
+
+  /* ── Preguntas ────────────────────────────────────────────────────── */
+  .kz-faq-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+    gap: 56px;
+    align-items: start;
+  }
+  .kz-faq-lado { position: sticky; top: 110px; }
+  @media (max-width: 1024px) {
+    .kz-faq-lado { position: static; }
+  }
+  .kz-faq-caja {
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 24px;
+    background: var(--bg2);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+  }
+  .kz-preg {
+    background: var(--bg2);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .kz-preg summary {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 22px 24px;
+    cursor: pointer;
+    list-style: none;
+    transition: background-color 0.2s ease;
+  }
+  .kz-preg summary::-webkit-details-marker { display: none; }
+  .kz-preg summary:hover { background: color-mix(in srgb, var(--ink) 3%, transparent); }
+  .kz-preg-signo {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    font-size: 20px;
+    line-height: 1;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .kz-preg[open] .kz-preg-signo {
+    background: var(--green);
+    border-color: var(--green);
+    color: #fff;
+  }
+  .kz-preg[open] .kz-preg-signo::after { content: '−'; }
+  .kz-preg[open] .kz-preg-signo { font-size: 0; }
+  .kz-preg[open] .kz-preg-signo::after { font-size: 20px; }
+  .kz-preg p {
+    padding: 0 24px 24px 66px;
+    max-width: 760px;
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--ink2);
+    text-wrap: pretty;
+  }
+
+  /* ── Cierre ───────────────────────────────────────────────────────── */
+  .kz-cierre-verde,
+  .kz-cierre-borde {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 30px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 17px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  .kz-cierre-verde {
+    background: var(--green);
+    color: #fff;
+  }
+  .kz-cierre-verde:hover {
+    background: #3ed39a;
+    color: #0b1a33;
+  }
+  .kz-cierre-borde {
+    border: 1px solid color-mix(in srgb, var(--bg) 25%, transparent);
+    color: var(--bg);
+  }
+  .kz-cierre-borde:hover {
+    background: color-mix(in srgb, var(--bg) 8%, transparent);
+  }
+
+  @media (max-width: 640px) {
+    .kz-wrap { padding-left: 20px; padding-right: 20px; }
+    .kz-pilar { padding: 32px 0; border-right: 0; border-bottom: 1px solid var(--line); }
+    .kz-pilar:last-child { border-bottom: 0; }
+    .kz-esquema { padding: 24px; }
+    .kz-caja-cobertura, .kz-caja-cta { padding: 28px 24px; }
+    .kz-preg p { padding-left: 24px; }
+  }
+</style>

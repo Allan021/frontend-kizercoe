@@ -1,10 +1,14 @@
 ---
 import ServicioPage from '@/components/ServicioPage.astro';
+import CamarasPage from '@/components/CamarasPage.astro';
 import { servicios } from '@/lib/servicios';
 
 export function getStaticPaths() {
   return servicios.map((s) => ({ params: { slug: s.slugEn }, props: { servicio: s } }));
 }
 const { servicio } = Astro.props;
+
+// Misma excepción que en español: la landing de cámaras tiene plantilla propia.
+const esCamaras = servicio.slug === 'instalacion-camaras';
 ---
-<ServicioPage servicio={servicio} lang="en" />
+{esCamaras ? <CamarasPage servicio={servicio} lang="en" /> : <ServicioPage servicio={servicio} lang="en" />}
