@@ -1,0 +1,559 @@
+---
+/**
+ * El cuerpo largo de la página de cámaras.
+ *
+ * Nace de una búsqueda real: alguien escribió "instalación de cámaras en El
+ * Progreso" en Google y salimos nosotros. Esa persona no llega buscando
+ * software — llega con un portón, una bodega y una duda: cuántas cámaras,
+ * de qué tipo, y qué más hace falta además de las cámaras.
+ *
+ * Entonces esta sección responde eso y nada más: los tipos que existen y para
+ * qué sirve cada uno, el equipo que sostiene el sistema (grabador, disco,
+ * switch, rack, respaldo), cómo se conecta todo, y qué lleva un sistema de 4,
+ * 8 o 16 cámaras. Las ilustraciones son SVG a mano y no fotos de catálogo: la
+ * foto de catálogo muestra un producto que no vendemos, el dibujo muestra la
+ * forma que el cliente va a reconocer cuando mire su propia pared.
+ *
+ * Las dos fotos son nuestras, de una instalación en El Progreso. Valen más
+ * que cualquier ilustración para el que está decidiendo a quién llamar.
+ */
+interface Props {
+  es: boolean;
+}
+const { es } = Astro.props;
+
+const tipos = [
+  {
+    id: 'bala',
+    tEs: 'Cámara bala',
+    tEn: 'Bullet camera',
+    pEs: 'La alargada que se ve de lejos. Alcance largo y vista fija: se apunta una vez y cubre ese camino.',
+    pEn: 'The long one you can spot from afar. Long reach and a fixed view: aim it once and it covers that path.',
+    dEs: 'Portones, fachadas, pasillos y parqueos.',
+    dEn: 'Gates, façades, corridors and parking lots.',
+    nEs: 'Se ve. Y eso también sirve: el que la mira, se piensa dos veces.',
+    nEn: 'It is visible. That helps too: whoever sees it thinks twice.',
+  },
+  {
+    id: 'domo',
+    tEs: 'Cámara domo',
+    tEn: 'Dome camera',
+    pEs: 'La media esfera del techo. Nadie sabe hacia dónde está mirando, y la carcasa aguanta un golpe.',
+    pEn: 'The half sphere on the ceiling. Nobody can tell where it is pointing, and the housing takes a hit.',
+    dEs: 'Caja, mostrador, salón, bodega y pasillos interiores.',
+    dEn: 'Register, counter, dining room, storage and indoor aisles.',
+    nEs: 'La de adentro: discreta, no incomoda al cliente que está comprando.',
+    nEn: 'The indoor one: discreet, it does not bother the customer who is buying.',
+  },
+  {
+    id: 'ptz',
+    tEs: 'Cámara PTZ motorizada',
+    tEn: 'Motorized PTZ camera',
+    pEs: 'Gira, se inclina y hace zoom. Una sola cubre lo que a tres fijas se les escapa.',
+    pEn: 'It pans, tilts and zooms. One covers what three fixed cameras would miss.',
+    dEs: 'Patios grandes, predios, lotes y canchas.',
+    dEn: 'Large yards, lots, plots and courts.',
+    nEs: 'Cuesta más. Solo la recomendamos cuando el área de verdad la necesita.',
+    nEn: 'It costs more. We only recommend it when the area truly needs it.',
+  },
+  {
+    id: 'ip',
+    tEs: 'Cámara IP con audio',
+    tEn: 'IP camera with audio',
+    pEs: 'Va por red, trae micrófono y bocina, y da más resolución para leer un rostro o una placa.',
+    pEn: 'Runs over the network, has a mic and speaker, and gives more resolution to read a face or a plate.',
+    dEs: 'Casa, oficina, negocio pequeño y puntos donde hay que oír.',
+    dEn: 'Home, office, small business and spots where you need to hear.',
+    nEs: 'Ojo con la ley: grabar audio de conversaciones ajenas no siempre se puede.',
+    nEn: 'Careful with the law: recording other people’s conversations is not always allowed.',
+  },
+  {
+    id: 'panoramica',
+    tEs: 'Panorámica 180° / 360°',
+    tEn: 'Panoramic 180° / 360°',
+    pEs: 'Una sola lente abre toda la sala. Menos cámaras, menos cables, menos huecos en la pared.',
+    pEn: 'A single lens opens the whole room. Fewer cameras, fewer cables, fewer holes in the wall.',
+    dEs: 'Salones, bodegas abiertas y recepciones.',
+    dEn: 'Halls, open warehouses and receptions.',
+    nEs: 'Ve todo, pero de lejos pierde detalle. Se combina con una fija en la entrada.',
+    nEn: 'It sees everything, but loses detail at a distance. Pair it with a fixed one at the door.',
+  },
+  {
+    id: 'termica',
+    tEs: 'Cámara con reflector y sirena',
+    tEn: 'Camera with floodlight and siren',
+    pEs: 'Detecta a una persona, prende la luz y suena. Deja de ser testigo y pasa a ser estorbo.',
+    pEn: 'It detects a person, turns on the light and sounds off. It stops being a witness and becomes a nuisance.',
+    dEs: 'Entradas traseras, techos y puntos ciegos de noche.',
+    dEn: 'Back entrances, roofs and night blind spots.',
+    nEs: 'Se configura para que avise por persona, no por cada perro que pasa.',
+    nEn: 'Tuned to alert on people, not on every dog that walks by.',
+  },
+];
+
+const equipo = [
+  {
+    tEs: 'Grabador DVR o NVR',
+    tEn: 'DVR or NVR recorder',
+    dEs: 'Es el cerebro: guarda todo y manda el video a tu celular. DVR si el cableado es coaxial; NVR si las cámaras van por red. Te decimos cuál conviene según lo que ya tengas.',
+    dEn: 'The brain: it stores everything and sends video to your phone. DVR for coaxial wiring; NVR when cameras run over the network. We tell you which fits what you already have.',
+  },
+  {
+    tEs: 'Disco duro de vigilancia',
+    tEn: 'Surveillance hard drive',
+    dEs: 'No es el disco de una computadora: este escribe las 24 horas sin parar. El tamaño decide cuántos días podés mirar hacia atrás — normalmente entre 7 y 30.',
+    dEn: 'Not a regular computer drive: this one writes 24 hours a day. Its size decides how many days you can look back — usually 7 to 30.',
+  },
+  {
+    tEs: 'Switch PoE',
+    tEn: 'PoE switch',
+    dEs: 'Lleva datos y corriente por el mismo cable de red. Una cámara en el poste del portón no necesita tomacorriente allá arriba.',
+    dEn: 'Carries data and power over the same network cable. A camera on the gate post needs no outlet up there.',
+  },
+  {
+    tEs: 'Rack y organización',
+    tEn: 'Rack and tidy wiring',
+    dEs: 'Grabador, switch y cables en su gabinete, etiquetados. Cuando algo falle, se arregla en minutos y no adivinando cuál cable es cuál.',
+    dEn: 'Recorder, switch and cables in their cabinet, labeled. When something fails it is fixed in minutes, not by guessing which cable is which.',
+  },
+  {
+    tEs: 'Respaldo de corriente (UPS)',
+    tEn: 'Power backup (UPS)',
+    dEs: 'Se va la luz y el sistema sigue grabando un rato. Sin esto, el apagón es justo el momento en que nadie está mirando.',
+    dEn: 'The power goes out and the system keeps recording for a while. Without it, the blackout is exactly when nobody is watching.',
+  },
+  {
+    tEs: 'Cableado y canaleta',
+    tEn: 'Cabling and conduit',
+    dEs: 'Cable de red o coaxial del bueno, por canaleta o tubería, con sus conectores ponchados. El cable barato se ve igual el primer día y falla en el primer invierno.',
+    dEn: 'Proper network or coaxial cable, in conduit, with crimped connectors. Cheap cable looks the same on day one and fails in the first rainy season.',
+  },
+];
+
+const paquetes = [
+  {
+    n: '4',
+    tEs: 'Casa o negocio pequeño',
+    tEn: 'Home or small business',
+    puntosEs: ['Portón y fachada', 'Entrada principal', 'Caja o sala', 'Patio o parte de atrás'],
+    puntosEn: ['Gate and façade', 'Main entrance', 'Register or living room', 'Yard or back area'],
+  },
+  {
+    n: '8',
+    tEs: 'Negocio con bodega',
+    tEn: 'Business with storage',
+    puntosEs: ['Todo lo del sistema de 4', 'Bodega y puerta de carga', 'Pasillos de venta', 'Área de empleados'],
+    puntosEn: ['Everything in the 4-camera system', 'Storage and loading door', 'Sales aisles', 'Staff area'],
+  },
+  {
+    n: '16',
+    tEs: 'Local grande o varias plantas',
+    tEn: 'Large place or several floors',
+    puntosEs: ['Cobertura por planta', 'Parqueo completo', 'Varias cajas', 'Perímetro con PTZ'],
+    puntosEn: ['Coverage per floor', 'Full parking lot', 'Several registers', 'Perimeter with PTZ'],
+  },
+];
+
+const zonas = [
+  'El Progreso',
+  'San Pedro Sula',
+  'La Lima',
+  'Villanueva',
+  'Santa Rita',
+  'Morazán',
+  'Tela',
+  'Yoro',
+];
+---
+
+<!-- ── Trabajo nuestro ─────────────────────────────────────────────────── -->
+<section class="mx-auto max-w-[1200px] px-6 pb-4 pt-2">
+  <span class="kz-eyebrow">{es ? 'Trabajo nuestro' : 'Our own work'}</span>
+  <h2 class="kz-h2 mt-2" style="font-size: clamp(24px, 2.6vw, 32px)">
+    {es ? 'Así quedan, en una casa de El Progreso' : 'How they look, at a home in El Progreso'}
+  </h2>
+  <p class="mt-2 max-w-[680px] text-[16px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+    {es
+      ? 'Cámaras bala en el poste del portón, caja de conexión sellada y cable por tubería. No son fotos de catálogo: es una instalación que hicimos nosotros.'
+      : 'Bullet cameras on the gate post, a sealed junction box and cable in conduit. These are not catalog photos: it is an installation we did ourselves.'}
+  </p>
+
+  <div class="mt-6 grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))">
+    <figure class="kz-foto">
+      <img
+        src="/camaras/instalacion-el-progreso-1.jpg"
+        alt={es
+          ? 'Técnico de Kizercode montando una cámara bala en el poste de un portón en El Progreso, Yoro'
+          : 'Kizercode technician mounting a bullet camera on a gate post in El Progreso, Yoro'}
+        width="1200"
+        height="1600"
+        loading="lazy"
+        decoding="async"
+      />
+      <figcaption>
+        {es ? 'Montaje de la cámara en el poste del portón.' : 'Mounting the camera on the gate post.'}
+      </figcaption>
+    </figure>
+    <figure class="kz-foto">
+      <img
+        src="/camaras/instalacion-el-progreso-2.jpg"
+        alt={es
+          ? 'Cámara de seguridad instalada sobre el muro con caja de conexión y cableado ordenado'
+          : 'Security camera installed on the wall with a junction box and tidy cabling'}
+        width="1200"
+        height="1600"
+        loading="lazy"
+        decoding="async"
+      />
+      <figcaption>
+        {es ? 'Caja de conexión sellada y cable protegido.' : 'Sealed junction box and protected cable.'}
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ── Tipos de cámara ─────────────────────────────────────────────────── -->
+<section class="border-y mt-14" style="background: var(--bg2); border-color: var(--line)">
+  <div class="mx-auto max-w-[1200px] px-6 py-16">
+    <span class="kz-eyebrow">{es ? 'Qué tipo te conviene' : 'Which type suits you'}</span>
+    <h2 class="kz-h2 mt-2" style="font-size: clamp(24px, 2.6vw, 32px)">
+      {es ? 'Cada cámara es para un trabajo distinto' : 'Each camera is for a different job'}
+    </h2>
+    <p class="mt-2 max-w-[700px] text-[16px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+      {es
+        ? 'Poner la cámara equivocada en el lugar equivocado es la razón número uno de "tengo cámaras pero no se ve nada". Esto es lo que hay y para qué sirve cada una.'
+        : 'Putting the wrong camera in the wrong place is the number one reason for "I have cameras but you can’t see anything". Here is what exists and what each one is for.'}
+    </p>
+
+    <ul class="mt-8 grid list-none gap-4" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))">
+      {tipos.map((t) => (
+        <li class="kz-card flex flex-col gap-3 p-6">
+          <span class="kz-illo" aria-hidden="true">
+            {t.id === 'bala' && (
+              <svg viewBox="0 0 96 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="20" y="18" width="46" height="20" rx="10" />
+                <path d="M66 22h8a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3h-8" />
+                <circle cx="70" cy="28" r="3.2" fill="currentColor" stroke="none" opacity=".55" />
+                <path d="M34 38v8M34 46h-8a4 4 0 0 0-4 4v4" />
+                <path d="M18 54h16" />
+                <path d="M78 20c5 5 5 17 0 22" opacity=".45" />
+                <path d="M85 15c8 8 8 27 0 35" opacity=".25" />
+              </svg>
+            )}
+            {t.id === 'domo' && (
+              <svg viewBox="0 0 96 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 14h52" />
+                <path d="M30 40a18 18 0 0 1 36 0z" />
+                <path d="M30 40h36" />
+                <path d="M48 22v-8" />
+                <circle cx="48" cy="33" r="5" />
+                <path d="M34 48c4 6 24 6 28 0" opacity=".35" />
+              </svg>
+            )}
+            {t.id === 'ptz' && (
+              <svg viewBox="0 0 96 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M30 14h36" />
+                <path d="M48 14v6" />
+                <rect x="34" y="20" width="28" height="9" rx="4" />
+                <circle cx="48" cy="42" r="13" />
+                <circle cx="48" cy="42" r="5" />
+                <path d="M22 42a8 8 0 0 1 4-7" opacity=".45" />
+                <path d="M74 42a8 8 0 0 0-4-7" opacity=".45" />
+                <path d="M26 54c6 5 38 5 44 0" opacity=".3" />
+              </svg>
+            )}
+            {t.id === 'ip' && (
+              <svg viewBox="0 0 96 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="26" y="20" width="36" height="26" rx="6" />
+                <circle cx="44" cy="33" r="7" />
+                <circle cx="44" cy="33" r="2.4" fill="currentColor" stroke="none" />
+                <path d="M62 30h6l6-5v16l-6-5h-6" />
+                <path d="M34 46v8h20v-8" opacity=".5" />
+                <path d="M20 26c-3 4-3 10 0 14" opacity=".4" />
+                <path d="M14 21c-5 7-5 15 0 22" opacity=".22" />
+              </svg>
+            )}
+            {t.id === 'panoramica' && (
+              <svg viewBox="0 0 96 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M26 16h44" />
+                <circle cx="48" cy="34" r="12" />
+                <circle cx="48" cy="34" r="4.5" />
+                <path d="M48 22v-6" />
+                <path d="M16 50c8-14 56-14 64 0" opacity=".4" />
+                <path d="M10 56c10-19 66-19 76 0" opacity=".2" />
+              </svg>
+            )}
+            {t.id === 'termica' && (
+              <svg viewBox="0 0 96 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="30" y="24" width="36" height="18" rx="6" />
+                <circle cx="48" cy="33" r="5.5" />
+                <path d="M30 20h36" />
+                <path d="M24 16l-6-5M72 16l6-5" opacity=".5" />
+                <path d="M38 48v6M58 48v6" opacity=".45" />
+                <path d="M18 34h-8M86 34h-8" opacity=".45" />
+                <path d="M26 44c-4 4-6 9-6 12M70 44c4 4 6 9 6 12" opacity=".25" />
+              </svg>
+            )}
+          </span>
+          <strong class="text-[17px] font-bold" style="letter-spacing: -0.01em">{es ? t.tEs : t.tEn}</strong>
+          <span class="text-[14px] leading-relaxed" style="color: var(--ink2)">{es ? t.pEs : t.pEn}</span>
+          <span class="kz-donde">
+            <span class="text-[12px] font-semibold uppercase tracking-[0.07em]" style="color: var(--mute)">
+              {es ? 'Dónde' : 'Where'}
+            </span>
+            <span class="text-[13px]" style="color: var(--ink2)">{es ? t.dEs : t.dEn}</span>
+          </span>
+          <span class="text-[13px] leading-relaxed" style="color: var(--mute)">{es ? t.nEs : t.nEn}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<!-- ── El sistema completo ─────────────────────────────────────────────── -->
+<section class="mx-auto max-w-[1200px] px-6 py-16">
+  <span class="kz-eyebrow">{es ? 'Cómo se conecta' : 'How it connects'}</span>
+  <h2 class="kz-h2 mt-2" style="font-size: clamp(24px, 2.6vw, 32px)">
+    {es ? 'Las cámaras son la mitad del sistema' : 'The cameras are half the system'}
+  </h2>
+  <p class="mt-2 max-w-[700px] text-[16px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+    {es
+      ? 'La otra mitad es lo que nadie ve: el grabador, el disco, el switch y el cable. Ahí está la diferencia entre un video que sirve de prueba y uno borroso que se borró a los dos días.'
+      : 'The other half is what nobody sees: the recorder, the drive, the switch and the cable. That is the difference between footage that works as evidence and a blurry clip that was overwritten in two days.'}
+  </p>
+
+  <div class="kz-diagrama mt-8">
+    <svg viewBox="0 0 980 300" role="img" aria-label={es ? 'Diagrama: las cámaras llegan por cable al switch PoE y al grabador en el rack, y el video sale por internet a tu celular' : 'Diagram: cameras run by cable to the PoE switch and the recorder in the rack, and video goes over the internet to your phone'}>
+      <!-- cámaras -->
+      <g class="kz-dg-cam">
+        <rect x="24" y="36" width="66" height="26" rx="13" />
+        <path d="M48 62v14" />
+        <rect x="24" y="126" width="66" height="26" rx="13" />
+        <path d="M48 152v14" />
+        <rect x="24" y="216" width="66" height="26" rx="13" />
+        <path d="M48 216v-14" />
+      </g>
+      <text x="57" y="26" class="kz-dg-rot">{es ? 'Bala · portón' : 'Bullet · gate'}</text>
+      <text x="57" y="116" class="kz-dg-rot">{es ? 'Domo · caja' : 'Dome · register'}</text>
+      <text x="57" y="262" class="kz-dg-rot">{es ? 'PTZ · patio' : 'PTZ · yard'}</text>
+
+      <!-- cables -->
+      <g class="kz-dg-cable">
+        <path d="M90 49h120q20 0 20 20v62h70" />
+        <path d="M90 139h190" />
+        <path d="M90 229h120q20 0 20-20v-62h70" />
+      </g>
+      <text x="150" y="168" class="kz-dg-rot kz-dg-cable-rot">{es ? 'Cable UTP / coaxial' : 'UTP / coaxial cable'}</text>
+
+      <!-- rack -->
+      <g class="kz-dg-rack">
+        <rect x="290" y="44" width="250" height="196" rx="16" />
+        <rect x="312" y="96" width="206" height="36" rx="8" class="kz-dg-box" />
+        <rect x="312" y="146" width="206" height="36" rx="8" class="kz-dg-box" />
+        <rect x="312" y="196" width="206" height="28" rx="8" class="kz-dg-box" />
+        <circle cx="336" cy="114" r="4" class="kz-dg-led" />
+        <circle cx="336" cy="164" r="4" class="kz-dg-led" />
+      </g>
+      <text x="415" y="78" class="kz-dg-tit">{es ? 'Rack' : 'Rack'}</text>
+      <text x="415" y="119" class="kz-dg-rot">{es ? 'Switch PoE' : 'PoE switch'}</text>
+      <text x="415" y="169" class="kz-dg-rot">{es ? 'Grabador DVR / NVR' : 'DVR / NVR recorder'}</text>
+      <text x="415" y="215" class="kz-dg-rot">{es ? 'Disco + respaldo UPS' : 'Drive + UPS backup'}</text>
+
+      <!-- internet -->
+      <g class="kz-dg-cable"><path d="M540 142h86" /></g>
+      <g class="kz-dg-rack">
+        <path d="M646 142a34 26 0 0 1 64-10 24 20 0 0 1 2 38h-44a26 20 0 0 1-22-28z" />
+      </g>
+      <text x="686" y="190" class="kz-dg-rot">{es ? 'Internet del local' : 'Local internet'}</text>
+
+      <!-- celular -->
+      <g class="kz-dg-cable"><path d="M740 142h78" /></g>
+      <g class="kz-dg-rack">
+        <rect x="826" y="76" width="92" height="140" rx="16" />
+        <rect x="840" y="96" width="64" height="86" rx="6" class="kz-dg-box" />
+        <path d="M858 200h28" />
+      </g>
+      <text x="872" y="244" class="kz-dg-tit">{es ? 'Tu celular' : 'Your phone'}</text>
+      <text x="872" y="264" class="kz-dg-rot">{es ? 'En vivo y grabaciones' : 'Live and recordings'}</text>
+    </svg>
+  </div>
+
+  <ul class="mt-10 grid list-none gap-4" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))">
+    {equipo.map((e) => (
+      <li class="kz-card flex flex-col gap-2 p-6">
+        <strong class="text-[16px] font-bold">{es ? e.tEs : e.tEn}</strong>
+        <span class="text-[14px] leading-relaxed" style="color: var(--ink2)">{es ? e.dEs : e.dEn}</span>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<!-- ── Paquetes ────────────────────────────────────────────────────────── -->
+<section class="border-y" style="background: var(--bg2); border-color: var(--line)">
+  <div class="mx-auto max-w-[1200px] px-6 py-16">
+    <span class="kz-eyebrow">{es ? 'Cuántas necesito' : 'How many do I need'}</span>
+    <h2 class="kz-h2 mt-2" style="font-size: clamp(24px, 2.6vw, 32px)">
+      {es ? 'Sistemas de 4, 8 o 16 cámaras' : 'Systems of 4, 8 or 16 cameras'}
+    </h2>
+    <p class="mt-2 max-w-[700px] text-[16px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+      {es
+        ? 'Para que tengas una idea de por dónde va tu caso. El número final sale de ver el lugar — y el precio, por escrito, antes de que toquemos una pared.'
+        : 'Just so you can place your own case. The final number comes from seeing the place — and the price, in writing, before we touch a wall.'}
+    </p>
+
+    <ul class="mt-8 grid list-none gap-4" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr))">
+      {paquetes.map((p) => (
+        <li class="kz-card flex flex-col gap-3 p-6">
+          <span class="flex items-baseline gap-2">
+            <strong class="text-4xl font-bold" style="letter-spacing: -0.02em; color: var(--green)">{p.n}</strong>
+            <span class="text-[14px] font-medium" style="color: var(--mute)">{es ? 'cámaras' : 'cameras'}</span>
+          </span>
+          <strong class="text-[16px] font-bold">{es ? p.tEs : p.tEn}</strong>
+          <ul class="flex list-none flex-col gap-2">
+            {(es ? p.puntosEs : p.puntosEn).map((x) => (
+              <li class="flex items-start gap-2.5 text-[14px] leading-normal" style="color: var(--ink2)">
+                <span class="shrink-0 font-bold" style="color: var(--green)">✓</span>
+                {x}
+              </li>
+            ))}
+          </ul>
+        </li>
+      ))}
+    </ul>
+
+    <p class="mt-6 rounded-[14px] border p-4 text-sm leading-relaxed" style="background: var(--green-soft); border-color: color-mix(in srgb, var(--green) 30%, transparent); color: var(--ink2)">
+      {es
+        ? 'Todos llevan grabador con disco, cableado, configuración y la app en tu celular. Si ya tenés cámaras instaladas, las revisamos y te decimos qué se puede aprovechar antes de venderte nada.'
+        : 'All of them include a recorder with a drive, cabling, setup and the app on your phone. If you already have cameras, we check them and tell you what can be reused before selling you anything.'}
+    </p>
+  </div>
+</section>
+
+<!-- ── Cobertura ───────────────────────────────────────────────────────── -->
+<section class="mx-auto max-w-[1200px] px-6 py-14">
+  <h2 class="kz-h2" style="font-size: clamp(22px, 2.3vw, 28px)">
+    {es ? 'Dónde instalamos' : 'Where we install'}
+  </h2>
+  <p class="mt-2 max-w-[700px] text-[16px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+    {es
+      ? 'Estamos en El Progreso, Yoro, y atendemos el valle de Sula. Si estás más lejos, escribinos igual y te decimos de una si llegamos.'
+      : 'We are in El Progreso, Yoro, and we cover the Sula valley. If you are farther away, write anyway and we will tell you straight if we can get there.'}
+  </p>
+  <ul class="mt-5 flex list-none flex-wrap gap-2.5">
+    {zonas.map((z) => (
+      <li class="rounded-full border px-4 py-2 text-[13px] font-medium" style="border-color: var(--line); background: var(--bg); color: var(--ink2)">
+        {z}
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .kz-eyebrow {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--green2);
+  }
+
+  /* La foto manda: el borde y el radio son los de la tarjeta, para que una
+     instalación real no se vea como un cuerpo extraño entre las tarjetas. */
+  .kz-foto {
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--bg2);
+  }
+  .kz-foto img {
+    display: block;
+    width: 100%;
+    height: clamp(260px, 38vw, 420px);
+    object-fit: cover;
+    /* El encuadre es vertical y lo que importa está arriba: la cámara, no la
+       escalera. Sin esto el recorte deja en pantalla los zapatos del técnico. */
+    object-position: 50% 28%;
+  }
+  .kz-foto figcaption {
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--mute);
+    border-top: 1px solid var(--line);
+  }
+
+  .kz-illo {
+    display: block;
+    width: 96px;
+    height: 64px;
+    color: var(--green2);
+  }
+  .kz-illo svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .kz-donde {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: var(--bg2);
+  }
+
+  /* El diagrama es ancho a propósito: en teléfono se desliza, no se encoge
+     hasta volverse ilegible. */
+  .kz-diagrama {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--bg2);
+    padding: 20px;
+  }
+  .kz-diagrama svg {
+    display: block;
+    min-width: 760px;
+    width: 100%;
+    height: auto;
+  }
+  .kz-dg-cam,
+  .kz-dg-rack {
+    fill: none;
+    stroke: var(--ink2);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .kz-dg-box {
+    fill: color-mix(in srgb, var(--green) 10%, transparent);
+    stroke: var(--green2);
+  }
+  .kz-dg-led {
+    fill: var(--green);
+    stroke: none;
+  }
+  .kz-dg-cable {
+    fill: none;
+    stroke: var(--green);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-dasharray: 7 6;
+  }
+  .kz-dg-tit {
+    fill: var(--ink);
+    font-size: 15px;
+    font-weight: 700;
+    text-anchor: middle;
+  }
+  .kz-dg-rot {
+    fill: var(--ink2);
+    font-size: 13px;
+    text-anchor: middle;
+  }
+  .kz-dg-cable-rot {
+    fill: var(--mute);
+    font-size: 12px;
+  }
+</style>
