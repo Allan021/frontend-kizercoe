@@ -145,7 +145,7 @@ const zonas = ['El Progreso', 'San Pedro Sula', 'La Lima', 'Villanueva', 'Santa 
   <Nav />
   <main id="contenido">
     <!-- ── 01 · Hero ───────────────────────────────────────────────────── -->
-    <section class="kz-cam-hero">
+    <section id="portada" class="kz-cam-hero">
       <div class="kz-wrap kz-hero-grid">
         <div>
           <nav aria-label="breadcrumb" class="mb-7 text-[13px] font-medium" style="color: var(--mute)">
@@ -216,7 +216,7 @@ const zonas = ['El Progreso', 'San Pedro Sula', 'La Lima', 'Villanueva', 'Santa 
     </section>
 
     <!-- ── 02 · Pilares ────────────────────────────────────────────────── -->
-    <section class="kz-pilares">
+    <section id="pilares" class="kz-pilares">
       <div class="kz-wrap kz-pilares-grid">
         {pilares.map((p, i) => (
           <div class="kz-pilar">
@@ -229,7 +229,7 @@ const zonas = ['El Progreso', 'San Pedro Sula', 'La Lima', 'Villanueva', 'Santa 
     </section>
 
     <!-- ── 03 · Proceso ────────────────────────────────────────────────── -->
-    <section style="background: var(--bg2)">
+    <section id="proceso" style="background: var(--bg2)">
       <div class="kz-wrap kz-sec">
         <div class="kz-encabe">
           <div>
@@ -259,7 +259,7 @@ const zonas = ['El Progreso', 'San Pedro Sula', 'La Lima', 'Villanueva', 'Santa 
     </section>
 
     <!-- ── 04 · Catálogo ───────────────────────────────────────────────── -->
-    <section style="background: var(--bg)">
+    <section id="catalogo" style="background: var(--bg)">
       <div class="kz-wrap kz-sec">
         <div class="max-w-[760px]">
           <div class="kz-eyebrow">{es ? 'Catálogo técnico' : 'Technical catalog'}</div>
@@ -323,7 +323,7 @@ const zonas = ['El Progreso', 'San Pedro Sula', 'La Lima', 'Villanueva', 'Santa 
     </section>
 
     <!-- ── 05 · El sistema ─────────────────────────────────────────────── -->
-    <section style="background: var(--bg2)">
+    <section id="sistema" style="background: var(--bg2)">
       <div class="kz-wrap kz-sec">
         <div class="kz-encabe">
           <div>
@@ -386,7 +386,7 @@ const zonas = ['El Progreso', 'San Pedro Sula', 'La Lima', 'Villanueva', 'Santa 
     </section>
 
     <!-- ── 06 · Trabajo nuestro ────────────────────────────────────────── -->
-    <section style="background: var(--bg)">
+    <section id="trabajo" style="background: var(--bg)">
       <div class="kz-wrap kz-sec">
         <div class="kz-encabe">
           <div>
@@ -438,7 +438,7 @@ const zonas = ['El Progreso', 'San Pedro Sula', 'La Lima', 'Villanueva', 'Santa 
     </section>
 
     <!-- ── 07 · Dimensionamiento ───────────────────────────────────────── -->
-    <section style="background: var(--bg2)">
+    <section id="dimensionamiento" style="background: var(--bg2)">
       <div class="kz-wrap kz-sec">
         <div class="max-w-[760px]">
           <div class="kz-eyebrow">{es ? 'Dimensionamiento' : 'Sizing'}</div>
@@ -486,7 +486,7 @@ const zonas = ['El Progreso', 'San Pedro Sula', 'La Lima', 'Villanueva', 'Santa 
     </section>
 
     <!-- ── 08 · Reglas ─────────────────────────────────────────────────── -->
-    <section style="background: var(--bg)">
+    <section id="reglas" style="background: var(--bg)">
       <div class="kz-wrap kz-sec">
         <div class="kz-eyebrow">{es ? 'Cómo cotizamos' : 'How we quote'}</div>
         <h2 class="kz-h2-cam mb-14">{es ? 'Cuatro reglas que no cambian' : 'Four rules that do not change'}</h2>
@@ -503,7 +503,7 @@ const zonas = ['El Progreso', 'San Pedro Sula', 'La Lima', 'Villanueva', 'Santa 
     </section>
 
     <!-- ── 09 · Qué incluye + cobertura ────────────────────────────────── -->
-    <section style="background: var(--bg2)">
+    <section id="incluye" style="background: var(--bg2)">
       <div class="kz-wrap kz-sec kz-dos-col">
         <div>
           <h2 class="text-[clamp(28px,3vw,38px)] font-bold" style="letter-spacing: -.02em">
@@ -588,7 +588,7 @@ const zonas = ['El Progreso', 'San Pedro Sula', 'La Lima', 'Villanueva', 'Santa 
     </section>
 
     <!-- ── 11 · Cierre ─────────────────────────────────────────────────── -->
-    <section style="background: var(--navy); color: var(--bg)">
+    <section id="cierre" style="background: var(--navy); color: var(--bg)">
       <div class="kz-wrap kz-sec flex flex-wrap items-center justify-between gap-10">
         <div class="max-w-[640px]">
           <h2 class="text-[clamp(34px,4.4vw,56px)] font-bold" style="line-height: 1.05; letter-spacing: -.025em">
