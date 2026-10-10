@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { ArrowRight, Menu, X } from 'lucide-react';
+import { ArrowRight, Menu, Star, X } from 'lucide-react';
 
 /* ── Constants ─────────────────────────────────────────────────────── */
 const HLS_SRC =
@@ -17,7 +17,7 @@ const STATS = [
   { value: 2400, suffix: '+', label: 'Developers Hired',   decimals: 0 },
   { value: 98,   suffix: '%', label: 'Job Placement Rate', decimals: 0 },
   { value: 40,   suffix: '+', label: 'Partner Companies',  decimals: 0 },
-  { value: 4.9,  suffix: '★', label: 'Avg Rating',         decimals: 1 },
+  { value: 4.9,  suffix: 'star', label: 'Avg Rating',      decimals: 1 },
 ];
 
 /* ── CSS keyframes (injected once) ────────────────────────────────── */
@@ -95,7 +95,7 @@ function StatItem({
         }}
       >
         {decimals > 0 ? n.toFixed(decimals) : Math.round(n)}
-        {suffix}
+        {suffix === 'star' ? <Star size={22} fill="currentColor" className="ml-1 inline align-[-1px]" aria-hidden="true" /> : suffix}
       </div>
       <div
         style={{

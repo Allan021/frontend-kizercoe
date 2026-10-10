@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 /** Guías: lo que se le explica a cada cliente en la primera llamada. Los
  *  enlaces llevan al contacto mientras no existan como artículos. */
 const recursos = [
@@ -30,7 +31,7 @@ const recursos = [
           <span class="kz-badge self-start" style="padding: 4px 10px; font-size: 12px"><span class="en">{r.tag_en}</span><span class="es">{r.tag_es}</span></span>
           <strong class="text-lg font-bold leading-snug" style="text-wrap: balance"><span class="en">{r.t_en}</span><span class="es">{r.t_es}</span></strong>
           <span class="text-sm leading-relaxed" style="color: var(--ink2); text-wrap: pretty"><span class="en">{r.d_en}</span><span class="es">{r.d_es}</span></span>
-          <span class="mt-auto text-[13px] font-semibold" style="color: var(--green2)"><span class="en">Ask us</span><span class="es">Preguntanos</span> →</span>
+          <span class="mt-auto text-[13px] font-semibold" style="color: var(--green2)"><span class="en">Ask us</span><span class="es">Preguntanos</span> <Icon name="lucide:arrow-right" class="inline h-3.5 w-3.5 align-[-2px]" aria-hidden="true" /></span>
         </a>
       </li>
     ))}

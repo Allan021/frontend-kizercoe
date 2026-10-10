@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 /**
  * Header del rediseño: barra superior navy (estado, horario, contacto, ES/EN),
  * nav sticky con franja degradada navy→verde y menú "Servicios" desplegable
@@ -247,7 +248,7 @@ const enlaces = [
           <strong class="font-semibold" style="color: var(--ink)"><span class="en">Not sure what you need?</span><span class="es">¿No sabés qué necesitás?</span></strong>
           <span class="en">Free 30-minute diagnosis call: we tell you what suits you and what it costs, in writing.</span><span class="es">Llamada de diagnóstico gratis de 30 minutos: te decimos qué te conviene y cuánto cuesta, por escrito.</span>
         </span>
-        <a href={L('/contacto/')} class="shrink-0 text-sm font-semibold" style="color: var(--green2)"><span class="en">Book the call</span><span class="es">Agendar llamada</span> →</a>
+        <a href={L('/contacto/')} class="shrink-0 text-sm font-semibold" style="color: var(--green2)"><span class="en">Book the call</span><span class="es">Agendar llamada</span> <Icon name="lucide:arrow-right" class="inline h-3.5 w-3.5 align-[-2px]" aria-hidden="true" /></a>
       </div>
     </div>
   </div>
@@ -274,7 +275,7 @@ const enlaces = [
           <strong class="font-semibold" style="color: var(--ink)"><span class="en">Your trade not listed?</span><span class="es">¿Tu rubro no está?</span></strong>
           <span class="en">We build for your business anyway, on the same proven base.</span><span class="es">Igual construimos para tu negocio, sobre la misma base probada.</span>
         </span>
-        <a href={L('/industrias/')} class="shrink-0 text-sm font-semibold" style="color: var(--green2)"><span class="en">See all industries</span><span class="es">Ver todas las industrias</span> →</a>
+        <a href={L('/industrias/')} class="shrink-0 text-sm font-semibold" style="color: var(--green2)"><span class="en">See all industries</span><span class="es">Ver todas las industrias</span> <Icon name="lucide:arrow-right" class="inline h-3.5 w-3.5 align-[-2px]" aria-hidden="true" /></a>
       </div>
     </div>
   </div>
@@ -301,7 +302,7 @@ const enlaces = [
           <strong class="font-semibold" style="color: var(--ink)"><span class="en">5+ years building software</span><span class="es">+5 años construyendo software</span></strong>
           <span class="en">For a bank, a US company and Honduran businesses.</span><span class="es">Para un banco, una empresa de EE. UU. y negocios hondureños.</span>
         </span>
-        <a href={L('/nosotros/')} class="shrink-0 text-sm font-semibold" style="color: var(--green2)"><span class="en">Meet us</span><span class="es">Conocernos</span> →</a>
+        <a href={L('/nosotros/')} class="shrink-0 text-sm font-semibold" style="color: var(--green2)"><span class="en">Meet us</span><span class="es">Conocernos</span> <Icon name="lucide:arrow-right" class="inline h-3.5 w-3.5 align-[-2px]" aria-hidden="true" /></a>
       </div>
     </div>
   </div>

@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 import Layout from '@/layouts/Layout.astro';
 import Nav from '@/components/Nav.astro';
 import Footer from '@/components/Footer.astro';
@@ -123,16 +124,16 @@ const foto = ind.fotoAltEs ? { alt: es ? ind.fotoAltEs : ind.fotoAltEn } : undef
             <div class="flex flex-col gap-2 rounded-2xl p-6" style="background: var(--navy); color: var(--bg); box-shadow: 0 12px 30px rgba(11,26,51,.18)">
               <span class="text-[11px] font-semibold uppercase tracking-[0.08em]" style="color: var(--green-bright)">
                 {prod?.estrella
-                  ? (es ? '★ Nuestro producto estrella' : '★ Our flagship product')
+                  ? (es ? 'Nuestro producto estrella' : 'Our flagship product')
                   : ind.producto ? (es ? 'Producto listo para usar' : 'Ready-to-use product') : (es ? 'Caso real en producción' : 'Real case in production')}
               </span>
               <strong class="text-2xl font-bold">{destacado.nombre}</strong>
               <span class="text-sm leading-relaxed" style="color: color-mix(in srgb, var(--bg) 75%, transparent)">{es ? destacado.dEs : destacado.dEn}</span>
               <span class="mt-1 flex flex-wrap gap-x-5 gap-y-1 text-[13px] font-semibold">
-                <a href={destacado.url} target="_blank" rel="noopener noreferrer" data-servicio={destacado.nombre} style="color: var(--green-bright)">{es ? 'Verlo funcionando' : 'See it working'} ↗</a>
+                <a href={destacado.url} target="_blank" rel="noopener noreferrer" data-servicio={destacado.nombre} style="color: var(--green-bright)">{es ? 'Verlo funcionando' : 'See it working'} <Icon name="lucide:arrow-up-right" class="inline h-4 w-4 align-[-2px]" aria-hidden="true" /></a>
                 {prod && (
                   <a href={es ? `/productos/${prod.slug}/` : `/en/products/${prod.slugEn}/`} style="color: var(--green-bright)">
-                    {es ? `Conocer ${prod.nombre}` : `About ${prod.nombre}`} →
+                    {es ? `Conocer ${prod.nombre}` : `About ${prod.nombre}`} <Icon name="lucide:arrow-right" class="inline h-3.5 w-3.5 align-[-2px]" aria-hidden="true" />
                   </a>
                 )}
               </span>
@@ -141,7 +142,7 @@ const foto = ind.fotoAltEs ? { alt: es ? ind.fotoAltEs : ind.fotoAltEn } : undef
           <div class={foto ? 'grid grid-cols-1 gap-3 lg:grid-cols-3' : 'flex flex-col gap-3.5'}>
             {statsServicio.slice(0, 3).map((st) => (
               <div class={`flex items-center rounded-2xl border ${foto ? 'gap-3 p-3.5' : 'gap-4 p-5'}`} style="background: var(--bg); border-color: var(--line); box-shadow: 0 12px 30px rgba(11,26,51,.06)">
-                <span class={`flex shrink-0 items-center justify-center rounded-xl font-bold ${foto ? 'h-9 w-9 text-base' : 'h-12 w-12 text-lg'}`} style="background: var(--green-soft); color: var(--green2)">✓</span>
+                <span class={`flex shrink-0 items-center justify-center rounded-xl font-bold ${foto ? 'h-9 w-9 text-base' : 'h-12 w-12 text-lg'}`} style="background: var(--green-soft); color: var(--green2)"><Icon name="lucide:check" class="h-5 w-5" aria-hidden="true" /></span>
                 <span class="flex min-w-0 flex-col">
                   <strong class={`font-bold ${foto ? 'text-lg' : 'text-2xl'}`} style="letter-spacing: -0.02em; color: var(--green)">{st.n}</strong>
                   <span class={`font-medium ${foto ? 'text-[12.5px] leading-snug' : 'text-[14px]'}`} style="color: var(--ink2)">{es ? st.es : st.en}</span>

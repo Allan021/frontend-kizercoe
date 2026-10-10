@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 import { productos } from '@/lib/productos';
 
 /** Productos propios en la portada: cada tarjeta lleva a su página. */
@@ -14,7 +15,7 @@ import { productos } from '@/lib/productos';
       </h2>
     </div>
     <a href="/productos/" class="text-[15px] font-semibold" style="color: var(--green2)">
-      <span class="en">See all products</span><span class="es">Ver todos los productos</span> →
+      <span class="en">See all products</span><span class="es">Ver todos los productos</span> <Icon name="lucide:arrow-right" class="inline h-3.5 w-3.5 align-[-2px]" aria-hidden="true" />
     </a>
   </div>
 
@@ -23,7 +24,7 @@ import { productos } from '@/lib/productos';
       <li>
         <a href={`/productos/${p.slug}/`} class="kz-card flex h-full flex-col gap-3 rounded-2xl p-6" style={p.estrella ? 'color: var(--ink); border-color: var(--green); box-shadow: 0 0 0 1px var(--green)' : 'color: var(--ink)'}>
           <span class="text-[11px] uppercase tracking-[0.06em]" style="font-family: ui-monospace, Menlo, monospace; color: var(--green2)">
-            {p.estrella && <span>★ <span class="en">Flagship · </span><span class="es">Estrella · </span></span>}
+            {p.estrella && <span class="inline-flex items-center gap-1"><Icon name="lucide:star" class="h-3 w-3" fill="currentColor" aria-hidden="true" /><span class="en">Flagship · </span><span class="es">Estrella · </span></span>}
             <span class="en">{p.tagEn}</span><span class="es">{p.tagEs}</span>
           </span>
           <strong class="text-xl font-bold">{p.nombre}</strong>
@@ -31,7 +32,7 @@ import { productos } from '@/lib/productos';
             <span class="en">{p.taglineEn}</span><span class="es">{p.taglineEs}</span>
           </span>
           <span class="mt-auto text-[13px] font-semibold" style="color: var(--green2)">
-            <span class="en">View more</span><span class="es">Ver más</span> →
+            <span class="en">View more</span><span class="es">Ver más</span> <Icon name="lucide:arrow-right" class="inline h-3.5 w-3.5 align-[-2px]" aria-hidden="true" />
           </span>
         </a>
       </li>

@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 import Layout from '@/layouts/Layout.astro';
 import Nav from '@/components/Nav.astro';
 import Footer from '@/components/Footer.astro';
@@ -40,7 +41,7 @@ const es = lang === 'es';
                 {es ? 'desde ' : 'from '}<span class="lps">{s.lps}</span><span class="usd">{s.usd}</span>
               </span>
             )}
-            <span class="mt-auto text-[13px] font-semibold" style="color: var(--green2)">{es ? 'Ver servicio' : 'View service'} →</span>
+            <span class="mt-auto text-[13px] font-semibold" style="color: var(--green2)">{es ? 'Ver servicio' : 'View service'} <Icon name="lucide:arrow-right" class="inline h-3.5 w-3.5 align-[-2px]" aria-hidden="true" /></span>
           </a>
         </li>
       ))}

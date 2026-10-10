@@ -8,7 +8,9 @@ import {
   Pencil,
   Plus,
   Trash2,
+  Star,
   Users,
+  X,
 } from 'lucide-react';
 import { PanelLeads } from '@/components/PanelLeads';
 import { SubirImagen } from '@/components/SubirImagen';
@@ -315,7 +317,7 @@ function BarraFormulario({
         className="rounded-lg border px-2.5 py-1 text-sm"
         style={{ borderColor: 'var(--color-border)', color: 'var(--color-muted)' }}
       >
-        ✕
+        <X size={14} />
       </button>
     </div>
   );
@@ -917,8 +919,10 @@ function Testimonios({ onConteo }: { onConteo: (n: number) => void }) {
               titulo={
                 <>
                   {t.author}
-                  <span aria-label={`${t.rating} de 5`} style={{ color: '#ffbd2e' }}>
-                    {'★'.repeat(t.rating)}
+                  <span aria-label={`${t.rating} de 5`} className="inline-flex gap-0.5" style={{ color: '#ffbd2e' }}>
+                    {Array.from({ length: t.rating }, (_, i) => (
+                      <Star key={i} size={13} fill="currentColor" aria-hidden="true" />
+                    ))}
                   </span>
                 </>
               }

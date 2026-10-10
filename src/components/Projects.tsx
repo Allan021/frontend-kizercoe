@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import {
+  ArrowUpRight,
   Facebook,
   Globe,
   Instagram,
@@ -209,7 +210,7 @@ export default function Projects() {
                   className="text-sm transition-colors hover:opacity-80"
                   style={{ color: 'var(--color-muted)' }}
                 >
-                  <T en="View live" es="Ver en vivo" /> ↗
+                  <T en="View live" es="Ver en vivo" /> <ArrowUpRight size={15} className="inline align-[-2px]" aria-hidden="true" />
                 </a>
               )}
             </div>

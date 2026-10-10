@@ -88,7 +88,7 @@ const href = (p: (typeof productos)[number]) => (es ? `/productos/${p.slug}/` : 
                 <div class="flex flex-wrap items-center gap-2">
                   {p.estrella && (
                     <span class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[12px] font-bold" style="background: var(--green); color: #fff">
-                      <span aria-hidden="true">★</span>{es ? 'Producto estrella' : 'Flagship product'}
+                      <Icon name="lucide:star" class="h-3.5 w-3.5" fill="currentColor" aria-hidden="true" />{es ? 'Producto estrella' : 'Flagship product'}
                     </span>
                   )}
                   <span class="kz-badge" style="padding: 4px 10px; font-size: 12px">{es ? p.tagEs : p.tagEn}</span>
@@ -111,15 +111,15 @@ const href = (p: (typeof productos)[number]) => (es ? `/productos/${p.slug}/` : 
                   {p.estrella ? (
                     <span class="flex flex-wrap gap-2">
                       <a href={p.url} target="_blank" rel="noopener noreferrer" data-servicio={p.nombre} class="kz-btn kz-btn-secundario text-sm" style="padding: 10px 18px">
-                        {es ? 'Verlo funcionando' : 'See it working'} ↗
+                        {es ? 'Verlo funcionando' : 'See it working'} <Icon name="lucide:arrow-up-right" class="inline h-4 w-4 align-[-2px]" aria-hidden="true" />
                       </a>
                       <a href={href(p)} class="kz-btn kz-btn-primario text-sm" style="padding: 10px 18px">
-                        {es ? 'Ver más' : 'View more'} →
+                        {es ? 'Ver más' : 'View more'} <Icon name="lucide:arrow-right" class="inline h-3.5 w-3.5 align-[-2px]" aria-hidden="true" />
                       </a>
                     </span>
                   ) : (
                     <a href={href(p)} class="text-[13px] font-semibold" style="color: var(--green2)">
-                      {es ? 'Ver más' : 'View more'} →
+                      {es ? 'Ver más' : 'View more'} <Icon name="lucide:arrow-right" class="inline h-3.5 w-3.5 align-[-2px]" aria-hidden="true" />
                     </a>
                   )}
                 </div>

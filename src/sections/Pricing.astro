@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 /**
  * Precios por lo que el cliente quiere, con toggle Lempiras/Dólares.
  * Se renderizan las dos monedas y el CSS (html[data-moneda]) muestra una;
@@ -78,7 +79,7 @@ const cosas = [
           <ul class="flex list-none flex-col gap-2">
             {c.es.map((item, i) => (
               <li class="flex items-start gap-2.5 text-sm leading-normal" style="color: var(--ink2)">
-                <span class="shrink-0 font-bold" style="color: var(--green)">✓</span>
+                <span class="shrink-0" style="color: var(--green)"><Icon name="lucide:check" class="mt-0.5 h-4 w-4" aria-hidden="true" /></span>
                 <span><span class="en">{c.en[i]}</span><span class="es">{item}</span></span>
               </li>
             ))}

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type CSSProperties } from 'react';
-import { ChevronDown, ExternalLink, FileText, Mail, MessageCircle, RefreshCw, Search, Trash2 } from 'lucide-react';
+import { ChevronDown, ExternalLink, FileText, Mail, MessageCircle, RefreshCw, Search, Trash2, X } from 'lucide-react';
 import { panelDeleteLead, panelLeads, panelUpdateLead, type Lead, type LeadEstado } from '@/lib/api';
 
 /**
@@ -226,8 +226,8 @@ export function PanelLeads({ onConteo }: { onConteo: (n: number) => void }) {
           );
         })}
         {filtroServicio !== 'todos' && (
-          <button onClick={() => setFiltroServicio('todos')} className="kz-tab kz-tab-activa">
-            {filtroServicio} ✕
+          <button onClick={() => setFiltroServicio('todos')} className="kz-tab kz-tab-activa inline-flex items-center gap-1.5">
+            {filtroServicio} <X size={14} aria-label="Quitar filtro" />
           </button>
         )}
       </div>
