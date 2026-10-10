@@ -46,7 +46,8 @@ const { gaId } = Astro.props;
       addEventListener(ev, cargar, { once: true, passive: true });
     });
     addEventListener('load', function () {
-      ('requestIdleCallback' in window ? requestIdleCallback : setTimeout)(cargar, 2500);
+      if ('requestIdleCallback' in window) requestIdleCallback(cargar, { timeout: 2500 });
+      else setTimeout(cargar, 2500);
     });
   })();
   window.dataLayer = window.dataLayer || [];

@@ -109,7 +109,8 @@ const cosas = [
 </section>
 
 <style>
-  .kz-moneda-btn { background: transparent; color: var(--ink2); transition: background-color 0.15s ease, color 0.15s ease; }
+  /* Sin transición de color: a media animación quedaba gris sobre navy (1.8:1). */
+  .kz-moneda-btn { background: transparent; color: var(--ink2); }
   html:not([data-moneda='usd']) #btn-lps,
   html[data-moneda='usd'] #btn-usd { background: var(--navy); color: var(--bg); }
 </style>
