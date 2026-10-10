@@ -70,18 +70,22 @@ const href = (p: (typeof productos)[number]) => (es ? `/productos/${p.slug}/` : 
                   <strong class="text-2xl font-bold" style="letter-spacing: -0.02em">{p.nombre}</strong>
                 </span>
                 {p.fotoAltEs && (
-                  <img
-                    src={`/productos/${p.slug}.jpg`}
-                    srcset={`/productos/${p.slug}-768.jpg 768w, /productos/${p.slug}.jpg 1200w`}
-                    sizes={p.estrella ? '(min-width: 1024px) 600px, 100vw' : '(min-width: 1024px) 380px, 100vw'}
-                    alt={es ? p.fotoAltEs : p.fotoAltEn}
-                    width="1200"
-                    height="800"
-                    loading={p.estrella ? 'eager' : 'lazy'}
-                    decoding="async"
-                    onerror="this.remove()"
-                    class="absolute inset-0 h-full w-full object-cover"
-                  />
+                  <picture>
+                    <source type="image/avif" srcset={`/productos/${p.slug}-768.avif 768w, /productos/${p.slug}.avif 1200w`} sizes={p.estrella ? '(min-width: 1024px) 600px, 100vw' : '(min-width: 1024px) 380px, 100vw'} />
+                    <source type="image/webp" srcset={`/productos/${p.slug}-768.webp 768w, /productos/${p.slug}.webp 1200w`} sizes={p.estrella ? '(min-width: 1024px) 600px, 100vw' : '(min-width: 1024px) 380px, 100vw'} />
+                    <img
+                      src={`/productos/${p.slug}.jpg`}
+                      srcset={`/productos/${p.slug}-768.jpg 768w, /productos/${p.slug}.jpg 1200w`}
+                      sizes={p.estrella ? '(min-width: 1024px) 600px, 100vw' : '(min-width: 1024px) 380px, 100vw'}
+                      alt={es ? p.fotoAltEs : p.fotoAltEn}
+                      width="1200"
+                      height="800"
+                      loading={p.estrella ? 'eager' : 'lazy'}
+                      decoding="async"
+                      onerror="this.remove()"
+                      class="absolute inset-0 h-full w-full object-cover"
+                    />
+                  </picture>
                 )}
               </a>
               <div class={`flex flex-1 flex-col gap-3 ${p.estrella ? 'justify-center p-8' : 'p-6'}`}>

@@ -3,6 +3,7 @@ import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 import icon from 'astro-icon';
+import unIdioma from './src/integrations/un-idioma';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -19,6 +20,9 @@ export default defineConfig({
     // Iconos como SVG en línea, solo los que se usan: cero JavaScript y cero
     // petición extra. Se escriben <Icon name="lucide:arrow-right" />.
     icon({ include: { lucide: ['*'] } }),
+    // En páginas con URL por idioma, borra del HTML final el texto del otro
+    // idioma (los <span class="en">/"es"> que el CSS escondía).
+    unIdioma(),
   ],
   output: 'static',
   compressHTML: true,

@@ -27,8 +27,28 @@ interface Props {
 const { gaId } = Astro.props;
 ---
 
-<script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
 <script is:inline define:vars={{ GA_ID: gaId }}>
+  // gtag.js pesa 176 KB y en 4G le peleaba el ancho de banda a la página: era
+  // lo más pesado que bajaba el celular. Se carga cuando la página ya se ve
+  // (después de 'load' y en un rato libre) o al primer toque, lo que pase
+  // antes. Los eventos se encolan en dataLayer desde ya: no se pierde ninguno.
+  (function () {
+    var cargado = false;
+    function cargar() {
+      if (cargado) return;
+      cargado = true;
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+      document.head.appendChild(s);
+    }
+    ['pointerdown', 'keydown', 'scroll'].forEach(function (ev) {
+      addEventListener(ev, cargar, { once: true, passive: true });
+    });
+    addEventListener('load', function () {
+      ('requestIdleCallback' in window ? requestIdleCallback : setTimeout)(cargar, 2500);
+    });
+  })();
   window.dataLayer = window.dataLayer || [];
   function gtag() { dataLayer.push(arguments); }
   window.gtag = gtag;

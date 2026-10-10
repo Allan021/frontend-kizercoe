@@ -7,6 +7,7 @@ import FloatingWhatsApp from '@/components/FloatingWhatsApp.astro';
 import { statsServicio } from '@/lib/serviciosIntro';
 import type { Industria } from '@/lib/industrias';
 import { productos } from '@/lib/productos';
+import { serviciosDe } from '@/lib/enlaces';
 
 /**
  * Plantilla de páginas de industria: la historia del rubro, el producto YA
@@ -24,6 +25,7 @@ const urlEs = `/industrias/${ind.slug}/`;
 const urlEn = `/en/industries/${ind.slugEn}/`;
 const propia = es ? urlEs : urlEn;
 const otra = es ? urlEn : urlEs;
+const servRel = serviciosDe(ind.slug);
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -107,18 +109,22 @@ const foto = ind.fotoAltEs ? { alt: es ? ind.fotoAltEs : ind.fotoAltEn } : undef
 
         <div class="flex flex-col gap-3.5 lg:pt-10">
           {foto && (
-            <img
-              src={`/industrias/${ind.slug}.jpg`}
-              srcset={`/industrias/${ind.slug}-768.jpg 768w, /industrias/${ind.slug}.jpg 1200w`}
-              sizes="(min-width: 1024px) 560px, 100vw"
-              alt={foto.alt}
-              width="1200"
-              height="800"
-              fetchpriority="high"
-              decoding="async"
-              class="block h-auto w-full rounded-3xl border object-cover"
-              style="border-color: var(--line); box-shadow: 0 24px 50px rgba(11,26,51,.14); aspect-ratio: 3 / 2"
-            />
+            <picture>
+              <source type="image/avif" srcset={`/industrias/${ind.slug}-768.avif 768w, /industrias/${ind.slug}.avif 1200w`} sizes="(min-width: 1024px) 560px, 100vw" />
+              <source type="image/webp" srcset={`/industrias/${ind.slug}-768.webp 768w, /industrias/${ind.slug}.webp 1200w`} sizes="(min-width: 1024px) 560px, 100vw" />
+              <img
+                src={`/industrias/${ind.slug}.jpg`}
+                srcset={`/industrias/${ind.slug}-768.jpg 768w, /industrias/${ind.slug}.jpg 1200w`}
+                sizes="(min-width: 1024px) 560px, 100vw"
+                alt={foto.alt}
+                width="1200"
+                height="800"
+                fetchpriority="high"
+                decoding="async"
+                class="block h-auto w-full rounded-3xl border object-cover"
+                style="border-color: var(--line); box-shadow: 0 24px 50px rgba(11,26,51,.14); aspect-ratio: 3 / 2"
+              />
+            </picture>
           )}
           {destacado && (
             <div class="flex flex-col gap-2 rounded-2xl p-6" style="background: var(--navy); color: var(--bg); box-shadow: 0 12px 30px rgba(11,26,51,.18)">
@@ -210,6 +216,30 @@ const foto = ind.fotoAltEs ? { alt: es ? ind.fotoAltEs : ind.fotoAltEn } : undef
         </div>
       </div>
     </section>
+
+    {servRel.length > 0 && (
+      <section class="mx-auto max-w-[1200px] px-6 py-14">
+        <h2 class="kz-h2" style="font-size: clamp(22px, 2.4vw, 28px)">
+          {es ? `Servicios para ${ind.nombre.toLowerCase()}` : `Services for ${ind.name.toLowerCase()}`}
+        </h2>
+        <ul class="mt-6 grid list-none gap-4" style="grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr))">
+          {servRel.map((sv) => (
+            <li>
+              <a href={es ? `/servicios/${sv.slug}/` : `/en/services/${sv.slugEn}/`} class="kz-card flex h-full flex-col gap-1.5 p-5">
+                <strong class="text-[15px] font-semibold">{es ? sv.nombre : sv.name}</strong>
+                {sv.lps && (
+                  <span class="text-[13px]" style="color: var(--mute)">{es ? `desde ${sv.lps}` : `from ${sv.usd}`}</span>
+                )}
+                <span class="mt-auto inline-flex items-center gap-1 pt-2 text-[13px] font-semibold" style="color: var(--green2)">
+                  {es ? 'Ver servicio' : 'View service'}
+                  <Icon name="lucide:arrow-right" class="h-3.5 w-3.5" aria-hidden="true" />
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
 
     <!-- CTA final -->
     <section style="background: var(--navy); color: var(--bg)">

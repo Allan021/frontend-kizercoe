@@ -19,7 +19,8 @@
   --line: #e1e7ec;
   --ink: #0b1a33;
   --ink2: #3d4a63;
-  --mute: #74809a;
+  /* #5f6b84 y no #74809a: el gris viejo daba 3.96:1 sobre blanco y no pasaba AA. */
+  --mute: #5f6b84;
   /* #0d8050 y no #16a36c: con letra blanca encima da 4.98:1 (WCAG AA); el viejo daba 3.24 y Lighthouse lo marcaba en cada botón. */
   --green: #0d8050;
   --green2: #0a6b43;
@@ -190,11 +191,15 @@
 
   /* Primera línea del H1 de servicios: la búsqueda real ("Diseño de páginas web en Honduras"),
      chica y en verde, arriba del lema grande. Google lee el H1 entero. */
+  /* <picture> solo elige avif/webp/jpg: que no genere caja, así el <img> se acomoda igual que antes. */
+  picture { display: contents; }
   .kz-h1-kw { display: block; margin-bottom: 14px; font-size: 15px; font-weight: 600; line-height: 1.4; letter-spacing: 0; color: var(--green2); text-wrap: balance; }
   .kz-latido { width: 7px; height: 7px; border-radius: 999px; background: var(--green); flex-shrink: 0; }
   @media (prefers-reduced-motion: no-preference) {
     /* Primera línea del H1 de servicios: la búsqueda real ("Diseño de páginas web en Honduras"),
      chica y en verde, arriba del lema grande. Google lee el H1 entero. */
+  /* <picture> solo elige avif/webp/jpg: que no genere caja, así el <img> se acomoda igual que antes. */
+  picture { display: contents; }
   .kz-h1-kw { display: block; margin-bottom: 14px; font-size: 15px; font-weight: 600; line-height: 1.4; letter-spacing: 0; color: var(--green2); text-wrap: balance; }
   .kz-latido { animation: kz-latir 2s ease-in-out infinite; }
   }

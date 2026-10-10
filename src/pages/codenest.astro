@@ -55,7 +55,8 @@ const canonicalURL = `${siteURL}/codenest`;
   <link rel="manifest" href="/site.webmanifest" />
 
   <!-- Schema.org -->
-  <script is:inline type="application/ld+json">{JSON.stringify({
+  <!-- set:html y no {…} adentro: con is:inline la expresión salía como texto literal y el JSON-LD llegaba roto. -->
+  <script is:inline type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": "Course",
     "name": "CodeNest — Coding Bootcamp",
@@ -73,7 +74,7 @@ const canonicalURL = `${siteURL}/codenest`;
       "@type": "Offer",
       "availability": "https://schema.org/InStock"
     }
-  })}</script>
+  })} />
 
   <!-- Preconnect -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />

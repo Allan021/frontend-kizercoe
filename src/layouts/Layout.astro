@@ -26,6 +26,8 @@ interface Props {
   waEn?: string;
   /** Incluir el schema de los productos propios (portada y /productos). */
   conProductos?: boolean;
+  /** Página solo en español (las guías): no se declara versión en inglés. */
+  soloEs?: boolean;
 }
 
 const {
@@ -45,6 +47,7 @@ const {
   waEs,
   waEn,
   conProductos = false,
+  soloEs = false,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -86,7 +89,7 @@ const GOOGLE_VERIFICATION = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
   <meta property="og:image:alt" content={imageAlt} />
   <meta property="og:image:type" content={image.endsWith('.jpg') ? 'image/jpeg' : 'image/png'} />
   <meta property="og:locale" content={locale} />
-  <meta property="og:locale:alternate" content="en_US" />
+  {!soloEs && <meta property="og:locale:alternate" content="en_US" />}
   <meta property="og:site_name" content="Kizercode" />
 
   <!-- Twitter / X Card -->
@@ -103,7 +106,7 @@ const GOOGLE_VERIFICATION = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 
   <!-- hreflang — con URL propia por idioma cuando la página la tiene -->
   <link rel="alternate" hreflang="es" href={urlEs ? new URL(urlEs, Astro.site) : canonicalURL} />
-  <link rel="alternate" hreflang="en" href={urlEn ? new URL(urlEn, Astro.site) : canonicalURL} />
+  {!soloEs && <link rel="alternate" hreflang="en" href={urlEn ? new URL(urlEn, Astro.site) : canonicalURL} />}
   <link rel="alternate" hreflang="x-default" href={urlEs ? new URL(urlEs, Astro.site) : canonicalURL} />
 
   <!-- Favicon -->

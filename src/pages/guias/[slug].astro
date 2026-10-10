@@ -1,0 +1,243 @@
+---
+import { Icon } from 'astro-icon/components';
+import { render } from 'astro:content';
+import Layout from '@/layouts/Layout.astro';
+import Nav from '@/components/Nav.astro';
+import Footer from '@/components/Footer.astro';
+import FloatingWhatsApp from '@/components/FloatingWhatsApp.astro';
+import IdiomaPorUrl from '@/components/IdiomaPorUrl.astro';
+import { servicios } from '@/lib/servicios';
+import { guiasOrdenadas, fechaMod, fechaLarga, fechaIso, minutosLectura, type Guia } from '@/lib/guias';
+
+/**
+ * Una guía. Pensada para que la cite Google o una IA: H1 con la pregunta,
+ * fecha de actualización visible, índice, respuesta, FAQ y JSON-LD de
+ * Article + FAQPage + migas.
+ *
+ * hreflang: las guías existen solo en español. Layout siempre emite un
+ * alternate `en`; sin URL inglesa real, lo menos malo es que apunte a la misma
+ * página (autorreferencia, igual que la `es` y la x-default). Apuntarlo a /en/
+ * diría que la portada inglesa es la traducción de esta guía, y eso es falso.
+ */
+export async function getStaticPaths() {
+  const guias = await guiasOrdenadas();
+  return guias.map((g) => ({ params: { slug: g.id }, props: { guia: g } }));
+}
+interface Props {
+  guia: Guia;
+}
+const { guia } = Astro.props;
+const d = guia.data;
+const { Content, headings } = await render(guia);
+const s = servicios.find((v) => v.slug === d.servicio)!;
+
+const url = `/guias/${guia.id}/`;
+const urlAbs = new URL(url, Astro.site).href;
+const mod = fechaMod(guia);
+const minutos = minutosLectura(guia);
+
+// Índice: los h2 del cuerpo, más el FAQ, que se pinta fuera del Markdown.
+const indice = [
+  ...headings.filter((h) => h.depth === 2).map((h) => ({ slug: h.slug, text: h.text })),
+  ...(d.faq.length ? [{ slug: 'preguntas-frecuentes', text: 'Preguntas frecuentes' }] : []),
+];
+
+const nombreMin = s.nombre.replace(/^[A-ZÁÉÍÓÚ](?=[a-záéíóúñ])/, (c) => c.toLowerCase());
+const waTexto = `Hola! Leí la guía "${d.title}" y quiero cotizar ${nombreMin}.`;
+const wa = `https://wa.me/50488091744?text=${encodeURIComponent(waTexto)}`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: d.title,
+      description: d.description,
+      inLanguage: 'es-HN',
+      datePublished: fechaIso(d.date),
+      dateModified: fechaIso(mod),
+      author: { '@id': 'https://www.kizercode.com/#business' },
+      publisher: { '@id': 'https://www.kizercode.com/#business' },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': urlAbs },
+      image: new URL('/og-image.png', Astro.site).href,
+      ...(d.tags.length ? { keywords: d.tags.join(', ') } : {}),
+      about: { '@type': 'Service', name: s.nombre, url: new URL(`/servicios/${s.slug}/`, Astro.site).href },
+    },
+    ...(d.faq.length
+      ? [{
+          '@type': 'FAQPage',
+          mainEntity: d.faq.map((f) => ({
+            '@type': 'Question',
+            name: f.q,
+            acceptedAnswer: { '@type': 'Answer', text: f.a },
+          })),
+        }]
+      : []),
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Kizercode', item: 'https://www.kizercode.com/' },
+        { '@type': 'ListItem', position: 2, name: 'Guías', item: new URL('/guias/', Astro.site).href },
+        { '@type': 'ListItem', position: 3, name: d.title, item: urlAbs },
+      ],
+    },
+  ],
+};
+---
+<Layout
+  title={`${d.title} | Kizercode`}
+  description={d.description}
+  type="article"
+  forzarLang="es"
+  urlEs={url}
+  soloEs
+  keywords={d.tags.join(', ')}
+  servicio={s.nombre}
+  waEs={waTexto}
+>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+  <Nav />
+  <IdiomaPorUrl otra="/en/" />
+  <main id="contenido">
+    <header class="relative overflow-hidden" style="background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%)">
+      <div class="relative mx-auto flex max-w-[768px] flex-col gap-5 px-6 pb-8 pt-14">
+        <nav aria-label="breadcrumb" class="text-[13px] font-medium" style="color: var(--mute)">
+          <a href="/" class="transition-colors hover:text-[var(--green2)]" style="color: var(--mute)">Kizercode</a>
+          <span aria-hidden="true"> / </span>
+          <a href="/guias/" class="transition-colors hover:text-[var(--green2)]" style="color: var(--mute)">Guías</a>
+          <span aria-hidden="true"> / </span>
+          <span style="color: var(--ink2)">{d.title}</span>
+        </nav>
+        <h1 class="font-bold" style="font-size: clamp(32px, 4.4vw, 48px); line-height: 1.12; letter-spacing: -0.02em; text-wrap: balance">
+          {d.title}
+        </h1>
+        <p class="text-[18px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">{d.description}</p>
+        <p class="flex flex-wrap items-center gap-x-3 gap-y-1 text-[13.5px]" style="color: var(--mute)">
+          <span>Por <strong style="color: var(--ink2)">Kizercode</strong>, El Progreso</span>
+          <span aria-hidden="true">·</span>
+          <span>{d.updated ? 'Actualizada el' : 'Publicada el'} <time datetime={fechaIso(mod)}>{fechaLarga(mod)}</time></span>
+          <span aria-hidden="true">·</span>
+          <span>{minutos} min de lectura</span>
+        </p>
+      </div>
+    </header>
+
+    <div class="mx-auto max-w-[768px] px-6 pb-20">
+      {indice.length > 2 && (
+        <nav aria-labelledby="indice-titulo" class="kz-card mb-10 p-6" style="background: var(--bg2)">
+          <p id="indice-titulo" class="kz-eyebrow mb-3" style="font-size: 12px">En esta guía</p>
+          <ol class="kz-indice flex flex-col gap-2 text-[15px]">
+            {indice.map((h) => (
+              <li><a href={`#${h.slug}`}>{h.text}</a></li>
+            ))}
+          </ol>
+        </nav>
+      )}
+
+      <article class="kz-prosa">
+        <Content />
+      </article>
+
+      {d.faq.length > 0 && (
+        <section class="mt-14" aria-labelledby="preguntas-frecuentes">
+          <h2 id="preguntas-frecuentes" class="kz-h2 mb-3" style="font-size: clamp(24px, 2.6vw, 30px)">Preguntas frecuentes</h2>
+          {d.faq.map((f) => (
+            <details class="kz-gfaq border-b" style="border-color: var(--line)">
+              <summary class="flex cursor-pointer items-center justify-between gap-4 py-4 text-[16px] font-semibold">
+                <span>{f.q}</span>
+                <span class="kz-gfaq-signo shrink-0" aria-hidden="true">+</span>
+              </summary>
+              <p class="pb-5 text-[16px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">{f.a}</p>
+            </details>
+          ))}
+        </section>
+      )}
+
+      <!-- CTA: el servicio de la guía y WhatsApp con el mensaje ya escrito. -->
+      <aside class="mt-14 flex flex-col gap-4 rounded-3xl p-8" style="background: var(--green-soft); border: 1px solid color-mix(in srgb, var(--green) 30%, transparent)">
+        <p class="kz-eyebrow" style="font-size: 12px">{s.nombre}</p>
+        <p class="text-[22px] font-bold leading-snug" style="letter-spacing: -0.01em; text-wrap: balance">
+          {s.lps
+            ? `¿Lo querés para tu negocio? ${s.nombre}, desde ${s.lps} (${s.usd}), con precio fijo por escrito.`
+            : `¿Lo querés para tu negocio? Te damos el precio por escrito antes de empezar.`}
+        </p>
+        <p class="text-[15.5px] leading-relaxed" style="color: var(--ink2)">
+          Estamos en Plaza Bendeck, El Progreso, Yoro, de lunes a sábado de 7:00 a.m. a 6:00 p.m. Escribinos y te respondemos en menos de 24 horas.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a href={`/servicios/${s.slug}/`} class="kz-btn kz-btn-primario" style="padding: 14px 24px; font-size: 15px">
+            Ver {nombreMin}
+          </a>
+          <a href={wa} target="_blank" rel="noopener noreferrer" class="kz-btn kz-btn-secundario" style="padding: 14px 24px; font-size: 15px; background: var(--bg)">
+            <img src="/whatsapp.svg" alt="" width="18" height="18" class="block" />
+            WhatsApp +504 8809-1744
+          </a>
+        </div>
+      </aside>
+
+      {d.relacionados.length > 0 && (
+        <nav aria-labelledby="segui-leyendo" class="mt-12">
+          <h2 id="segui-leyendo" class="mb-4 text-[18px] font-bold">Seguí leyendo</h2>
+          <ul class="grid list-none gap-3" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))">
+            {d.relacionados.map((r) => (
+              <li>
+                <a href={r.href} class="kz-card flex h-full items-center justify-between gap-3 p-5 text-[15px] font-semibold" style="color: var(--ink)">
+                  <span>{r.titulo}</span>
+                  <Icon name="lucide:arrow-right" class="h-4 w-4 shrink-0" style="color: var(--green2)" aria-hidden="true" />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
+    </div>
+  </main>
+  <Footer />
+  <FloatingWhatsApp />
+</Layout>
+
+<style>
+  .kz-indice { list-style: decimal; padding-left: 1.25rem; }
+  .kz-indice li::marker { color: var(--mute); font-size: 13px; }
+  .kz-indice a { color: var(--ink2); transition: color 0.2s ease; }
+  .kz-indice a:hover { color: var(--green2); }
+
+  /* Tipografía del artículo: el Markdown llega sin clases. */
+  .kz-prosa { font-size: 17px; line-height: 1.75; color: var(--ink2); }
+  .kz-prosa > :global(* + *) { margin-top: 1.15em; }
+  .kz-prosa :global(h2) {
+    margin-top: 2.2em; color: var(--ink); font-size: clamp(24px, 2.6vw, 30px);
+    line-height: 1.2; letter-spacing: -0.02em; font-weight: 700; text-wrap: balance;
+    scroll-margin-top: 96px;
+  }
+  .kz-prosa :global(h3) {
+    margin-top: 1.8em; color: var(--ink); font-size: 20px; line-height: 1.3;
+    font-weight: 700; scroll-margin-top: 96px;
+  }
+  .kz-prosa :global(h2 + *), .kz-prosa :global(h3 + *) { margin-top: 0.6em; }
+  .kz-prosa :global(p) { text-wrap: pretty; }
+  .kz-prosa :global(strong) { color: var(--ink); font-weight: 600; }
+  .kz-prosa :global(a) { color: var(--green2); font-weight: 500; text-decoration: underline; text-underline-offset: 3px; }
+  .kz-prosa :global(a:hover) { color: var(--green); }
+  .kz-prosa :global(ul) { list-style: disc; padding-left: 1.4em; }
+  .kz-prosa :global(ol) { list-style: decimal; padding-left: 1.4em; }
+  .kz-prosa :global(li + li) { margin-top: 0.45em; }
+  .kz-prosa :global(li::marker) { color: var(--green); }
+  .kz-prosa :global(blockquote) {
+    border-left: 3px solid var(--green); padding: 0.2em 0 0.2em 1.1em; color: var(--ink);
+  }
+  .kz-prosa :global(table) {
+    display: block; width: 100%; overflow-x: auto; border-collapse: collapse;
+    font-size: 15px; line-height: 1.5;
+  }
+  .kz-prosa :global(th), .kz-prosa :global(td) {
+    border-bottom: 1px solid var(--line); padding: 10px 12px; text-align: left; vertical-align: top;
+  }
+  .kz-prosa :global(th) { color: var(--ink); font-weight: 600; background: var(--bg2); white-space: nowrap; }
+  .kz-prosa :global(hr) { border: 0; border-top: 1px solid var(--line); margin: 2.4em 0; }
+
+  .kz-gfaq summary { list-style: none; }
+  .kz-gfaq summary::-webkit-details-marker { display: none; }
+  .kz-gfaq-signo { font-size: 20px; line-height: 1; color: var(--green); transition: transform 0.2s ease; }
+  .kz-gfaq[open] .kz-gfaq-signo { transform: rotate(45deg); }
+</style>

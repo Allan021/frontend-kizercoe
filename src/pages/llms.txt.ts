@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { servicios } from '@/lib/servicios';
 import { productos } from '@/lib/productos';
 import { industrias } from '@/lib/industrias';
+import { guiasOrdenadas } from '@/lib/guias';
 
 /**
  * /llms.txt — el resumen del sitio para ChatGPT, Claude, Perplexity y compañía
@@ -10,7 +11,8 @@ import { industrias } from '@/lib/industrias';
  */
 const SITIO = 'https://www.kizercode.com';
 
-export const GET: APIRoute = () => {
+export const GET: APIRoute = async () => {
+  const guias = await guiasOrdenadas();
   const lineas = [
     '# Kizercode',
     '',
@@ -41,11 +43,16 @@ export const GET: APIRoute = () => {
     '',
     ...industrias.map((i) => `- [Software para ${i.nombre.toLowerCase()}](${SITIO}/industrias/${i.slug}/)`),
     '',
+    '## Guías',
+    '',
+    ...guias.map((g) => `- [${g.data.title}](${SITIO}/guias/${g.id}/): ${g.data.description}`),
+    '',
     '## Más',
     '',
     `- [Precios](${SITIO}/precios/): todos los precios en una página`,
     `- [Proyectos](${SITIO}/proyectos/): casos reales`,
     `- [Nosotros](${SITIO}/nosotros/): historia y equipo`,
+    `- [Guías](${SITIO}/guias/): artículos para decidir antes de contratar (solo en español)`,
     `- [Contacto](${SITIO}/contacto/): cotización gratis en menos de 24 horas`,
     `- [English version](${SITIO}/en/services/)`,
     '',

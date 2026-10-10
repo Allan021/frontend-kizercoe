@@ -9,6 +9,7 @@ import { intros, statsServicio } from '@/lib/serviciosIntro';
 import { extras } from '@/lib/serviciosExtra';
 import { fotos } from '@/lib/serviciosFotos';
 import { galerias } from '@/lib/galerias';
+import { industriasDe } from '@/lib/enlaces';
 import { servicios } from '@/lib/servicios';
 import { productos } from '@/lib/productos';
 
@@ -30,6 +31,7 @@ const stats: { n: string; nEn?: string; es: string; en: string }[] = s.stats ?? 
 const x = extras[s.slug];
 const foto = fotos[s.slug];
 const galeria = galerias[s.slug];
+const paraNegocios = industriasDe(s.slug);
 const faqs = [...s.faq, ...(x?.faq ?? [])];
 // Reparaciones: se atienden en el local. El software se hace para todo el país.
 const local = s.slug.startsWith('reparacion');
@@ -144,18 +146,22 @@ const jsonLd = {
 
         <div class="flex flex-col gap-3.5 lg:pt-10">
           {foto && (
-            <img
-              src={`/servicios/${s.slug}.jpg`}
-              srcset={`/servicios/${s.slug}-768.jpg 768w, /servicios/${s.slug}.jpg 1200w`}
-              sizes="(min-width: 1024px) 560px, 100vw"
-              alt={es ? foto.altEs : foto.altEn}
-              width="1200"
-              height="800"
-              fetchpriority="high"
-              decoding="async"
-              class="block h-auto w-full rounded-3xl border object-cover"
-              style="border-color: var(--line); box-shadow: 0 24px 50px rgba(11,26,51,.14); aspect-ratio: 3 / 2"
-            />
+            <picture>
+              <source type="image/avif" srcset={`/servicios/${s.slug}-768.avif 768w, /servicios/${s.slug}.avif 1200w`} sizes="(min-width: 1024px) 560px, 100vw" />
+              <source type="image/webp" srcset={`/servicios/${s.slug}-768.webp 768w, /servicios/${s.slug}.webp 1200w`} sizes="(min-width: 1024px) 560px, 100vw" />
+              <img
+                src={`/servicios/${s.slug}.jpg`}
+                srcset={`/servicios/${s.slug}-768.jpg 768w, /servicios/${s.slug}.jpg 1200w`}
+                sizes="(min-width: 1024px) 560px, 100vw"
+                alt={es ? foto.altEs : foto.altEn}
+                width="1200"
+                height="800"
+                fetchpriority="high"
+                decoding="async"
+                class="block h-auto w-full rounded-3xl border object-cover"
+                style="border-color: var(--line); box-shadow: 0 24px 50px rgba(11,26,51,.14); aspect-ratio: 3 / 2"
+              />
+            </picture>
           )}
           <div class={foto ? 'grid grid-cols-2 gap-3' : 'flex flex-col gap-3.5'}>
             {stats.map((st) => (
@@ -206,18 +212,22 @@ const jsonLd = {
                       {es ? `Ya corre en ${prod.nombre}` : `Live in ${prod.nombre}`}
                     </span>
                   )}
-                  <img
-                    src={`/${galeria.carpeta}/${t.slug}.jpg`}
-                    srcset={`/${galeria.carpeta}/${t.slug}-768.jpg 768w, /${galeria.carpeta}/${t.slug}.jpg 1200w`}
-                    sizes="(min-width: 1100px) 380px, (min-width: 720px) 50vw, 100vw"
-                    alt={es ? `Diseño de muestra: ${t.tEs.toLowerCase()} hecho por Kizercode` : `Sample design: ${t.tEn.toLowerCase()} by Kizercode`}
-                    width="1200"
-                    height="800"
-                    loading="lazy"
-                    decoding="async"
-                    class="block h-auto w-full transition-transform duration-500 group-hover:scale-[1.03]"
-                    style="aspect-ratio: 3 / 2; object-fit: cover"
-                  />
+                  <picture>
+                    <source type="image/avif" srcset={`/${galeria.carpeta}/${t.slug}-768.avif 768w, /${galeria.carpeta}/${t.slug}.avif 1200w`} sizes="(min-width: 1100px) 380px, (min-width: 720px) 50vw, 100vw" />
+                    <source type="image/webp" srcset={`/${galeria.carpeta}/${t.slug}-768.webp 768w, /${galeria.carpeta}/${t.slug}.webp 1200w`} sizes="(min-width: 1100px) 380px, (min-width: 720px) 50vw, 100vw" />
+                    <img
+                      src={`/${galeria.carpeta}/${t.slug}.jpg`}
+                      srcset={`/${galeria.carpeta}/${t.slug}-768.jpg 768w, /${galeria.carpeta}/${t.slug}.jpg 1200w`}
+                      sizes="(min-width: 1100px) 380px, (min-width: 720px) 50vw, 100vw"
+                      alt={es ? `Diseño de muestra: ${t.tEs.toLowerCase()} hecho por Kizercode` : `Sample design: ${t.tEn.toLowerCase()} by Kizercode`}
+                      width="1200"
+                      height="800"
+                      loading="lazy"
+                      decoding="async"
+                      class="block h-auto w-full transition-transform duration-500 group-hover:scale-[1.03]"
+                      style="aspect-ratio: 3 / 2; object-fit: cover"
+                    />
+                  </picture>
                 </div>
                 <div class="flex flex-1 flex-col gap-2 p-6">
                   <h3 class="text-[18px] font-bold" style="letter-spacing: -0.01em">{es ? t.tEs : t.tEn}</h3>
@@ -316,6 +326,22 @@ const jsonLd = {
         </div>
       </div>
     </section>
+
+    {paraNegocios.length > 0 && (
+      <section class="mx-auto max-w-[1200px] px-6 py-14">
+        <h2 class="kz-h2" style="font-size: clamp(22px, 2.4vw, 28px)">{es ? 'Para qué negocios lo hacemos' : 'Businesses we build it for'}</h2>
+        <ul class="mt-6 flex list-none flex-wrap gap-3">
+          {paraNegocios.map((i) => (
+            <li>
+              <a href={es ? `/industrias/${i.slug}/` : `/en/industries/${i.slugEn}/`} class="kz-tab inline-flex items-center gap-2">
+                {es ? i.nombre : i.name}
+                <Icon name="lucide:arrow-right" class="h-3.5 w-3.5" aria-hidden="true" />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
 
     <!-- CTA final -->
     <section style="background: var(--navy); color: var(--bg)">

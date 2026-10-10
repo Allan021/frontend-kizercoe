@@ -1,0 +1,98 @@
+---
+import { Icon } from 'astro-icon/components';
+import Layout from '@/layouts/Layout.astro';
+import Nav from '@/components/Nav.astro';
+import Footer from '@/components/Footer.astro';
+import FloatingWhatsApp from '@/components/FloatingWhatsApp.astro';
+import IdiomaPorUrl from '@/components/IdiomaPorUrl.astro';
+import { servicios } from '@/lib/servicios';
+import { guiasOrdenadas, fechaMod, fechaLarga, fechaIso, minutosLectura } from '@/lib/guias';
+
+/**
+ * /guias/ — el blog. Solo en español: no hay /en/ de esto, así que urlEs y
+ * urlEn quedan en la misma URL (ver la nota en [slug].astro).
+ */
+const guias = await guiasOrdenadas();
+const url = '/guias/';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'CollectionPage',
+      name: 'Guías de Kizercode',
+      url: new URL(url, Astro.site).href,
+      inLanguage: 'es-HN',
+      publisher: { '@id': 'https://www.kizercode.com/#business' },
+      hasPart: guias.map((g) => ({
+        '@type': 'Article',
+        headline: g.data.title,
+        url: new URL(`/guias/${g.id}/`, Astro.site).href,
+        datePublished: fechaIso(g.data.date),
+        dateModified: fechaIso(fechaMod(g)),
+      })),
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Kizercode', item: 'https://www.kizercode.com/' },
+        { '@type': 'ListItem', position: 2, name: 'Guías', item: new URL(url, Astro.site).href },
+      ],
+    },
+  ],
+};
+---
+<Layout
+  title="Guías de tecnología para negocios en Honduras | Kizercode"
+  description="Guías claras para decidir antes de contratar: cuánto cuesta una página web, qué cámaras de seguridad conviene y más. Escritas desde El Progreso, Yoro."
+  forzarLang="es"
+  urlEs={url}
+  soloEs
+>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+  <Nav />
+  <IdiomaPorUrl otra="/en/" />
+  <main id="contenido">
+    <section class="relative overflow-hidden" style="background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%)">
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0" style="background-image: linear-gradient(color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1px); background-size: 56px 56px; mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 100%); -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 100%)"></div>
+      <div class="relative mx-auto flex max-w-[760px] flex-col items-center gap-4 px-6 pb-4 pt-16 text-center">
+        <nav aria-label="breadcrumb" class="text-[13px] font-medium" style="color: var(--mute)">
+          <a href="/" class="transition-colors hover:text-[var(--green2)]" style="color: var(--mute)">Kizercode</a>
+          <span aria-hidden="true"> / </span>
+          <span style="color: var(--ink2)">Guías</span>
+        </nav>
+        <h1 class="font-bold" style="font-size: clamp(34px, 4.6vw, 54px); line-height: 1.1; letter-spacing: -0.02em; text-wrap: balance">
+          Guías para decidir antes de pagar.
+        </h1>
+        <p class="max-w-[580px] text-lg leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+          Lo que le explicamos a cada cliente en la primera llamada, por escrito: precios, qué preguntar y qué evitar.
+        </p>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-[1200px] px-6 pb-20 pt-10">
+      <ul class="grid list-none gap-5" style="grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr))">
+        {guias.map((g) => {
+          const s = servicios.find((v) => v.slug === g.data.servicio);
+          return (
+            <li>
+              <a href={`/guias/${g.id}/`} class="kz-card flex h-full flex-col gap-3 p-7" style="color: var(--ink)">
+                {s && <span class="kz-eyebrow" style="font-size: 12px">{s.nombre}</span>}
+                <h2 class="text-[21px] font-bold leading-snug" style="letter-spacing: -0.01em; text-wrap: balance">{g.data.title}</h2>
+                <p class="text-[15px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">{g.data.description}</p>
+                <p class="mt-auto flex flex-wrap items-center gap-x-3 gap-y-1 pt-2 text-[13px]" style="color: var(--mute)">
+                  <time datetime={fechaIso(fechaMod(g))}>{fechaLarga(fechaMod(g))}</time>
+                  <span aria-hidden="true">·</span>
+                  <span>{minutosLectura(g)} min de lectura</span>
+                </p>
+                <span class="text-[14px] font-semibold" style="color: var(--green2)">Leer la guía <Icon name="lucide:arrow-right" class="inline h-3.5 w-3.5 align-[-2px]" aria-hidden="true" /></span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  </main>
+  <Footer />
+  <FloatingWhatsApp />
+</Layout>
