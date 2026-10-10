@@ -4,6 +4,32 @@
  * nav sticky con franja degradada navy→verde y menú "Servicios" desplegable
  * en 4 grupos. El logo cambia con el tema vía CSS ([data-logo-*]).
  */
+import { servicios } from '@/lib/servicios';
+import { industrias } from '@/lib/industrias';
+
+// En las páginas /en/... los enlaces llevan a la versión en inglés cuando
+// existe; el resto queda en español. Los anchors (#faq) se conservan.
+const enIngles = Astro.url.pathname.startsWith('/en/');
+const rutasEn: Record<string, string> = {
+  '/': '/en/',
+  '/nosotros/': '/en/about/',
+  '/precios/': '/en/pricing/',
+  '/contacto/': '/en/contact/',
+  '/proyectos/': '/en/projects/',
+  '/trabaja-con-nosotros/': '/en/careers/',
+  '/productos/': '/en/products/',
+  '/industrias/': '/en/industries/',
+  '/servicios/': '/en/services/',
+  ...Object.fromEntries(servicios.map((s) => [`/servicios/${s.slug}/`, `/en/services/${s.slugEn}/`])),
+  ...Object.fromEntries(industrias.map((i) => [`/industrias/${i.slug}/`, `/en/industries/${i.slugEn}/`])),
+};
+const L = (href: string) => {
+  if (!enIngles) return href;
+  const [ruta, hash] = href.split('#');
+  const destino = rutasEn[ruta] ?? ruta;
+  return hash === undefined ? destino : `${destino}#${hash}`;
+};
+
 const WA = 'https://wa.me/50488091744?text=Hola!%20Quiero%20cotizar%20con%20Kizercode.';
 
 // Cada servicio enlaza a su página dedicada: eso teje el SEO interno.
@@ -140,9 +166,9 @@ const enlaces = [
 >
   <div class="h-[3px]" style="background: linear-gradient(90deg, var(--navy) 0%, var(--green) 55%, var(--green-bright) 100%)"></div>
   <div class="mx-auto flex max-w-[1200px] items-center justify-between gap-5 px-6 py-3">
-    <a href="/" aria-label="Kizercode — inicio" class="flex shrink-0 items-center">
-      <img data-logo-light="1" src="/kizercode-logo.png" alt="Kizercode" width="126" height="42" class="block h-[42px] w-[126px] object-contain" />
-      <img data-logo-dark="1" src="/kizercode-logo-dark.png" alt="Kizercode" width="126" height="42" class="h-[42px] w-[126px] object-contain" />
+    <a href={L('/')} aria-label="Kizercode — inicio" class="flex shrink-0 items-center">
+      <img data-logo-light="1" src="/logo-claro.png" alt="Kizercode" width="126" height="42" class="block h-[42px] w-[126px] object-contain" />
+      <img data-logo-dark="1" src="/logo-oscuro.png" loading="lazy" decoding="async" alt="Kizercode" width="126" height="42" class="h-[42px] w-[126px] object-contain" />
     </a>
 
     <nav class="hidden items-center justify-center gap-1 text-sm font-medium lg:flex" aria-label="Principal">
@@ -159,7 +185,7 @@ const enlaces = [
         <span class="text-[10px]" aria-hidden="true">▾</span>
       </button>
       {enlaces.map((l) => (
-        <a href={l.href} class="kz-navlink"><span class="en">{l.en}</span><span class="es">{l.es}</span></a>
+        <a href={L(l.href)} class="kz-navlink"><span class="en">{l.en}</span><span class="es">{l.es}</span></a>
       ))}
     </nav>
 
@@ -177,7 +203,7 @@ const enlaces = [
         <svg id="icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
         <svg id="icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" class="hidden"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
       </button>
-      <a href="/contacto/" class="kz-btn-secundario hidden items-center rounded-[10px] px-4 py-2 text-sm font-semibold sm:inline-flex" style="border-width: 1.5px">
+      <a href={L('/contacto/')} class="kz-btn-secundario hidden items-center rounded-[10px] px-4 py-2 text-sm font-semibold sm:inline-flex" style="border-width: 1.5px">
         <span class="en">Get a quote</span><span class="es">Cotizar</span>
       </a>
       <a href={WA} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-[10px] px-4 py-2.5 text-sm font-semibold text-white transition-colors" style="background: var(--green)" onmouseover="this.style.background='var(--green2)'" onmouseout="this.style.background='var(--green)'">
@@ -193,13 +219,13 @@ const enlaces = [
       <!-- Enlaces principales, solo en móvil (el nav de arriba está oculto) -->
       <div class="col-[1/-1] flex flex-wrap gap-2 lg:hidden">
         {enlaces.map((l) => (
-          <a href={l.href} class="kz-menupill"><span class="en">{l.en}</span><span class="es">{l.es}</span></a>
+          <a href={L(l.href)} class="kz-menupill"><span class="en">{l.en}</span><span class="es">{l.es}</span></a>
         ))}
-        <a href="/industrias/" class="kz-menupill"><span class="en">Industries</span><span class="es">Industrias</span></a>
-        <a href="/nosotros/" class="kz-menupill"><span class="en">About us</span><span class="es">Nosotros</span></a>
-        <a href="/proyectos/" class="kz-menupill"><span class="en">Projects</span><span class="es">Proyectos</span></a>
-        <a href="/#taller" class="kz-menupill"><span class="en">Repair shop</span><span class="es">Taller</span></a>
-        <a href="/contacto/" class="kz-menupill" style="border-color: var(--green); color: var(--green2)"><span class="en">Get a quote</span><span class="es">Cotizar</span></a>
+        <a href={L('/industrias/')} class="kz-menupill"><span class="en">Industries</span><span class="es">Industrias</span></a>
+        <a href={L('/nosotros/')} class="kz-menupill"><span class="en">About us</span><span class="es">Nosotros</span></a>
+        <a href={L('/proyectos/')} class="kz-menupill"><span class="en">Projects</span><span class="es">Proyectos</span></a>
+        <a href={L('/#taller')} class="kz-menupill"><span class="en">Repair shop</span><span class="es">Taller</span></a>
+        <a href={L('/contacto/')} class="kz-menupill" style="border-color: var(--green); color: var(--green2)"><span class="en">Get a quote</span><span class="es">Cotizar</span></a>
       </div>
 
       {grupos.map((g) => (
@@ -208,7 +234,7 @@ const enlaces = [
             <span class="en">{g.g_en}</span><span class="es">{g.g_es}</span>
           </span>
           {g.items.map((it) => (
-            <a href={it.href} class="kz-menuitem">
+            <a href={L(it.href)} class="kz-menuitem">
               <span class="text-[15px] font-semibold"><span class="en">{it.t_en}</span><span class="es">{it.t_es}</span></span>
               <span class="text-[13px]" style="color: var(--mute)"><span class="en">{it.d_en}</span><span class="es">{it.d_es}</span></span>
             </a>
@@ -221,7 +247,7 @@ const enlaces = [
           <strong class="font-semibold" style="color: var(--ink)"><span class="en">Not sure what you need?</span><span class="es">¿No sabés qué necesitás?</span></strong>
           <span class="en">Free 30-minute diagnosis call: we tell you what suits you and what it costs, in writing.</span><span class="es">Llamada de diagnóstico gratis de 30 minutos: te decimos qué te conviene y cuánto cuesta, por escrito.</span>
         </span>
-        <a href="/contacto/" class="shrink-0 text-sm font-semibold" style="color: var(--green2)"><span class="en">Book the call</span><span class="es">Agendar llamada</span> →</a>
+        <a href={L('/contacto/')} class="shrink-0 text-sm font-semibold" style="color: var(--green2)"><span class="en">Book the call</span><span class="es">Agendar llamada</span> →</a>
       </div>
     </div>
   </div>
@@ -235,7 +261,7 @@ const enlaces = [
             <span class="en">{g.g_en}</span><span class="es">{g.g_es}</span>
           </span>
           {g.items.map((it) => (
-            <a href={it.href} class="kz-menuitem">
+            <a href={L(it.href)} class="kz-menuitem">
               <span class="text-[15px] font-semibold"><span class="en">{it.t_en}</span><span class="es">{it.t_es}</span></span>
               <span class="text-[13px]" style="color: var(--mute)"><span class="en">{it.d_en}</span><span class="es">{it.d_es}</span></span>
             </a>
@@ -248,7 +274,7 @@ const enlaces = [
           <strong class="font-semibold" style="color: var(--ink)"><span class="en">Your trade not listed?</span><span class="es">¿Tu rubro no está?</span></strong>
           <span class="en">We build for your business anyway, on the same proven base.</span><span class="es">Igual construimos para tu negocio, sobre la misma base probada.</span>
         </span>
-        <a href="/industrias/" class="shrink-0 text-sm font-semibold" style="color: var(--green2)"><span class="en">See all industries</span><span class="es">Ver todas las industrias</span> →</a>
+        <a href={L('/industrias/')} class="shrink-0 text-sm font-semibold" style="color: var(--green2)"><span class="en">See all industries</span><span class="es">Ver todas las industrias</span> →</a>
       </div>
     </div>
   </div>
@@ -262,7 +288,7 @@ const enlaces = [
             <span class="en">{g.g_en}</span><span class="es">{g.g_es}</span>
           </span>
           {g.items.map((it) => (
-            <a href={it.href} class="kz-menuitem">
+            <a href={L(it.href)} class="kz-menuitem">
               <span class="text-[15px] font-semibold"><span class="en">{it.t_en}</span><span class="es">{it.t_es}</span></span>
               <span class="text-[13px]" style="color: var(--mute)"><span class="en">{it.d_en}</span><span class="es">{it.d_es}</span></span>
             </a>
@@ -275,7 +301,7 @@ const enlaces = [
           <strong class="font-semibold" style="color: var(--ink)"><span class="en">5+ years building software</span><span class="es">+5 años construyendo software</span></strong>
           <span class="en">For a bank, a US company and Honduran businesses.</span><span class="es">Para un banco, una empresa de EE. UU. y negocios hondureños.</span>
         </span>
-        <a href="/nosotros/" class="shrink-0 text-sm font-semibold" style="color: var(--green2)"><span class="en">Meet us</span><span class="es">Conocernos</span> →</a>
+        <a href={L('/nosotros/')} class="shrink-0 text-sm font-semibold" style="color: var(--green2)"><span class="en">Meet us</span><span class="es">Conocernos</span> →</a>
       </div>
     </div>
   </div>

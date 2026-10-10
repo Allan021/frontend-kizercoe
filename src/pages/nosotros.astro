@@ -36,12 +36,23 @@ const areas = [
   { t_en: 'Marketing', t_es: 'Marketing', d_en: 'Ads, SEO and social media, measured in customers, not likes.', d_es: 'Anuncios, SEO y redes, medidos en clientes, no en likes.' },
   { t_en: 'Repair shop and hardware', t_es: 'Taller y equipos', d_en: 'Computer and phone repair, on-site installation and support.', d_es: 'Reparación de computadoras y teléfonos, instalación en sitio y soporte.' },
 ];
+import IdiomaPorUrl from '@/components/IdiomaPorUrl.astro';
+
+// /en/about/ renderiza esta misma página (src/pages/en/about.astro).
+const en = Astro.url.pathname.startsWith('/en/');
 ---
 <Layout
-  title="Nosotros — Historia, fundador y equipo | Kizercode"
-  description="Kizercode es una agencia de software, IA, marketing y taller de El Progreso, Yoro, Honduras. Más de 5 años construyendo software para bancos, empresas de EE. UU. y negocios locales."
+  title={en ? 'About Us — History, Founder and Team | Kizercode' : 'Nosotros — Historia, fundador y equipo | Kizercode'}
+  description={en
+    ? 'Kizercode is a software, AI, marketing and tech repair agency from El Progreso, Yoro, Honduras, with 5+ years building software for banks, US companies and local businesses.'
+    : 'Agencia de software, IA, marketing y taller en El Progreso, Yoro. Más de 5 años haciendo software para bancos, empresas de EE. UU. y negocios de Honduras.'}
+  locale={en ? 'en_US' : undefined}
+  forzarLang={en ? 'en' : 'es'}
+  urlEs="/nosotros/"
+  urlEn="/en/about/"
 >
   <Nav />
+  <IdiomaPorUrl otra={en ? '/nosotros/' : '/en/about/'} />
   <main id="contenido">
     <!-- Hero -->
     <section class="relative overflow-hidden" style="background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%)">

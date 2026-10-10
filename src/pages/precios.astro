@@ -12,12 +12,25 @@ import Garantias from '@/sections/Garantias.astro';
  * completa de precios con su toggle L/$, la comparativa contra freelancer y
  * agencia grande, y las garantías. El que llega aquí viene a decidir.
  */
+import IdiomaPorUrl from '@/components/IdiomaPorUrl.astro';
+
+// /en/pricing/ renderiza esta misma página (src/pages/en/pricing.astro).
+const en = Astro.url.pathname.startsWith('/en/');
 ---
 <Layout
-  title="Precios de páginas web, sistemas y apps en Honduras | Kizercode"
-  description="Precios claros en lempiras y dólares: página web desde L 4,000, tienda en línea desde L 14,500, sistema desde L 25,000. Precio fijo por escrito y 30 días de garantía."
+  title={en
+    ? 'Website, Software and App Pricing | Kizercode'
+    : 'Precios de páginas web, sistemas y apps en Honduras'}
+  description={en
+    ? 'Clear prices in dollars or lempiras: websites from $150, online stores from $550, business systems from $950. Fixed price in writing and a 30-day warranty.'
+    : 'Precios en lempiras y dólares: página web desde L 4,000, tienda en línea desde L 14,500, sistema desde L 25,000. Precio fijo por escrito y 30 días de garantía.'}
+  locale={en ? 'en_US' : undefined}
+  forzarLang={en ? 'en' : 'es'}
+  urlEs="/precios/"
+  urlEn="/en/pricing/"
 >
   <Nav />
+  <IdiomaPorUrl otra={en ? '/precios/' : '/en/pricing/'} />
   <main id="contenido">
     <section class="relative overflow-hidden" style="background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%)">
       <div aria-hidden="true" class="pointer-events-none absolute inset-0" style="background-image: linear-gradient(color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1px); background-size: 56px 56px; mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 100%); -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 100%)"></div>

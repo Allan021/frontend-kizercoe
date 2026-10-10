@@ -24,6 +24,8 @@ interface Props {
   /** Mensaje precargado de WhatsApp en esta página. Pisa el genérico del botón. */
   waEs?: string;
   waEn?: string;
+  /** Incluir el schema de los productos propios (portada y /productos). */
+  conProductos?: boolean;
 }
 
 const {
@@ -42,6 +44,7 @@ const {
   servicio,
   waEs,
   waEn,
+  conProductos = false,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -81,7 +84,7 @@ const GOOGLE_VERIFICATION = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content={imageAlt} />
-  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:type" content={image.endsWith('.jpg') ? 'image/jpeg' : 'image/png'} />
   <meta property="og:locale" content={locale} />
   <meta property="og:locale:alternate" content="en_US" />
   <meta property="og:site_name" content="Kizercode" />
@@ -116,7 +119,9 @@ const GOOGLE_VERIFICATION = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
         "@type": "LocalBusiness",
         "@id": "https://www.kizercode.com/#business",
         "name": "Kizercode",
-        "description": description,
+        // Fija: es la misma entidad en todas las páginas. Si cambia con cada una,
+        // Google y las IA ven un negocio distinto por URL.
+        "description": "Agencia de software y taller de tecnología en El Progreso, Yoro, Honduras: páginas web, tiendas en línea, sistemas a la medida, apps, IA, marketing digital, instalación de cámaras de seguridad y reparación de computadoras y celulares.",
         "url": "https://www.kizercode.com",
         "logo": {
           "@type": "ImageObject",
@@ -135,10 +140,19 @@ const GOOGLE_VERIFICATION = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
         "telephone": "+50488091744",
         "address": {
           "@type": "PostalAddress",
-          "addressCountry": "HN",
+          "streetAddress": "Plaza Bendeck",
           "addressLocality": "El Progreso",
-          "addressRegion": "Yoro"
+          "addressRegion": "Yoro",
+          "addressCountry": "HN"
         },
+        "geo": { "@type": "GeoCoordinates", "latitude": 15.3874749, "longitude": -87.7996886 },
+        "hasMap": "https://www.google.com/maps/place/Plaza+Bendeck/@15.3874749,-87.7996886,18z",
+        "openingHoursSpecification": [{
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+          "opens": "07:00",
+          "closes": "18:00"
+        }],
         "contactPoint": {
           "@type": "ContactPoint",
           "contactType": "sales",
@@ -167,7 +181,9 @@ const GOOGLE_VERIFICATION = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
         "name": "Kizercode",
         "publisher": { "@id": "https://www.kizercode.com/#business" }
       },
-      ...[
+      // Los productos solo donde se habla de ellos: en la página de cámaras
+      // eran ruido que diluía de qué trata la página.
+      ...(!conProductos ? [] : [
         ["KizerPOS", "https://pos.kizercode.com/", "Inventario y punto de venta con IA para tiendas"],
         ["KizerResto", "https://pos.kizercode.com/resto", "Gestión de restaurantes: mesas, comandas y cierre de turno"],
         ["Kizer Cobros", "https://cobros.kizercode.com/", "Cobros y cartera para prestamistas"],
@@ -181,7 +197,7 @@ const GOOGLE_VERIFICATION = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "Web",
         "author": { "@id": "https://www.kizercode.com/#business" }
-      }))
+      })))
     ]
   })} />
 

@@ -5,6 +5,8 @@ import Footer from '@/components/Footer.astro';
 import FloatingWhatsApp from '@/components/FloatingWhatsApp.astro';
 import type { Servicio } from '@/lib/servicios';
 import { intros, statsServicio } from '@/lib/serviciosIntro';
+import { extras } from '@/lib/serviciosExtra';
+import { fotos } from '@/lib/serviciosFotos';
 
 /**
  * Plantilla de las páginas de servicio (/servicios/x y /en/services/x).
@@ -21,6 +23,20 @@ const { servicio: s, lang } = Astro.props;
 const es = lang === 'es';
 const intro = intros[s.slug];
 const stats: { n: string; nEn?: string; es: string; en: string }[] = s.stats ?? statsServicio;
+const x = extras[s.slug];
+const foto = fotos[s.slug];
+const faqs = [...s.faq, ...(x?.faq ?? [])];
+// Reparaciones: se atienden en el local. El software se hace para todo el país.
+const local = s.slug.startsWith('reparacion');
+const desdeLps = s.lps ? Number(s.lps.replace(/[^\d]/g, '')) : NaN;
+const desdeUsd = s.usd ? Number(s.usd.replace(/[^\d]/g, '')) : NaN;
+// Un precio "desde": el schema lo dice con minPrice, no como precio cerrado.
+const oferta = (precio: number, moneda: string) => ({
+  '@type': 'Offer',
+  priceCurrency: moneda,
+  price: precio,
+  priceSpecification: { '@type': 'PriceSpecification', minPrice: precio, priceCurrency: moneda },
+});
 
 const urlEs = `/servicios/${s.slug}/`;
 const urlEn = `/en/services/${s.slugEn}/`;
@@ -35,13 +51,21 @@ const jsonLd = {
       name: es ? s.nombre : s.name,
       description: es ? s.descEs : s.descEn,
       url: new URL(propia, Astro.site).href,
-      areaServed: { '@type': 'Country', name: 'Honduras' },
+      serviceType: es ? s.nombre : s.name,
+      ...(foto ? { image: new URL(`/servicios/${s.slug}.jpg`, Astro.site).href } : {}),
+      areaServed: local
+        ? { '@type': 'City', name: 'El Progreso', containedInPlace: { '@type': 'AdministrativeArea', name: 'Yoro, Honduras' } }
+        : { '@type': 'Country', name: 'Honduras' },
       provider: { '@id': 'https://www.kizercode.com/#business' },
-      ...(s.usd ? { offers: { '@type': 'Offer', price: s.usd.replace(/[$,]/g, ''), priceCurrency: 'USD' } } : {}),
+      // Lempiras primero: es el precio que dice la página en español. Antes
+      // decía solo USD 150 contra "L 4,000" del texto, y una IA citaba cualquiera.
+      ...(desdeLps > 0
+        ? { offers: [oferta(desdeLps, 'HNL'), ...(desdeUsd > 0 ? [oferta(desdeUsd, 'USD')] : [])] }
+        : {}),
     },
     {
       '@type': 'FAQPage',
-      mainEntity: s.faq.map((f) => ({
+      mainEntity: faqs.map((f) => ({
         '@type': 'Question',
         name: es ? f.qEs : f.qEn,
         acceptedAnswer: { '@type': 'Answer', text: es ? f.aEs : f.aEn },
@@ -66,6 +90,8 @@ const jsonLd = {
   forzarLang={lang}
   urlEs={urlEs}
   urlEn={urlEn}
+  image={foto ? `/servicios/${s.slug}-og.jpg` : undefined}
+  imageAlt={foto ? (es ? foto.altEs : foto.altEn) : undefined}
   servicio={s.nombre} waEs={`Hola! Estoy interesado en el servicio de ${s.nombre.replace(/^[A-ZÁÉÍÓÚ](?=[a-záéíóúñ])/, (c) => c.toLowerCase())}.`} waEn={`Hi! I'm interested in your ${s.name.replace(/^[A-Z](?=[a-z])/, (c) => c.toLowerCase())} service.`}
 >
   <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
@@ -85,6 +111,7 @@ const jsonLd = {
             <span style="color: var(--ink2)">{es ? s.nombre : s.name}</span>
           </nav>
           <h1 class="font-bold" style="font-size: clamp(34px, 4.2vw, 52px); line-height: 1.1; letter-spacing: -0.02em; text-wrap: balance">
+            {x && <span class="kz-h1-kw">{es ? x.kwEs : x.kwEn}</span>}
             {es ? s.h1Es : s.h1En}
           </h1>
           {(es ? intro?.es : intro?.en)?.map((p) => (
@@ -111,15 +138,31 @@ const jsonLd = {
         </div>
 
         <div class="flex flex-col gap-3.5 lg:pt-10">
-          {stats.map((st) => (
-            <div class="flex items-center gap-4 rounded-2xl border p-5" style="background: var(--bg); border-color: var(--line); box-shadow: 0 12px 30px rgba(11,26,51,.06)">
-              <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-lg font-bold" style="background: var(--green-soft); color: var(--green2)">✓</span>
-              <span class="flex flex-col">
-                <strong class="text-2xl font-bold" style="letter-spacing: -0.02em; color: var(--green)">{es ? st.n : (st.nEn ?? st.n)}</strong>
-                <span class="text-[14px] font-medium" style="color: var(--ink2)">{es ? st.es : st.en}</span>
-              </span>
-            </div>
-          ))}
+          {foto && (
+            <img
+              src={`/servicios/${s.slug}.jpg`}
+              srcset={`/servicios/${s.slug}-768.jpg 768w, /servicios/${s.slug}.jpg 1200w`}
+              sizes="(min-width: 1024px) 560px, 100vw"
+              alt={es ? foto.altEs : foto.altEn}
+              width="1200"
+              height="800"
+              fetchpriority="high"
+              decoding="async"
+              class="block h-auto w-full rounded-3xl border object-cover"
+              style="border-color: var(--line); box-shadow: 0 24px 50px rgba(11,26,51,.14); aspect-ratio: 3 / 2"
+            />
+          )}
+          <div class={foto ? 'grid grid-cols-2 gap-3' : 'flex flex-col gap-3.5'}>
+            {stats.map((st) => (
+              <div class={`flex items-center rounded-2xl border ${foto ? 'gap-3 p-3.5' : 'gap-4 p-5'}`} style="background: var(--bg); border-color: var(--line); box-shadow: 0 12px 30px rgba(11,26,51,.06)">
+                <span class={`flex shrink-0 items-center justify-center rounded-xl font-bold ${foto ? 'h-9 w-9 text-base' : 'h-12 w-12 text-lg'}`} style="background: var(--green-soft); color: var(--green2)">✓</span>
+                <span class="flex min-w-0 flex-col">
+                  <strong class={`font-bold ${foto ? 'text-lg' : 'text-2xl'}`} style="letter-spacing: -0.02em; color: var(--green)">{es ? st.n : (st.nEn ?? st.n)}</strong>
+                  <span class={`font-medium ${foto ? 'text-[12.5px] leading-snug' : 'text-[14px]'}`} style="color: var(--ink2)">{es ? st.es : st.en}</span>
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -135,6 +178,46 @@ const jsonLd = {
         ))}
       </ul>
     </section>
+
+    {x && (
+      <section class="mx-auto max-w-[1200px] px-6 pb-16">
+        <h2 class="kz-h2 mb-6" style="font-size: clamp(24px, 2.6vw, 32px)">{es ? 'Cómo trabajamos' : 'How we work'}</h2>
+        <ol class="grid list-none gap-4" style="grid-template-columns: repeat(auto-fit, minmax(230px, 1fr))">
+          {x.pasos.map((p, i) => (
+            <li class="kz-card flex flex-col gap-2 p-6">
+              <span class="flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold text-white" style="background: var(--green)">{i + 1}</span>
+              <strong class="mt-1 text-[15px] font-semibold">{es ? p.tEs : p.tEn}</strong>
+              <span class="text-sm leading-relaxed" style="color: var(--ink2)">{es ? p.dEs : p.dEn}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )}
+
+    {x && (
+      <section class="mx-auto max-w-[1200px] px-6 pb-16">
+        <div class="grid items-start gap-10 rounded-3xl border p-8 md:p-10" style="border-color: var(--line); grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))">
+          <div class="flex flex-col gap-4">
+            <h2 class="kz-h2" style="font-size: clamp(24px, 2.6vw, 32px)">{es ? x.costoTituloEs : x.costoTituloEn}</h2>
+            {(es ? x.costoEs : x.costoEn).map((p) => (
+              <p class="text-[15.5px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">{p}</p>
+            ))}
+          </div>
+          {s.lps && (
+            <div class="flex flex-col gap-3 rounded-2xl p-7" style="background: var(--green-soft)">
+              <span class="text-[13px] font-medium" style="color: var(--ink2)">{es ? `${s.nombre}, desde` : `${s.name}, from`}</span>
+              <span class="text-5xl font-bold" style="letter-spacing: -0.02em; color: var(--green2)">{es ? s.lps : s.usd}</span>
+              <span class="text-[13px]" style="color: var(--ink2)">
+                {es ? `${s.usd} · pago único · precio fijo por escrito` : `${s.lps} · one-time · fixed price in writing`}
+              </span>
+              <a href={`/contacto/?servicio=${encodeURIComponent(s.formServicio)}`} class="kz-btn kz-btn-primario mt-2 justify-center">
+                {es ? 'Pedir mi cotización' : 'Get my quote'}
+              </a>
+            </div>
+          )}
+        </div>
+      </section>
+    )}
 
     <!-- Qué incluye + FAQ -->
     <section class="border-y" style="background: var(--bg2); border-color: var(--line)">
@@ -157,7 +240,7 @@ const jsonLd = {
         </div>
         <div class="flex flex-col gap-2">
           <h2 class="kz-h2 mb-2" style="font-size: clamp(24px, 2.6vw, 32px)">{es ? 'Preguntas frecuentes' : 'FAQ'}</h2>
-          {s.faq.map((f) => (
+          {faqs.map((f) => (
             <details class="kz-sfaq border-b" style="border-color: var(--line)">
               <summary class="flex cursor-pointer items-center justify-between gap-4 py-3.5 text-[15px] font-semibold">
                 <span>{es ? f.qEs : f.qEn}</span>
@@ -181,7 +264,7 @@ const jsonLd = {
             {es ? 'Diagnóstico gratis y precio fijo por escrito en menos de 24 horas.' : 'Free diagnosis and a fixed written price in under 24 hours.'}
           </p>
         </div>
-        <a href={`/contacto/?servicio=${encodeURIComponent(s.formServicio)}`} class="rounded-xl px-6 py-3.5 text-[15px] font-semibold text-white transition-colors" style="background: #16a36c" onmouseover="this.style.background='#3ed39a'; this.style.color='#0b1a33'" onmouseout="this.style.background='#16a36c'; this.style.color='#fff'">
+        <a href={`/contacto/?servicio=${encodeURIComponent(s.formServicio)}`} class="rounded-xl px-6 py-3.5 text-[15px] font-semibold text-white transition-colors" style="background: #0d8050" onmouseover="this.style.background='#3ed39a'; this.style.color='#0b1a33'" onmouseout="this.style.background='#0d8050'; this.style.color='#fff'">
           {es ? 'Cotizar este servicio' : 'Get a quote for this'}
         </a>
       </div>

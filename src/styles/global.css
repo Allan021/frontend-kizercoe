@@ -20,8 +20,9 @@
   --ink: #0b1a33;
   --ink2: #3d4a63;
   --mute: #74809a;
-  --green: #16a36c;
-  --green2: #0f8a5a;
+  /* #0d8050 y no #16a36c: con letra blanca encima da 4.98:1 (WCAG AA); el viejo daba 3.24 y Lighthouse lo marcaba en cada botón. */
+  --green: #0d8050;
+  --green2: #0a6b43;
   --green-soft: #e6f6ef;
   --navy: #0b1a33;
   --green-bright: #3ed39a;
@@ -169,6 +170,8 @@
   /* Regla de hover del sistema: nunca blanco/azul. */
   .kz-btn-primario { background: var(--green); color: #fff; border: 0; }
   .kz-btn-primario:hover { background: var(--green2); color: #fff; }
+  /* En oscuro el verde es claro: la letra va navy para que se lea (7.3:1). */
+  [data-theme='dark'] .kz-btn-primario, [data-theme='dark'] .kz-btn-primario:hover { color: #0b1a33; }
   .kz-btn-secundario { background: transparent; color: var(--ink); border: 1.5px solid var(--line); }
   .kz-btn-secundario:hover { border-color: var(--green); color: var(--green2); }
   .kz-btn-navy { background: var(--navy); color: var(--bg); border: 0; }
@@ -185,9 +188,15 @@
   .kz-tab:hover { color: var(--green2); border-color: var(--green); }
   .kz-tab-activa { color: var(--green2); font-weight: 600; border-color: var(--green); background: var(--green-soft); }
 
+  /* Primera línea del H1 de servicios: la búsqueda real ("Diseño de páginas web en Honduras"),
+     chica y en verde, arriba del lema grande. Google lee el H1 entero. */
+  .kz-h1-kw { display: block; margin-bottom: 14px; font-size: 15px; font-weight: 600; line-height: 1.4; letter-spacing: 0; color: var(--green2); text-wrap: balance; }
   .kz-latido { width: 7px; height: 7px; border-radius: 999px; background: var(--green); flex-shrink: 0; }
   @media (prefers-reduced-motion: no-preference) {
-    .kz-latido { animation: kz-latir 2s ease-in-out infinite; }
+    /* Primera línea del H1 de servicios: la búsqueda real ("Diseño de páginas web en Honduras"),
+     chica y en verde, arriba del lema grande. Google lee el H1 entero. */
+  .kz-h1-kw { display: block; margin-bottom: 14px; font-size: 15px; font-weight: 600; line-height: 1.4; letter-spacing: 0; color: var(--green2); text-wrap: balance; }
+  .kz-latido { animation: kz-latir 2s ease-in-out infinite; }
   }
   @keyframes kz-latir { 50% { opacity: 0.35; transform: scale(0.8); } }
 

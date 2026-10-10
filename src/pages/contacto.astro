@@ -10,12 +10,23 @@ import CTA from '@/sections/CTA.astro';
  * promesa, la sección de contacto completa (canales + formulario, que lee
  * ?servicio= para llegar preseleccionado) y la ubicación con horario.
  */
+import IdiomaPorUrl from '@/components/IdiomaPorUrl.astro';
+
+// /en/contact/ renderiza esta misma página (src/pages/en/contact.astro).
+const en = Astro.url.pathname.startsWith('/en/');
 ---
 <Layout
-  title="Contacto — Cotizá tu proyecto | Kizercode"
-  description="Contactá a Kizercode: WhatsApp, llamada o formulario. Diagnóstico gratis y respuesta en menos de 24 horas con precio fijo por escrito."
+  title={en ? 'Contact — Get a Quote for Your Project | Kizercode' : 'Contacto — Cotizá tu proyecto | Kizercode'}
+  description={en
+    ? 'Contact Kizercode by WhatsApp, phone or form. Free diagnosis and a reply in under 24 hours with a fixed price in writing.'
+    : 'Contactá a Kizercode: WhatsApp, llamada o formulario. Diagnóstico gratis y respuesta en menos de 24 horas con precio fijo por escrito.'}
+  locale={en ? 'en_US' : undefined}
+  forzarLang={en ? 'en' : 'es'}
+  urlEs="/contacto/"
+  urlEn="/en/contact/"
 >
   <Nav />
+  <IdiomaPorUrl otra={en ? '/contacto/' : '/en/contact/'} />
   <main id="contenido">
     <section class="relative overflow-hidden" style="background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%)">
       <div aria-hidden="true" class="pointer-events-none absolute inset-0" style="background-image: linear-gradient(color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1px); background-size: 56px 56px; mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 100%); -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 100%)"></div>

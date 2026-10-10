@@ -41,6 +41,8 @@ const otra = es ? urlEn : urlEs;
 const cotizar = `/contacto/?servicio=${encodeURIComponent(s.formServicio)}`;
 const wa = 'https://wa.me/50488091744';
 
+const zonas = ['El Progreso', 'San Pedro Sula', 'La Lima', 'Villanueva', 'Santa Rita', 'Morazán', 'Tela', 'Yoro'];
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -49,11 +51,9 @@ const jsonLd = {
       name: es ? s.nombre : s.name,
       description: es ? s.descEs : s.descEn,
       url: new URL(propia, Astro.site).href,
-      areaServed: [
-        { '@type': 'City', name: 'El Progreso' },
-        { '@type': 'City', name: 'San Pedro Sula' },
-        { '@type': 'AdministrativeArea', name: 'Yoro, Honduras' },
-      ],
+      serviceType: es ? 'Instalación de cámaras de seguridad (CCTV)' : 'Security camera (CCTV) installation',
+      // Las mismas zonas que la página promete, no una lista distinta.
+      areaServed: zonas.map((name) => ({ '@type': 'City', name, containedInPlace: { '@type': 'Country', name: 'Honduras' } })),
       provider: { '@id': 'https://www.kizercode.com/#business' },
     },
     {
@@ -129,8 +129,6 @@ const reglas = [
   { r: 'III', tEs: 'Marca y modelo a la vista', tEn: 'Brand and model stated', dEs: 'La propuesta dice exactamente qué equipo se instala. Nada de "cámaras HD" sin apellido.', dEn: 'The proposal states exactly which equipment is installed. No nameless "HD cameras".' },
   { r: 'IV', tEs: 'El sistema queda a tu nombre', tEn: 'The system is yours', dEs: 'Usuarios, contraseñas y acceso al grabador quedan en tus manos. No dependés de nosotros para entrar.', dEn: 'Users, passwords and recorder access stay with you. You do not depend on us to get in.' },
 ];
-
-const zonas = ['El Progreso', 'San Pedro Sula', 'La Lima', 'Villanueva', 'Santa Rita', 'Morazán', 'Tela', 'Yoro'];
 ---
 
 <Layout
@@ -157,7 +155,11 @@ const zonas = ['El Progreso', 'San Pedro Sula', 'La Lima', 'Villanueva', 'Santa 
             <span style="color: var(--green2)">{es ? s.nombre : s.name}</span>
           </nav>
 
-          <h1 class="kz-cam-h1">{es ? s.h1Es : s.h1En}</h1>
+          <!-- La búsqueda real primero: es lo que Google lee del H1. El lema sigue debajo, igual de grande. -->
+          <h1 class="kz-cam-h1">
+            <span class="kz-h1-kw">{es ? 'Instalación de cámaras de seguridad en El Progreso, Yoro' : 'Security camera installation in El Progreso, Honduras'}</span>
+            {es ? s.h1Es : s.h1En}
+          </h1>
 
           <p class="mt-7 max-w-[580px] text-[19px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
             {es
@@ -191,6 +193,8 @@ const zonas = ['El Progreso', 'San Pedro Sula', 'La Lima', 'Villanueva', 'Santa 
         <figure class="kz-hud">
           <img
             src="/camaras/instalacion-el-progreso-1.jpg"
+            srcset="/camaras/instalacion-el-progreso-1-600.jpg 600w, /camaras/instalacion-el-progreso-1-900.jpg 900w, /camaras/instalacion-el-progreso-1.jpg 1200w"
+            sizes="(min-width: 1024px) 560px, 100vw"
             alt={es
               ? 'Técnico de Kizercode montando una cámara bala en el poste de un portón en El Progreso, Yoro'
               : 'Kizercode technician mounting a bullet camera on a gate post in El Progreso, Yoro'}
@@ -405,6 +409,8 @@ const zonas = ['El Progreso', 'San Pedro Sula', 'La Lima', 'Villanueva', 'Santa 
           <figure class="kz-foto">
             <img
               src="/camaras/instalacion-el-progreso-1.jpg"
+            srcset="/camaras/instalacion-el-progreso-1-600.jpg 600w, /camaras/instalacion-el-progreso-1-900.jpg 900w, /camaras/instalacion-el-progreso-1.jpg 1200w"
+            sizes="(min-width: 1024px) 560px, 100vw"
               alt={es
                 ? 'Montaje de una cámara bala sobre el poste del portón en El Progreso, Yoro'
                 : 'Mounting a bullet camera on the gate post in El Progreso, Yoro'}
@@ -421,6 +427,8 @@ const zonas = ['El Progreso', 'San Pedro Sula', 'La Lima', 'Villanueva', 'Santa 
           <figure class="kz-foto">
             <img
               src="/camaras/instalacion-el-progreso-2.jpg"
+            srcset="/camaras/instalacion-el-progreso-2-600.jpg 600w, /camaras/instalacion-el-progreso-2-900.jpg 900w, /camaras/instalacion-el-progreso-2.jpg 1200w"
+            sizes="(min-width: 1024px) 560px, 100vw"
               alt={es
                 ? 'Cámara instalada sobre el muro con caja de conexión sellada y cableado ordenado'
                 : 'Camera installed on the wall with a sealed junction box and tidy cabling'}

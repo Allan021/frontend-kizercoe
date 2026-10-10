@@ -18,9 +18,23 @@ import Integraciones from '@/sections/Integraciones.astro';
 import Comparativa from '@/sections/Comparativa.astro';
 import Garantias from '@/sections/Garantias.astro';
 import Recursos from '@/sections/Recursos.astro';
+import IdiomaPorUrl from '@/components/IdiomaPorUrl.astro';
+
+// /en/ renderiza esta misma página (src/pages/en/index.astro): el contenido
+// ya es bilingüe, solo cambian el idioma fijo y los metadatos.
+const en = Astro.url.pathname.startsWith('/en/');
 ---
-<Layout>
+<Layout
+  title={en ? 'Kizercode — Software, Branding and Growth | Honduras' : undefined}
+  description={en ? 'Custom software, web and mobile apps, AI agents, digital marketing, and computer and phone repair in El Progreso, Yoro, Honduras.' : undefined}
+  locale={en ? 'en_US' : undefined}
+  forzarLang={en ? 'en' : 'es'}
+  urlEs="/"
+  urlEn="/en/"
+  conProductos
+>
   <Nav />
+  <IdiomaPorUrl otra={en ? '/' : '/en/'} />
   <!-- Orden del DESIGN-SYSTEM.md. "Equipo" y logos de clientes quedan fuera
        hasta tener fotos y nombres reales: placeholders no se publican. -->
   <main id="contenido">

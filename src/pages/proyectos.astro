@@ -7,12 +7,23 @@ import Projects from '@/sections/Projects.astro';
 import Reviews from '@/sections/Reviews.astro';
 
 /** Proyectos: los casos reales que se cargan desde el panel, en página propia. */
+import IdiomaPorUrl from '@/components/IdiomaPorUrl.astro';
+
+// /en/projects/ renderiza esta misma página (src/pages/en/projects.astro).
+const en = Astro.url.pathname.startsWith('/en/');
 ---
 <Layout
-  title="Proyectos — Casos de éxito de Kizercode"
-  description="Proyectos reales de Kizercode: plataformas, tiendas en línea y sistemas corriendo hoy en negocios de Honduras, Estados Unidos y Colombia."
+  title={en ? 'Projects — Kizercode Case Studies' : 'Proyectos — Casos de éxito de Kizercode'}
+  description={en
+    ? 'Real Kizercode projects: platforms, online stores and business systems running today for companies in Honduras, the United States and Colombia.'
+    : 'Proyectos reales de Kizercode: plataformas, tiendas en línea y sistemas corriendo hoy en negocios de Honduras, Estados Unidos y Colombia.'}
+  locale={en ? 'en_US' : undefined}
+  forzarLang={en ? 'en' : 'es'}
+  urlEs="/proyectos/"
+  urlEn="/en/projects/"
 >
   <Nav />
+  <IdiomaPorUrl otra={en ? '/proyectos/' : '/en/projects/'} />
   <main id="contenido">
     <section class="relative overflow-hidden" style="background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%)">
       <div class="relative mx-auto flex max-w-[760px] flex-col items-center gap-4 px-6 pb-2 pt-16 text-center">

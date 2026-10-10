@@ -45,7 +45,8 @@ const { gaId } = Astro.props;
     /^\/precios\//.test(ruta) ? 'Precios' :
     /^\/contacto\//.test(ruta) ? 'Contacto' : 'Otras';
   var idioma = 'es';
-  try { idioma = localStorage.getItem('kz-lang') || document.documentElement.lang || 'es'; } catch (e) {}
+  // El idioma de la página (las /en/ lo fijan) y no el último que eligió en el toggle.
+  idioma = document.documentElement.lang || 'es';
   gtag('config', GA_ID, { anonymize_ip: true, content_group: grupo });
   gtag('set', 'user_properties', { idioma: idioma });
 

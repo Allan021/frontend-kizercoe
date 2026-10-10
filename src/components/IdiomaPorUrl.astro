@@ -1,0 +1,24 @@
+---
+/**
+ * En las páginas con URL por idioma (/nosotros ↔ /en/about, etc.) el toggle
+ * ES/EN del Nav no cambia el CSS: lleva a la URL del otro idioma. Corre en
+ * captura para ganarle al listener del Nav. Va DESPUÉS de <Nav />: el script
+ * inline corre en el acto y el botón tiene que existir ya.
+ */
+interface Props {
+  /** URL de la contraparte en el otro idioma. */
+  otra: string;
+}
+const { otra } = Astro.props;
+---
+<script is:inline define:vars={{ otra }}>
+  document.getElementById('lang-toggle')?.addEventListener(
+    'click',
+    (e) => {
+      e.stopImmediatePropagation();
+      localStorage.setItem('kz-lang', otra.startsWith('/en/') ? 'en' : 'es');
+      location.href = otra + location.hash;
+    },
+    { capture: true },
+  );
+</script>

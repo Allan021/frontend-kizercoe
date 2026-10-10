@@ -27,7 +27,18 @@ const paraQuien = p.industrias
   .map((slug) => industrias.find((i) => i.slug === slug))
   .filter((i) => i !== undefined);
 
-const textoDemo = es ? `Hola! Quiero una demo de ${p.nombre}.` : `Hi! I would like a demo of ${p.nombre}.`;
+// Título de búsqueda (≤ 60): nombre + qué es. El lema largo de cada producto
+// pasaba de 80 caracteres y Google lo cortaba a la mitad.
+const titulos: Record<string, [string, string]> = {
+  kizerpos: ['KizerPOS: punto de venta e inventario en Honduras', 'KizerPOS: point of sale and inventory software'],
+  kizerresto: ['KizerResto: sistema para restaurantes en Honduras', 'KizerResto: restaurant POS software for Honduras'],
+  'kizer-cobros': ['Kizer Cobros: software para prestamistas en Honduras', 'Kizer Cobros: loan management software'],
+  'kizer-check': ['Kizer Check: control de asistencia y planilla', 'Kizer Check: attendance and payroll software'],
+  clinicosalud: ['ClínicoSalud: software para clínicas en Honduras', 'ClínicoSalud: clinic management software'],
+};
+const titulo = titulos[p.slug]?.[es ? 0 : 1] ?? `${p.nombre} | Kizercode`;
+
+const textoDemo =es ? `Hola! Quiero una demo de ${p.nombre}.` : `Hi! I would like a demo of ${p.nombre}.`;
 const waDemo = 'https://wa.me/50488091744?text=' + encodeURIComponent(textoDemo);
 
 const jsonLd = {
@@ -55,7 +66,7 @@ const jsonLd = {
 ---
 
 <Layout
-  title={`${p.nombre} — ${es ? p.taglineEs : p.taglineEn} | Kizercode`}
+  title={titulo}
   description={es ? p.descEs : p.descEn}
   locale={es ? 'es_HN' : 'en_US'}
   forzarLang={lang}
@@ -181,7 +192,7 @@ const jsonLd = {
             {es ? 'Te lo mostramos funcionando, sin compromiso.' : 'We show it to you working, no strings attached.'}
           </p>
         </div>
-        <a href={waDemo} target="_blank" rel="noopener noreferrer" class="rounded-xl px-6 py-3.5 text-[15px] font-semibold text-white transition-colors" style="background: #16a36c" onmouseover="this.style.background='#3ed39a'; this.style.color='#0b1a33'" onmouseout="this.style.background='#16a36c'; this.style.color='#fff'">
+        <a href={waDemo} target="_blank" rel="noopener noreferrer" class="rounded-xl px-6 py-3.5 text-[15px] font-semibold text-white transition-colors" style="background: #0d8050" onmouseover="this.style.background='#3ed39a'; this.style.color='#0b1a33'" onmouseout="this.style.background='#0d8050'; this.style.color='#fff'">
           {es ? 'Pedir una demo' : 'Ask for a demo'}
         </a>
       </div>

@@ -11,12 +11,23 @@ const perfiles = [
   { t_en: 'Technical support', t_es: 'Soporte técnico', d_en: 'Repair shop, installation and on-site support.', d_es: 'Taller, instalación y soporte en sitio.' },
 ];
 const mailto = 'mailto:hello@kizercode.com?subject=' + encodeURIComponent('Quiero trabajar en Kizercode');
+import IdiomaPorUrl from '@/components/IdiomaPorUrl.astro';
+
+// /en/careers/ renderiza esta misma página (src/pages/en/careers.astro).
+const en = Astro.url.pathname.startsWith('/en/');
 ---
 <Layout
-  title="Trabajá con nosotros — Carreras en Kizercode"
-  description="¿Desarrollás, hacés marketing o soporte técnico? Mandanos tu portafolio y conocé cómo trabajamos en Kizercode, Honduras."
+  title={en ? 'Careers at Kizercode — Work With Us' : 'Trabajá con nosotros — Carreras en Kizercode'}
+  description={en
+    ? 'Are you a developer, marketer or tech support pro? Send us your portfolio and see how we work at Kizercode, Honduras.'
+    : '¿Desarrollás, hacés marketing o soporte técnico? Mandanos tu portafolio y conocé cómo trabajamos en Kizercode, Honduras.'}
+  locale={en ? 'en_US' : undefined}
+  forzarLang={en ? 'en' : 'es'}
+  urlEs="/trabaja-con-nosotros/"
+  urlEn="/en/careers/"
 >
   <Nav />
+  <IdiomaPorUrl otra={en ? '/trabaja-con-nosotros/' : '/en/careers/'} />
   <main id="contenido">
     <section class="relative overflow-hidden" style="background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%)">
       <div class="relative mx-auto flex max-w-[760px] flex-col items-center gap-4 px-6 pb-12 pt-16 text-center">
