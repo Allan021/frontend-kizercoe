@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import Analitica from '@/components/Analitica.astro';
+import LeadWhatsApp from '@/components/LeadWhatsApp.astro';
 
 interface Props {
   title?: string;
@@ -18,6 +19,11 @@ interface Props {
   /** Contrapartes para hreflang cuando la página tiene URL por idioma. */
   urlEs?: string;
   urlEn?: string;
+  /** De qué servicio es la página: el lead de WhatsApp sale etiquetado con esto en el CRM. */
+  servicio?: string;
+  /** Mensaje precargado de WhatsApp en esta página. Pisa el genérico del botón. */
+  waEs?: string;
+  waEn?: string;
 }
 
 const {
@@ -33,6 +39,9 @@ const {
   forzarLang,
   urlEs,
   urlEn,
+  servicio,
+  waEs,
+  waEn,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -198,7 +207,7 @@ const GOOGLE_VERIFICATION = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
     })();
   </script>
 </head>
-<body>
+<body data-servicio={servicio} data-wa-es={waEs} data-wa-en={waEn}>
   <!-- Primer elemento enfocable de la página: quien navega con teclado o
        lector de pantalla salta el menú de una vez, en vez de tabular por los
        ocho enlaces del nav en cada carga. -->
@@ -206,6 +215,7 @@ const GOOGLE_VERIFICATION = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
     <span class="en">Skip to content</span><span class="es">Saltar al contenido</span>
   </a>
   <slot />
+  {!noindex && <LeadWhatsApp />}
   <!-- GSAP se fue con el rediseño: el diseño nuevo no anima secciones y el
        sitio se ahorra ~126 KB de JavaScript. -->
 </body>

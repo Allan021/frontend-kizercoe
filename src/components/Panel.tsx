@@ -8,7 +8,9 @@ import {
   Pencil,
   Plus,
   Trash2,
+  Users,
 } from 'lucide-react';
+import { PanelLeads } from '@/components/PanelLeads';
 import { SubirImagen } from '@/components/SubirImagen';
 import { miniatura } from '@/lib/upload';
 import {
@@ -98,11 +100,12 @@ function Marca({ size = 34 }: { size?: number }) {
 
 // ── Escritorio ──
 
-type Pestana = 'proyectos' | 'testimonios';
+type Pestana = 'leads' | 'proyectos' | 'testimonios';
 
 function Escritorio({ user, onSalir }: { user: PanelUser; onSalir: () => void }) {
-  const [pestana, setPestana] = useState<Pestana>('proyectos');
+  const [pestana, setPestana] = useState<Pestana>('leads');
   const [conteos, setConteos] = useState<Record<Pestana, number | null>>({
+    leads: null,
     proyectos: null,
     testimonios: null,
   });
@@ -147,6 +150,7 @@ function Escritorio({ user, onSalir }: { user: PanelUser; onSalir: () => void })
         <nav aria-label="Secciones del panel" className="mt-4 flex gap-2">
           {(
             [
+              ['leads', Users],
               ['proyectos', FolderKanban],
               ['testimonios', MessageSquareQuote],
             ] as const
@@ -175,6 +179,9 @@ function Escritorio({ user, onSalir }: { user: PanelUser; onSalir: () => void })
         </nav>
       </header>
 
+      <div hidden={pestana !== 'leads'}>
+        <PanelLeads onConteo={marcar('leads')} />
+      </div>
       <div hidden={pestana !== 'proyectos'}>
         <Proyectos onConteo={marcar('proyectos')} />
       </div>

@@ -66,6 +66,7 @@ const jsonLd = {
   forzarLang={lang}
   urlEs={urlEs}
   urlEn={urlEn}
+  servicio={s.nombre} waEs={`Hola! Estoy interesado en el servicio de ${s.nombre.replace(/^[A-ZÁÉÍÓÚ](?=[a-záéíóúñ])/, (c) => c.toLowerCase())}.`} waEn={`Hi! I'm interested in your ${s.name.replace(/^[A-Z](?=[a-z])/, (c) => c.toLowerCase())} service.`}
 >
   <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
   <Nav />

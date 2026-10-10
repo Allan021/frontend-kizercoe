@@ -1,6 +1,6 @@
 import type { ContactFormData, ContactResponse, Project, Testimonial } from '@/types';
 
-const API_URL = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:3001';
+export const API_URL = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:3001';
 
 async function pedir<T>(path: string, opts: RequestInit = {}): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, {
@@ -81,3 +81,31 @@ export const panelSaveTestimonial = (t: Partial<Testimonial>) =>
 
 export const panelDeleteTestimonial = (id: string) =>
   pedir<{ ok: boolean }>(`/v1/panel/testimonials/${id}`, conToken({ method: 'DELETE' }));
+
+// ── CRM ──
+
+export type LeadEstado = 'new' | 'contacted' | 'converted' | 'closed';
+
+export type Lead = {
+  id: string;
+  name: string;
+  email: string;
+  company?: string;
+  service: string;
+  budget?: string;
+  message: string;
+  status: LeadEstado;
+  source: 'form' | 'whatsapp';
+  page?: string;
+  notes?: string;
+  projectSlug?: string;
+  createdAt: string;
+};
+
+export const panelLeads = () => pedir<Lead[]>('/v1/panel/contacts', conToken());
+
+export const panelUpdateLead = (id: string, cambios: { status?: LeadEstado; notes?: string }) =>
+  pedir<Lead>(`/v1/panel/contacts/${id}`, conToken({ method: 'PATCH', body: JSON.stringify(cambios) }));
+
+export const panelDeleteLead = (id: string) =>
+  pedir<{ ok: boolean }>(`/v1/panel/contacts/${id}`, conToken({ method: 'DELETE' }));

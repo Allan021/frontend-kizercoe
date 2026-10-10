@@ -1,0 +1,238 @@
+---
+/**
+ * Antes de abrir WhatsApp, nombre y correo.
+ *
+ * Intercepta TODOS los enlaces a wa.me del sitio — botón flotante, nav, CTA,
+ * páginas de servicio — desde un solo lugar. Agregar un botón nuevo de WhatsApp
+ * no obliga a acordarse de esto: si es un wa.me, ya pide los datos.
+ *
+ * El lead entra al CRM del panel etiquetado con el servicio de la página
+ * (`data-servicio` del body, o del propio enlace), y el mensaje de WhatsApp
+ * sale precargado con ese servicio y el nombre: "Hola! Estoy interesado en el
+ * servicio de cámaras de seguridad. Soy Ana."
+ *
+ * Quien ya los dejó una vez no los vuelve a escribir: se recuerdan en este
+ * navegador y el clic va directo, pero igual queda anotado en el CRM qué
+ * servicio tocó.
+ */
+---
+
+<dialog id="kz-lead" class="kz-lead" aria-labelledby="kz-lead-titulo">
+  <form class="kz-lead-caja" novalidate>
+    <button type="button" class="kz-lead-x" data-cerrar aria-label="Cerrar">✕</button>
+
+    <span class="kz-lead-icono" aria-hidden="true">
+      <img src="/whatsapp.svg" alt="" width="26" height="26" />
+    </span>
+
+    <h2 id="kz-lead-titulo" class="kz-lead-titulo">
+      <span class="es">Antes de pasar a WhatsApp</span><span class="en">Before we jump to WhatsApp</span>
+    </h2>
+    <p class="kz-lead-sub">
+      <span class="es">Dejanos tu nombre y correo: así te atendemos por nombre y te mandamos la cotización por escrito.</span>
+      <span class="en">Leave your name and email so we can follow up and send you a written quote.</span>
+    </p>
+
+    <p class="kz-lead-chip" data-chip hidden>
+      <span class="kz-lead-punto"></span><span data-chip-texto></span>
+    </p>
+
+    <label class="kz-lead-campo">
+      <span><span class="es">Nombre</span><span class="en">Name</span></span>
+      <input name="name" required minlength="2" maxlength="100" autocomplete="name" />
+    </label>
+    <label class="kz-lead-campo">
+      <span><span class="es">Correo</span><span class="en">Email</span></span>
+      <input name="email" type="email" required maxlength="254" autocomplete="email" inputmode="email" />
+    </label>
+    <p class="kz-lead-error" data-error hidden></p>
+
+    <button type="submit" class="kz-lead-ir">
+      <img src="/whatsapp.svg" alt="" width="20" height="20" />
+      <span class="es">Continuar a WhatsApp</span><span class="en">Continue to WhatsApp</span>
+    </button>
+    <p class="kz-lead-letra">
+      <span class="es">Sin spam. Solo lo usamos para darte seguimiento.</span>
+      <span class="en">No spam. We only use it to follow up with you.</span>
+    </p>
+  </form>
+</dialog>
+
+<script>
+  import { API_URL } from '@/lib/api';
+
+  const CLAVE = 'kz-lead';
+  const dlg = document.getElementById('kz-lead') as HTMLDialogElement | null;
+
+  if (dlg) {
+    const form = dlg.querySelector('form')!;
+    const chip = dlg.querySelector<HTMLElement>('[data-chip]')!;
+    const chipTexto = dlg.querySelector<HTMLElement>('[data-chip-texto]')!;
+    const error = dlg.querySelector<HTMLElement>('[data-error]')!;
+    let pendiente: { url: URL; texto: string; servicio: string } | null = null;
+
+    const en = () => document.documentElement.lang === 'en';
+
+    const recordado = (): { name: string; email: string } | null => {
+      try {
+        const v = JSON.parse(localStorage.getItem(CLAVE) ?? 'null');
+        return v?.name && v?.email ? v : null;
+      } catch {
+        return null;
+      }
+    };
+
+    function irAWhatsApp(name: string, email: string) {
+      if (!pendiente) return;
+      const { url, texto, servicio } = pendiente;
+      url.searchParams.set('text', `${texto}\n\n${en() ? "I'm" : 'Soy'} ${name}.`);
+
+      // Primero se abre y después se avisa a la API: abrir una pestaña después
+      // de un await el navegador lo trata como popup y lo bloquea.
+      const w = window.open(url.toString(), '_blank');
+      if (w) w.opener = null;
+      else location.href = url.toString();
+
+      // keepalive: el aviso sobrevive aunque esta pestaña se vaya a WhatsApp.
+      fetch(`${API_URL}/v1/contact`, {
+        method: 'POST',
+        keepalive: true,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, service: servicio, source: 'whatsapp', page: location.pathname }),
+      }).catch(() => {});
+
+      (window as { gtag?: (...a: unknown[]) => void }).gtag?.('event', 'generate_lead', {
+        method: 'whatsapp',
+        servicio,
+      });
+
+      try {
+        localStorage.setItem(CLAVE, JSON.stringify({ name, email }));
+      } catch {}
+      pendiente = null;
+      if (dlg!.open) dlg!.close();
+    }
+
+    document.addEventListener('click', (e) => {
+      const a = (e.target as Element | null)?.closest?.<HTMLAnchorElement>('a[href*="wa.me/"]');
+      if (!a || e.defaultPrevented) return;
+      e.preventDefault();
+
+      const body = document.body.dataset;
+      const url = new URL(a.href);
+      // El mensaje de la página (servicio) gana al genérico del botón.
+      const texto =
+        (en() ? body.waEn : body.waEs) ||
+        url.searchParams.get('text') ||
+        (en() ? 'Hi! I would like to know more about Kizercode.' : 'Hola! Quiero saber más sobre Kizercode.');
+      const servicio = a.dataset.servicio || body.servicio || 'General';
+      pendiente = { url, texto, servicio };
+
+      const ya = recordado();
+      if (ya) return irAWhatsApp(ya.name, ya.email);
+
+      chip.hidden = servicio === 'General';
+      chipTexto.textContent = servicio;
+      error.hidden = true;
+      dlg.showModal();
+      form.querySelector<HTMLInputElement>('[name=name]')!.focus();
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const datos = new FormData(form);
+      const name = String(datos.get('name') ?? '').trim();
+      const email = String(datos.get('email') ?? '').trim();
+      if (name.length < 2) return mostrarError(en() ? 'Tell us your name.' : 'Contanos tu nombre.');
+      if (!form.querySelector<HTMLInputElement>('[name=email]')!.checkValidity() || !email)
+        return mostrarError(en() ? 'That email doesn’t look right.' : 'Revisá el correo, no parece válido.');
+      irAWhatsApp(name, email);
+    });
+
+    function mostrarError(m: string) {
+      error.textContent = m;
+      error.hidden = false;
+    }
+
+    dlg.querySelector('[data-cerrar]')!.addEventListener('click', () => dlg.close());
+    // Clic en el fondo oscuro = cerrar.
+    dlg.addEventListener('click', (e) => {
+      if (e.target === dlg) dlg.close();
+    });
+  }
+</script>
+
+<style>
+  .kz-lead {
+    width: min(440px, calc(100vw - 32px));
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    background: var(--bg);
+    color: var(--ink);
+    box-shadow: 0 30px 80px rgba(11, 26, 51, 0.35);
+  }
+  .kz-lead[open] { animation: kz-lead-in 0.22s cubic-bezier(0.2, 0.9, 0.3, 1.2); }
+  .kz-lead::backdrop {
+    background: rgba(11, 26, 51, 0.55);
+    backdrop-filter: blur(6px);
+  }
+  @keyframes kz-lead-in {
+    from { opacity: 0; transform: translateY(14px) scale(0.97); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .kz-lead[open] { animation: none; }
+  }
+
+  .kz-lead-caja { position: relative; padding: 30px 28px 24px; }
+  .kz-lead-x {
+    position: absolute; top: 14px; right: 14px;
+    width: 32px; height: 32px; border-radius: 10px;
+    color: var(--mute); font-size: 14px;
+  }
+  .kz-lead-x:hover { background: var(--bg2); color: var(--ink); }
+
+  .kz-lead-icono {
+    display: grid; place-items: center;
+    width: 54px; height: 54px; border-radius: 16px;
+    background: var(--green);
+    box-shadow: 0 10px 24px color-mix(in srgb, var(--green) 40%, transparent);
+  }
+  .kz-lead-icono img, .kz-lead-ir img { filter: brightness(0) invert(1); }
+
+  .kz-lead-titulo { margin: 18px 0 6px; font-size: 22px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; }
+  .kz-lead-sub { margin: 0; font-size: 14.5px; line-height: 1.55; color: var(--ink2); }
+
+  .kz-lead-chip {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin: 16px 0 0; padding: 6px 12px; border-radius: 999px;
+    background: var(--green-soft); color: var(--green2);
+    font-size: 13px; font-weight: 600;
+  }
+  .kz-lead-punto { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+
+  .kz-lead-campo { display: block; margin-top: 16px; font-size: 13px; font-weight: 500; color: var(--ink2); }
+  .kz-lead-campo input {
+    display: block; width: 100%; margin-top: 6px; padding: 12px 14px;
+    border: 1px solid var(--line); border-radius: 12px;
+    background: var(--bg2); color: var(--ink); font-size: 15px;
+    outline: none; transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .kz-lead-campo input:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--green) 18%, transparent);
+  }
+
+  .kz-lead-error { margin: 12px 0 0; font-size: 13px; color: #d64545; }
+
+  .kz-lead-ir {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; margin-top: 22px; padding: 14px 18px; border-radius: 14px;
+    background: var(--green); color: #fff; font-size: 15.5px; font-weight: 600;
+    transition: background 0.15s, transform 0.15s;
+  }
+  .kz-lead-ir:hover { background: var(--green2); }
+  .kz-lead-ir:active { transform: scale(0.98); }
+
+  .kz-lead-letra { margin: 12px 0 0; text-align: center; font-size: 12px; color: var(--mute); }
+</style>

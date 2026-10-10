@@ -8,7 +8,8 @@
  * acordarse de medirlo: si es un enlace, ya queda contado.
  *
  * Eventos:
- *   generate_lead    WhatsApp, llamada, correo (y el formulario, en ContactForm)
+ *   generate_lead    llamada, correo, WhatsApp con datos (LeadWhatsApp) y el formulario (ContactForm)
+ *   click_whatsapp   clic a wa.me, antes de dejar los datos
  *   cta_cotizar      clic a /contacto sin servicio elegido
  *   elegir_servicio  clic con ?servicio= (precios, páginas de servicio)
  *   abrir_producto   clic a KizerPOS, Resto, Cobros, Check o ClínicoSalud
@@ -69,7 +70,8 @@ const { gaId } = Astro.props;
     var a = t.closest('a');
     if (a) {
       var href = a.getAttribute('href') || '';
-      if (href.indexOf('wa.me') !== -1) return evento('generate_lead', { method: 'whatsapp', seccion: zona });
+      // El lead de WhatsApp se cuenta cuando deja nombre y correo (LeadWhatsApp); el clic es solo intención.
+      if (href.indexOf('wa.me') !== -1) return evento('click_whatsapp', { seccion: zona });
       if (href.indexOf('tel:') === 0) return evento('generate_lead', { method: 'phone', seccion: zona });
       if (href.indexOf('mailto:') === 0) return evento('generate_lead', { method: 'email', seccion: zona });
       if (/(pos|cobros|check)\.kizercode\.com|dentalosweb/.test(href)) return evento('abrir_producto', { producto: href, seccion: zona });
