@@ -95,7 +95,8 @@ export type Lead = {
   budget?: string;
   message: string;
   status: LeadEstado;
-  source: 'form' | 'whatsapp';
+  /** 'demo': dejó sus datos antes de abrir la app o demo de un producto. */
+  source: 'form' | 'whatsapp' | 'demo';
   page?: string;
   notes?: string;
   projectSlug?: string;

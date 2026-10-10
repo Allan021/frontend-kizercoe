@@ -21,8 +21,9 @@ import { productos } from '@/lib/productos';
   <ul class="grid list-none gap-4" style="grid-template-columns: repeat(auto-fit, minmax(210px, 1fr))">
     {productos.map((p) => (
       <li>
-        <a href={`/productos/${p.slug}/`} class="kz-card flex h-full flex-col gap-3 rounded-2xl p-6" style="color: var(--ink)">
+        <a href={`/productos/${p.slug}/`} class="kz-card flex h-full flex-col gap-3 rounded-2xl p-6" style={p.estrella ? 'color: var(--ink); border-color: var(--green); box-shadow: 0 0 0 1px var(--green)' : 'color: var(--ink)'}>
           <span class="text-[11px] uppercase tracking-[0.06em]" style="font-family: ui-monospace, Menlo, monospace; color: var(--green2)">
+            {p.estrella && <span>★ <span class="en">Flagship · </span><span class="es">Estrella · </span></span>}
             <span class="en">{p.tagEn}</span><span class="es">{p.tagEs}</span>
           </span>
           <strong class="text-xl font-bold">{p.nombre}</strong>

@@ -132,25 +132,43 @@ export const extras: Record<string, ServicioExtra> = {
       {
         tEs: 'Tienda armada con tu catálogo',
         tEn: 'Store built with your catalog',
-        dEs: 'Montamos catálogo, carrito y pagos, y la revisás antes de abrirla al público.',
-        dEn: 'We set up the catalog, cart and payments, and you review it before it opens to the public.',
+        dEs: 'Montamos catálogo, carrito, pasarela de pago, el chatbot con las respuestas de tu negocio y los avisos automáticos de cada pedido. La revisás y la probás antes de abrirla al público.',
+        dEn: 'We set up the catalog, cart, payment gateway, the chatbot with your business’s answers and the automatic notifications for each order. You review and test it before it opens to the public.',
       },
       {
-        dEs: 'Te dejamos el panel para subir productos vos mismo. Si algo de lo entregado falla, lo corregimos gratis.',
-        dEn: 'We hand you the panel to upload products yourself. If anything we delivered fails, we fix it free.',
+        dEs: 'Te dejamos el panel para subir productos vos mismo y los pagos con tarjeta funcionando. Si algo de lo entregado falla, lo corregimos gratis.',
+        dEn: 'We hand you the panel to upload products yourself, with card payments working. If anything we delivered fails, we fix it free.',
       },
     ),
     costoTituloEs: '¿Cuánto cuesta una tienda en línea en Honduras?',
     costoTituloEn: 'How much does an online store cost in Honduras?',
     costoEs: [
-      'Una tienda en línea con Kizercode cuesta desde L 14,500 (unos $550), en pago único. Incluye catálogo con fotos, variantes y precios, carrito, proceso de pago, panel para subir tus productos y 30 días de garantía. No le pagás comisión a ninguna plataforma por cada venta.',
-      'El precio sube o baja según el tamaño del catálogo, cuántos métodos de pago hay que configurar (tarjeta, transferencia, contra entrega), si querés pedidos por WhatsApp y si la tienda se conecta a tu inventario de KizerPOS. Te damos el precio fijo exacto por escrito después del diagnóstico gratis.',
+      'Una tienda en línea con Kizercode cuesta desde L 14,500 (unos $550), en pago único. Incluye catálogo con fotos, variantes y precios, carrito, pasarela de pago con tarjeta de crédito y débito, chatbot con IA, avisos automáticos de pedido, panel para subir tus productos y 30 días de garantía. No le pagás comisión a ninguna plataforma por cada venta.',
+      'El precio sube o baja según el tamaño del catálogo, cuántos métodos de pago hay que configurar (tarjeta, transferencia, contra entrega), si el chatbot también atiende tu WhatsApp, qué tareas querés automatizar y si la tienda se conecta a tu inventario de KizerPOS. Te damos el precio fijo exacto por escrito después del diagnóstico gratis.',
     ],
     costoEn: [
-      'An online store with Kizercode starts at $550 (L 14,500), as a one-time payment. It includes a catalog with photos, variants and prices, a cart, checkout, a panel to upload your products and a 30-day warranty. You pay no platform commission on any sale.',
-      'The price goes up or down with catalog size, how many payment methods need setting up (card, transfer, cash on delivery), whether you want WhatsApp ordering and whether the store connects to your KizerPOS inventory. You get the exact fixed price in writing after the free diagnosis.',
+      'An online store with Kizercode starts at $550 (L 14,500), as a one-time payment. It includes a catalog with photos, variants and prices, a cart, a credit and debit card payment gateway, an AI chatbot, automatic order notifications, a panel to upload your products and a 30-day warranty. You pay no platform commission on any sale.',
+      'The price goes up or down with catalog size, how many payment methods need setting up (card, transfer, cash on delivery), whether the chatbot also answers your WhatsApp, which tasks you want automated and whether the store connects to your KizerPOS inventory. You get the exact fixed price in writing after the free diagnosis.',
     ],
     faq: [
+      {
+        qEs: '¿Qué hace el chatbot de la tienda?',
+        qEn: 'What does the store chatbot do?',
+        aEs: 'Es un asistente con IA que contesta a tus clientes a cualquier hora: precios, existencias, tallas, envíos y formas de pago. Les ayuda a encontrar el producto y los lleva hasta el pedido. Funciona en la tienda y, si querés, también en tu WhatsApp. Cuando la pregunta se sale de lo que sabe, te pasa la conversación a vos.',
+        aEn: 'It is an AI assistant that answers your customers at any hour: prices, stock, sizes, shipping and payment methods. It helps them find the product and walks them to the order. It works on the store and, if you want, on your WhatsApp too. When a question goes beyond what it knows, it hands the conversation to you.',
+      },
+      {
+        qEs: '¿Con qué pasarelas de pago trabajan?',
+        qEn: 'Which payment gateways do you work with?',
+        aEs: 'Con las pasarelas que operan en Honduras, como las de tu banco, para cobrar con tarjeta de crédito y débito. Te ayudamos a elegir la que te conviene según sus comisiones y la dejamos conectada a la tienda. La comisión de la pasarela la cobra el banco o la pasarela, no nosotros.',
+        aEn: 'With the gateways that operate in Honduras, such as your bank’s, to take credit and debit cards. We help you pick the one that suits you based on its fees and leave it connected to the store. The gateway fee is charged by the bank or gateway, not by us.',
+      },
+      {
+        qEs: '¿Qué tareas se automatizan?',
+        qEn: 'Which tasks get automated?',
+        aEs: 'Las que hoy hacés a mano todos los días: el mensaje de confirmación cuando entra un pedido, los avisos de estado (preparando, enviado, entregado) y la alerta cuando un producto se está quedando sin existencias. Si tenés otra tarea repetitiva, la vemos en el diagnóstico.',
+        aEn: 'The ones you do by hand every day: the confirmation message when an order comes in, status updates (preparing, shipped, delivered) and the alert when a product is running low. If you have another repetitive task, we look at it in the diagnosis.',
+      },
       {
         qEs: '¿Tengo que pagar comisión por cada venta?',
         qEn: 'Do I pay a commission on each sale?',

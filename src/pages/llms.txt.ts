@@ -32,7 +32,10 @@ export const GET: APIRoute = () => {
     '',
     '## Productos propios',
     '',
-    ...productos.map((p) => `- [${p.nombre}](${SITIO}/productos/${p.slug}/): ${p.descEs} App: ${p.url}`),
+    ...productos.map(
+      (p) =>
+        `- [${p.nombre}](${SITIO}/productos/${p.slug}/)${p.estrella ? ' (producto estrella)' : ''}: ${p.descEs} ${p.casoEs ? 'Caso en producción' : 'App'}: ${p.url}`,
+    ),
     '',
     '## Industrias',
     '',

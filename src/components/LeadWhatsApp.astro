@@ -14,6 +14,11 @@
  * Quien ya los dejó una vez no los vuelve a escribir: se recuerdan en este
  * navegador y el clic va directo, pero igual queda anotado en el CRM qué
  * servicio tocó.
+ *
+ * Lo mismo con los enlaces que abren una app o demo de nuestros productos
+ * (`data-lead="demo"`, o cualquier enlace a los dominios de DEMOS): piden
+ * nombre y correo, entran al CRM como fuente "demo" con el producto, y abren
+ * el enlace en otra pestaña. Así sabemos quién se interesa en cada producto.
  */
 ---
 
@@ -22,15 +27,23 @@
     <button type="button" class="kz-lead-x" data-cerrar aria-label="Cerrar">✕</button>
 
     <span class="kz-lead-icono" aria-hidden="true">
-      <img src="/whatsapp.svg" alt="" width="26" height="26" />
+      <img src="/whatsapp.svg" alt="" width="26" height="26" data-solo-wa />
+      <svg data-solo-demo width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6" /><path d="M10 14 21 3" /><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></svg>
     </span>
 
     <h2 id="kz-lead-titulo" class="kz-lead-titulo">
-      <span class="es">Antes de pasar a WhatsApp</span><span class="en">Before we jump to WhatsApp</span>
+      <span data-solo-wa><span class="es">Antes de pasar a WhatsApp</span><span class="en">Before we jump to WhatsApp</span></span>
+      <span data-solo-demo><span class="es">Antes de abrir la demo</span><span class="en">Before opening the demo</span></span>
     </h2>
     <p class="kz-lead-sub">
-      <span class="es">Dejanos tu nombre y correo: así te atendemos por nombre y te mandamos la cotización por escrito.</span>
-      <span class="en">Leave your name and email so we can follow up and send you a written quote.</span>
+      <span data-solo-wa>
+        <span class="es">Dejanos tu nombre y correo: así te atendemos por nombre y te mandamos la cotización por escrito.</span>
+        <span class="en">Leave your name and email so we can follow up and send you a written quote.</span>
+      </span>
+      <span data-solo-demo>
+        <span class="es">Dejanos tu nombre y correo: así sabemos quién la está viendo y te ayudamos si te queda alguna duda.</span>
+        <span class="en">Leave your name and email so we know who is taking a look and can help if you have any questions.</span>
+      </span>
     </p>
 
     <p class="kz-lead-chip" data-chip hidden>
@@ -48,8 +61,11 @@
     <p class="kz-lead-error" data-error hidden></p>
 
     <button type="submit" class="kz-lead-ir">
-      <img src="/whatsapp.svg" alt="" width="20" height="20" />
-      <span class="es">Continuar a WhatsApp</span><span class="en">Continue to WhatsApp</span>
+      <span data-solo-wa class="kz-lead-ir-wa">
+        <img src="/whatsapp.svg" alt="" width="20" height="20" />
+        <span class="es">Continuar a WhatsApp</span><span class="en">Continue to WhatsApp</span>
+      </span>
+      <span data-solo-demo><span class="es">Abrir la demo</span><span class="en">Open the demo</span></span>
     </button>
     <p class="kz-lead-letra">
       <span class="es">Sin spam. Solo lo usamos para darte seguimiento.</span>
@@ -64,14 +80,62 @@
   const CLAVE = 'kz-lead';
   const dlg = document.getElementById('kz-lead') as HTMLDialogElement | null;
 
+  /** Dominios de las apps y demos de nuestros productos → nombre del producto. */
+  const DEMOS: Record<string, (u: URL) => string> = {
+    'pos.kizercode.com': (u) => (u.pathname.startsWith('/resto') ? 'KizerResto' : 'KizerPOS'),
+    'cobros.kizercode.com': () => 'Kizer Cobros',
+    'check.kizercode.com': () => 'Kizer Check',
+    'dentalosweb-production.up.railway.app': () => 'ClínicoSalud',
+    'www.aabienes.com': () => 'Portal Inmobiliario',
+  };
+
   if (dlg) {
     const form = dlg.querySelector('form')!;
     const chip = dlg.querySelector<HTMLElement>('[data-chip]')!;
     const chipTexto = dlg.querySelector<HTMLElement>('[data-chip-texto]')!;
     const error = dlg.querySelector<HTMLElement>('[data-error]')!;
-    let pendiente: { url: URL; texto: string; servicio: string } | null = null;
+    let pendiente: { tipo: 'whatsapp' | 'demo'; url: URL; texto: string; servicio: string } | null = null;
 
     const en = () => document.documentElement.lang === 'en';
+
+    /** Abre en otra pestaña; si el navegador la bloquea, en esta misma. */
+    function abrir(url: string) {
+      const w = window.open(url, '_blank');
+      if (w) w.opener = null;
+      else location.href = url;
+    }
+
+    function avisar(name: string, email: string, servicio: string, source: 'whatsapp' | 'demo') {
+      // keepalive: el aviso sobrevive aunque esta pestaña se vaya a otro sitio.
+      fetch(`${API_URL}/v1/contact`, {
+        method: 'POST',
+        keepalive: true,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, service: servicio, source, page: location.pathname }),
+      }).catch(() => {});
+
+      (window as { gtag?: (...a: unknown[]) => void }).gtag?.('event', 'generate_lead', {
+        method: source,
+        servicio,
+      });
+
+      try {
+        localStorage.setItem(CLAVE, JSON.stringify({ name, email }));
+      } catch {}
+      pendiente = null;
+      if (dlg!.open) dlg!.close();
+    }
+
+    function continuar(name: string, email: string) {
+      if (!pendiente) return;
+      if (pendiente.tipo === 'demo') {
+        const { url, servicio } = pendiente;
+        // Primero se abre y después se avisa a la API (ver irAWhatsApp).
+        abrir(url.toString());
+        return avisar(name, email, servicio, 'demo');
+      }
+      irAWhatsApp(name, email);
+    }
 
     const recordado = (): { name: string; email: string } | null => {
       try {
@@ -89,47 +153,44 @@
 
       // Primero se abre y después se avisa a la API: abrir una pestaña después
       // de un await el navegador lo trata como popup y lo bloquea.
-      const w = window.open(url.toString(), '_blank');
-      if (w) w.opener = null;
-      else location.href = url.toString();
-
-      // keepalive: el aviso sobrevive aunque esta pestaña se vaya a WhatsApp.
-      fetch(`${API_URL}/v1/contact`, {
-        method: 'POST',
-        keepalive: true,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, service: servicio, source: 'whatsapp', page: location.pathname }),
-      }).catch(() => {});
-
-      (window as { gtag?: (...a: unknown[]) => void }).gtag?.('event', 'generate_lead', {
-        method: 'whatsapp',
-        servicio,
-      });
-
-      try {
-        localStorage.setItem(CLAVE, JSON.stringify({ name, email }));
-      } catch {}
-      pendiente = null;
-      if (dlg!.open) dlg!.close();
+      abrir(url.toString());
+      avisar(name, email, servicio, 'whatsapp');
     }
 
     document.addEventListener('click', (e) => {
-      const a = (e.target as Element | null)?.closest?.<HTMLAnchorElement>('a[href*="wa.me/"]');
+      const a = (e.target as Element | null)?.closest?.<HTMLAnchorElement>('a[href]');
       if (!a || e.defaultPrevented) return;
+
+      let url: URL;
+      try {
+        url = new URL(a.href);
+      } catch {
+        return;
+      }
+      const esWa = a.href.includes('wa.me/');
+      const demoDe = DEMOS[url.hostname];
+      const esDemo = !esWa && (a.dataset.lead === 'demo' || demoDe !== undefined);
+      if (!esWa && !esDemo) return;
       e.preventDefault();
 
       const body = document.body.dataset;
-      const url = new URL(a.href);
-      // El mensaje de la página (servicio) gana al genérico del botón.
-      const texto =
-        (en() ? body.waEn : body.waEs) ||
-        url.searchParams.get('text') ||
-        (en() ? 'Hi! I would like to know more about Kizercode.' : 'Hola! Quiero saber más sobre Kizercode.');
-      const servicio = a.dataset.servicio || body.servicio || 'General';
-      pendiente = { url, texto, servicio };
+      let servicio: string;
+      if (esDemo) {
+        servicio = a.dataset.servicio || body.servicio || demoDe?.(url) || url.hostname;
+        pendiente = { tipo: 'demo', url, texto: '', servicio };
+      } else {
+        // El mensaje de la página (servicio) gana al genérico del botón.
+        const texto =
+          (en() ? body.waEn : body.waEs) ||
+          url.searchParams.get('text') ||
+          (en() ? 'Hi! I would like to know more about Kizercode.' : 'Hola! Quiero saber más sobre Kizercode.');
+        servicio = a.dataset.servicio || body.servicio || 'General';
+        pendiente = { tipo: 'whatsapp', url, texto, servicio };
+      }
+      dlg.dataset.modo = pendiente.tipo;
 
       const ya = recordado();
-      if (ya) return irAWhatsApp(ya.name, ya.email);
+      if (ya) return continuar(ya.name, ya.email);
 
       chip.hidden = servicio === 'General';
       chipTexto.textContent = servicio;
@@ -146,7 +207,7 @@
       if (name.length < 2) return mostrarError(en() ? 'Tell us your name.' : 'Contanos tu nombre.');
       if (!form.querySelector<HTMLInputElement>('[name=email]')!.checkValidity() || !email)
         return mostrarError(en() ? 'That email doesn’t look right.' : 'Revisá el correo, no parece válido.');
-      irAWhatsApp(name, email);
+      continuar(name, email);
     });
 
     function mostrarError(m: string) {
@@ -183,6 +244,11 @@
   @media (prefers-reduced-motion: reduce) {
     .kz-lead[open] { animation: none; }
   }
+
+  /* Mismo modal para WhatsApp y para demos: cada texto se ve en su modo. */
+  .kz-lead[data-modo='demo'] [data-solo-wa],
+  .kz-lead:not([data-modo='demo']) [data-solo-demo] { display: none; }
+  .kz-lead-ir-wa { display: inline-flex; align-items: center; gap: 10px; }
 
   .kz-lead-caja { position: relative; padding: 30px 28px 24px; }
   .kz-lead-x {

@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from 'react';
-import { ChevronDown, FileText, Mail, MessageCircle, RefreshCw, Search, Trash2 } from 'lucide-react';
+import { useEffect, useMemo, useState, type CSSProperties } from 'react';
+import { ChevronDown, ExternalLink, FileText, Mail, MessageCircle, RefreshCw, Search, Trash2 } from 'lucide-react';
 import { panelDeleteLead, panelLeads, panelUpdateLead, type Lead, type LeadEstado } from '@/lib/api';
 
 /**
- * CRM del sitio: todo el que escribió, por formulario o por WhatsApp.
+ * CRM del sitio: todo el que escribió, por formulario o por WhatsApp, y quien
+ * dejó sus datos antes de abrir la demo de un producto.
  *
  * El embudo es corto a propósito: Nuevo → Contactado → Cliente, o Perdido.
  * Más etapas son más clics que nadie va a hacer. Todo se filtra en el
@@ -17,6 +18,14 @@ const ESTADOS: { id: LeadEstado; label: string; color: string }[] = [
   { id: 'closed', label: 'Perdido', color: '#8a94a6' },
 ];
 const estado = (id: LeadEstado) => ESTADOS.find((e) => e.id === id) ?? ESTADOS[0];
+
+/** Por dónde entró cada lead: etiqueta, ícono y color de su insignia. */
+const FUENTE: Record<Lead['source'], { label: string; Icono: typeof FileText; estilo: CSSProperties }> = {
+  whatsapp: { label: 'WhatsApp', Icono: MessageCircle, estilo: { background: 'color-mix(in srgb, var(--green) 14%, transparent)', color: 'var(--green2)' } },
+  form: { label: 'Formulario', Icono: FileText, estilo: { background: 'rgba(59,130,246,0.12)', color: '#3b82f6' } },
+  demo: { label: 'Demo', Icono: ExternalLink, estilo: { background: 'rgba(139,92,246,0.14)', color: '#8b5cf6' } },
+};
+const fuente = (s: Lead['source']) => FUENTE[s] ?? FUENTE.form;
 
 const SEMANA = 7 * 24 * 3600 * 1000;
 const rtf = new Intl.RelativeTimeFormat('es', { numeric: 'auto' });
@@ -37,7 +46,7 @@ export function PanelLeads({ onConteo }: { onConteo: (n: number) => void }) {
   const [error, setError] = useState<string | null>(null);
   const [filtroEstado, setFiltroEstado] = useState<LeadEstado | 'todos'>('todos');
   const [filtroServicio, setFiltroServicio] = useState('todos');
-  const [filtroCanal, setFiltroCanal] = useState<'todos' | 'form' | 'whatsapp'>('todos');
+  const [filtroCanal, setFiltroCanal] = useState<'todos' | Lead['source']>('todos');
   const [q, setQ] = useState('');
   const [abierto, setAbierto] = useState<string | null>(null);
 
@@ -125,7 +134,7 @@ export function PanelLeads({ onConteo }: { onConteo: (n: number) => void }) {
         <div>
           <h2 className="text-xl font-black tracking-tight">Leads y clientes</h2>
           <p className="mt-1 text-sm" style={{ color: 'var(--color-muted)' }}>
-            Todo el que escribió desde el sitio: formulario y WhatsApp.
+            Todo el que escribió desde el sitio: formulario, WhatsApp y demos de productos.
           </p>
         </div>
         <button onClick={cargar} className="kz-btn kz-btn-secundario">
@@ -203,17 +212,19 @@ export function PanelLeads({ onConteo }: { onConteo: (n: number) => void }) {
             style={{ background: 'var(--color-bg-2)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
           />
         </label>
-        {(['todos', 'whatsapp', 'form'] as const).map((c) => (
-          <button
-            key={c}
-            onClick={() => setFiltroCanal(c)}
-            className={`kz-tab inline-flex items-center gap-1.5 ${filtroCanal === c ? 'kz-tab-activa' : ''}`}
-          >
-            {c === 'whatsapp' && <MessageCircle size={14} />}
-            {c === 'form' && <FileText size={14} />}
-            {c === 'todos' ? 'Todos' : c === 'whatsapp' ? 'WhatsApp' : 'Formulario'}
-          </button>
-        ))}
+        {(['todos', 'whatsapp', 'form', 'demo'] as const).map((c) => {
+          const f = c === 'todos' ? null : fuente(c);
+          return (
+            <button
+              key={c}
+              onClick={() => setFiltroCanal(c)}
+              className={`kz-tab inline-flex items-center gap-1.5 ${filtroCanal === c ? 'kz-tab-activa' : ''}`}
+            >
+              {f && <f.Icono size={14} />}
+              {f ? f.label : 'Todos'}
+            </button>
+          );
+        })}
         {filtroServicio !== 'todos' && (
           <button onClick={() => setFiltroServicio('todos')} className="kz-tab kz-tab-activa">
             {filtroServicio} ✕
@@ -229,7 +240,7 @@ export function PanelLeads({ onConteo }: { onConteo: (n: number) => void }) {
           <p className="mx-auto mt-2 max-w-md text-sm" style={{ color: 'var(--color-muted)' }}>
             {lista.length
               ? 'Probá quitar algún filtro.'
-              : 'Cuando alguien llene el formulario o toque WhatsApp en el sitio, aparece acá.'}
+              : 'Cuando alguien llene el formulario, toque WhatsApp o abra una demo en el sitio, aparece acá.'}
           </p>
         </div>
       ) : (
@@ -343,14 +354,17 @@ function FilaLead({
           </span>
           <span
             className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11.5px] font-medium"
-            style={
-              l.source === 'whatsapp'
-                ? { background: 'color-mix(in srgb, var(--green) 14%, transparent)', color: 'var(--green2)' }
-                : { background: 'rgba(59,130,246,0.12)', color: '#3b82f6' }
-            }
+            style={fuente(l.source).estilo}
           >
-            {l.source === 'whatsapp' ? <MessageCircle size={12} /> : <FileText size={12} />}
-            {l.source === 'whatsapp' ? 'WhatsApp' : 'Formulario'}
+            {(() => {
+              const { Icono, label } = fuente(l.source);
+              return (
+                <>
+                  <Icono size={12} />
+                  {label}
+                </>
+              );
+            })()}
           </span>
         </span>
 

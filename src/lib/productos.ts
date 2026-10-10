@@ -24,9 +24,56 @@ export type Producto = {
   /** Slugs de /industrias a los que le sirve. */
   industrias: string[];
   sinInternet: boolean;
+  /** Producto estrella: va primero, con tarjeta grande y secciones propias. */
+  estrella?: boolean;
+  /** Dónde corre hoy, si es un caso real con nombre (no son números de Kizercode). */
+  casoEs?: string;
+  casoEn?: string;
+  /** Alt de la foto /productos/<slug>.jpg (si falta, la página no la muestra). */
+  fotoAltEs?: string;
+  fotoAltEn?: string;
 };
 
 export const productos: Producto[] = [
+  {
+    slug: 'portal-inmobiliario',
+    slugEn: 'real-estate-portal',
+    nombre: 'Portal Inmobiliario',
+    icon: 'lucide:house',
+    url: 'https://www.aabienes.com/',
+    tagEs: 'Bienes raíces',
+    tagEn: 'Real estate',
+    taglineEs: 'El portal que conecta cada lead con la casa que quiere.',
+    taglineEn: 'The portal that ties every lead to the house they want.',
+    descEs: 'Portal inmobiliario con mapa, filtros, visitas agendadas por WhatsApp y propietarios que publican gratis. En producción en A&A Inmobiliaria.',
+    descEn: 'Real estate portal with a map, filters, visits booked over WhatsApp and owners who list for free. In production at A&A Inmobiliaria.',
+    introEs: [
+      'Te armamos el flujo que conecta tus leads con tus casas de manera más sencilla: el comprador busca en el mapa, agenda la visita desde la ficha de la propiedad y la consulta te llega por WhatsApp ya amarrada a esa casa. Tu asesor sabe qué propiedad quiere cada interesado sin preguntar dos veces.',
+      'Los propietarios publican gratis — fotos, precio en lempiras o dólares, varas² y pin en el mapa — con sus datos privados, y la inmobiliaria lo maneja todo desde su panel. Hoy corre en A&A Inmobiliaria, en El Progreso, y lo acompañamos con renders 3D para vender casas antes de construirlas.',
+    ],
+    introEn: [
+      'We build you the flow that connects your leads with your houses, the simple way: the buyer searches the map, books the visit from the property page and the inquiry reaches you on WhatsApp already tied to that house. Your agent knows which property each lead wants without asking twice.',
+      'Owners list for free — photos, price in lempiras or dollars, square varas and a map pin — with their details kept private, and the agency runs everything from its panel. It runs today at A&A Inmobiliaria, in El Progreso, and we pair it with 3D renders to sell houses before they are built.',
+    ],
+    features: [
+      { es: 'Búsqueda en mapa con pins y precio', en: 'Map search with pins and prices' },
+      { es: 'Filtros por tipo, habitaciones y varas²', en: 'Filters by type, bedrooms and square varas' },
+      { es: 'Favoritos para el comprador', en: 'Favorites for buyers' },
+      { es: 'Visitas agendadas desde la ficha, confirmadas por WhatsApp', en: 'Visits booked from the listing, confirmed on WhatsApp' },
+      { es: 'Propietarios publican gratis, con sus datos privados', en: 'Owners list for free, with their details private' },
+      { es: 'Precios en lempiras o dólares', en: 'Prices in lempiras or dollars' },
+      { es: 'Flujo para la diáspora: tour en video, documentos y firma a distancia', en: 'Diaspora flow: video tour, documents and remote signing' },
+      { es: 'Panel para la inmobiliaria', en: 'Agency panel' },
+      { es: 'Renders 3D para vender antes de construir', en: '3D renders to sell before building' },
+    ],
+    industrias: ['bienes-raices'],
+    sinInternet: false,
+    estrella: true,
+    casoEs: 'En producción en A&A Inmobiliaria',
+    casoEn: 'In production at A&A Inmobiliaria',
+    fotoAltEs: 'El Portal Inmobiliario abierto en una tablet, con el mapa de casas en venta, en una inmobiliaria de Honduras',
+    fotoAltEn: 'The Real Estate Portal open on a tablet, showing the map of homes for sale, at a Honduran real estate agency',
+  },
   {
     slug: 'kizerpos',
     slugEn: 'kizerpos',
@@ -58,6 +105,8 @@ export const productos: Producto[] = [
     ],
     industrias: ['farmacias', 'ferreterias', 'boutiques', 'distribuidoras'],
     sinInternet: true,
+    fotoAltEs: 'Cajera de una tienda en Honduras cobra con KizerPOS en la caja',
+    fotoAltEn: 'Cashier at a store in Honduras ringing up a sale with KizerPOS',
   },
   {
     slug: 'kizerresto',
@@ -90,6 +139,8 @@ export const productos: Producto[] = [
     ],
     industrias: ['restaurantes'],
     sinInternet: true,
+    fotoAltEs: 'Mesero de un restaurante en Honduras toma la orden con KizerResto en una tablet',
+    fotoAltEn: 'Waiter at a restaurant in Honduras taking an order with KizerResto on a tablet',
   },
   {
     slug: 'kizer-cobros',
@@ -121,6 +172,8 @@ export const productos: Producto[] = [
     ],
     industrias: ['prestamistas'],
     sinInternet: false,
+    fotoAltEs: 'Prestamista en Honduras revisa las cuotas del día en Kizer Cobros desde el celular',
+    fotoAltEn: 'Lender in Honduras checking the day’s installments in Kizer Cobros on a phone',
   },
   {
     slug: 'kizer-check',
@@ -152,6 +205,8 @@ export const productos: Producto[] = [
     ],
     industrias: ['restaurantes', 'farmacias', 'distribuidoras', 'talleres'],
     sinInternet: true,
+    fotoAltEs: 'Encargado de un negocio en Honduras revisa el reporte de asistencia de Kizer Check en una laptop',
+    fotoAltEn: 'Manager at a business in Honduras reviewing the Kizer Check attendance report on a laptop',
   },
   {
     slug: 'clinicosalud',
@@ -183,5 +238,7 @@ export const productos: Producto[] = [
     ],
     industrias: ['clinicas'],
     sinInternet: false,
+    fotoAltEs: 'Médica de una clínica en Honduras consulta el expediente del paciente en ClínicoSalud',
+    fotoAltEn: 'Doctor at a clinic in Honduras checking a patient record in ClínicoSalud',
   },
 ];

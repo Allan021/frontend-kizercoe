@@ -5,6 +5,7 @@ import Footer from '@/components/Footer.astro';
 import FloatingWhatsApp from '@/components/FloatingWhatsApp.astro';
 import { statsServicio } from '@/lib/serviciosIntro';
 import type { Industria } from '@/lib/industrias';
+import { productos } from '@/lib/productos';
 
 /**
  * Plantilla de páginas de industria: la historia del rubro, el producto YA
@@ -31,6 +32,7 @@ const jsonLd = {
       name: es ? `Software para ${ind.nombre.toLowerCase()}` : `Software for ${ind.name.toLowerCase()}`,
       description: es ? ind.descEs : ind.descEn,
       url: new URL(propia, Astro.site).href,
+      ...(ind.fotoAltEs ? { image: new URL(`/industrias/${ind.slug}.jpg`, Astro.site).href } : {}),
       areaServed: { '@type': 'Country', name: 'Honduras' },
       provider: { '@id': 'https://www.kizercode.com/#business' },
     },
@@ -54,6 +56,9 @@ const jsonLd = {
 };
 
 const destacado = ind.producto ?? ind.caso;
+// La página propia del producto (si es uno de los nuestros), para enlazarla.
+const prod = ind.producto ? productos.find((p) => p.nombre === ind.producto!.nombre) : undefined;
+const foto = ind.fotoAltEs ? { alt: es ? ind.fotoAltEs : ind.fotoAltEn } : undefined;
 ---
 
 <Layout
@@ -63,6 +68,8 @@ const destacado = ind.producto ?? ind.caso;
   forzarLang={lang}
   urlEs={urlEs}
   urlEn={urlEn}
+  image={foto ? `/industrias/${ind.slug}-og.jpg` : undefined}
+  imageAlt={foto?.alt}
   servicio={`Software para ${ind.nombre.toLowerCase()}`} waEs={`Hola! Quiero software para ${ind.nombre.toLowerCase()}.`} waEn={`Hi! I'd like software for ${ind.name.toLowerCase()}.`}
 >
   <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
@@ -98,25 +105,50 @@ const destacado = ind.producto ?? ind.caso;
         </div>
 
         <div class="flex flex-col gap-3.5 lg:pt-10">
+          {foto && (
+            <img
+              src={`/industrias/${ind.slug}.jpg`}
+              srcset={`/industrias/${ind.slug}-768.jpg 768w, /industrias/${ind.slug}.jpg 1200w`}
+              sizes="(min-width: 1024px) 560px, 100vw"
+              alt={foto.alt}
+              width="1200"
+              height="800"
+              fetchpriority="high"
+              decoding="async"
+              class="block h-auto w-full rounded-3xl border object-cover"
+              style="border-color: var(--line); box-shadow: 0 24px 50px rgba(11,26,51,.14); aspect-ratio: 3 / 2"
+            />
+          )}
           {destacado && (
-            <a href={destacado.url} target="_blank" rel="noopener noreferrer" class="flex flex-col gap-2 rounded-2xl p-6 transition-colors" style="background: var(--navy); color: var(--bg); box-shadow: 0 12px 30px rgba(11,26,51,.18)">
+            <div class="flex flex-col gap-2 rounded-2xl p-6" style="background: var(--navy); color: var(--bg); box-shadow: 0 12px 30px rgba(11,26,51,.18)">
               <span class="text-[11px] font-semibold uppercase tracking-[0.08em]" style="color: var(--green-bright)">
-                {ind.producto ? (es ? 'Producto listo para usar' : 'Ready-to-use product') : (es ? 'Caso real en producción' : 'Real case in production')}
+                {prod?.estrella
+                  ? (es ? '★ Nuestro producto estrella' : '★ Our flagship product')
+                  : ind.producto ? (es ? 'Producto listo para usar' : 'Ready-to-use product') : (es ? 'Caso real en producción' : 'Real case in production')}
               </span>
               <strong class="text-2xl font-bold">{destacado.nombre}</strong>
               <span class="text-sm leading-relaxed" style="color: color-mix(in srgb, var(--bg) 75%, transparent)">{es ? destacado.dEs : destacado.dEn}</span>
-              <span class="mt-1 text-[13px] font-semibold" style="color: var(--green-bright)">{es ? 'Verlo funcionando' : 'See it working'} →</span>
-            </a>
-          )}
-          {statsServicio.slice(0, 3).map((st) => (
-            <div class="flex items-center gap-4 rounded-2xl border p-5" style="background: var(--bg); border-color: var(--line); box-shadow: 0 12px 30px rgba(11,26,51,.06)">
-              <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-lg font-bold" style="background: var(--green-soft); color: var(--green2)">✓</span>
-              <span class="flex flex-col">
-                <strong class="text-2xl font-bold" style="letter-spacing: -0.02em; color: var(--green)">{st.n}</strong>
-                <span class="text-[14px] font-medium" style="color: var(--ink2)">{es ? st.es : st.en}</span>
+              <span class="mt-1 flex flex-wrap gap-x-5 gap-y-1 text-[13px] font-semibold">
+                <a href={destacado.url} target="_blank" rel="noopener noreferrer" data-servicio={destacado.nombre} style="color: var(--green-bright)">{es ? 'Verlo funcionando' : 'See it working'} ↗</a>
+                {prod && (
+                  <a href={es ? `/productos/${prod.slug}/` : `/en/products/${prod.slugEn}/`} style="color: var(--green-bright)">
+                    {es ? `Conocer ${prod.nombre}` : `About ${prod.nombre}`} →
+                  </a>
+                )}
               </span>
             </div>
-          ))}
+          )}
+          <div class={foto ? 'grid grid-cols-1 gap-3 lg:grid-cols-3' : 'flex flex-col gap-3.5'}>
+            {statsServicio.slice(0, 3).map((st) => (
+              <div class={`flex items-center rounded-2xl border ${foto ? 'gap-3 p-3.5' : 'gap-4 p-5'}`} style="background: var(--bg); border-color: var(--line); box-shadow: 0 12px 30px rgba(11,26,51,.06)">
+                <span class={`flex shrink-0 items-center justify-center rounded-xl font-bold ${foto ? 'h-9 w-9 text-base' : 'h-12 w-12 text-lg'}`} style="background: var(--green-soft); color: var(--green2)">✓</span>
+                <span class="flex min-w-0 flex-col">
+                  <strong class={`font-bold ${foto ? 'text-lg' : 'text-2xl'}`} style="letter-spacing: -0.02em; color: var(--green)">{st.n}</strong>
+                  <span class={`font-medium ${foto ? 'text-[12.5px] leading-snug' : 'text-[14px]'}`} style="color: var(--ink2)">{es ? st.es : st.en}</span>
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -153,7 +185,9 @@ const destacado = ind.producto ?? ind.caso;
           <div class="flex flex-wrap gap-3">
             {ind.producto && (
               <a href={ind.producto.url} target="_blank" rel="noopener noreferrer" class="kz-btn kz-btn-navy text-sm" style="padding: 12px 20px; border-radius: 10px">
-                {es ? `Probar ${ind.producto.nombre}` : `Try ${ind.producto.nombre}`}
+                {prod?.estrella
+                  ? (es ? `Ver ${ind.producto.nombre} funcionando` : `See ${ind.producto.nombre} working`)
+                  : (es ? `Probar ${ind.producto.nombre}` : `Try ${ind.producto.nombre}`)}
               </a>
             )}
             <a href="/contacto/" class="kz-btn kz-btn-secundario text-sm" style="padding: 12px 20px; border-radius: 10px">

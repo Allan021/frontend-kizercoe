@@ -27,11 +27,11 @@ export const intros: Record<string, { es: string[]; en: string[] }> = {
   'tiendas-en-linea': {
     es: [
       'Vender en línea ya no es opcional: tu cliente compara precios desde el sofá y le compra al que se lo pone fácil. Una tienda bien hecha atiende, cobra y registra el pedido mientras vos hacés otra cosa — sin pagarle comisión a una plataforma por cada venta.',
-      'Construimos tiendas completas: catálogo con variantes, carrito, pagos como se paga en Honduras (tarjeta, transferencia o contra entrega) y un panel para que subás tus productos vos mismo. Y si ya usás KizerPOS, la tienda y el local comparten inventario: lo que se vende en uno se descuenta en el otro.',
+      'Construimos tiendas completas: catálogo con variantes, carrito, pasarela de pago con tarjeta de crédito y débito (además de transferencia o contra entrega), un chatbot con IA que atiende a tus clientes en la tienda y en WhatsApp, y los avisos de cada pedido saliendo solos. Con panel para que subás tus productos vos mismo — y si ya usás KizerPOS, la tienda y el local comparten inventario.',
     ],
     en: [
       'Selling online is no longer optional: your customer compares prices from the couch and buys from whoever makes it easy. A well-built store serves, charges and logs the order while you do something else — without paying a platform commission per sale.',
-      'We build complete stores: catalog with variants, cart, payments the local way (card, transfer or cash on delivery) and a panel so you upload products yourself. And if you already run KizerPOS, the store and the shop share inventory: a sale in one is discounted in the other.',
+      'We build complete stores: catalog with variants, cart, a credit and debit card payment gateway (plus transfer or cash on delivery), an AI chatbot that serves your customers on the store and on WhatsApp, and order notifications that go out on their own. With a panel so you upload products yourself — and if you already run KizerPOS, the store and the shop share inventory.',
     ],
   },
   'sistemas-a-la-medida': {

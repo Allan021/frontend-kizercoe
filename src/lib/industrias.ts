@@ -23,11 +23,16 @@ export type Industria = {
   caso?: { nombre: string; url: string; dEs: string; dEn: string };
   dolores: { tEs: string; tEn: string; dEs: string; dEn: string }[];
   faq: { qEs: string; qEn: string; aEs: string; aEn: string }[];
+  /** Alt de la foto /industrias/<slug>.jpg (si falta, la página no la muestra). */
+  fotoAltEs?: string;
+  fotoAltEn?: string;
 };
 
 export const industrias: Industria[] = [
   {
     slug: 'farmacias',
+    fotoAltEs: 'Farmacia en Honduras cobrando con KizerPOS en una tablet en el mostrador',
+    fotoAltEn: 'Pharmacy in Honduras checking out a customer with KizerPOS on a tablet at the counter',
     slugEn: 'pharmacies',
     nombre: 'Farmacias',
     name: 'Pharmacies',
@@ -61,6 +66,8 @@ export const industrias: Industria[] = [
   },
   {
     slug: 'ferreterias',
+    fotoAltEs: 'Ferretería en Honduras buscando un producto en KizerPOS desde una tablet',
+    fotoAltEn: 'Hardware store in Honduras looking up a product in KizerPOS on a tablet',
     slugEn: 'hardware-stores',
     nombre: 'Ferreterías',
     name: 'Hardware stores',
@@ -94,6 +101,8 @@ export const industrias: Industria[] = [
   },
   {
     slug: 'boutiques',
+    fotoAltEs: 'Boutique en Honduras revisando tallas y existencias en KizerPOS desde el celular',
+    fotoAltEn: 'Boutique in Honduras checking sizes and stock in KizerPOS on a phone',
     slugEn: 'boutiques',
     nombre: 'Boutiques y tiendas',
     name: 'Boutiques and retail',
@@ -127,6 +136,8 @@ export const industrias: Industria[] = [
   },
   {
     slug: 'restaurantes',
+    fotoAltEs: 'Restaurante en Honduras tomando la orden con KizerResto en una tablet',
+    fotoAltEn: 'Restaurant in Honduras taking an order with KizerResto on a tablet',
     slugEn: 'restaurants',
     nombre: 'Restaurantes',
     name: 'Restaurants',
@@ -160,6 +171,8 @@ export const industrias: Industria[] = [
   },
   {
     slug: 'prestamistas',
+    fotoAltEs: 'Prestamista en Honduras revisando su cartera en Kizer Cobros desde el celular',
+    fotoAltEn: 'Lender in Honduras reviewing their portfolio in Kizer Cobros on a phone',
     slugEn: 'lenders',
     nombre: 'Prestamistas',
     name: 'Lenders',
@@ -193,6 +206,8 @@ export const industrias: Industria[] = [
   },
   {
     slug: 'clinicas',
+    fotoAltEs: 'Clínica en Honduras con el expediente del paciente abierto en ClínicoSalud en una tablet',
+    fotoAltEn: 'Clinic in Honduras with a patient record open in ClínicoSalud on a tablet',
     slugEn: 'clinics',
     nombre: 'Clínicas y salud',
     name: 'Clinics and healthcare',
@@ -231,34 +246,40 @@ export const industrias: Industria[] = [
     name: 'Real estate',
     titleEs: 'Software y portales para bienes raíces | Kizercode',
     titleEn: 'Real estate software and portals | Kizercode',
-    descEs: 'Portales inmobiliarios con mapa, búsqueda y WhatsApp, como aabienes.com. Publicá propiedades, recibí prospectos y dales seguimiento.',
-    descEn: 'Real estate portals with map, search and WhatsApp, like aabienes.com. List properties, receive leads and follow them up.',
+    descEs: 'Portal inmobiliario con mapa, visitas por WhatsApp amarradas a cada casa y renders 3D para vender en planos. En producción en A&A Inmobiliaria.',
+    descEn: 'Real estate portal with a map, WhatsApp visits tied to each house and 3D renders to sell off-plan. In production at A&A Inmobiliaria.',
     h1Es: 'Tus propiedades en un portal que sí vende.',
     h1En: 'Your properties on a portal that actually sells.',
     intro: {
       es: [
-        'Vender propiedades por Facebook es pelear contra el algoritmo: las publicaciones se entierran, las fotos pierden calidad y el interesado de hace un mes es imposible de encontrar. Un portal propio pone tu inventario completo, con mapa y filtros, a un clic del comprador.',
-        'Lo hicimos para AA Bienes: portal con búsqueda por zona y precio, mapa, ficha de cada propiedad y contacto directo por WhatsApp — con panel para publicar y despublicar sin depender de nadie. Lo mismo se adapta a tu inmobiliaria, con CRM de prospectos si querés dar seguimiento en serio.',
+        'Vender propiedades por Facebook es pelear contra el algoritmo: las publicaciones se entierran, las fotos pierden calidad y el interesado de hace un mes es imposible de encontrar. Y cuando por fin escribe, nadie sabe por cuál casa preguntó.',
+        'Nuestro Portal Inmobiliario ya corre en A&A Inmobiliaria, en El Progreso: búsqueda en mapa con pins y precio, filtros, visitas agendadas desde la ficha y confirmadas por WhatsApp, y propietarios que publican gratis. Te armamos el flujo que conecta tus leads con tus casas de manera más sencilla — cada consulta llega amarrada a su propiedad — y con renders 3D vendés casas antes de construirlas.',
       ],
       en: [
-        'Selling properties on Facebook means fighting the algorithm: posts get buried, photos lose quality and last month’s interested buyer is impossible to find. Your own portal puts your full inventory, with map and filters, one click from the buyer.',
-        'We built it for AA Bienes: a portal with search by area and price, map, a page per property and direct WhatsApp contact — with a panel to publish and unpublish without depending on anyone. The same adapts to your agency, with a lead CRM if you want serious follow-up.',
+        'Selling properties on Facebook means fighting the algorithm: posts get buried, photos lose quality and last month’s interested buyer is impossible to find. And when they finally write, nobody knows which house they asked about.',
+        'Our real estate portal, Portal Inmobiliario, already runs at A&A Inmobiliaria, in El Progreso: map search with pins and prices, filters, visits booked from the listing and confirmed on WhatsApp, and owners who list for free. We build you the flow that connects your leads with your houses, the simple way — every inquiry arrives tied to its property — and with 3D renders you sell houses before they are built.',
       ],
     },
-    caso: { nombre: 'AA Bienes', url: 'https://www.aabienes.com', dEs: 'Portal inmobiliario para el mercado hondureño, con IA y mapa.', dEn: 'Real estate portal for the Honduran market, with AI and map.' },
+    producto: { nombre: 'Portal Inmobiliario', url: 'https://www.aabienes.com/', dEs: 'Mapa, filtros, visitas por WhatsApp y propietarios que publican gratis. En producción en A&A Inmobiliaria.', dEn: 'Map, filters, WhatsApp visits and owners who list for free. In production at A&A Inmobiliaria.' },
     dolores: [
-      { tEs: 'Inventario completo y visible', tEn: 'Full, visible inventory', dEs: 'Todas tus propiedades con filtros, mapa y ficha propia.', dEn: 'All your properties with filters, map and their own page.' },
-      { tEs: 'Prospectos que no se pierden', tEn: 'Leads that do not get lost', dEs: 'Cada consulta llega por WhatsApp y queda registrada.', dEn: 'Every inquiry arrives on WhatsApp and gets logged.' },
-      { tEs: 'Publicás vos mismo', tEn: 'You publish yourself', dEs: 'Panel para subir, editar y marcar como vendida cada propiedad.', dEn: 'A panel to upload, edit and mark each property as sold.' },
-      { tEs: 'Google te encuentra', tEn: 'Google finds you', dEs: 'Cada propiedad es una página indexable: SEO que trae compradores.', dEn: 'Each property is an indexable page: SEO that brings buyers.' },
+      { tEs: 'Cada lead con su casa', tEn: 'Every lead with its house', dEs: 'La consulta y la visita llegan por WhatsApp con la propiedad incluida: tu asesor sabe qué casa quieren.', dEn: 'The inquiry and the visit arrive on WhatsApp with the property included: your agent knows which house they want.' },
+      { tEs: 'Un mapa que vende', tEn: 'A map that sells', dEs: 'Pins con precio, filtros por tipo, habitaciones y varas², y favoritos para el comprador.', dEn: 'Pins with prices, filters by type, bedrooms and square varas, and favorites for the buyer.' },
+      { tEs: 'Renders 3D', tEn: '3D renders', dEs: 'Vendé en planos o mostrá la remodelación: el comprador ve la casa terminada antes de que exista.', dEn: 'Sell off-plan or show the remodel: the buyer sees the finished house before it exists.' },
+      { tEs: 'Propietarios publican gratis', tEn: 'Owners list for free', dEs: 'Fotos, precio en L o $, varas² y pin en el mapa, con sus datos privados.', dEn: 'Photos, price in L or $, square varas and a map pin, with their details private.' },
     ],
     faq: [
-      { qEs: '¿Puedo verlo funcionando?', qEn: 'Can I see it working?', aEs: 'Sí: aabienes.com es nuestro y está en producción. Esa misma base se adapta a tu inmobiliaria.', aEn: 'Yes: aabienes.com is ours and in production. That same base adapts to your agency.' },
-      { qEs: '¿Cuánto cuesta un portal así?', qEn: 'How much does such a portal cost?', aEs: 'Depende de los módulos (CRM, mapa, asesores). El rango arranca donde los sistemas a la medida; cotización por escrito tras el diagnóstico.', aEn: 'Depends on modules (CRM, map, agents). The range starts where custom systems do; written quote after the diagnosis.' },
+      { qEs: '¿Puedo verlo funcionando?', qEn: 'Can I see it working?', aEs: 'Sí: corre en producción en A&A Inmobiliaria (aabienes.com), en El Progreso. Las propiedades y los números de ese sitio son de A&A; el software lo construimos y lo operamos nosotros, y la misma base se adapta a tu inmobiliaria.', aEn: 'Yes: it runs in production at A&A Inmobiliaria (aabienes.com), in El Progreso. The listings and numbers on that site belong to A&A; we built and run the software, and the same base adapts to your agency.' },
+      { qEs: '¿Los renders 3D vienen incluidos?', qEn: 'Are the 3D renders included?', aEs: 'Sí, van como parte del paquete: renders para vender casas antes de construirlas o para mostrar cómo queda una remodelación. Cuántos necesitás lo definimos en la cotización.', aEn: 'Yes, they come as part of the package: renders to sell houses before they are built or to show how a remodel turns out. How many you need is set in the quote.' },
+      { qEs: '¿Sirve para venderle a hondureños en Estados Unidos?', qEn: 'Does it work for selling to Hondurans in the US?', aEs: 'Sí: precios en dólares, tour en video, documentos escaneados y firma a distancia, todo coordinado por WhatsApp.', aEn: 'Yes: prices in dollars, video tours, scanned documents and remote signing, all coordinated on WhatsApp.' },
+      { qEs: '¿Cuánto cuesta un portal así?', qEn: 'How much does such a portal cost?', aEs: 'Depende de lo que necesités: mapa, publicación de propietarios, renders, flujo para la diáspora. Te damos el precio fijo por escrito después del diagnóstico gratis.', aEn: 'It depends on what you need: map, owner listings, renders, the diaspora flow. You get the fixed price in writing after the free diagnosis.' },
     ],
+    fotoAltEs: 'Inmobiliaria en Honduras muestra casas en el mapa del Portal Inmobiliario en una tablet',
+    fotoAltEn: 'Real estate agency in Honduras showing homes on the Portal Inmobiliario map on a tablet',
   },
   {
     slug: 'abogados',
+    fotoAltEs: 'Bufete de abogados en Honduras revisando expedientes y plazos en su sistema desde una tablet',
+    fotoAltEn: 'Law firm in Honduras reviewing case files and deadlines in its system on a tablet',
     slugEn: 'law-firms',
     nombre: 'Abogados',
     name: 'Law firms',
@@ -291,6 +312,8 @@ export const industrias: Industria[] = [
   },
   {
     slug: 'distribuidoras',
+    fotoAltEs: 'Vendedor de una distribuidora en Honduras levantando un pedido desde el celular',
+    fotoAltEn: 'Distributor salesperson in Honduras taking an order on a phone',
     slugEn: 'distributors',
     nombre: 'Distribuidoras',
     name: 'Distributors',
@@ -324,6 +347,8 @@ export const industrias: Industria[] = [
   },
   {
     slug: 'talleres',
+    fotoAltEs: 'Taller mecánico en Honduras revisando una orden de trabajo en su sistema desde una tablet',
+    fotoAltEn: 'Auto shop in Honduras reviewing a work order in its system on a tablet',
     slugEn: 'workshops',
     nombre: 'Talleres',
     name: 'Auto shops',
