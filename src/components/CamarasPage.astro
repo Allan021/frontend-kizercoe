@@ -44,6 +44,32 @@ const wa = 'https://wa.me/50488091744';
 
 const zonas = ['El Progreso', 'San Pedro Sula', 'La Lima', 'Villanueva', 'Santa Rita', 'Morazán', 'Tela', 'Yoro'];
 
+/**
+ * Galería de instalaciones (/public/camaras/<f>.jpg, -600, -900, avif/webp).
+ * Las dos de El Progreso son fotos reales del trabajo; las demás muestran el
+ * mismo trabajo en otros tipos de lugar de la zona. `vertical`: el encuadre
+ * original es vertical y lo importante está arriba.
+ */
+const instalaciones = [
+  { f: 'instalacion-el-progreso-1', vertical: true, lugar: 'El Progreso', tEs: 'Cámara bala en el poste del portón', tEn: 'Bullet camera on the gate post' },
+  { f: 'local-sps', lugar: 'San Pedro Sula', tEs: 'Local comercial: dos balas sobre la entrada', tEn: 'Storefront: two bullets over the entrance' },
+  { f: 'casa-santa-rita', lugar: 'Santa Rita, Yoro', tEs: 'Casa: domo bajo el alero del corredor', tEn: 'House: dome under the porch eave' },
+  { f: 'residencia', lugar: 'El Progreso', tEs: 'Residencia: bala en la esquina, cubriendo calle y portón', tEn: 'Residence: corner bullet covering street and gate' },
+  { f: 'repuestos', lugar: 'El Progreso', tEs: 'Repuestera: domos sobre los pasillos', tEn: 'Auto parts store: domes over the aisles' },
+  { f: 'bodega-villanueva', lugar: 'Villanueva, Cortés', tEs: 'Bodega: bala apuntando a las puertas de carga', tEn: 'Warehouse: bullet aimed at the loading doors' },
+  { f: 'finca', lugar: 'Valle de Sula', tEs: 'Finca: PTZ en el portón del potrero', tEn: 'Ranch: PTZ at the pasture gate' },
+  { f: 'instalacion-el-progreso-2', vertical: true, lugar: 'El Progreso', tEs: 'Caja de conexión sellada y cable protegido', tEn: 'Sealed junction box and protected cable' },
+  { f: 'gabinete', lugar: 'El Progreso', tEs: 'Gabinete: grabador, switch PoE y UPS etiquetados', tEn: 'Cabinet: recorder, PoE switch and UPS, labeled' },
+];
+
+/** Cómo se ve el sistema ya funcionando: tele, celular afuera, alertas. */
+const monitoreo = [
+  { f: 'dvr-tele', tEs: 'En la tele de la casa', tEn: 'On the TV at home', dEs: 'El grabador se conecta a la tele: todas las cámaras en una pantalla, en vivo o buscando la grabación de una hora exacta.', dEn: 'The recorder connects to the TV: every camera on one screen, live or searching the recording of an exact hour.' },
+  { f: 'celular-afuera', tEs: 'Desde afuera del país', tEn: 'From abroad', dEs: 'La app en tu celular te muestra tu casa o tu negocio en vivo desde Estados Unidos o desde donde estés. Le dejamos acceso a la familia que vos digás.', dEn: 'The app on your phone shows your home or business live from the US or wherever you are. We give access to the family members you choose.' },
+  { f: 'alerta-ladron', tEs: 'Alerta al instante', tEn: 'Instant alert', dEs: 'Si alguien se acerca al portón de noche, te llega la alerta con la foto al celular. Se configura para personas, no para cada perro o cada carro que pasa.', dEn: 'If someone approaches the gate at night, the alert with a photo reaches your phone. It is tuned for people, not every dog or passing car.' },
+  { f: 'reflector-sirena', tEs: 'Reflector y sirena', tEn: 'Floodlight and siren', dEs: 'Las cámaras con reflector encienden la luz y suenan la sirena cuando detectan a alguien: dejan de solo grabar y lo espantan.', dEn: 'Floodlight cameras turn on the light and sound the siren when they detect someone: they stop just recording and scare them off.' },
+];
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -401,65 +427,91 @@ const reglas = [
         <div class="kz-encabe">
           <div>
             <div class="kz-eyebrow">{es ? 'Trabajo nuestro' : 'Our own work'}</div>
-            <h2 class="kz-h2-cam">{es ? 'Una instalación en El Progreso' : 'An installation in El Progreso'}</h2>
+            <h2 class="kz-h2-cam">{es ? 'Casas, negocios, bodegas y fincas' : 'Homes, shops, warehouses and ranches'}</h2>
           </div>
           <p class="text-[18px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
             {es
-              ? 'Cámara bala sobre el poste del portón, caja de conexión sellada contra la lluvia y cable protegido hasta el gabinete. Son fotos del trabajo, no de un catálogo.'
-              : 'A bullet camera on the gate post, a junction box sealed against rain and protected cable all the way to the cabinet. These are photos of the work, not of a catalog.'}
+              ? 'Cámara bala sobre el poste del portón, caja de conexión sellada contra la lluvia y cable protegido hasta el gabinete. Cada lugar pide una cámara distinta: domo adentro, bala hacia la calle, PTZ en el terreno abierto.'
+              : 'A bullet camera on the gate post, a junction box sealed against rain and protected cable all the way to the cabinet. Each place calls for a different camera: dome indoors, bullet toward the street, PTZ on open ground.'}
           </p>
         </div>
 
-        <div class="kz-fotos">
-          <figure class="kz-foto">
-            <picture>
-              <source type="image/avif" srcset="/camaras/instalacion-el-progreso-1-600.avif 600w, /camaras/instalacion-el-progreso-1-900.avif 900w, /camaras/instalacion-el-progreso-1.avif 1200w" sizes="(min-width: 1024px) 560px, 100vw" />
-              <source type="image/webp" srcset="/camaras/instalacion-el-progreso-1-600.webp 600w, /camaras/instalacion-el-progreso-1-900.webp 900w, /camaras/instalacion-el-progreso-1.webp 1200w" sizes="(min-width: 1024px) 560px, 100vw" />
-              <img
-                src="/camaras/instalacion-el-progreso-1.jpg"
-              srcset="/camaras/instalacion-el-progreso-1-600.jpg 600w, /camaras/instalacion-el-progreso-1-900.jpg 900w, /camaras/instalacion-el-progreso-1.jpg 1200w"
-              sizes="(min-width: 1024px) 560px, 100vw"
-                alt={es
-                  ? 'Montaje de una cámara bala sobre el poste del portón en El Progreso, Yoro'
-                  : 'Mounting a bullet camera on the gate post in El Progreso, Yoro'}
-                width="1200"
-                height="1600"
-                loading="lazy"
-                decoding="async"
-              />
-            </picture>
-            <figcaption>
-              <span>{es ? 'Montaje y alineación de la cámara sobre el poste.' : 'Mounting and aligning the camera on the post.'}</span>
-              <span class="kz-mono text-[11px] whitespace-nowrap" style="color: var(--green-bright, #3ed39a)">01 / 02</span>
-            </figcaption>
-          </figure>
-          <figure class="kz-foto">
-            <picture>
-              <source type="image/avif" srcset="/camaras/instalacion-el-progreso-2-600.avif 600w, /camaras/instalacion-el-progreso-2-900.avif 900w, /camaras/instalacion-el-progreso-2.avif 1200w" sizes="(min-width: 1024px) 560px, 100vw" />
-              <source type="image/webp" srcset="/camaras/instalacion-el-progreso-2-600.webp 600w, /camaras/instalacion-el-progreso-2-900.webp 900w, /camaras/instalacion-el-progreso-2.webp 1200w" sizes="(min-width: 1024px) 560px, 100vw" />
-              <img
-                src="/camaras/instalacion-el-progreso-2.jpg"
-              srcset="/camaras/instalacion-el-progreso-2-600.jpg 600w, /camaras/instalacion-el-progreso-2-900.jpg 900w, /camaras/instalacion-el-progreso-2.jpg 1200w"
-              sizes="(min-width: 1024px) 560px, 100vw"
-                alt={es
-                  ? 'Cámara instalada sobre el muro con caja de conexión sellada y cableado ordenado'
-                  : 'Camera installed on the wall with a sealed junction box and tidy cabling'}
-                width="1200"
-                height="1600"
-                loading="lazy"
-                decoding="async"
-              />
-            </picture>
-            <figcaption>
-              <span>{es ? 'Caja de conexión sellada y bajada de cable protegida.' : 'Sealed junction box and protected cable run.'}</span>
-              <span class="kz-mono text-[11px] whitespace-nowrap" style="color: var(--green-bright, #3ed39a)">02 / 02</span>
-            </figcaption>
-          </figure>
+        <div class="kz-fotos kz-fotos-muchas">
+          {instalaciones.map((x, i) => (
+            <figure class="kz-foto">
+              <picture>
+                <source type="image/avif" srcset={`/camaras/${x.f}-600.avif 600w, /camaras/${x.f}-900.avif 900w, /camaras/${x.f}.avif 1200w`} sizes="(min-width: 1100px) 380px, (min-width: 720px) 50vw, 100vw" />
+                <source type="image/webp" srcset={`/camaras/${x.f}-600.webp 600w, /camaras/${x.f}-900.webp 900w, /camaras/${x.f}.webp 1200w`} sizes="(min-width: 1100px) 380px, (min-width: 720px) 50vw, 100vw" />
+                <img
+                  src={`/camaras/${x.f}.jpg`}
+                  srcset={`/camaras/${x.f}-600.jpg 600w, /camaras/${x.f}-900.jpg 900w, /camaras/${x.f}.jpg 1200w`}
+                  sizes="(min-width: 1100px) 380px, (min-width: 720px) 50vw, 100vw"
+                  alt={`${es ? x.tEs : x.tEn} — ${x.lugar}`}
+                  width="1200"
+                  height={x.vertical ? 1600 : 800}
+                  loading="lazy"
+                  decoding="async"
+                  style={x.vertical ? undefined : 'object-position: 50% 50%'}
+                />
+              </picture>
+              <figcaption>
+                <span>
+                  <strong class="block text-[13px] font-semibold">{x.lugar}</strong>
+                  {es ? x.tEs : x.tEn}
+                </span>
+                <span class="kz-mono text-[11px] whitespace-nowrap" style="color: var(--green-bright, #3ed39a)">
+                  {String(i + 1).padStart(2, '0')} / {String(instalaciones.length).padStart(2, '0')}
+                </span>
+              </figcaption>
+            </figure>
+          ))}
         </div>
       </div>
     </section>
 
-    <!-- ── 07 · Dimensionamiento ───────────────────────────────────────── -->
+    <!-- ── 06b · Así lo ves ────────────────────────────────────────────── -->
+    <section id="monitoreo" style="background: var(--bg2)">
+      <div class="kz-wrap kz-sec">
+        <div class="kz-encabe">
+          <div>
+            <div class="kz-eyebrow">{es ? 'Ya funcionando' : 'Up and running'}</div>
+            <h2 class="kz-h2-cam">{es ? 'Lo ves en la tele, en el celular y desde afuera del país' : 'Watch it on the TV, on your phone and from abroad'}</h2>
+          </div>
+          <p class="text-[18px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+            {es
+              ? 'El grabador queda conectado a la tele y a internet. Configuramos la app en los celulares que nos digás, también los de la familia que vive afuera, y las alertas para que te avise cuando alguien se acerca.'
+              : 'The recorder stays connected to the TV and the internet. We set up the app on the phones you choose, including family abroad, and the alerts that tell you when someone approaches.'}
+          </p>
+        </div>
+
+        <ul class="kz-monitoreo">
+          {monitoreo.map((m) => (
+            <li class="kz-monitoreo-item">
+              <picture>
+                <source type="image/avif" srcset={`/camaras/${m.f}-600.avif 600w, /camaras/${m.f}-900.avif 900w, /camaras/${m.f}.avif 1200w`} sizes="(min-width: 1100px) 560px, 100vw" />
+                <source type="image/webp" srcset={`/camaras/${m.f}-600.webp 600w, /camaras/${m.f}-900.webp 900w, /camaras/${m.f}.webp 1200w`} sizes="(min-width: 1100px) 560px, 100vw" />
+                <img
+                  src={`/camaras/${m.f}.jpg`}
+                  srcset={`/camaras/${m.f}-600.jpg 600w, /camaras/${m.f}-900.jpg 900w, /camaras/${m.f}.jpg 1200w`}
+                  sizes="(min-width: 1100px) 560px, 100vw"
+                  alt={es ? m.tEs : m.tEn}
+                  width="1200"
+                  height="800"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
+              <div class="flex flex-col gap-2 p-6">
+                <h3 class="text-[19px] font-bold" style="letter-spacing: -0.01em">{es ? m.tEs : m.tEn}</h3>
+                <p class="text-[15px] leading-relaxed" style="color: var(--ink2)">{es ? m.dEs : m.dEn}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+<!-- ── 07 · Dimensionamiento ───────────────────────────────────────── -->
     <section id="dimensionamiento" style="background: var(--bg2)">
       <div class="kz-wrap kz-sec">
         <div class="max-w-[760px]">
@@ -1027,6 +1079,10 @@ const reglas = [
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr));
     gap: 20px;
   }
+  .kz-fotos-muchas { grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); }
+  .kz-monitoreo { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); gap: 20px; list-style: none; margin: 0; padding: 0; }
+  .kz-monitoreo-item { border: 1px solid var(--line); border-radius: 20px; overflow: hidden; background: var(--bg); }
+  .kz-monitoreo-item img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; }
   .kz-foto {
     position: relative;
     margin: 0;
