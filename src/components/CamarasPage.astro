@@ -75,12 +75,12 @@ const monitoreo = [
 /** Índice con scroll spy: los ids de las secciones de abajo, en orden. */
 const indice = [
   { id: 'portada', es: 'Inicio', en: 'Top' },
+  { id: 'trabajo', es: 'Instalaciones', en: 'Installations' },
+  { id: 'monitoreo', es: 'Tele, celular y alertas', en: 'TV, phone and alerts' },
   { id: 'pilares', es: 'Cómo instalamos', en: 'How we install' },
   { id: 'proceso', es: 'Los cuatro pasos', en: 'The four steps' },
   { id: 'catalogo', es: 'Tipos de cámara', en: 'Camera types' },
   { id: 'sistema', es: 'Grabador y equipo', en: 'Recorder and gear' },
-  { id: 'trabajo', es: 'Instalaciones', en: 'Installations' },
-  { id: 'monitoreo', es: 'Tele, celular y alertas', en: 'TV, phone and alerts' },
   { id: 'dimensionamiento', es: 'Sistemas de 4, 8 o 16', en: '4, 8 or 16 cameras' },
   { id: 'reglas', es: 'Nuestras reglas', en: 'Our rules' },
   { id: 'incluye', es: 'Qué incluye y zonas', en: 'Included & areas' },
@@ -271,6 +271,96 @@ const reglas = [
 
     <IndiceSecciones items={indice} lang={lang} />
 
+    <!-- ── 06 · Trabajo nuestro ────────────────────────────────────────── -->
+    <section id="trabajo" style="background: var(--bg)">
+      <div class="kz-wrap kz-sec">
+        <div class="kz-encabe">
+          <div>
+            <div class="kz-eyebrow">{es ? 'Trabajo nuestro' : 'Our own work'}</div>
+            <h2 class="kz-h2-cam">{es ? 'Casas, negocios, bodegas y fincas' : 'Homes, shops, warehouses and ranches'}</h2>
+          </div>
+          <p class="text-[18px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+            {es
+              ? 'Cámara bala sobre el poste del portón, caja de conexión sellada contra la lluvia y cable protegido hasta el gabinete. Cada lugar pide una cámara distinta: domo adentro, bala hacia la calle, PTZ en el terreno abierto.'
+              : 'A bullet camera on the gate post, a junction box sealed against rain and protected cable all the way to the cabinet. Each place calls for a different camera: dome indoors, bullet toward the street, PTZ on open ground.'}
+          </p>
+        </div>
+
+        <div class="kz-fotos kz-fotos-muchas">
+          {instalaciones.map((x, i) => (
+            <figure class="kz-foto">
+              <picture>
+                <source type="image/avif" srcset={`/camaras/${x.f}-600.avif 600w, /camaras/${x.f}-900.avif 900w, /camaras/${x.f}.avif 1200w`} sizes="(min-width: 1100px) 380px, (min-width: 720px) 50vw, 100vw" />
+                <source type="image/webp" srcset={`/camaras/${x.f}-600.webp 600w, /camaras/${x.f}-900.webp 900w, /camaras/${x.f}.webp 1200w`} sizes="(min-width: 1100px) 380px, (min-width: 720px) 50vw, 100vw" />
+                <img
+                  src={`/camaras/${x.f}.jpg`}
+                  srcset={`/camaras/${x.f}-600.jpg 600w, /camaras/${x.f}-900.jpg 900w, /camaras/${x.f}.jpg 1200w`}
+                  sizes="(min-width: 1100px) 380px, (min-width: 720px) 50vw, 100vw"
+                  alt={`${es ? x.tEs : x.tEn} — ${x.lugar}`}
+                  width="1200"
+                  height={x.vertical ? 1600 : 800}
+                  loading="lazy"
+                  decoding="async"
+                  style={x.vertical ? undefined : 'object-position: 50% 50%'}
+                />
+              </picture>
+              <figcaption>
+                <span>
+                  <strong class="block text-[13px] font-semibold">{x.lugar}</strong>
+                  {es ? x.tEs : x.tEn}
+                </span>
+                <span class="kz-mono text-[11px] whitespace-nowrap" style="color: var(--green-bright, #3ed39a)">
+                  {String(i + 1).padStart(2, '0')} / {String(instalaciones.length).padStart(2, '0')}
+                </span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 06b · Así lo ves ────────────────────────────────────────────── -->
+    <section id="monitoreo" style="background: var(--bg2)">
+      <div class="kz-wrap kz-sec">
+        <div class="kz-encabe">
+          <div>
+            <div class="kz-eyebrow">{es ? 'Ya funcionando' : 'Up and running'}</div>
+            <h2 class="kz-h2-cam">{es ? 'Lo ves en la tele, en el celular y desde afuera del país' : 'Watch it on the TV, on your phone and from abroad'}</h2>
+          </div>
+          <p class="text-[18px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+            {es
+              ? 'El grabador queda conectado a la tele y a internet. Configuramos la app en los celulares que nos digás, también los de la familia que vive afuera, y las alertas para que te avise cuando alguien se acerca.'
+              : 'The recorder stays connected to the TV and the internet. We set up the app on the phones you choose, including family abroad, and the alerts that tell you when someone approaches.'}
+          </p>
+        </div>
+
+        <ul class="kz-monitoreo">
+          {monitoreo.map((m) => (
+            <li class="kz-monitoreo-item">
+              <picture>
+                <source type="image/avif" srcset={`/camaras/${m.f}-600.avif 600w, /camaras/${m.f}-900.avif 900w, /camaras/${m.f}.avif 1200w`} sizes="(min-width: 1100px) 560px, 100vw" />
+                <source type="image/webp" srcset={`/camaras/${m.f}-600.webp 600w, /camaras/${m.f}-900.webp 900w, /camaras/${m.f}.webp 1200w`} sizes="(min-width: 1100px) 560px, 100vw" />
+                <img
+                  src={`/camaras/${m.f}.jpg`}
+                  srcset={`/camaras/${m.f}-600.jpg 600w, /camaras/${m.f}-900.jpg 900w, /camaras/${m.f}.jpg 1200w`}
+                  sizes="(min-width: 1100px) 560px, 100vw"
+                  alt={es ? m.tEs : m.tEn}
+                  width="1200"
+                  height="800"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
+              <div class="flex flex-col gap-2 p-6">
+                <h3 class="text-[19px] font-bold" style="letter-spacing: -0.01em">{es ? m.tEs : m.tEn}</h3>
+                <p class="text-[15px] leading-relaxed" style="color: var(--ink2)">{es ? m.dEs : m.dEn}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
     <!-- ── 02 · Pilares ────────────────────────────────────────────────── -->
     <section id="pilares" class="kz-pilares">
       <div class="kz-wrap kz-pilares-grid">
@@ -441,98 +531,8 @@ const reglas = [
       </div>
     </section>
 
-    <!-- ── 06 · Trabajo nuestro ────────────────────────────────────────── -->
-    <section id="trabajo" style="background: var(--bg)">
-      <div class="kz-wrap kz-sec">
-        <div class="kz-encabe">
-          <div>
-            <div class="kz-eyebrow">{es ? 'Trabajo nuestro' : 'Our own work'}</div>
-            <h2 class="kz-h2-cam">{es ? 'Casas, negocios, bodegas y fincas' : 'Homes, shops, warehouses and ranches'}</h2>
-          </div>
-          <p class="text-[18px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
-            {es
-              ? 'Cámara bala sobre el poste del portón, caja de conexión sellada contra la lluvia y cable protegido hasta el gabinete. Cada lugar pide una cámara distinta: domo adentro, bala hacia la calle, PTZ en el terreno abierto.'
-              : 'A bullet camera on the gate post, a junction box sealed against rain and protected cable all the way to the cabinet. Each place calls for a different camera: dome indoors, bullet toward the street, PTZ on open ground.'}
-          </p>
-        </div>
-
-        <div class="kz-fotos kz-fotos-muchas">
-          {instalaciones.map((x, i) => (
-            <figure class="kz-foto">
-              <picture>
-                <source type="image/avif" srcset={`/camaras/${x.f}-600.avif 600w, /camaras/${x.f}-900.avif 900w, /camaras/${x.f}.avif 1200w`} sizes="(min-width: 1100px) 380px, (min-width: 720px) 50vw, 100vw" />
-                <source type="image/webp" srcset={`/camaras/${x.f}-600.webp 600w, /camaras/${x.f}-900.webp 900w, /camaras/${x.f}.webp 1200w`} sizes="(min-width: 1100px) 380px, (min-width: 720px) 50vw, 100vw" />
-                <img
-                  src={`/camaras/${x.f}.jpg`}
-                  srcset={`/camaras/${x.f}-600.jpg 600w, /camaras/${x.f}-900.jpg 900w, /camaras/${x.f}.jpg 1200w`}
-                  sizes="(min-width: 1100px) 380px, (min-width: 720px) 50vw, 100vw"
-                  alt={`${es ? x.tEs : x.tEn} — ${x.lugar}`}
-                  width="1200"
-                  height={x.vertical ? 1600 : 800}
-                  loading="lazy"
-                  decoding="async"
-                  style={x.vertical ? undefined : 'object-position: 50% 50%'}
-                />
-              </picture>
-              <figcaption>
-                <span>
-                  <strong class="block text-[13px] font-semibold">{x.lugar}</strong>
-                  {es ? x.tEs : x.tEn}
-                </span>
-                <span class="kz-mono text-[11px] whitespace-nowrap" style="color: var(--green-bright, #3ed39a)">
-                  {String(i + 1).padStart(2, '0')} / {String(instalaciones.length).padStart(2, '0')}
-                </span>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <!-- ── 06b · Así lo ves ────────────────────────────────────────────── -->
-    <section id="monitoreo" style="background: var(--bg2)">
-      <div class="kz-wrap kz-sec">
-        <div class="kz-encabe">
-          <div>
-            <div class="kz-eyebrow">{es ? 'Ya funcionando' : 'Up and running'}</div>
-            <h2 class="kz-h2-cam">{es ? 'Lo ves en la tele, en el celular y desde afuera del país' : 'Watch it on the TV, on your phone and from abroad'}</h2>
-          </div>
-          <p class="text-[18px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
-            {es
-              ? 'El grabador queda conectado a la tele y a internet. Configuramos la app en los celulares que nos digás, también los de la familia que vive afuera, y las alertas para que te avise cuando alguien se acerca.'
-              : 'The recorder stays connected to the TV and the internet. We set up the app on the phones you choose, including family abroad, and the alerts that tell you when someone approaches.'}
-          </p>
-        </div>
-
-        <ul class="kz-monitoreo">
-          {monitoreo.map((m) => (
-            <li class="kz-monitoreo-item">
-              <picture>
-                <source type="image/avif" srcset={`/camaras/${m.f}-600.avif 600w, /camaras/${m.f}-900.avif 900w, /camaras/${m.f}.avif 1200w`} sizes="(min-width: 1100px) 560px, 100vw" />
-                <source type="image/webp" srcset={`/camaras/${m.f}-600.webp 600w, /camaras/${m.f}-900.webp 900w, /camaras/${m.f}.webp 1200w`} sizes="(min-width: 1100px) 560px, 100vw" />
-                <img
-                  src={`/camaras/${m.f}.jpg`}
-                  srcset={`/camaras/${m.f}-600.jpg 600w, /camaras/${m.f}-900.jpg 900w, /camaras/${m.f}.jpg 1200w`}
-                  sizes="(min-width: 1100px) 560px, 100vw"
-                  alt={es ? m.tEs : m.tEn}
-                  width="1200"
-                  height="800"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </picture>
-              <div class="flex flex-col gap-2 p-6">
-                <h3 class="text-[19px] font-bold" style="letter-spacing: -0.01em">{es ? m.tEs : m.tEn}</h3>
-                <p class="text-[15px] leading-relaxed" style="color: var(--ink2)">{es ? m.dEs : m.dEn}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-
 <!-- ── 07 · Dimensionamiento ───────────────────────────────────────── -->
-    <section id="dimensionamiento" style="background: var(--bg2)">
+    <section id="dimensionamiento" style="background: var(--bg)">
       <div class="kz-wrap kz-sec">
         <div class="max-w-[760px]">
           <div class="kz-eyebrow">{es ? 'Dimensionamiento' : 'Sizing'}</div>
@@ -580,7 +580,7 @@ const reglas = [
     </section>
 
     <!-- ── 08 · Reglas ─────────────────────────────────────────────────── -->
-    <section id="reglas" style="background: var(--bg)">
+    <section id="reglas" style="background: var(--bg2)">
       <div class="kz-wrap kz-sec">
         <div class="kz-eyebrow">{es ? 'Cómo cotizamos' : 'How we quote'}</div>
         <h2 class="kz-h2-cam mb-14">{es ? 'Cuatro reglas que no cambian' : 'Four rules that do not change'}</h2>
@@ -597,7 +597,7 @@ const reglas = [
     </section>
 
     <!-- ── 09 · Qué incluye + cobertura ────────────────────────────────── -->
-    <section id="incluye" style="background: var(--bg2)">
+    <section id="incluye" style="background: var(--bg)">
       <div class="kz-wrap kz-sec kz-dos-col">
         <div>
           <h2 class="text-[clamp(28px,3vw,38px)] font-bold" style="letter-spacing: -.02em">
@@ -641,7 +641,7 @@ const reglas = [
     </section>
 
     <!-- ── 10 · Preguntas ──────────────────────────────────────────────── -->
-    <section id="faq" style="background: var(--bg); scroll-margin-top: 70px">
+    <section id="faq" style="background: var(--bg2); scroll-margin-top: 70px">
       <div class="kz-wrap kz-sec kz-faq-grid">
         <div class="kz-faq-lado">
           <div class="kz-eyebrow">{s.faq.length} {es ? 'respuestas' : 'answers'}</div>
