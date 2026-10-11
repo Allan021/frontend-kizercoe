@@ -208,9 +208,10 @@ const enlaces = [
       <a href={L('/contacto/')} class="kz-btn-secundario hidden items-center rounded-[10px] px-4 py-2 text-sm font-semibold sm:inline-flex" style="border-width: 1.5px">
         <span class="en">Get a quote</span><span class="es">Cotizar</span>
       </a>
-      <a href={WA} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-[10px] px-4 py-2.5 text-sm font-semibold text-white transition-colors" style="background: var(--green-btn)" onmouseover="this.style.background='var(--green-btn-hover)'" onmouseout="this.style.background='var(--green-btn)'">
+      <!-- En celular solo el ícono: con el texto, el botón se salía de la pantalla a 412px. -->
+      <a href={WA} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-[10px] px-3 py-2.5 text-sm font-semibold text-white transition-colors sm:px-4" style="background: var(--green-btn)" onmouseover="this.style.background='var(--green-btn-hover)'" onmouseout="this.style.background='var(--green-btn)'">
         <IconoWhatsApp size={18} class="block" />
-        <span class="en">Let's talk</span><span class="es">Hablemos</span>
+        <span class="sr-only sm:not-sr-only"><span class="en">Let's talk</span><span class="es">Hablemos</span></span>
       </a>
     </div>
   </div>
