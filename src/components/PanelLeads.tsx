@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { ChevronDown, ExternalLink, FileText, Mail, MessageCircle, RefreshCw, Search, Trash2, X } from 'lucide-react';
-import { panelDeleteLead, panelLeads, panelUpdateLead, type Lead, type LeadEstado } from '@/lib/api';
+import { panelDeleteLead, panelLeads, panelUpdateLead, waDe, type Lead, type LeadEstado } from '@/lib/api';
 
 /**
  * CRM del sitio: todo el que escribió, por formulario o por WhatsApp, y quien
@@ -94,7 +94,7 @@ export function PanelLeads({ onConteo }: { onConteo: (n: number) => void }) {
         (filtroEstado === 'todos' || l.status === filtroEstado) &&
         (filtroServicio === 'todos' || l.service === filtroServicio) &&
         (filtroCanal === 'todos' || l.source === filtroCanal) &&
-        (!t || `${l.name} ${l.email} ${l.service} ${l.company ?? ''} ${l.notes ?? ''}`.toLowerCase().includes(t)),
+        (!t || `${l.name} ${l.email} ${l.service} ${l.company ?? ''} ${l.phone ?? ''} ${l.phone?.replace(/\D/g, '') ?? ''} ${l.notes ?? ''}`.toLowerCase().includes(t)),
     );
   }, [lista, filtroEstado, filtroServicio, filtroCanal, q]);
 
@@ -396,6 +396,7 @@ function FilaLead({
             <p className="kz-eyebrow">// lo que dijo</p>
             <p className="whitespace-pre-wrap leading-relaxed">{l.message}</p>
             <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-[13px]" style={{ color: 'var(--color-muted)' }}>
+              {l.phone && (<><dt>Teléfono</dt><dd style={{ color: 'var(--color-text)' }}><a href={`tel:${l.phone.replace(/[^\d+]/g, '')}`} style={{ color: 'inherit' }}>{l.phone}</a></dd></>)}
               {l.company && (<><dt>Empresa</dt><dd style={{ color: 'var(--color-text)' }}>{l.company}</dd></>)}
               {l.budget && (<><dt>Presupuesto</dt><dd style={{ color: 'var(--color-text)' }}>{l.budget}</dd></>)}
               {l.page && (<><dt>Página</dt><dd className="truncate" style={{ color: 'var(--color-text)' }}>{l.page}</dd></>)}
@@ -423,6 +424,12 @@ function FilaLead({
                 <Mail size={15} />
                 Responder
               </a>
+              {l.phone && waDe(l.phone) && (
+                <a href={waDe(l.phone)!} target="_blank" rel="noopener noreferrer" className="kz-btn kz-btn-secundario">
+                  <MessageCircle size={15} />
+                  WhatsApp
+                </a>
+              )}
               <button onClick={onBorrar} className="kz-btn kz-btn-secundario" style={{ color: '#ff6b6b' }}>
                 <Trash2 size={15} />
                 Es spam

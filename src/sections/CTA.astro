@@ -6,7 +6,7 @@ import ContactForm from '@/components/ContactForm';
  */
 ---
 
-<section id="contacto" class="mx-auto grid w-full max-w-[1200px] gap-12 px-6 py-20" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))" aria-labelledby="contact-title">
+<section id="contacto" class="mx-auto grid w-full max-w-[1200px] gap-12 px-6 py-20" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr))" aria-labelledby="contact-title">
   <div class="flex flex-col gap-5">
     <p class="kz-eyebrow"><span class="en">We reply right away</span><span class="es">Respondemos de inmediato</span></p>
     <h2 id="contact-title" class="kz-h2" style="text-wrap: initial">
@@ -46,7 +46,7 @@ import ContactForm from '@/components/ContactForm';
     </div>
   </div>
 
-  <div class="rounded-[20px] border p-7" style="background: var(--bg2); border-color: var(--line)">
+  <div class="min-w-0 rounded-[20px] border p-4 sm:p-7" style="background: var(--bg2); border-color: var(--line)">
     <ContactForm client:load />
   </div>
 

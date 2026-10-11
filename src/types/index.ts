@@ -2,6 +2,8 @@ export interface ContactFormData {
   name: string;
   email: string;
   company?: string;
+  /** WhatsApp o teléfono, opcional. */
+  phone?: string;
   service: string;
   budget?: string;
   message: string;

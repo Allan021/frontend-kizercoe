@@ -91,6 +91,8 @@ export type Lead = {
   name: string;
   email: string;
   company?: string;
+  /** WhatsApp o teléfono que dejó en el formulario. */
+  phone?: string;
   service: string;
   budget?: string;
   message: string;
@@ -110,3 +112,10 @@ export const panelUpdateLead = (id: string, cambios: { status?: LeadEstado; note
 
 export const panelDeleteLead = (id: string) =>
   pedir<{ ok: boolean }>(`/v1/panel/contacts/${id}`, conToken({ method: 'DELETE' }));
+
+/** Enlace wa.me con solo los dígitos; 8 dígitos sin código de país se toman como Honduras. */
+export function waDe(phone: string): string | null {
+  const d = phone.replace(/\D/g, '');
+  if (d.length < 8) return null;
+  return `https://wa.me/${d.length === 8 ? `504${d}` : d}`;
+}
