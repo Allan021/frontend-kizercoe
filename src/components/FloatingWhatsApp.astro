@@ -1,4 +1,5 @@
 ---
+import IconoWhatsApp from '@/components/IconoWhatsApp.astro';
 /**
  * FAB de WhatsApp del rediseño: pastilla verde con texto siempre visible.
  * El mensaje precargado cambia con el idioma (el script de abajo lo ajusta).
@@ -19,11 +20,11 @@ const msgs = {
   target="_blank"
   rel="noopener noreferrer"
   class="fixed bottom-[22px] right-[22px] z-30 inline-flex items-center gap-2.5 rounded-full px-5 py-3.5 text-[15px] font-semibold text-white transition-colors"
-  style="background: var(--green); box-shadow: 0 10px 30px rgba(11,26,51,.25); border: 2px solid var(--bg)"
+  style="background: var(--green-btn); box-shadow: 0 10px 30px rgba(11,26,51,.25); border: 2px solid var(--bg)"
   onmouseover="this.style.background='var(--green2)'"
   onmouseout="this.style.background='var(--green)'"
 >
-  <img src="/whatsapp.svg" alt="" width="22" height="22" class="block brightness-0 invert" />
+  <IconoWhatsApp size={22} class="block" />
   <span class="en">Chat with us</span><span class="es">Escribinos</span>
 </a>
 

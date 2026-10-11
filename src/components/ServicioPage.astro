@@ -1,4 +1,5 @@
 ---
+import IconoWhatsApp from '@/components/IconoWhatsApp.astro';
 import { Icon } from 'astro-icon/components';
 import Layout from '@/layouts/Layout.astro';
 import Nav from '@/components/Nav.astro';
@@ -12,6 +13,7 @@ import { galerias } from '@/lib/galerias';
 import { industriasDe } from '@/lib/enlaces';
 import { servicios } from '@/lib/servicios';
 import { productos } from '@/lib/productos';
+import IndiceSecciones from '@/components/IndiceSecciones.astro';
 
 /**
  * Plantilla de las páginas de servicio (/servicios/x y /en/services/x).
@@ -32,6 +34,16 @@ const x = extras[s.slug];
 const foto = fotos[s.slug];
 const galeria = galerias[s.slug];
 const paraNegocios = industriasDe(s.slug);
+// Solo las secciones que esta página tiene: no todos los servicios traen galería o precio.
+const indice = [
+  { id: 'inicio', es: 'Inicio', en: 'Top' },
+  { id: 'beneficios', es: 'Beneficios', en: 'Benefits' },
+  ...(galeria ? [{ id: 'tipos', es: galeria.kwEs, en: galeria.kwEn }] : []),
+  ...(x ? [{ id: 'proceso', es: 'Cómo trabajamos', en: 'How we work' }, { id: 'precio', es: 'Precio', en: 'Price' }] : []),
+  { id: 'incluye', es: 'Qué incluye y preguntas', en: 'Included & FAQ' },
+  ...(paraNegocios.length ? [{ id: 'negocios', es: 'Para qué negocios', en: 'Who it is for' }] : []),
+  { id: 'cotizar', es: 'Cotizar', en: 'Get a quote' },
+];
 const faqs = [...s.faq, ...(x?.faq ?? [])];
 // Reparaciones: se atienden en el local. El software se hace para todo el país.
 const local = s.slug.startsWith('reparacion');
@@ -106,7 +118,7 @@ const jsonLd = {
   <main id="contenido">
     <!-- Hero a dos columnas: la historia a la izquierda, los números a la
          derecha. El visitante que scrollea lee; el que compara mira stats. -->
-    <section class="relative overflow-hidden" style="background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%)">
+    <section id="inicio" class="relative overflow-hidden" style="background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%)">
       <div aria-hidden="true" class="pointer-events-none absolute inset-0" style="background-image: linear-gradient(color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1px); background-size: 56px 56px; mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 100%); -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 100%)"></div>
       <div class="relative mx-auto grid max-w-[1200px] items-start gap-12 px-6 pb-14 pt-14" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))">
         <div class="flex max-w-[640px] flex-col gap-6">
@@ -138,7 +150,7 @@ const jsonLd = {
               {es ? 'Cotización gratis' : 'Free quote'}
             </a>
             <a href="https://wa.me/50488091744" target="_blank" rel="noopener noreferrer" class="kz-btn kz-btn-secundario" style="padding: 15px 26px; font-size: 16px">
-              <img src="/whatsapp.svg" alt="" width="18" height="18" class="block" />
+              <IconoWhatsApp size={18} class="block" />
               WhatsApp
             </a>
           </div>
@@ -178,8 +190,10 @@ const jsonLd = {
       </div>
     </section>
 
+    <IndiceSecciones items={indice} lang={lang} />
+
     <!-- Beneficios -->
-    <section class="mx-auto max-w-[1200px] px-6 py-16">
+    <section id="beneficios" class="mx-auto max-w-[1200px] px-6 py-16">
       <ul class="grid list-none gap-4" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr))">
         {s.beneficios.map((b) => (
           <li class="kz-card flex flex-col gap-2 p-6">
@@ -191,7 +205,7 @@ const jsonLd = {
     </section>
 
     {galeria && (
-      <section class="mx-auto max-w-[1200px] px-6 pb-20">
+      <section id="tipos" class="mx-auto max-w-[1200px] px-6 pb-20">
         <p class="kz-h1-kw" style="margin-bottom: 8px">{es ? galeria.kwEs : galeria.kwEn}</p>
         <h2 class="kz-h2" style="font-size: clamp(26px, 3vw, 38px); text-wrap: balance">
           {es ? galeria.h2Es : galeria.h2En}
@@ -254,12 +268,12 @@ const jsonLd = {
     )}
 
     {x && (
-      <section class="mx-auto max-w-[1200px] px-6 pb-16">
+      <section id="proceso" class="mx-auto max-w-[1200px] px-6 pb-16">
         <h2 class="kz-h2 mb-6" style="font-size: clamp(24px, 2.6vw, 32px)">{es ? 'Cómo trabajamos' : 'How we work'}</h2>
         <ol class="grid list-none gap-4" style="grid-template-columns: repeat(auto-fit, minmax(230px, 1fr))">
           {x.pasos.map((p, i) => (
             <li class="kz-card flex flex-col gap-2 p-6">
-              <span class="flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold text-white" style="background: var(--green)">{i + 1}</span>
+              <span class="flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold text-white" style="background: var(--green-btn)">{i + 1}</span>
               <strong class="mt-1 text-[15px] font-semibold">{es ? p.tEs : p.tEn}</strong>
               <span class="text-sm leading-relaxed" style="color: var(--ink2)">{es ? p.dEs : p.dEn}</span>
             </li>
@@ -269,7 +283,7 @@ const jsonLd = {
     )}
 
     {x && (
-      <section class="mx-auto max-w-[1200px] px-6 pb-16">
+      <section id="precio" class="mx-auto max-w-[1200px] px-6 pb-16">
         <div class="grid items-start gap-10 rounded-3xl border p-8 md:p-10" style="border-color: var(--line); grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))">
           <div class="flex flex-col gap-4">
             <h2 class="kz-h2" style="font-size: clamp(24px, 2.6vw, 32px)">{es ? x.costoTituloEs : x.costoTituloEn}</h2>
@@ -294,7 +308,7 @@ const jsonLd = {
     )}
 
     <!-- Qué incluye + FAQ -->
-    <section class="border-y" style="background: var(--bg2); border-color: var(--line)">
+    <section id="incluye" class="border-y" style="background: var(--bg2); border-color: var(--line)">
       <div class="mx-auto grid max-w-[1200px] gap-12 px-6 py-16" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))">
         <div class="flex flex-col gap-4">
           <h2 class="kz-h2" style="font-size: clamp(24px, 2.6vw, 32px)">{es ? 'Qué incluye' : "What's included"}</h2>
@@ -328,7 +342,7 @@ const jsonLd = {
     </section>
 
     {paraNegocios.length > 0 && (
-      <section class="mx-auto max-w-[1200px] px-6 py-14">
+      <section id="negocios" class="mx-auto max-w-[1200px] px-6 py-14">
         <h2 class="kz-h2" style="font-size: clamp(22px, 2.4vw, 28px)">{es ? 'Para qué negocios lo hacemos' : 'Businesses we build it for'}</h2>
         <ul class="mt-6 flex list-none flex-wrap gap-3">
           {paraNegocios.map((i) => (
@@ -344,7 +358,7 @@ const jsonLd = {
     )}
 
     <!-- CTA final -->
-    <section style="background: var(--navy); color: var(--bg)">
+    <section id="cotizar" style="background: var(--navy); color: var(--bg)">
       <div class="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-6 px-6 py-14">
         <div class="flex max-w-[600px] flex-col gap-2">
           <h2 class="font-bold" style="font-size: clamp(24px, 2.8vw, 34px); line-height: 1.15; letter-spacing: -0.02em; text-wrap: balance">

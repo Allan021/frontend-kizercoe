@@ -1,0 +1,138 @@
+---
+/**
+ * Navegación interna de una página larga, con scroll spy.
+ *
+ * Escritorio (≥1024px): riel de puntos fijo a la izquierda; el activo se
+ * alarga en verde y al pasar el mouse se ven todos los nombres. No tapa
+ * texto porque en reposo solo ocupa el margen.
+ * Celular: barra horizontal pegada debajo del menú, que se corre sola hasta
+ * la sección que estás leyendo.
+ *
+ * Se pone justo después del hero: así la barra del celular empieza a pegarse
+ * cuando ya pasaste la portada. Cada sección necesita su `id`.
+ */
+interface Props {
+  items: { id: string; es: string; en: string }[];
+  lang: 'es' | 'en';
+}
+const { items, lang } = Astro.props;
+const es = lang === 'es';
+---
+
+<nav class="kz-indice-riel" aria-label={es ? 'Secciones de esta página' : 'Sections on this page'}>
+  <ul>
+    {items.map((it) => (
+      <li>
+        <a href={`#${it.id}`} data-indice={it.id}>
+          <span class="kz-indice-punto" aria-hidden="true"></span>
+          <span class="kz-indice-texto">{es ? it.es : it.en}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<nav class="kz-indice-barra" aria-label={es ? 'Secciones de esta página' : 'Sections on this page'}>
+  <ul>
+    {items.map((it) => (
+      <li><a href={`#${it.id}`} data-indice={it.id}>{es ? it.es : it.en}</a></li>
+    ))}
+  </ul>
+</nav>
+
+<script>
+  // Alto real del menú: la barra del celular se pega justo debajo, y los
+  // saltos a una sección no quedan tapados por él.
+  const header = document.querySelector('header');
+  const ponerAlto = () => document.documentElement.style.setProperty('--nav-h', `${header?.offsetHeight ?? 72}px`);
+  ponerAlto();
+  addEventListener('resize', ponerAlto, { passive: true });
+
+  const enlaces = [...document.querySelectorAll<HTMLAnchorElement>('[data-indice]')];
+  const ids = [...new Set(enlaces.map((a) => a.dataset.indice!))];
+  const secciones = ids.map((id) => document.getElementById(id)).filter((s): s is HTMLElement => !!s);
+  const barra = document.querySelector<HTMLElement>('.kz-indice-barra');
+
+  let activa = '';
+  function marcar(id: string) {
+    if (id === activa) return;
+    activa = id;
+    for (const a of enlaces) {
+      if (a.dataset.indice === id) a.setAttribute('aria-current', 'true');
+      else a.removeAttribute('aria-current');
+    }
+    // En la barra, correr horizontalmente hasta el activo (sin mover la página).
+    const chip = barra?.querySelector<HTMLElement>(`[data-indice="${id}"]`);
+    if (barra && chip) barra.scrollTo({ left: chip.offsetLeft - 16, behavior: 'smooth' });
+  }
+
+  // La sección activa es la última cuyo borde de arriba ya pasó el 35 % de la pantalla.
+  function calcular() {
+    const linea = innerHeight * 0.35;
+    let actual = secciones[0]?.id ?? '';
+    for (const s of secciones) if (s.getBoundingClientRect().top <= linea) actual = s.id;
+    marcar(actual);
+  }
+  let pendiente = false;
+  addEventListener('scroll', () => {
+    if (pendiente) return;
+    pendiente = true;
+    requestAnimationFrame(() => { pendiente = false; calcular(); });
+  }, { passive: true });
+  calcular();
+</script>
+
+<style>
+  :global([id]) { scroll-margin-top: calc(var(--nav-h, 72px) + 64px); }
+
+  /* ── Riel (escritorio) ── */
+  .kz-indice-riel { display: none; }
+  @media (min-width: 1024px) {
+    .kz-indice-riel {
+      display: block;
+      position: fixed;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 30;
+    }
+  }
+  .kz-indice-riel ul { list-style: none; margin: 0; padding: 10px 8px; display: flex; flex-direction: column; gap: 4px; border-radius: 16px; transition: background 0.2s, box-shadow 0.2s; }
+  .kz-indice-riel:hover ul, .kz-indice-riel:focus-within ul {
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 12px 34px rgba(11, 26, 51, 0.14);
+  }
+  .kz-indice-riel a { display: flex; align-items: center; gap: 10px; padding: 5px 6px; border-radius: 8px; color: var(--mute); text-decoration: none; }
+  .kz-indice-punto { width: 8px; height: 8px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 28%, transparent); flex-shrink: 0; transition: height 0.2s, background 0.2s; }
+  .kz-indice-riel a:hover .kz-indice-punto { background: var(--green); }
+  .kz-indice-riel a[aria-current] .kz-indice-punto { height: 22px; background: var(--green); }
+  .kz-indice-texto { font-size: 13px; font-weight: 500; white-space: nowrap; max-width: 0; overflow: hidden; opacity: 0; transition: max-width 0.25s, opacity 0.2s; }
+  .kz-indice-riel:hover .kz-indice-texto, .kz-indice-riel:focus-within .kz-indice-texto { max-width: 220px; opacity: 1; }
+  .kz-indice-riel a[aria-current] .kz-indice-texto { color: var(--green2); font-weight: 600; }
+  .kz-indice-riel a:hover { color: var(--ink); }
+
+  /* ── Barra (celular y tablet) ── */
+  .kz-indice-barra {
+    position: sticky;
+    top: var(--nav-h, 72px);
+    z-index: 25;
+    background: color-mix(in srgb, var(--bg) 94%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .kz-indice-barra::-webkit-scrollbar { display: none; }
+  @media (min-width: 1024px) { .kz-indice-barra { display: none; } }
+  .kz-indice-barra ul { list-style: none; margin: 0; padding: 10px 16px; display: flex; gap: 8px; width: max-content; }
+  .kz-indice-barra a {
+    display: block; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line);
+    font-size: 13px; font-weight: 500; color: var(--ink2); text-decoration: none; white-space: nowrap;
+  }
+  .kz-indice-barra a[aria-current] { background: var(--green-btn); border-color: var(--green-btn); color: #fff; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .kz-indice-punto, .kz-indice-texto, .kz-indice-riel ul { transition: none; }
+  }
+</style>

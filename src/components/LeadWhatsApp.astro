@@ -1,4 +1,5 @@
 ---
+import IconoWhatsApp from '@/components/IconoWhatsApp.astro';
 import { Icon } from 'astro-icon/components';
 /**
  * Antes de abrir WhatsApp, nombre y correo.
@@ -28,7 +29,7 @@ import { Icon } from 'astro-icon/components';
     <button type="button" class="kz-lead-x" data-cerrar aria-label="Cerrar"><Icon name="lucide:x" class="mx-auto h-4 w-4" aria-hidden="true" /></button>
 
     <span class="kz-lead-icono" aria-hidden="true">
-      <img src="/whatsapp.svg" alt="" width="26" height="26" data-solo-wa />
+      <span data-solo-wa><IconoWhatsApp size={26} class="block" /></span>
       <svg data-solo-demo width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6" /><path d="M10 14 21 3" /><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></svg>
     </span>
 
@@ -63,7 +64,7 @@ import { Icon } from 'astro-icon/components';
 
     <button type="submit" class="kz-lead-ir">
       <span data-solo-wa class="kz-lead-ir-wa">
-        <img src="/whatsapp.svg" alt="" width="20" height="20" />
+        <IconoWhatsApp size={20} class="block" />
         <span class="es">Continuar a WhatsApp</span><span class="en">Continue to WhatsApp</span>
       </span>
       <span data-solo-demo><span class="es">Abrir la demo</span><span class="en">Open the demo</span></span>
@@ -262,10 +263,9 @@ import { Icon } from 'astro-icon/components';
   .kz-lead-icono {
     display: grid; place-items: center;
     width: 54px; height: 54px; border-radius: 16px;
-    background: var(--green);
+    background: var(--green-btn); color: #fff;
     box-shadow: 0 10px 24px color-mix(in srgb, var(--green) 40%, transparent);
   }
-  .kz-lead-icono img, .kz-lead-ir img { filter: brightness(0) invert(1); }
 
   .kz-lead-titulo { margin: 18px 0 6px; font-size: 22px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; }
   .kz-lead-sub { margin: 0; font-size: 14.5px; line-height: 1.55; color: var(--ink2); }
@@ -295,10 +295,10 @@ import { Icon } from 'astro-icon/components';
   .kz-lead-ir {
     display: flex; align-items: center; justify-content: center; gap: 10px;
     width: 100%; margin-top: 22px; padding: 14px 18px; border-radius: 14px;
-    background: var(--green); color: #fff; font-size: 15.5px; font-weight: 600;
+    background: var(--green-btn); color: #fff; font-size: 15.5px; font-weight: 600;
     transition: background 0.15s, transform 0.15s;
   }
-  .kz-lead-ir:hover { background: var(--green2); }
+  .kz-lead-ir:hover { background: var(--green-btn-hover); }
   .kz-lead-ir:active { transform: scale(0.98); }
 
   .kz-lead-letra { margin: 12px 0 0; text-align: center; font-size: 12px; color: var(--mute); }

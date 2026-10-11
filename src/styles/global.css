@@ -24,6 +24,9 @@
   /* #0d8050 y no #16a36c: con letra blanca encima da 4.98:1 (WCAG AA); el viejo daba 3.24 y Lighthouse lo marcaba en cada botón. */
   --green: #0d8050;
   --green2: #0a6b43;
+  /* Fondo de botón con letra blanca: el mismo en los dos temas. */
+  --green-btn: #0d8050;
+  --green-btn-hover: #0a6b43;
   --green-soft: #e6f6ef;
   --navy: #0b1a33;
   --green-bright: #3ed39a;
@@ -169,14 +172,12 @@
     transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   }
   /* Regla de hover del sistema: nunca blanco/azul. */
-  .kz-btn-primario { background: var(--green); color: #fff; border: 0; }
-  .kz-btn-primario:hover { background: var(--green2); color: #fff; }
-  /* En oscuro el verde es claro: la letra va navy para que se lea (7.3:1). */
-  [data-theme='dark'] .kz-btn-primario, [data-theme='dark'] .kz-btn-primario:hover { color: #0b1a33; }
+  .kz-btn-primario { background: var(--green-btn); color: #fff; border: 0; }
+  .kz-btn-primario:hover { background: var(--green-btn-hover); color: #fff; }
   .kz-btn-secundario { background: transparent; color: var(--ink); border: 1.5px solid var(--line); }
   .kz-btn-secundario:hover { border-color: var(--green); color: var(--green2); }
   .kz-btn-navy { background: var(--navy); color: var(--bg); border: 0; }
-  .kz-btn-navy:hover { background: var(--green); color: #fff; }
+  .kz-btn-navy:hover { background: var(--green-btn); color: #fff; }
 
   .kz-tab {
     font-size: 14px;

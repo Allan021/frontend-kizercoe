@@ -1,4 +1,6 @@
 ---
+import IndiceSecciones from '@/components/IndiceSecciones.astro';
+import IconoWhatsApp from '@/components/IconoWhatsApp.astro';
 import { Icon } from 'astro-icon/components';
 import Layout from '@/layouts/Layout.astro';
 import Nav from '@/components/Nav.astro';
@@ -68,6 +70,22 @@ const monitoreo = [
   { f: 'celular-afuera', tEs: 'Desde afuera del país', tEn: 'From abroad', dEs: 'La app en tu celular te muestra tu casa o tu negocio en vivo desde Estados Unidos o desde donde estés. Le dejamos acceso a la familia que vos digás.', dEn: 'The app on your phone shows your home or business live from the US or wherever you are. We give access to the family members you choose.' },
   { f: 'alerta-ladron', tEs: 'Alerta al instante', tEn: 'Instant alert', dEs: 'Si alguien se acerca al portón de noche, te llega la alerta con la foto al celular. Se configura para personas, no para cada perro o cada carro que pasa.', dEn: 'If someone approaches the gate at night, the alert with a photo reaches your phone. It is tuned for people, not every dog or passing car.' },
   { f: 'reflector-sirena', tEs: 'Reflector y sirena', tEn: 'Floodlight and siren', dEs: 'Las cámaras con reflector encienden la luz y suenan la sirena cuando detectan a alguien: dejan de solo grabar y lo espantan.', dEn: 'Floodlight cameras turn on the light and sound the siren when they detect someone: they stop just recording and scare them off.' },
+];
+
+/** Índice con scroll spy: los ids de las secciones de abajo, en orden. */
+const indice = [
+  { id: 'portada', es: 'Inicio', en: 'Top' },
+  { id: 'pilares', es: 'Cómo instalamos', en: 'How we install' },
+  { id: 'proceso', es: 'Los cuatro pasos', en: 'The four steps' },
+  { id: 'catalogo', es: 'Tipos de cámara', en: 'Camera types' },
+  { id: 'sistema', es: 'Grabador y equipo', en: 'Recorder and gear' },
+  { id: 'trabajo', es: 'Instalaciones', en: 'Installations' },
+  { id: 'monitoreo', es: 'Tele, celular y alertas', en: 'TV, phone and alerts' },
+  { id: 'dimensionamiento', es: 'Sistemas de 4, 8 o 16', en: '4, 8 or 16 cameras' },
+  { id: 'reglas', es: 'Nuestras reglas', en: 'Our rules' },
+  { id: 'incluye', es: 'Qué incluye y zonas', en: 'Included & areas' },
+  { id: 'faq', es: 'Preguntas', en: 'FAQ' },
+  { id: 'cierre', es: 'Cotizar', en: 'Get a quote' },
 ];
 
 const jsonLd = {
@@ -200,7 +218,7 @@ const reglas = [
           <div class="mt-9 flex flex-wrap gap-3">
             <a href={cotizar} class="kz-cta-verde">{es ? 'Cotización gratis' : 'Free quote'}</a>
             <a href={wa} target="_blank" rel="noopener noreferrer" class="kz-cta-borde">
-              <img src="/whatsapp.svg" alt="" width="18" height="18" class="block" />
+              <IconoWhatsApp size={18} class="block" />
               WhatsApp
             </a>
           </div>
@@ -250,6 +268,8 @@ const reglas = [
         </figure>
       </div>
     </section>
+
+    <IndiceSecciones items={indice} lang={lang} />
 
     <!-- ── 02 · Pilares ────────────────────────────────────────────────── -->
     <section id="pilares" class="kz-pilares">
@@ -633,7 +653,7 @@ const reglas = [
           </p>
           <div class="kz-faq-caja">
             <a href={wa} target="_blank" rel="noopener noreferrer" class="kz-cta-verde w-full justify-center">
-              <img src="/whatsapp.svg" alt="" width="18" height="18" class="block brightness-0 invert" />
+              <IconoWhatsApp size={18} class="block" />
               {es ? 'Preguntar por WhatsApp' : 'Ask on WhatsApp'}
             </a>
             <a href="tel:+50488091744" class="text-center text-[14px]" style="color: var(--ink2)">
@@ -675,7 +695,7 @@ const reglas = [
         <div class="flex flex-wrap gap-3">
           <a href={cotizar} class="kz-cierre-verde">{es ? 'Cotizar este servicio' : 'Get a quote for this'}</a>
           <a href={wa} target="_blank" rel="noopener noreferrer" class="kz-cierre-borde">
-            <img src="/whatsapp.svg" alt="" width="18" height="18" class="block brightness-0 invert" />
+            <IconoWhatsApp size={18} class="block" />
             WhatsApp
           </a>
         </div>
@@ -798,7 +818,7 @@ const reglas = [
     transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   }
   .kz-cta-verde {
-    background: var(--green);
+    background: var(--green-btn);
     color: #fff;
     box-shadow: 0 10px 30px -10px color-mix(in srgb, var(--green) 70%, transparent);
   }
@@ -935,7 +955,7 @@ const reglas = [
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: var(--green);
+    background: var(--green-btn);
     color: #fff;
     font-weight: 600;
   }
@@ -1030,7 +1050,7 @@ const reglas = [
     justify-content: center;
     padding: 14px;
     border-radius: 10px;
-    background: var(--green);
+    background: var(--green-btn);
     color: #fff;
   }
   .kz-cable-col {
@@ -1159,7 +1179,7 @@ const reglas = [
   .kz-tick-lleno {
     width: 22px;
     height: 22px;
-    background: var(--green);
+    background: var(--green-btn);
     color: #fff;
     margin-top: 1px;
   }
@@ -1215,7 +1235,7 @@ const reglas = [
     font-size: 14px;
   }
   .kz-zona-base {
-    background: var(--green);
+    background: var(--green-btn);
     border-color: var(--green);
     color: #fff;
     font-weight: 500;
@@ -1281,7 +1301,7 @@ const reglas = [
     transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   }
   .kz-preg[open] .kz-preg-signo {
-    background: var(--green);
+    background: var(--green-btn);
     border-color: var(--green);
     color: #fff;
   }
@@ -1310,7 +1330,7 @@ const reglas = [
     transition: background-color 0.2s ease, color 0.2s ease;
   }
   .kz-cierre-verde {
-    background: var(--green);
+    background: var(--green-btn);
     color: #fff;
   }
   .kz-cierre-verde:hover {

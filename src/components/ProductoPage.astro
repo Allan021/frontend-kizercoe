@@ -1,4 +1,5 @@
 ---
+import IconoWhatsApp from '@/components/IconoWhatsApp.astro';
 import { Icon } from 'astro-icon/components';
 import Layout from '@/layouts/Layout.astro';
 import Nav from '@/components/Nav.astro';
@@ -150,7 +151,7 @@ const jsonLd = {
           ))}
           <div class="flex flex-wrap gap-3">
             <a href={waDemo} target="_blank" rel="noopener noreferrer" class="kz-btn kz-btn-primario" style="padding: 15px 26px; font-size: 16px">
-              <img src="/whatsapp.svg" alt="" width="18" height="18" class="block brightness-0 invert" />
+              <IconoWhatsApp size={18} class="block" />
               {es ? 'Pedir una demo' : 'Ask for a demo'}
             </a>
             <a href={p.demo ?? p.url} target="_blank" rel="noopener noreferrer" data-servicio={p.nombre} class="kz-btn kz-btn-secundario" style="padding: 15px 26px; font-size: 16px">
@@ -252,7 +253,7 @@ const jsonLd = {
         <ol class="grid list-none gap-4" style="grid-template-columns: repeat(auto-fit, minmax(230px, 1fr))">
           {pasosLead.map((paso, i) => (
             <li class="kz-card flex flex-col gap-2 p-6">
-              <span class="flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold text-white" style="background: var(--green)">{i + 1}</span>
+              <span class="flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold text-white" style="background: var(--green-btn)">{i + 1}</span>
               <strong class="mt-1 text-[15px] font-semibold">{es ? paso.tEs : paso.tEn}</strong>
               <span class="text-sm leading-relaxed" style="color: var(--ink2)">{es ? paso.dEs : paso.dEn}</span>
             </li>
