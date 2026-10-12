@@ -1,5 +1,6 @@
 ---
 import IndiceSecciones from '@/components/IndiceSecciones.astro';
+import VideoServicio from '@/components/VideoServicio.astro';
 import IconoWhatsApp from '@/components/IconoWhatsApp.astro';
 import { Icon } from 'astro-icon/components';
 import Layout from '@/layouts/Layout.astro';
@@ -270,6 +271,8 @@ const reglas = [
     </section>
 
     <IndiceSecciones items={indice} lang={lang} />
+
+    <VideoServicio slug={s.slug} nombre={s.nombre} lang={lang} />
 
     <!-- ── 06 · Trabajo nuestro ────────────────────────────────────────── -->
     <section id="trabajo" style="background: var(--bg)">

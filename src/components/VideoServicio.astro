@@ -1,0 +1,64 @@
+---
+/**
+ * El video vertical de cada servicio (/public/videos/<slug>.mp4 + .webp de portada),
+ * en marco de celular, justo después del hero.
+ *
+ * preload="none": no baja ni un byte hasta que el visitante llega; ahí arranca
+ * solo, en silencio, y se pausa al salir de pantalla. El texto del video está
+ * en español, así que en /en no sale.
+ */
+interface Props {
+  slug: string;
+  nombre: string;
+  lang: 'es' | 'en';
+}
+const { slug, nombre, lang } = Astro.props;
+const hay = ['paginas-web', 'tiendas-en-linea', 'sistemas-a-la-medida', 'apps-moviles', 'automatizacion-ia', 'crm-a-la-medida', 'seo', 'anuncios', 'redes-sociales', 'modernizacion-web', 'reparacion-computadoras', 'reparacion-telefonos', 'instalacion-camaras'];
+---
+
+{lang === 'es' && hay.includes(slug) && (
+  <section id="video" class="kz-video">
+    <div class="kz-video-in">
+      <div class="kz-video-txt">
+        <p class="kz-video-kicker">En 30 segundos</p>
+        <h2>{nombre}, en video.</h2>
+        <p>Lo que hacemos, cómo queda y cuánto cuesta, sin leer nada. Si te sirve, mandalo a quien decide en tu negocio.</p>
+        <a href="https://wa.me/50488091744" target="_blank" rel="noopener noreferrer" class="kz-btn kz-btn-primario" style="padding: 14px 24px; font-size: 16px">Escribinos por WhatsApp</a>
+      </div>
+      <div class="kz-video-cel">
+        <video
+          src={`/videos/${slug}.mp4`}
+          poster={`/videos/${slug}.webp`}
+          width="720"
+          height="1280"
+          preload="none"
+          muted
+          loop
+          playsinline
+          controls
+          aria-label={`Video: ${nombre} con Kizercode`}
+        ></video>
+      </div>
+    </div>
+  </section>
+)}
+
+<script>
+  // Play al entrar en pantalla, pausa al salir. Sin esto, preload="none" deja el video quieto.
+  const v = document.querySelector<HTMLVideoElement>('.kz-video video');
+  if (v && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    new IntersectionObserver(([e]) => (e.isIntersecting ? v.play().catch(() => {}) : v.pause()), { threshold: 0.5 }).observe(v);
+  }
+</script>
+
+<style>
+  .kz-video { background: var(--navy); color: #fff; }
+  .kz-video-in { max-width: 1200px; margin: 0 auto; padding: 72px 24px; display: grid; gap: 48px; align-items: center; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .kz-video-txt { display: flex; flex-direction: column; gap: 18px; max-width: 520px; }
+  .kz-video-kicker { color: var(--green-bright); font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+  .kz-video h2 { font-size: clamp(30px, 3.6vw, 44px); line-height: 1.1; letter-spacing: -0.02em; font-weight: 700; text-wrap: balance; }
+  .kz-video-txt p:not(.kz-video-kicker) { font-size: 17px; line-height: 1.6; color: color-mix(in srgb, #fff 78%, transparent); }
+  .kz-video-txt .kz-btn { align-self: flex-start; }
+  .kz-video-cel { justify-self: center; width: min(340px, 100%); padding: 10px; border-radius: 44px; background: #111; box-shadow: 0 40px 80px rgba(0,0,0,.45), inset 0 0 0 2px #333; }
+  .kz-video-cel video { display: block; width: 100%; height: auto; aspect-ratio: 9 / 16; border-radius: 34px; background: #000; object-fit: cover; }
+</style>

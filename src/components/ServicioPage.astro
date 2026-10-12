@@ -14,6 +14,7 @@ import { industriasDe } from '@/lib/enlaces';
 import { servicios } from '@/lib/servicios';
 import { productos } from '@/lib/productos';
 import IndiceSecciones from '@/components/IndiceSecciones.astro';
+import VideoServicio from '@/components/VideoServicio.astro';
 
 /**
  * Plantilla de las páginas de servicio (/servicios/x y /en/services/x).
@@ -191,6 +192,8 @@ const jsonLd = {
     </section>
 
     <IndiceSecciones items={indice} lang={lang} />
+
+    <VideoServicio slug={s.slug} nombre={s.nombre} lang={lang} />
 
     <!-- Beneficios -->
     <section id="beneficios" class="mx-auto max-w-[1200px] px-6 py-16">
