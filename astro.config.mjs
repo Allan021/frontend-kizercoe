@@ -16,7 +16,8 @@ export default defineConfig({
   integrations: [
     react(),
     tailwind({ applyBaseStyles: false }),
-    sitemap(),
+    // El panel lleva noindex: en el sitemap solo confunde a Google.
+    sitemap({ filter: (page) => !page.includes('/panel') }),
     // Iconos como SVG en línea, solo los que se usan: cero JavaScript y cero
     // petición extra. Se escriben <Icon name="lucide:arrow-right" />.
     icon({ include: { lucide: ['*'] } }),
@@ -26,6 +27,10 @@ export default defineConfig({
   ],
   output: 'static',
   compressHTML: true,
+  // El CSS va dentro del HTML: era la única petición que bloqueaba el primer
+  // pintado. Son ~8 KB comprimidos; en un sitio de visitas de una página
+  // pesa más el viaje extra que la caché.
+  build: { inlineStylesheets: 'always' },
   vite: {
     resolve: {
       alias: {

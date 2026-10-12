@@ -91,7 +91,7 @@ const href = (p: (typeof productos)[number]) => (es ? `/productos/${p.slug}/` : 
               <div class={`flex flex-1 flex-col gap-3 ${p.estrella ? 'justify-center p-8' : 'p-6'}`}>
                 <div class="flex flex-wrap items-center gap-2">
                   {p.estrella && (
-                    <span class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[12px] font-bold" style="background: var(--green); color: #fff">
+                    <span class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[12px] font-bold" style="background: var(--green-btn); color: #fff">
                       <Icon name="lucide:star" class="h-3.5 w-3.5" fill="currentColor" aria-hidden="true" />{es ? 'Producto estrella' : 'Flagship product'}
                     </span>
                   )}

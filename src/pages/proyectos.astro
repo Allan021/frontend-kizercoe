@@ -8,6 +8,7 @@ import Reviews from '@/sections/Reviews.astro';
 
 /** Proyectos: los casos reales que se cargan desde el panel, en página propia. */
 import IdiomaPorUrl from '@/components/IdiomaPorUrl.astro';
+import { API_URL } from '@/lib/api';
 
 // /en/projects/ renderiza esta misma página (src/pages/en/projects.astro).
 const en = Astro.url.pathname.startsWith('/en/');
@@ -22,6 +23,8 @@ const en = Astro.url.pathname.startsWith('/en/');
   urlEs="/proyectos/"
   urlEn="/en/projects/"
 >
+  <!-- Los proyectos son lo principal de esta página y vienen de la API: la conexión se abre ya, sin esperar a React. -->
+  <link rel="preconnect" href={new URL(API_URL).origin} crossorigin slot="head" />
   <Nav />
   <IdiomaPorUrl otra={en ? '/proyectos/' : '/en/projects/'} />
   <main id="contenido">

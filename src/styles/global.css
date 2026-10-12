@@ -4,6 +4,19 @@
 @import '@fontsource/poppins/600.css';
 @import '@fontsource/poppins/700.css';
 
+/* Arial con las medidas de Poppins (ancho medido: 113.94 %; alturas del hhea
+   de Poppins: 1050/350/100 sobre 1000). Mientras Poppins carga se ve esta, y
+   al llegar Poppins el texto no se mueve: era el salto de diseño (CLS 0.17)
+   de los párrafos del hero. */
+@font-face {
+  font-family: 'Poppins Fallback';
+  src: local('Arial');
+  size-adjust: 113.94%;
+  ascent-override: 92.15%;
+  descent-override: 30.72%;
+  line-gap-override: 8.78%;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -68,6 +81,15 @@
 
 /* El logo correcto según el tema: dos <img>, se muestra una. */
 [data-logo-dark] { display: none; }
+/* En oscuro --navy se invierte a blanco: así los botones navy quedan claros.
+   Pero los bloques navy (barra de arriba, secciones de cierre, tarjetas
+   destacadas) se quedaban blancos con letra verde clara encima, ilegibles.
+   Dentro de ellos se redefinen los tokens: fondo oscuro y letra blanca. */
+[data-theme='dark'] :is(section, div, span, a)[style*='background: var(--navy)'],
+[data-theme='dark'] .kz-flotante-navy {
+  --navy: #050e1f;
+  --bg: #ffffff;
+}
 [data-theme='dark'] [data-logo-light] { display: none; }
 [data-theme='dark'] [data-logo-dark] { display: block; }
 
@@ -94,7 +116,7 @@
   body {
     background-color: var(--bg);
     color: var(--ink);
-    font-family: 'Poppins', Helvetica, Arial, sans-serif;
+    font-family: 'Poppins', 'Poppins Fallback', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
@@ -211,7 +233,7 @@
     left: -9999px;
     z-index: 999;
     padding: 12px 20px;
-    background: var(--green);
+    background: var(--green-btn);
     color: #fff;
     border-radius: 0 0 8px 0;
   }
@@ -236,8 +258,8 @@ html[data-moneda='usd'] .lps { display: none !important; }
 }
 
 /* ─── Performance ──────────────────────────────────────────────────── */
-#servicios, #productos, #casos, #como, #taller, #precios, #faq,
-#integraciones, #comparativa, #garantias, #recursos {
+#resenas, #porque, #servicios, #productos, #casos, #como, #taller, #precios,
+#faq, #contacto, #integraciones, #comparativa, #garantias, #recursos {
   content-visibility: auto;
-  contain-intrinsic-size: 0 700px;
+  contain-intrinsic-size: auto 700px;
 }

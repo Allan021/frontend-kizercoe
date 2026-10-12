@@ -119,7 +119,7 @@ export default function Projects() {
 
   return (
     <div className={clasesDeGrilla(projects.length)}>
-      {projects.map((p) => (
+      {projects.map((p, i) => (
         <article
           key={p.slug}
           className="group flex flex-col overflow-hidden rounded-2xl border transition-all duration-300 hover:-translate-y-1"
@@ -130,7 +130,8 @@ export default function Projects() {
               <img
                 src={p.imageUrl}
                 alt={p.title}
-                loading="lazy"
+                // la primera fila es lo principal de /proyectos: sin lazy no espera turno
+                loading={i < 3 ? 'eager' : 'lazy'}
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
             </div>

@@ -52,10 +52,11 @@ const hay = ['paginas-web', 'tiendas-en-linea', 'sistemas-a-la-medida', 'apps-mo
 </script>
 
 <style>
-  .kz-video { background: var(--navy); color: #fff; }
+  /* Navy fijo, no var(--navy): en el tema oscuro --navy se invierte a blanco. */
+  .kz-video { background: #0b1a33; color: #fff; }
   .kz-video-in { max-width: 1200px; margin: 0 auto; padding: 72px 24px; display: grid; gap: 48px; align-items: center; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
   .kz-video-txt { display: flex; flex-direction: column; gap: 18px; max-width: 520px; }
-  .kz-video-kicker { color: var(--green-bright); font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+  .kz-video-kicker { color: #3ed39a; font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
   .kz-video h2 { font-size: clamp(30px, 3.6vw, 44px); line-height: 1.1; letter-spacing: -0.02em; font-weight: 700; text-wrap: balance; }
   .kz-video-txt p:not(.kz-video-kicker) { font-size: 17px; line-height: 1.6; color: color-mix(in srgb, #fff 78%, transparent); }
   .kz-video-txt .kz-btn { align-self: flex-start; }
