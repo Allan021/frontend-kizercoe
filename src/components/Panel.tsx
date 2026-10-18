@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useMemo, useState } from 'react';
 import {
+  CalendarDays,
   FolderKanban,
   ImageIcon,
   LogOut,
@@ -13,6 +14,7 @@ import {
   X,
 } from 'lucide-react';
 import { PanelLeads } from '@/components/PanelLeads';
+import { PanelVisitas } from '@/components/PanelVisitas';
 import { SubirImagen } from '@/components/SubirImagen';
 import { miniatura } from '@/lib/upload';
 import {
@@ -102,12 +104,13 @@ function Marca({ size = 34 }: { size?: number }) {
 
 // ── Escritorio ──
 
-type Pestana = 'leads' | 'proyectos' | 'testimonios';
+type Pestana = 'leads' | 'visitas' | 'proyectos' | 'testimonios';
 
 function Escritorio({ user, onSalir }: { user: PanelUser; onSalir: () => void }) {
   const [pestana, setPestana] = useState<Pestana>('leads');
   const [conteos, setConteos] = useState<Record<Pestana, number | null>>({
     leads: null,
+    visitas: null,
     proyectos: null,
     testimonios: null,
   });
@@ -153,6 +156,7 @@ function Escritorio({ user, onSalir }: { user: PanelUser; onSalir: () => void })
           {(
             [
               ['leads', Users],
+              ['visitas', CalendarDays],
               ['proyectos', FolderKanban],
               ['testimonios', MessageSquareQuote],
             ] as const
@@ -183,6 +187,9 @@ function Escritorio({ user, onSalir }: { user: PanelUser; onSalir: () => void })
 
       <div hidden={pestana !== 'leads'}>
         <PanelLeads onConteo={marcar('leads')} />
+      </div>
+      <div hidden={pestana !== 'visitas'}>
+        <PanelVisitas onConteo={marcar('visitas')} />
       </div>
       <div hidden={pestana !== 'proyectos'}>
         <Proyectos onConteo={marcar('proyectos')} />

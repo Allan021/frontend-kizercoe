@@ -113,6 +113,38 @@ export const panelUpdateLead = (id: string, cambios: { status?: LeadEstado; note
 export const panelDeleteLead = (id: string) =>
   pedir<{ ok: boolean }>(`/v1/panel/contacts/${id}`, conToken({ method: 'DELETE' }));
 
+export type VisitaEstado = 'pendiente' | 'confirmada' | 'realizada' | 'cancelada';
+
+/** Lo que el bot de WhatsApp deja solicitado; el día y la hora los pone el equipo. */
+export type Visita = {
+  id: string;
+  telefono: string;
+  nombre: string;
+  servicio: string;
+  /** 'visita': vamos al cliente. 'local': viene él. */
+  tipo: 'visita' | 'local';
+  municipio: string | null;
+  direccion: string;
+  /** Lo que dijo el cliente: "el sábado en la mañana". */
+  preferencia: string | null;
+  estado: VisitaEstado;
+  fecha: string | null;
+  hora: string | null;
+  notas: string | null;
+  createdAt: string;
+};
+
+export const panelVisitas = () => pedir<Visita[]>('/v1/panel/visitas', conToken());
+
+export const panelUpdateVisita = (
+  id: string,
+  cambios: { fecha?: string; hora?: string; estado?: VisitaEstado; notas?: string },
+) =>
+  pedir<{ visita: Visita; whatsapp: { ok: boolean; error?: string } | null }>(
+    `/v1/panel/visitas/${id}`,
+    conToken({ method: 'PATCH', body: JSON.stringify(cambios) }),
+  );
+
 /** Enlace wa.me con solo los dígitos; 8 dígitos sin código de país se toman como Honduras. */
 export function waDe(phone: string): string | null {
   const d = phone.replace(/\D/g, '');
