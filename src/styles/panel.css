@@ -328,3 +328,85 @@
   color: var(--ink);
 }
 .kzp-paleta-item[aria-selected='true'], .kzp-paleta-item:hover { background: var(--green-soft); color: var(--green2); }
+
+/* ── Login: marca a la izquierda, formulario a la derecha ── */
+.kzp-login {
+  display: grid;
+  min-height: 100dvh;
+  grid-template-rows: auto 1fr;
+}
+@media (min-width: 1024px) {
+  .kzp-login { grid-template-rows: none; grid-template-columns: minmax(380px, 46%) 1fr; }
+}
+.kzp-login-marca {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 28px 24px;
+  color: #fff;
+  background:
+    radial-gradient(700px 360px at 85% -10%, rgba(31, 191, 128, 0.38), transparent 60%),
+    radial-gradient(520px 320px at -10% 110%, rgba(62, 211, 154, 0.22), transparent 60%),
+    linear-gradient(160deg, #0b1a33 0%, #071226 100%);
+}
+.kzp-login-marca::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse at 30% 40%, #000 20%, transparent 75%);
+}
+.kzp-login-marca > * { position: relative; z-index: 1; }
+@media (min-width: 1024px) { .kzp-login-marca { padding: 40px 48px; } }
+/* En el teléfono la marca es un encabezado corto: las ventajas se esconden. */
+@media (max-width: 1023.98px) {
+  .kzp-login-marca .my-auto { display: none; }
+  .kzp-login-marca > p { display: none; }
+}
+.kzp-login-ventaja {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(6px);
+}
+.kzp-login-icono {
+  display: grid;
+  place-items: center;
+  width: 30px; height: 30px;
+  flex-shrink: 0;
+  border-radius: 9px;
+  background: rgba(31, 191, 128, 0.2);
+  color: var(--green-bright);
+}
+.kzp-login-form {
+  display: grid;
+  place-items: center;
+  padding: 24px 16px 40px;
+}
+@media (min-width: 1024px) { .kzp-login-form { padding: 48px; } }
+.kzp-login-caja {
+  width: 100%;
+  max-width: 420px;
+  padding: 32px 28px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--bg);
+  box-shadow: var(--kzp-sombra-alta);
+}
+@media (min-width: 640px) { .kzp-login-caja { padding: 40px; } }
+@media (prefers-reduced-motion: no-preference) {
+  .kzp-login-caja { animation: kzp-entrar 0.3s ease-out both; }
+  .kzp-login-ventaja { animation: kzp-entrar 0.4s ease-out both; }
+  .kzp-login-ventaja:nth-child(2) { animation-delay: 60ms; }
+  .kzp-login-ventaja:nth-child(3) { animation-delay: 120ms; }
+  .kzp-login-ventaja:nth-child(4) { animation-delay: 180ms; }
+}

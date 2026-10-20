@@ -1,9 +1,15 @@
 'use client';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
+  ArrowRight,
+  Bot,
   CalendarDays,
+  Eye,
+  EyeOff,
   FolderKanban,
   Home,
+  Loader2,
+  NotebookPen,
   MoreHorizontal,
   Sparkles,
   ImageIcon,
@@ -43,6 +49,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { toast } from 'sonner';
 import { miniatura } from '@/lib/upload';
 import {
+  API_URL,
   clearPanelToken,
   getPanelToken,
   panelDeleteProject,
@@ -86,7 +93,7 @@ export default function Panel() {
       {cargando ? (
         <Centrado>{<Cargando />}</Centrado>
       ) : !user ? (
-        <Centrado>{<Login onEntrar={setUser} />}</Centrado>
+        <Login onEntrar={setUser} />
       ) : (
         <Escritorio
           user={user}
@@ -518,18 +525,34 @@ function Encabezado({
 
 // ── Login ──
 
+const VENTAJAS: { Icono: typeof Bot; titulo: string; texto: string }[] = [
+  { Icono: Bot, titulo: 'Bot de WhatsApp 24/7', texto: 'Cotiza, pide visitas y deja cada lead acá.' },
+  { Icono: CalendarDays, titulo: 'Agenda por ruta', texto: 'Confirmás el día y al cliente le llega el WhatsApp.' },
+  { Icono: NotebookPen, titulo: 'Bitácora con fotos', texto: 'Cada instalación con su ficha, contrato y claves.' },
+  { Icono: Sparkles, titulo: 'Asistente IA', texto: 'Responde con tus datos: leads, visitas, instalaciones.' },
+];
+
 function Login({ onEntrar }: { onEntrar: (u: PanelUser) => void }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [ver, setVer] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [api, setApi] = useState<'ok' | 'mal' | null>(null);
+
+  // Un punto verde que diga que la API está viva: si no, el error no es tu contraseña.
+  useEffect(() => {
+    fetch(`${API_URL}/health`, { signal: AbortSignal.timeout(8000) })
+      .then((r) => setApi(r.ok ? 'ok' : 'mal'))
+      .catch(() => setApi('mal'));
+  }, []);
 
   async function entrar(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
     setError(null);
     try {
-      onEntrar(await panelLogin(email, password));
+      onEntrar(await panelLogin(email.trim(), password));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'No pudimos entrar');
       setBusy(false);
@@ -537,40 +560,101 @@ function Login({ onEntrar }: { onEntrar: (u: PanelUser) => void }) {
   }
 
   return (
-    <form onSubmit={entrar} className="kz-card kz-card-principal w-full max-w-sm p-8">
-      <Marca size={40} />
-      <p className="kz-eyebrow mt-5">// panel</p>
-      <h1 className="mt-2 text-2xl font-black tracking-tight">Entrar</h1>
-      <p className="mt-2 text-sm" style={{ color: 'var(--color-muted)' }}>
-        La sesión dura lo que dure esta pestaña.
-      </p>
+    <div className="kzp-login">
+      <aside className="kzp-login-marca">
+        <div className="flex items-center gap-3">
+          <Marca size={44} />
+          <div>
+            <p className="kz-eyebrow !text-[11px] !text-[var(--green-bright)]">// panel</p>
+            <p className="text-lg font-black leading-tight tracking-tight">Kizercode</p>
+          </div>
+        </div>
+        <div className="my-auto py-10">
+          <h1 className="max-w-md text-[34px] font-black leading-[1.08] tracking-tight sm:text-[42px]">
+            Todo lo que entra por WhatsApp, <span style={{ color: 'var(--green-bright)' }}>ordenado</span>.
+          </h1>
+          <p className="mt-4 max-w-md text-[15px] leading-relaxed opacity-80">
+            Leads, visitas, instalaciones y un asistente que responde con tus propios datos. Desde el teléfono o la compu.
+          </p>
+          <ul className="mt-8 grid max-w-lg gap-3 sm:grid-cols-2">
+            {VENTAJAS.map((v) => (
+              <li key={v.titulo} className="kzp-login-ventaja">
+                <span className="kzp-login-icono"><v.Icono size={16} /></span>
+                <span>
+                  <span className="block text-[13.5px] font-semibold">{v.titulo}</span>
+                  <span className="block text-[12.5px] opacity-70">{v.texto}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <p className="flex items-center gap-2 text-[12.5px] opacity-80">
+          <span className="kz-latido" style={api === 'mal' ? { background: '#ff7b7b', animation: 'none' } : undefined} />
+          {api === null ? 'Conectando con la API…' : api === 'ok' ? 'API en línea · api.kizercode.com' : 'La API no responde: revisá Railway'}
+          <span className="ml-auto">El Progreso, Yoro</span>
+        </p>
+      </aside>
 
-      <div className="mt-6 space-y-4">
-        <Campo etiqueta="Correo">
-          <Input
-            type="email"
-            autoFocus
-            autoComplete="username"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </Campo>
-        <Campo etiqueta="Contraseña">
-          <Input
-            type="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </Campo>
-      </div>
+      <main className="kzp-login-form">
+        <form onSubmit={entrar} className="kzp-login-caja" aria-busy={busy}>
+          <p className="kz-eyebrow">// bienvenido</p>
+          <h2 className="mt-2 text-[28px] font-black tracking-tight">Entrar al panel</h2>
+          <p className="mt-1.5 text-sm text-muted-foreground">Con tu correo y contraseña de administrador.</p>
 
-      {error && <Aviso mensaje={error} />}
+          <div className="mt-7 space-y-5">
+            <div className="space-y-2">
+              <Label htmlFor="login-email">Correo</Label>
+              <Input
+                id="login-email"
+                type="email"
+                autoFocus
+                autoComplete="username"
+                inputMode="email"
+                placeholder="vos@kizercode.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="h-12 text-[15px]"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="login-password">Contraseña</Label>
+              <div className="relative">
+                <Input
+                  id="login-password"
+                  type={ver ? 'text' : 'password'}
+                  autoComplete="current-password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="h-12 pr-12 text-[15px]"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setVer((v) => !v)}
+                  aria-label={ver ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                  aria-pressed={ver}
+                  className="absolute right-1.5 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+                >
+                  {ver ? <EyeOff size={17} /> : <Eye size={17} />}
+                </button>
+              </div>
+            </div>
+          </div>
 
-      <Button type="submit" size="lg" disabled={busy} className="mt-6 w-full">
-        {busy ? 'Entrando…' : 'Entrar'}
-      </Button>
-    </form>
+          {error && <Aviso mensaje={error} />}
+
+          <Button type="submit" size="lg" disabled={busy || !email || !password} className="mt-7 w-full">
+            {busy ? (<><Loader2 className="animate-spin" /> Entrando…</>) : (<>Entrar <ArrowRight /></>)}
+          </Button>
+
+          <p className="mt-5 text-center text-[12px] text-muted-foreground">
+            La sesión dura lo que dure esta pestaña. Al cerrarla, se cierra.
+          </p>
+        </form>
+      </main>
+    </div>
   );
 }
 
