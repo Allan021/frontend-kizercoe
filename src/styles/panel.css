@@ -365,8 +365,10 @@
 @media (min-width: 1024px) { .kzp-login-marca { padding: 40px 48px; } }
 /* En el teléfono la marca es un encabezado corto: las ventajas se esconden. */
 @media (max-width: 1023.98px) {
+  .kzp-login-marca { padding: 18px 20px; }
   .kzp-login-marca .my-auto { display: none; }
   .kzp-login-marca > p { display: none; }
+  .kzp-login-marca > img { height: 40px; }
 }
 .kzp-login-ventaja {
   display: flex;

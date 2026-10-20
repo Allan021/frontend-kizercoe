@@ -123,21 +123,13 @@ function Cargando() {
 
 // ── Marca ──
 
-function Marca({ size = 34 }: { size?: number }) {
+/** El logo de Kizercode, el mismo del sitio: claro u oscuro según el tema. */
+function Logo({ alto = 36, className = '' }: { alto?: number; className?: string }) {
+  const ancho = Math.round(alto * 3);
   return (
-    <span
-      aria-hidden="true"
-      className="grid shrink-0 place-items-center rounded-xl font-black"
-      style={{
-        width: size,
-        height: size,
-        background: 'linear-gradient(135deg, var(--green) 0%, var(--green2) 100%)',
-        color: '#fff',
-        fontSize: size * 0.42,
-        boxShadow: '0 6px 16px -8px color-mix(in srgb, var(--green) 70%, transparent)',
-      }}
-    >
-      K
+    <span className={`inline-flex shrink-0 ${className}`}>
+      <img data-logo-light="1" src="/logo-claro.webp" alt="Kizercode" width={ancho} height={alto} style={{ height: alto, width: ancho }} className="object-contain object-left" />
+      <img data-logo-dark="1" src="/logo-oscuro.webp" alt="Kizercode" width={ancho} height={alto} style={{ height: alto, width: ancho }} className="object-contain object-left" />
     </span>
   );
 }
@@ -227,12 +219,9 @@ function Escritorio({ user, onSalir }: { user: PanelUser; onSalir: () => void })
     <div className="kzp-shell">
       {/* ── Barra lateral (escritorio) ── */}
       <aside className="kzp-side" aria-label="Secciones del panel">
-        <div className="mb-4 flex items-center gap-3 px-2">
-          <Marca />
-          <div>
-            <p className="kz-eyebrow !text-[11px]">// panel</p>
-            <p className="text-[15px] font-black leading-tight tracking-tight">Kizercode</p>
-          </div>
+        <div className="mb-5 px-2">
+          <Logo alto={40} />
+          <p className="kz-eyebrow mt-2 !text-[11px]">// panel</p>
         </div>
         <nav className="flex flex-col gap-1">
           {SECCIONES.map((s) => <Item key={s.id} s={s} />)}
@@ -250,7 +239,7 @@ function Escritorio({ user, onSalir }: { user: PanelUser; onSalir: () => void })
       {/* ── Contenido ── */}
       <div className="min-w-0">
         <header className="kzp-top">
-          <span className="lg:hidden"><Marca size={30} /></span>
+          <span className="lg:hidden"><Logo alto={30} /></span>
           <div className="hidden min-w-0 lg:block">
             <p className="truncate text-[15px] font-bold tracking-tight">{activa.etiqueta}</p>
           </div>
@@ -526,10 +515,10 @@ function Encabezado({
 // ── Login ──
 
 const VENTAJAS: { Icono: typeof Bot; titulo: string; texto: string }[] = [
-  { Icono: Bot, titulo: 'Bot de WhatsApp 24/7', texto: 'Cotiza, pide visitas y deja cada lead acá.' },
-  { Icono: CalendarDays, titulo: 'Agenda por ruta', texto: 'Confirmás el día y al cliente le llega el WhatsApp.' },
-  { Icono: NotebookPen, titulo: 'Bitácora con fotos', texto: 'Cada instalación con su ficha, contrato y claves.' },
-  { Icono: Sparkles, titulo: 'Asistente IA', texto: 'Responde con tus datos: leads, visitas, instalaciones.' },
+  { Icono: Users, titulo: 'Clientes y ventas', texto: 'Cada lead con su estado, su servicio y su historial.' },
+  { Icono: CalendarDays, titulo: 'Agenda y visitas', texto: 'Las visitas por confirmar y la ruta de cada día.' },
+  { Icono: NotebookPen, titulo: 'Instalaciones', texto: 'Ficha, contrato, claves y bitácora con fotos.' },
+  { Icono: Sparkles, titulo: 'Asistente IA', texto: 'Responde con tus propios datos, al momento.' },
 ];
 
 function Login({ onEntrar }: { onEntrar: (u: PanelUser) => void }) {
@@ -562,19 +551,14 @@ function Login({ onEntrar }: { onEntrar: (u: PanelUser) => void }) {
   return (
     <div className="kzp-login">
       <aside className="kzp-login-marca">
-        <div className="flex items-center gap-3">
-          <Marca size={44} />
-          <div>
-            <p className="kz-eyebrow !text-[11px] !text-[var(--green-bright)]">// panel</p>
-            <p className="text-lg font-black leading-tight tracking-tight">Kizercode</p>
-          </div>
-        </div>
+        <img src="/logo-oscuro.webp" alt="Kizercode" width={192} height={64} className="h-14 w-auto object-contain object-left sm:h-16" />
         <div className="my-auto py-10">
-          <h1 className="max-w-md text-[34px] font-black leading-[1.08] tracking-tight sm:text-[42px]">
-            Todo lo que entra por WhatsApp, <span style={{ color: 'var(--green-bright)' }}>ordenado</span>.
+          <p className="kz-eyebrow !text-[12px] !text-[var(--green-bright)]">// panel de administración</p>
+          <h1 className="mt-3 max-w-md text-[34px] font-black leading-[1.08] tracking-tight sm:text-[42px]">
+            Tu empresa, <span style={{ color: 'var(--green-bright)' }}>en un solo lugar</span>.
           </h1>
           <p className="mt-4 max-w-md text-[15px] leading-relaxed opacity-80">
-            Leads, visitas, instalaciones y un asistente que responde con tus propios datos. Desde el teléfono o la compu.
+            Clientes, agenda, instalaciones, proyectos y tu asistente. Desde el teléfono o la compu.
           </p>
           <ul className="mt-8 grid max-w-lg gap-3 sm:grid-cols-2">
             {VENTAJAS.map((v) => (
@@ -597,6 +581,7 @@ function Login({ onEntrar }: { onEntrar: (u: PanelUser) => void }) {
 
       <main className="kzp-login-form">
         <form onSubmit={entrar} className="kzp-login-caja" aria-busy={busy}>
+          <Logo alto={44} className="mb-6" />
           <p className="kz-eyebrow">// bienvenido</p>
           <h2 className="mt-2 text-[28px] font-black tracking-tight">Entrar al panel</h2>
           <p className="mt-1.5 text-sm text-muted-foreground">Con tu correo y contraseña de administrador.</p>
