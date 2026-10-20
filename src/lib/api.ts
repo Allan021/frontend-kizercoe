@@ -145,6 +145,32 @@ export const panelUpdateVisita = (
     conToken({ method: 'PATCH', body: JSON.stringify(cambios) }),
   );
 
+// ── Mi staff ──
+
+/** Alguien del equipo: el bot lo reconoce por su número y le pregunta por su trabajo. */
+export type Staff = {
+  id: string;
+  nombre: string;
+  telefono: string;
+  rol: string;
+  activo: boolean;
+  notas: string | null;
+  createdAt: string;
+};
+
+export type StaffDatos = Pick<Staff, 'nombre' | 'telefono' | 'rol' | 'activo'> & { notas?: string | null };
+
+export const panelStaff = () => pedir<Staff[]>('/v1/panel/staff', conToken());
+
+export const panelCrearStaff = (d: StaffDatos) =>
+  pedir<Staff>('/v1/panel/staff', conToken({ method: 'POST', body: JSON.stringify(d) }));
+
+export const panelEditarStaff = (id: string, d: Partial<StaffDatos>) =>
+  pedir<Staff>(`/v1/panel/staff/${id}`, conToken({ method: 'PATCH', body: JSON.stringify(d) }));
+
+export const panelBorrarStaff = (id: string) =>
+  pedir<{ ok: boolean }>(`/v1/panel/staff/${id}`, conToken({ method: 'DELETE' }));
+
 /** Enlace wa.me con solo los dígitos; 8 dígitos sin código de país se toman como Honduras. */
 export function waDe(phone: string): string | null {
   const d = phone.replace(/\D/g, '');

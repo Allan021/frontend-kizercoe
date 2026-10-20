@@ -10,10 +10,12 @@ import {
   Plus,
   Trash2,
   Star,
+  UserCog,
   Users,
   X,
 } from 'lucide-react';
 import { PanelLeads } from '@/components/PanelLeads';
+import { PanelStaff } from '@/components/PanelStaff';
 import { PanelVisitas } from '@/components/PanelVisitas';
 import { SubirImagen } from '@/components/SubirImagen';
 import { miniatura } from '@/lib/upload';
@@ -104,13 +106,23 @@ function Marca({ size = 34 }: { size?: number }) {
 
 // ── Escritorio ──
 
-type Pestana = 'leads' | 'visitas' | 'proyectos' | 'testimonios';
+type Pestana = 'leads' | 'visitas' | 'staff' | 'proyectos' | 'testimonios';
+
+/** Cómo se ve cada pestaña en la barra (la clave queda corta para el código). */
+const ETIQUETA: Record<Pestana, string> = {
+  leads: 'leads',
+  visitas: 'visitas',
+  staff: 'mi staff',
+  proyectos: 'proyectos',
+  testimonios: 'testimonios',
+};
 
 function Escritorio({ user, onSalir }: { user: PanelUser; onSalir: () => void }) {
   const [pestana, setPestana] = useState<Pestana>('leads');
   const [conteos, setConteos] = useState<Record<Pestana, number | null>>({
     leads: null,
     visitas: null,
+    staff: null,
     proyectos: null,
     testimonios: null,
   });
@@ -157,6 +169,7 @@ function Escritorio({ user, onSalir }: { user: PanelUser; onSalir: () => void })
             [
               ['leads', Users],
               ['visitas', CalendarDays],
+              ['staff', UserCog],
               ['proyectos', FolderKanban],
               ['testimonios', MessageSquareQuote],
             ] as const
@@ -168,7 +181,7 @@ function Escritorio({ user, onSalir }: { user: PanelUser; onSalir: () => void })
               className={`kz-tab inline-flex items-center gap-2 capitalize ${pestana === p ? 'kz-tab-activa' : ''}`}
             >
               <Icono size={15} strokeWidth={1.75} />
-              {p}
+              {ETIQUETA[p]}
               {conteos[p] !== null && (
                 <span
                   className="rounded-full px-1.5 font-mono text-[11px]"
@@ -190,6 +203,9 @@ function Escritorio({ user, onSalir }: { user: PanelUser; onSalir: () => void })
       </div>
       <div hidden={pestana !== 'visitas'}>
         <PanelVisitas onConteo={marcar('visitas')} />
+      </div>
+      <div hidden={pestana !== 'staff'}>
+        <PanelStaff onConteo={marcar('staff')} />
       </div>
       <div hidden={pestana !== 'proyectos'}>
         <Proyectos onConteo={marcar('proyectos')} />
