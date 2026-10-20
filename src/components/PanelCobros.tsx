@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { ExternalLink, Plus, Receipt, Trash2, Upload } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
+import { AvisoError } from '@/components/PanelAviso';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -41,10 +42,12 @@ export function PanelCobros({ onConteo }: { onConteo: (n: number) => void }) {
   const [filtro, setFiltro] = useState<'todas' | EstadoFactura>('todas');
   const [nueva, setNueva] = useState(false);
 
+  const [error, setError] = useState<string | null>(null);
   const cargar = () => {
+    setError(null);
     panelFacturas()
       .then(setLista)
-      .catch((e) => toast.error(e instanceof Error ? e.message : 'No se pudieron cargar los cobros'));
+      .catch((e) => setError(e instanceof Error ? e.message : 'No se pudieron cargar los cobros'));
   };
   useEffect(cargar, []);
   useEffect(() => {
@@ -106,11 +109,12 @@ export function PanelCobros({ onConteo }: { onConteo: (n: number) => void }) {
         </div>
         <Button onClick={() => setNueva(true)}><Plus /> Nueva factura</Button>
       </div>
+      {error && <AvisoError error={error} onReintentar={cargar} />}
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        {!lista ? (
+        {!lista && !error ? (
           Array.from({ length: 4 }, (_, i) => <div key={i} className="kzp-esqueleto h-[108px]" />)
-        ) : (
+        ) : !lista ? null : (
           <>
             <Stat titulo="Cobrado este mes" valor={lempiras(n.cobrado)} nota={`${n.nPagadas} factura${n.nPagadas === 1 ? '' : 's'}${delta !== null ? ` · ${delta >= 0 ? '+' : ''}${delta}% vs. anterior` : ''}`} tono="var(--green)" onClick={() => setFiltro('pagada')} />
             <Stat titulo="Por cobrar" valor={lempiras(n.pendiente)} nota={`${n.nPendientes} pendiente${n.nPendientes === 1 ? '' : 's'}`} tono="var(--kzp-ambar)" onClick={() => setFiltro('pendiente')} />

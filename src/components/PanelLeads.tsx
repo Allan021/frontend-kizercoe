@@ -390,12 +390,10 @@ function FilaLead({ lead: l, veces, abierto, onAbrir, onCambiar, onBorrar }: {
   const asunto = encodeURIComponent(`Kizercode — ${l.service}`);
 
   return (
-    <li className="kz-card overflow-hidden" style={{ borderLeft: `3px solid ${e.color}` }}>
+    <li className="kz-card overflow-hidden">
       <div className="flex flex-wrap items-center gap-4 p-4">
         <button onClick={onAbrir} className="flex min-w-0 flex-1 items-center gap-3 text-left" aria-expanded={abierto}>
-          <span aria-hidden="true" className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-sm font-bold" style={{ background: `color-mix(in srgb, ${e.color} 16%, transparent)`, color: e.color }}>
-            {iniciales(l.name)}
-          </span>
+          <span aria-hidden="true" className="kzp-avatar !h-11 !w-11 !text-[14px]">{iniciales(l.name)}</span>
           <span className="min-w-0">
             <span className="flex flex-wrap items-center gap-2 font-semibold">
               {l.name}

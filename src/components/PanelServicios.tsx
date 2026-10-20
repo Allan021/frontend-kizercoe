@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { Camera, ChevronDown, Code2, ExternalLink, Globe, Megaphone, Package, Plus, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
+import { AvisoError } from '@/components/PanelAviso';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -43,10 +44,12 @@ export function PanelServicios({ onConteo }: { onConteo: (n: number) => void }) 
   const [nuevo, setNuevo] = useState(false);
   const [visitas, setVisitas] = useState<Visita[]>([]);
 
+  const [error, setError] = useState<string | null>(null);
   const cargar = () => {
+    setError(null);
     panelContratos()
       .then(setLista)
-      .catch((e) => toast.error(e instanceof Error ? e.message : 'No se pudieron cargar los servicios'));
+      .catch((e) => setError(e instanceof Error ? e.message : 'No se pudieron cargar los servicios'));
   };
   useEffect(cargar, []);
   useEffect(() => {
@@ -102,6 +105,7 @@ export function PanelServicios({ onConteo }: { onConteo: (n: number) => void }) 
         </div>
         <Button onClick={() => setNuevo(true)}><Plus /> Nuevo contrato</Button>
       </div>
+      {error && <AvisoError error={error} onReintentar={cargar} />}
 
       <div className="flex flex-wrap gap-2">
         {CATEGORIAS.map((c) => (
@@ -112,9 +116,9 @@ export function PanelServicios({ onConteo }: { onConteo: (n: number) => void }) 
         ))}
       </div>
 
-      {!lista ? (
+      {!lista && !error ? (
         <div className="mt-4 space-y-2">{Array.from({ length: 2 }, (_, i) => <div key={i} className="kzp-esqueleto h-[84px]" />)}</div>
-      ) : visibles.length === 0 ? (
+      ) : !lista ? null : visibles.length === 0 ? (
         <div className="mt-4 rounded-2xl border border-dashed border-border p-10 text-center">
           <activa.Icono className="mx-auto text-muted-foreground" size={26} />
           <p className="mt-3 text-lg font-bold">Nada en {activa.label.toLowerCase()} todavía</p>

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { ArrowRight, Bot, CalendarDays, CreditCard, Laptop, MapPin, MessageCircle, Pencil, Smartphone, Sparkles, TrendingUp, Users, Wrench } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
+import { AvisoError } from '@/components/PanelAviso';
 import { Input } from '@/components/ui/input';
 import { lempiras, panelAjustes, panelFacturas, panelGuardarAjuste, panelLeads, panelOrdenes, panelStaff, panelVisitas, waDe, type Factura, type Lead, type Orden, type Staff, type Visita } from '@/lib/api';
 import { ESTADOS_ORDEN, saldoOrden, totalOrden } from '@/components/PanelTaller';
@@ -37,11 +38,17 @@ export function PanelHoy({ user, onIr }: { user: string; onIr: (p: Pestana) => v
   const [editandoMeta, setEditandoMeta] = useState(false);
   const [metaTxt, setMetaTxt] = useState('');
 
-  useEffect(() => {
-    Promise.all([panelLeads(), panelVisitas(), panelStaff(), panelOrdenes(), panelFacturas(), panelAjustes()])
-      .then(([leads, visitas, staff, ordenes, facturas, ajustes]) => setD({ leads, visitas, staff, ordenes, facturas, ajustes }))
-      .catch((e) => setError(e instanceof Error ? e.message : 'No se pudo cargar'));
-  }, []);
+  const cargar = () => {
+    setError(null);
+    // Cada fuente por su lado: si el taller o los cobros fallan (servidor viejo), el resto igual se ve.
+    Promise.allSettled([panelLeads(), panelVisitas(), panelStaff(), panelOrdenes(), panelFacturas(), panelAjustes()]).then((r) => {
+      const v = <T,>(i: number, def: T): T => (r[i]!.status === 'fulfilled' ? (r[i] as PromiseFulfilledResult<T>).value : def);
+      setD({ leads: v(0, []), visitas: v(1, []), staff: v(2, []), ordenes: v(3, []), facturas: v(4, []), ajustes: v(5, {}) });
+      const fallo = r.find((x) => x.status === 'rejected') as PromiseRejectedResult | undefined;
+      if (fallo) setError(fallo.reason instanceof Error ? fallo.reason.message : 'Una parte no cargó');
+    });
+  };
+  useEffect(cargar, []);
 
   const n = useMemo(() => {
     const hoy = hoyISO(), fin = masDias(7), m = mes(hoy);
@@ -51,6 +58,17 @@ export function PanelHoy({ user, onIr }: { user: string; onIr: (p: Pestana) => v
     const [y, mm] = m.split('-').map(Number);
     const anterior = `${mm === 1 ? y! - 1 : y}-${String(mm === 1 ? 12 : mm! - 1).padStart(2, '0')}`;
     const cobrado = cobradoEn(f, m), cobradoAnt = cobradoEn(f, anterior);
+    const semanas = Array.from({ length: 8 }, (_, i) => {
+      const fin = new Date(Date.now() - (7 - i) * 7 * 86_400_000);
+      const ini = new Date(fin.getTime() - 7 * 86_400_000);
+      const en = f.filter((x) => x.estado === 'pagada' && x.pagadaAt && new Date(x.pagadaAt) > ini && new Date(x.pagadaAt) <= fin);
+      return {
+        label: fin.toLocaleDateString('es-HN', { timeZone: 'America/Tegucigalpa', day: 'numeric', month: 'short' }),
+        taller: en.filter((x) => x.origen === 'taller').reduce((a, x) => a + x.monto, 0),
+        contratos: en.filter((x) => x.origen !== 'taller').reduce((a, x) => a + x.monto, 0),
+      };
+    });
+    const topSemana = Math.max(1, ...semanas.map((w) => w.taller + w.contratos));
     const meta = Number(d?.ajustes.meta_mensual ?? 0) || 0;
     const pulso = [
       ...o.flatMap((x) => x.log.slice(-1).map((e) => ({ cuando: e.cuando, tono: 'var(--green)', texto: `${e.quien}: ${e.texto} (${x.num} · ${x.cliente})` }))),
@@ -66,6 +84,7 @@ export function PanelHoy({ user, onIr }: { user: string; onIr: (p: Pestana) => v
       semana, camarasSemana: semana.filter((x) => /c[aá]mara/i.test(x.servicio)).length,
       porCobrar: porCobrar(f), nPendientes: f.filter((x) => x.estado !== 'pagada').length,
       cobrado, delta: cobradoAnt ? Math.round(((cobrado - cobradoAnt) / cobradoAnt) * 100) : null, meta, metaPct: meta ? Math.min(100, Math.round((cobrado / meta) * 100)) : 0,
+      semanas, topSemana,
       tecnicos: (d?.staff ?? []).filter((s) => s.activo && s.rol === 'tecnico'),
       pulso,
     };
@@ -101,7 +120,7 @@ export function PanelHoy({ user, onIr }: { user: string; onIr: (p: Pestana) => v
       <h2 className="kzp-titulo mt-1">{saludo}, {user.split(' ')[0]}.</h2>
       <p className="kzp-sub">{cargando ? 'Revisando qué hay…' : resumen.length ? `${resumen.join(', ')}.` : 'Nada pendiente. Todo atendido.'}</p>
 
-      {error && <p role="alert" className="mt-4 rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2.5 text-sm text-destructive">{error}</p>}
+      {error && <AvisoError error={error} onReintentar={cargar} />}
 
       <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
         {cargando ? (
@@ -147,6 +166,20 @@ export function PanelHoy({ user, onIr }: { user: string; onIr: (p: Pestana) => v
               <p className="mt-1.5 text-right font-mono text-[12px] text-muted-foreground">{n.meta ? `${n.metaPct}%` : 'sin meta'}</p>
             </div>
           </div>
+          {/* Cobrado por semana, últimas 8: taller abajo, contratos encima. */}
+          <div className="mt-5 flex items-end gap-1.5" style={{ height: 96 }} role="img" aria-label={`Cobrado por semana, últimas 8 semanas: ${n.semanas.map((w) => `${w.label} ${lempiras(w.taller + w.contratos)}`).join(', ')}`}>
+            {n.semanas.map((w) => (
+              <div key={w.label} className="group relative flex flex-1 flex-col justify-end" style={{ height: '100%' }} title={`Semana al ${w.label}: taller ${lempiras(w.taller)} · contratos ${lempiras(w.contratos)}`}>
+                <div className="w-full rounded-t-md" style={{ height: `${(w.contratos / n.topSemana) * 78}%`, background: 'var(--kzp-azul)', opacity: 0.85 }} />
+                <div className="w-full rounded-b-md" style={{ height: `${(w.taller / n.topSemana) * 78}%`, background: 'var(--green)' }} />
+                <span className="mt-1 block truncate text-center text-[10px] text-muted-foreground">{w.label}</span>
+              </div>
+            ))}
+          </div>
+          <p className="mt-1 flex gap-4 text-[11.5px] text-muted-foreground">
+            <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm" style={{ background: 'var(--green)' }} /> Taller</span>
+            <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm" style={{ background: 'var(--kzp-azul)' }} /> Contratos y servicios</span>
+          </p>
           <p className="kz-eyebrow mt-5">// pulso</p>
           <ul className="mt-2 space-y-2">
             {n.pulso.map((p, i) => (

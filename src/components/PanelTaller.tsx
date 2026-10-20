@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { ArrowLeft, Camera, Check, ChevronRight, Laptop, MessageCircle, Plus, Receipt, Search, Smartphone, Trash2, Wrench, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
+import { AvisoError } from '@/components/PanelAviso';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -59,10 +60,12 @@ export function PanelTaller({ onConteo, user }: { onConteo: (n: number) => void;
   const [nueva, setNueva] = useState(false);
   const [tecnicos, setTecnicos] = useState<string[]>([]);
 
+  const [error, setError] = useState<string | null>(null);
   const cargar = () => {
+    setError(null);
     panelOrdenes()
       .then(setOrdenes)
-      .catch((e) => toast.error(e instanceof Error ? e.message : 'No se pudo cargar el taller'));
+      .catch((e) => setError(e instanceof Error ? e.message : 'No se pudo cargar el taller'));
   };
   useEffect(cargar, []);
   useEffect(() => {
@@ -128,6 +131,7 @@ export function PanelTaller({ onConteo, user }: { onConteo: (n: number) => void;
         </div>
         <Button onClick={() => setNueva(true)}><Plus /> Nueva orden</Button>
       </div>
+      {error && <AvisoError error={error} onReintentar={cargar} />}
 
       <div className={`grid gap-4 ${actual ? 'xl:grid-cols-[minmax(0,1.15fr)_minmax(380px,1fr)]' : ''}`}>
         {/* ── Lista ── */}
@@ -157,7 +161,7 @@ export function PanelTaller({ onConteo, user }: { onConteo: (n: number) => void;
             ))}
           </div>
 
-          {!ordenes ? (
+          {!ordenes && !error ? (
             <div className="mt-4 space-y-2">{Array.from({ length: 3 }, (_, i) => <div key={i} className="kzp-esqueleto h-[76px]" />)}</div>
           ) : visibles.length === 0 ? (
             <div className="mt-4 rounded-2xl border border-dashed border-border p-10 text-center">
