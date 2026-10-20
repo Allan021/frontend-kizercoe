@@ -1,6 +1,15 @@
 import { useEffect, useMemo, useState } from 'react';
 import { CalendarCheck, Check, MapPin, MessageCircle, RefreshCw, Store, X } from 'lucide-react';
-import { panelUpdateVisita, panelVisitas, waDe, type Visita, type VisitaEstado } from '@/lib/api';
+import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
+  AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { panelUpdateVisita, panelVisitas, waDe, type Visita, type VisitaCambios } from '@/lib/api';
+import { Ficha } from '@/components/PanelInstalacion';
 
 /**
  * Las visitas que pide la gente por WhatsApp. El bot no fija el día: las deja
@@ -8,7 +17,8 @@ import { panelUpdateVisita, panelVisitas, waDe, type Visita, type VisitaEstado }
  * de cada solicitud se ve si ya vamos para ese municipio: una instalación en
  * Choloma el jueves es la excusa para pasar a cotizar a la vecina.
  *
- * Confirmar le manda el WhatsApp al cliente con día, hora y dirección.
+ * Confirmar le manda el WhatsApp al cliente con día, hora y dirección. Cada
+ * visita confirmada o hecha lleva su ficha y su bitácora (PanelInstalacion).
  */
 
 const hoy = () => new Date().toLocaleDateString('en-CA', { timeZone: 'America/Tegucigalpa' });
@@ -26,14 +36,11 @@ const mismoLugar = (a: string | null, b: string | null) =>
 
 export function PanelVisitas({ onConteo }: { onConteo: (n: number) => void }) {
   const [lista, setLista] = useState<Visita[] | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [aviso, setAviso] = useState<string | null>(null);
 
   const cargar = () => {
-    setError(null);
     panelVisitas()
       .then(setLista)
-      .catch((e) => setError(e instanceof Error ? e.message : 'No se pudieron cargar las visitas'));
+      .catch((e) => toast.error(e instanceof Error ? e.message : 'No se pudieron cargar las visitas'));
   };
   useEffect(cargar, []);
 
@@ -48,50 +55,44 @@ export function PanelVisitas({ onConteo }: { onConteo: (n: number) => void }) {
     }
     return [...m.entries()].sort(([a], [b]) => a.localeCompare(b));
   }, [todas]);
-  const historial = todas.filter((v) => v.estado === 'realizada' || v.estado === 'cancelada').slice(0, 30);
+  const hechas = todas.filter((v) => v.estado === 'realizada').slice(0, 60);
+  const canceladas = todas.filter((v) => v.estado === 'cancelada').slice(0, 30);
 
   useEffect(() => {
     if (lista) onConteo(pendientes.length);
   }, [lista, pendientes.length, onConteo]);
 
-  async function cambiar(v: Visita, c: { fecha?: string; hora?: string; estado?: VisitaEstado }) {
-    setError(null);
-    setAviso(null);
+  async function cambiar(v: Visita, c: VisitaCambios) {
     try {
       const r = await panelUpdateVisita(v.id, c);
       setLista((l) => (l ?? []).map((x) => (x.id === v.id ? r.visita : x)));
       if (r.whatsapp) {
-        setAviso(
-          r.whatsapp.ok
-            ? `Confirmada. A ${v.nombre} le llegó el WhatsApp.`
-            : `Confirmada, pero el WhatsApp no salió (${r.whatsapp.error ?? 'error'}). Escribile vos.`,
-        );
-      }
+        if (r.whatsapp.ok) toast.success(`Confirmada. A ${v.nombre} le llegó el WhatsApp.`);
+        else toast.warning(`Confirmada, pero el WhatsApp no salió (${r.whatsapp.error ?? 'error'}). Escribile vos.`);
+      } else if (c.estado === 'realizada') toast.success(`${v.nombre}: marcada como hecha.`);
+      else if (c.estado === 'cancelada') toast(`${v.nombre}: cancelada. Al cliente no se le avisa.`);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'No se pudo guardar');
+      toast.error(e instanceof Error ? e.message : 'No se pudo guardar');
+      throw e;
     }
   }
 
   return (
     <section>
-      <div className="mb-5 flex items-center justify-between gap-3">
-        <p className="text-sm" style={{ color: 'var(--color-muted)' }}>
-          El bot deja las solicitudes; vos ponés el día según la ruta y al cliente le llega la confirmación.
-        </p>
-        <button onClick={cargar} className="kz-tab inline-flex items-center gap-1.5" aria-label="Recargar">
-          <RefreshCw size={14} /> Recargar
-        </button>
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h2 className="kzp-titulo">Visitas e instalaciones</h2>
+          <p className="kzp-sub">El bot deja las solicitudes; vos ponés el día según la ruta y al cliente le llega la confirmación. Cada instalación guarda su ficha y su bitácora.</p>
+        </div>
+        <Button variant="outline" onClick={cargar}><RefreshCw /> Recargar</Button>
       </div>
-
-      {error && <Mensaje tono="error">{error}</Mensaje>}
-      {aviso && <Mensaje tono="ok">{aviso}</Mensaje>}
 
       {/* ── Por confirmar ── */}
       <p className="kz-eyebrow">// por confirmar · {pendientes.length}</p>
-      {pendientes.length === 0 ? (
-        <p className="mt-3 text-sm" style={{ color: 'var(--color-muted-2)' }}>
-          {lista ? 'Nada pendiente.' : 'Cargando…'}
-        </p>
+      {!lista ? (
+        <div className="mt-3 space-y-2.5">{Array.from({ length: 2 }, (_, i) => <div key={i} className="kzp-esqueleto h-[132px]" />)}</div>
+      ) : pendientes.length === 0 ? (
+        <p className="mt-3 text-sm text-muted-foreground">Nada pendiente.</p>
       ) : (
         <ul className="mt-3 space-y-2.5">
           {pendientes.map((v) => {
@@ -101,19 +102,15 @@ export function PanelVisitas({ onConteo }: { onConteo: (n: number) => void }) {
               <li key={v.id} className="kz-card p-4">
                 <Cabeza v={v} />
                 {v.preferencia && (
-                  <p className="mt-2 text-[13px]">
-                    <span style={{ color: 'var(--color-muted)' }}>Le queda bien: </span>
-                    {v.preferencia}
-                  </p>
+                  <p className="mt-2 text-[13px]"><span className="text-muted-foreground">Le queda bien: </span>{v.preferencia}</p>
                 )}
                 {cerca.length > 0 && (
-                  <p className="mt-2 text-[13px] font-medium" style={{ color: 'var(--green2)' }}>
-                    Ya vas por {v.municipio}: {cerca.map(dia).join(', ')}
-                  </p>
+                  <p className="mt-2 text-[13px] font-medium text-accent-foreground">Ya vas por {v.municipio}: {cerca.map(dia).join(', ')}</p>
                 )}
                 <Programar
                   inicial={{ fecha: cerca[0] ?? '', hora: '' }}
                   boton="Confirmar y avisar"
+                  nombre={v.nombre}
                   onGuardar={(f, h) => cambiar(v, { fecha: f, hora: h, estado: 'confirmada' })}
                   onCancelar={() => cambiar(v, { estado: 'cancelada' })}
                 />
@@ -126,14 +123,14 @@ export function PanelVisitas({ onConteo }: { onConteo: (n: number) => void }) {
       {/* ── Agenda ── */}
       <p className="kz-eyebrow mt-10">// agenda</p>
       {agenda.length === 0 ? (
-        <p className="mt-3 text-sm" style={{ color: 'var(--color-muted-2)' }}>Sin visitas confirmadas.</p>
+        <p className="mt-3 text-sm text-muted-foreground">Sin visitas confirmadas.</p>
       ) : (
         <div className="mt-3 space-y-5">
           {agenda.map(([f, vs]) => (
             <div key={f}>
               <p className="flex flex-wrap items-baseline gap-x-3 text-sm font-bold capitalize">
                 {dia(f)}
-                <span className="text-[12px] font-normal normal-case" style={{ color: 'var(--color-muted)' }}>
+                <span className="text-[12px] font-normal normal-case text-muted-foreground">
                   {vs.length} {vs.length === 1 ? 'visita' : 'visitas'} · {[...new Set(vs.map((x) => x.municipio).filter(Boolean))].join(', ')}
                 </span>
               </p>
@@ -146,10 +143,12 @@ export function PanelVisitas({ onConteo }: { onConteo: (n: number) => void }) {
                       <Programar
                         inicial={{ fecha: v.fecha ?? '', hora: v.hora ?? '' }}
                         boton="Mover y avisar"
+                        nombre={v.nombre}
                         onGuardar={(nf, nh) => cambiar(v, { fecha: nf, hora: nh })}
                         onCancelar={() => cambiar(v, { estado: 'cancelada' })}
                         onHecha={() => cambiar(v, { estado: 'realizada' })}
                       />
+                      <Ficha v={v} onGuardar={(c) => cambiar(v, c)} />
                     </li>
                   ))}
               </ul>
@@ -158,14 +157,27 @@ export function PanelVisitas({ onConteo }: { onConteo: (n: number) => void }) {
         </div>
       )}
 
-      {historial.length > 0 && (
+      {/* ── Instalaciones hechas: la ficha y la bitácora de cada una ── */}
+      <p className="kz-eyebrow mt-10">// instalaciones hechas · {hechas.length}</p>
+      {hechas.length === 0 ? (
+        <p className="mt-3 text-sm text-muted-foreground">Todavía ninguna.</p>
+      ) : (
+        <ul className="mt-3 space-y-2.5">
+          {hechas.map((v) => (
+            <li key={v.id} className="kz-card p-4">
+              <Cabeza v={v} hora={v.fecha ? dia(v.fecha) : undefined} />
+              <Ficha v={v} onGuardar={(c) => cambiar(v, c)} />
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {canceladas.length > 0 && (
         <details className="mt-10">
-          <summary className="kz-eyebrow cursor-pointer">// historial · {historial.length}</summary>
-          <ul className="mt-3 space-y-1.5 text-[13px]" style={{ color: 'var(--color-muted)' }}>
-            {historial.map((v) => (
-              <li key={v.id}>
-                {v.estado === 'realizada' ? '✓' : '✕'} {v.nombre} · {v.municipio ?? 'local'} · {v.fecha ? dia(v.fecha) : 'sin fecha'}
-              </li>
+          <summary className="kz-eyebrow cursor-pointer">// canceladas · {canceladas.length}</summary>
+          <ul className="mt-3 space-y-1.5 text-[13px] text-muted-foreground">
+            {canceladas.map((v) => (
+              <li key={v.id}>✕ {v.nombre} · {v.municipio ?? 'local'} · {v.fecha ? dia(v.fecha) : 'sin fecha'}</li>
             ))}
           </ul>
         </details>
@@ -179,37 +191,32 @@ function Cabeza({ v, hora }: { v: Visita; hora?: string }) {
   return (
     <div className="flex flex-wrap items-start justify-between gap-3">
       <div className="min-w-0">
-        <p className="font-bold">
-          {hora && <span className="mr-2 font-mono" style={{ color: 'var(--color-accent)' }}>{hora}</span>}
+        <p className="flex flex-wrap items-center gap-2 font-bold">
+          {hora && <span className="font-mono text-accent-foreground">{hora}</span>}
           {v.nombre}
-          <span className="ml-2 text-[12.5px] font-normal" style={{ color: 'var(--color-muted)' }}>{v.servicio}</span>
+          <Badge variant="secondary">{v.servicio}</Badge>
         </p>
-        <p className="mt-1 flex items-start gap-1.5 text-[13px]" style={{ color: 'var(--color-muted)' }}>
+        <p className="mt-1 flex items-start gap-1.5 text-[13px] text-muted-foreground">
           {v.tipo === 'local' ? <Store size={14} className="mt-0.5 shrink-0" /> : <MapPin size={14} className="mt-0.5 shrink-0" />}
-          <span>
-            {v.tipo === 'local' ? 'En el local' : [v.municipio, v.direccion].filter(Boolean).join(' · ')}
-          </span>
+          <span>{v.tipo === 'local' ? 'En el local' : [v.municipio, v.direccion].filter(Boolean).join(' · ')}</span>
         </p>
         {v.notas && <p className="mt-1.5 whitespace-pre-line text-[13px]">{v.notas}</p>}
       </div>
       {wa && (
-        <a href={wa} target="_blank" rel="noreferrer" className="kz-tab inline-flex shrink-0 items-center gap-1.5">
-          <MessageCircle size={14} /> {v.telefono}
-        </a>
+        <Button variant="outline" size="sm" asChild>
+          <a href={wa} target="_blank" rel="noreferrer"><MessageCircle /> {v.telefono}</a>
+        </Button>
       )}
     </div>
   );
 }
 
 function Programar({
-  inicial,
-  boton,
-  onGuardar,
-  onCancelar,
-  onHecha,
+  inicial, boton, nombre, onGuardar, onCancelar, onHecha,
 }: {
   inicial: { fecha: string; hora: string };
   boton: string;
+  nombre: string;
   onGuardar: (fecha: string, hora: string) => void;
   onCancelar: () => void;
   onHecha?: () => void;
@@ -217,43 +224,32 @@ function Programar({
   const [fecha, setFecha] = useState(inicial.fecha);
   const [h, setH] = useState(inicial.hora);
   const cambio = fecha !== inicial.fecha || h !== inicial.hora;
-  const campo = 'rounded-lg border px-2.5 py-1.5 text-sm outline-none focus:border-[var(--color-accent)]';
-  const estilo = { background: 'var(--color-bg-2)', borderColor: 'var(--color-border)', color: 'var(--color-text)' };
 
   return (
     <div className="mt-3 flex flex-wrap items-center gap-2">
-      <input type="date" min={hoy()} value={fecha} onChange={(e) => setFecha(e.target.value)} className={campo} style={estilo} aria-label="Día" />
-      <input type="time" min="07:00" max="18:00" step={900} value={h} onChange={(e) => setH(e.target.value)} className={campo} style={estilo} aria-label="Hora" />
-      <button
-        disabled={!fecha || !h || (!!onHecha && !cambio)}
-        onClick={() => onGuardar(fecha, h)}
-        className="kz-btn kz-btn-primario inline-flex items-center gap-1.5 px-3 py-1.5 text-sm disabled:opacity-40"
-      >
-        <CalendarCheck size={14} /> {boton}
-      </button>
+      <Input type="date" min={hoy()} value={fecha} onChange={(e) => setFecha(e.target.value)} className="w-auto" aria-label="Día" />
+      <Input type="time" min="07:00" max="18:00" step={900} value={h} onChange={(e) => setH(e.target.value)} className="w-auto" aria-label="Hora" />
+      <Button disabled={!fecha || !h || (!!onHecha && !cambio)} onClick={() => onGuardar(fecha, h)}>
+        <CalendarCheck /> {boton}
+      </Button>
       {onHecha && (
-        <button onClick={onHecha} className="kz-tab inline-flex items-center gap-1.5">
-          <Check size={14} /> Hecha
-        </button>
+        <Button variant="outline" onClick={onHecha}><Check /> Hecha</Button>
       )}
-      <button
-        onClick={() => confirm('¿Cancelar esta visita? Al cliente no se le avisa: escribile vos.') && onCancelar()}
-        className="kz-tab inline-flex items-center gap-1.5"
-      >
-        <X size={14} /> Cancelar
-      </button>
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <Button variant="ghost" className="text-muted-foreground"><X /> Cancelar</Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Cancelar la visita de {nombre}?</AlertDialogTitle>
+            <AlertDialogDescription>Al cliente no se le avisa: escribile vos por WhatsApp.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Volver</AlertDialogCancel>
+            <AlertDialogAction onClick={onCancelar}>Cancelar visita</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
-  );
-}
-
-function Mensaje({ tono, children }: { tono: 'ok' | 'error'; children: string }) {
-  const estilo =
-    tono === 'error'
-      ? { borderColor: 'rgba(255,107,107,0.4)', background: 'rgba(255,107,107,0.08)', color: '#ff8f8f' }
-      : { borderColor: 'color-mix(in srgb, var(--green) 40%, transparent)', background: 'color-mix(in srgb, var(--green) 10%, transparent)', color: 'var(--green2)' };
-  return (
-    <p role="status" className="mb-4 rounded-lg border px-4 py-3 text-sm" style={estilo}>
-      {children}
-    </p>
   );
 }

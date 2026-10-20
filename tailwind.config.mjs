@@ -1,3 +1,5 @@
+import animate from 'tailwindcss-animate';
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
@@ -27,8 +29,23 @@ export default {
           soft: 'var(--color-accent-soft)',
           deep: 'var(--color-accent-deep)',
         },
-        muted: { DEFAULT: 'var(--color-muted)', 2: 'var(--color-muted-2)' },
-        border: { DEFAULT: 'var(--color-border)', soft: 'var(--color-border-soft)' },
+        /**
+         * Tokens de shadcn/ui, mapeados a la paleta del sitio: los componentes
+         * (Button, Select, Dialog…) salen verdes y navy sin tocarlos uno por
+         * uno, y cambian solos con el tema oscuro.
+         */
+        background: 'var(--bg)',
+        foreground: 'var(--ink)',
+        card: { DEFAULT: 'var(--bg)', foreground: 'var(--ink)', 2: 'var(--color-card-2)' },
+        popover: { DEFAULT: 'var(--bg)', foreground: 'var(--ink)' },
+        primary: { DEFAULT: 'var(--green-btn)', foreground: '#ffffff' },
+        secondary: { DEFAULT: 'var(--bg2)', foreground: 'var(--ink)' },
+        muted: { DEFAULT: 'var(--bg2)', foreground: 'var(--mute)', 2: 'var(--color-muted-2)' },
+        accent: { DEFAULT: 'var(--green-soft)', foreground: 'var(--green2)', strong: 'var(--color-accent-strong)', soft: 'var(--color-accent-soft)', deep: 'var(--color-accent-deep)' },
+        destructive: { DEFAULT: '#d63c3c', foreground: '#ffffff' },
+        border: { DEFAULT: 'var(--line)', soft: 'var(--color-border-soft)' },
+        input: 'var(--line)',
+        ring: 'var(--green)',
       },
       fontFamily: {
         sans: ['"Instrument Sans Variable"', 'system-ui', 'sans-serif'],
@@ -70,5 +87,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [animate],
 };

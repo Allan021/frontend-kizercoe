@@ -1,23 +1,46 @@
 'use client';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   CalendarDays,
   FolderKanban,
+  Home,
+  MoreHorizontal,
+  Sparkles,
   ImageIcon,
   LogOut,
   MessageSquareQuote,
+  Moon,
   Pencil,
   Plus,
+  Search,
+  Sun,
   Trash2,
   Star,
   UserCog,
   Users,
   X,
 } from 'lucide-react';
+import { PanelAsistente } from '@/components/PanelAsistente';
+import { PanelBuscar } from '@/components/PanelBuscar';
+import { PanelHoy } from '@/components/PanelHoy';
 import { PanelLeads } from '@/components/PanelLeads';
 import { PanelStaff } from '@/components/PanelStaff';
 import { PanelVisitas } from '@/components/PanelVisitas';
 import { SubirImagen } from '@/components/SubirImagen';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
+  AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Toaster } from '@/components/ui/sonner';
+import { toast } from 'sonner';
 import { miniatura } from '@/lib/upload';
 import {
   clearPanelToken,
@@ -35,13 +58,15 @@ import {
 import type { Project, Testimonial } from '@/types';
 
 /**
- * Panel de Kizercode: cargar proyectos y testimonios sin tocar código.
+ * Panel de Kizercode, edición 2026.
  *
  * Corre entero en el navegador contra la API — el sitio es estático. El token
  * vive en sessionStorage: se va al cerrar la pestaña.
  *
- * Usa el mismo sistema de diseño que la landing (.kz-card, .kz-btn, .kz-tab y
- * las variables de color), así el panel no se siente otra aplicación.
+ * Estructura de producto: barra lateral en escritorio, barra inferior en el
+ * teléfono, búsqueda global con Ctrl K y una vista "Hoy" que dice qué
+ * atender. Misma línea gráfica del sitio (Poppins, verde, navy, claro y
+ * oscuro): los estilos propios viven en styles/panel.css bajo .kz-panel.
  */
 export default function Panel() {
   const [user, setUser] = useState<PanelUser | null>(null);
@@ -56,22 +81,28 @@ export default function Panel() {
       .finally(() => setCargando(false));
   }, []);
 
-  if (cargando) return <Centrado>{<Cargando />}</Centrado>;
-  if (!user) return <Centrado>{<Login onEntrar={setUser} />}</Centrado>;
-
   return (
-    <Escritorio
-      user={user}
-      onSalir={() => {
-        clearPanelToken();
-        setUser(null);
-      }}
-    />
+    <TooltipProvider delayDuration={300}>
+      {cargando ? (
+        <Centrado>{<Cargando />}</Centrado>
+      ) : !user ? (
+        <Centrado>{<Login onEntrar={setUser} />}</Centrado>
+      ) : (
+        <Escritorio
+          user={user}
+          onSalir={() => {
+            clearPanelToken();
+            setUser(null);
+          }}
+        />
+      )}
+      <Toaster />
+    </TooltipProvider>
   );
 }
 
 function Centrado({ children }: { children: React.ReactNode }) {
-  return <div className="grid min-h-[70vh] place-items-center">{children}</div>;
+  return <div className="grid min-h-dvh place-items-center px-4">{children}</div>;
 }
 
 function Cargando() {
@@ -93,10 +124,10 @@ function Marca({ size = 34 }: { size?: number }) {
       style={{
         width: size,
         height: size,
-        background: 'var(--color-accent-strong)',
+        background: 'linear-gradient(135deg, var(--green) 0%, var(--green2) 100%)',
         color: '#fff',
         fontSize: size * 0.42,
-        boxShadow: '0 0 0 1px color-mix(in srgb, var(--green) 35%, transparent)',
+        boxShadow: '0 6px 16px -8px color-mix(in srgb, var(--green) 70%, transparent)',
       }}
     >
       K
@@ -104,147 +135,199 @@ function Marca({ size = 34 }: { size?: number }) {
   );
 }
 
+// ── Tema: el mismo toggle del sitio, sin la cortina ──
+
+function usarTema() {
+  const [tema, setTema] = useState<'light' | 'dark'>('light');
+  useEffect(() => {
+    setTema((document.documentElement.getAttribute('data-theme') as 'light' | 'dark') || 'light');
+  }, []);
+  const alternar = () => {
+    const siguiente = tema === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', siguiente);
+    localStorage.setItem('kz-theme', siguiente);
+    setTema(siguiente);
+  };
+  return { tema, alternar };
+}
+
 // ── Escritorio ──
 
-type Pestana = 'leads' | 'visitas' | 'staff' | 'proyectos' | 'testimonios';
+export type Pestana = 'hoy' | 'leads' | 'visitas' | 'asistente' | 'staff' | 'proyectos' | 'testimonios';
 
-/** Cómo se ve cada pestaña en la barra (la clave queda corta para el código). */
-const ETIQUETA: Record<Pestana, string> = {
-  leads: 'leads',
-  visitas: 'visitas',
-  staff: 'mi staff',
-  proyectos: 'proyectos',
-  testimonios: 'testimonios',
-};
+const SECCIONES: { id: Pestana; etiqueta: string; corta: string; Icono: typeof Home }[] = [
+  { id: 'hoy', etiqueta: 'Hoy', corta: 'Hoy', Icono: Home },
+  { id: 'leads', etiqueta: 'Leads y clientes', corta: 'Leads', Icono: Users },
+  { id: 'visitas', etiqueta: 'Visitas e instalaciones', corta: 'Visitas', Icono: CalendarDays },
+  { id: 'asistente', etiqueta: 'Asistente IA', corta: 'IA', Icono: Sparkles },
+  { id: 'staff', etiqueta: 'Mi staff', corta: 'Staff', Icono: UserCog },
+  { id: 'proyectos', etiqueta: 'Proyectos', corta: 'Proyectos', Icono: FolderKanban },
+  { id: 'testimonios', etiqueta: 'Testimonios', corta: 'Testimonios', Icono: MessageSquareQuote },
+];
+/** En el teléfono caben 4 directos; el resto va en "Más". */
+const INFERIOR: Pestana[] = ['hoy', 'leads', 'visitas', 'asistente'];
+const MAS: Pestana[] = ['staff', 'proyectos', 'testimonios'];
 
 function Escritorio({ user, onSalir }: { user: PanelUser; onSalir: () => void }) {
-  const [pestana, setPestana] = useState<Pestana>('leads');
-  const [conteos, setConteos] = useState<Record<Pestana, number | null>>({
-    leads: null,
-    visitas: null,
-    staff: null,
-    proyectos: null,
-    testimonios: null,
-  });
+  const [pestana, setPestana] = useState<Pestana>('hoy');
+  const [buscando, setBuscando] = useState(false);
+  const [mas, setMas] = useState(false);
+  const [busquedaLeads, setBusquedaLeads] = useState<string | undefined>(undefined);
+  const [conteos, setConteos] = useState<Partial<Record<Pestana, number | null>>>({});
+  const { tema, alternar } = usarTema();
 
-  const marcar = (p: Pestana) => (n: number) =>
-    setConteos((c) => (c[p] === n ? c : { ...c, [p]: n }));
+  const marcar = useCallback((p: Pestana) => (n: number) => setConteos((c) => (c[p] === n ? c : { ...c, [p]: n })), []);
+  const ir = useCallback((p: Pestana, q?: string) => {
+    setPestana(p);
+    if (p === 'leads' && q !== undefined) setBusquedaLeads(q);
+    window.scrollTo({ top: 0 });
+  }, []);
+
+  // Ctrl K / ⌘K abre la búsqueda desde cualquier parte.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setBuscando((b) => !b);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  // Las pestañas con cosas por atender llevan el número en ámbar.
+  const alerta = useMemo(() => new Set<Pestana>(['leads', 'visitas']), []);
+  const activa = SECCIONES.find((s) => s.id === pestana)!;
+
+  const Item = ({ s, inferior }: { s: (typeof SECCIONES)[number]; inferior?: boolean }) => {
+    const n = conteos[s.id];
+    return (
+      <button
+        onClick={() => ir(s.id)}
+        aria-current={pestana === s.id ? 'page' : undefined}
+        className={inferior ? 'kzp-inferior-item' : 'kzp-nav-item'}
+      >
+        <s.Icono size={inferior ? 20 : 17} strokeWidth={1.75} />
+        {inferior ? s.corta : s.etiqueta}
+        {!inferior && n !== null && n !== undefined && (
+          <span className={`kzp-conteo ${alerta.has(s.id) && n > 0 ? 'kzp-conteo-alerta' : ''}`}>{n}</span>
+        )}
+      </button>
+    );
+  };
 
   return (
-    <div className="w-full">
-      <header
-        className="sticky top-0 z-20 -mx-6 mb-8 border-b px-6 py-4 backdrop-blur-xl"
-        style={{ background: 'var(--color-nav-bg)', borderColor: 'var(--color-border)' }}
-      >
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <Marca />
-            <div>
-              <p className="kz-eyebrow">// panel</p>
-              <h1 className="text-lg font-black leading-tight tracking-tight">Kizercode</h1>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <span
-              className="hidden items-center gap-2 rounded-full border px-3 py-1.5 text-[13px] sm:inline-flex"
-              style={{ borderColor: 'var(--color-border)', color: 'var(--color-muted)' }}
-            >
-              <span className="kz-latido" />
-              {user.name}
-            </span>
-            <button
-              onClick={onSalir}
-              className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-[13px] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-text)]"
-              style={{ borderColor: 'var(--color-border)', color: 'var(--color-muted)' }}
-            >
-              <LogOut size={13} />
-              Salir
-            </button>
+    <div className="kzp-shell">
+      {/* ── Barra lateral (escritorio) ── */}
+      <aside className="kzp-side" aria-label="Secciones del panel">
+        <div className="mb-4 flex items-center gap-3 px-2">
+          <Marca />
+          <div>
+            <p className="kz-eyebrow !text-[11px]">// panel</p>
+            <p className="text-[15px] font-black leading-tight tracking-tight">Kizercode</p>
           </div>
         </div>
-
-        <nav aria-label="Secciones del panel" className="mt-4 flex gap-2">
-          {(
-            [
-              ['leads', Users],
-              ['visitas', CalendarDays],
-              ['staff', UserCog],
-              ['proyectos', FolderKanban],
-              ['testimonios', MessageSquareQuote],
-            ] as const
-          ).map(([p, Icono]) => (
-            <button
-              key={p}
-              onClick={() => setPestana(p)}
-              aria-current={pestana === p ? 'page' : undefined}
-              className={`kz-tab inline-flex items-center gap-2 capitalize ${pestana === p ? 'kz-tab-activa' : ''}`}
-            >
-              <Icono size={15} strokeWidth={1.75} />
-              {ETIQUETA[p]}
-              {conteos[p] !== null && (
-                <span
-                  className="rounded-full px-1.5 font-mono text-[11px]"
-                  style={{
-                    background: 'color-mix(in srgb, var(--color-accent) 14%, transparent)',
-                    color: 'var(--color-accent-soft)',
-                  }}
-                >
-                  {conteos[p]}
-                </span>
-              )}
-            </button>
-          ))}
+        <nav className="flex flex-col gap-1">
+          {SECCIONES.map((s) => <Item key={s.id} s={s} />)}
         </nav>
-      </header>
+        <div className="mt-auto space-y-2 px-2">
+          <p className="flex items-center gap-2 text-[12.5px]" style={{ color: 'var(--color-muted)' }}>
+            <span className="kz-latido" /> {user.name}
+          </p>
+          <button onClick={onSalir} className="kzp-nav-item !min-h-[40px] !px-2 text-[13px]">
+            <LogOut size={15} /> Salir
+          </button>
+        </div>
+      </aside>
 
-      <div hidden={pestana !== 'leads'}>
-        <PanelLeads onConteo={marcar('leads')} />
+      {/* ── Contenido ── */}
+      <div className="min-w-0">
+        <header className="kzp-top">
+          <span className="lg:hidden"><Marca size={30} /></span>
+          <div className="hidden min-w-0 lg:block">
+            <p className="truncate text-[15px] font-bold tracking-tight">{activa.etiqueta}</p>
+          </div>
+          <button onClick={() => setBuscando(true)} className="kzp-buscar ml-auto" aria-label="Buscar en el panel (Ctrl K)">
+            <Search size={16} />
+            <span className="truncate">Buscar lead, visita, persona…</span>
+            <kbd className="kzp-kbd hidden sm:inline">Ctrl K</kbd>
+          </button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button onClick={alternar} className="kzp-icono-btn" aria-label={tema === 'dark' ? 'Tema claro' : 'Tema oscuro'}>
+                {tema === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>{tema === 'dark' ? 'Tema claro' : 'Tema oscuro'}</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button onClick={onSalir} className="kzp-icono-btn lg:hidden" aria-label="Salir">
+                <LogOut size={17} />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>Salir</TooltipContent>
+          </Tooltip>
+        </header>
+
+        <main className="kzp-main">
+          <div hidden={pestana !== 'hoy'}>
+            {pestana === 'hoy' && <PanelHoy user={user.name} onIr={ir} />}
+          </div>
+          <div hidden={pestana !== 'leads'} className={pestana === 'leads' ? 'kzp-vista' : ''}>
+            <PanelLeads onConteo={marcar('leads')} busqueda={busquedaLeads} />
+          </div>
+          <div hidden={pestana !== 'visitas'} className={pestana === 'visitas' ? 'kzp-vista' : ''}>
+            <PanelVisitas onConteo={marcar('visitas')} />
+          </div>
+          <div hidden={pestana !== 'asistente'} className={pestana === 'asistente' ? 'kzp-vista' : ''}>
+            <PanelAsistente />
+          </div>
+          <div hidden={pestana !== 'staff'} className={pestana === 'staff' ? 'kzp-vista' : ''}>
+            <PanelStaff onConteo={marcar('staff')} />
+          </div>
+          <div hidden={pestana !== 'proyectos'} className={pestana === 'proyectos' ? 'kzp-vista' : ''}>
+            <Proyectos onConteo={marcar('proyectos')} />
+          </div>
+          <div hidden={pestana !== 'testimonios'} className={pestana === 'testimonios' ? 'kzp-vista' : ''}>
+            <Testimonios onConteo={marcar('testimonios')} />
+          </div>
+        </main>
       </div>
-      <div hidden={pestana !== 'visitas'}>
-        <PanelVisitas onConteo={marcar('visitas')} />
-      </div>
-      <div hidden={pestana !== 'staff'}>
-        <PanelStaff onConteo={marcar('staff')} />
-      </div>
-      <div hidden={pestana !== 'proyectos'}>
-        <Proyectos onConteo={marcar('proyectos')} />
-      </div>
-      <div hidden={pestana !== 'testimonios'}>
-        <Testimonios onConteo={marcar('testimonios')} />
-      </div>
+
+      {/* ── Barra inferior (teléfono): 4 destinos directos y "Más" ── */}
+      <nav className="kzp-inferior" aria-label="Secciones del panel">
+        {SECCIONES.filter((s) => INFERIOR.includes(s.id)).map((s) => <Item key={s.id} s={s} inferior />)}
+        <button onClick={() => setMas(true)} className="kzp-inferior-item" aria-current={MAS.includes(pestana) ? 'page' : undefined} aria-haspopup="dialog">
+          <MoreHorizontal size={20} strokeWidth={1.75} /> Más
+        </button>
+      </nav>
+      <Dialog open={mas} onOpenChange={setMas}>
+        <DialogContent className="max-w-xs rounded-2xl">
+          <DialogHeader><DialogTitle>Más secciones</DialogTitle></DialogHeader>
+          <div className="grid gap-1">
+            {SECCIONES.filter((s) => MAS.includes(s.id)).map((s) => (
+              <button key={s.id} onClick={() => { ir(s.id); setMas(false); }} aria-current={pestana === s.id ? 'page' : undefined} className="kzp-nav-item">
+                <s.Icono size={17} strokeWidth={1.75} /> {s.etiqueta}
+              </button>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <PanelBuscar abierta={buscando} onCerrar={() => setBuscando(false)} onIr={ir} />
     </div>
   );
 }
 
 // ── Piezas compartidas ──
 
-const INPUT =
-  'w-full rounded-lg border px-3 py-2.5 text-sm outline-none transition-colors focus:border-[var(--color-accent)]';
-const INPUT_STYLE: React.CSSProperties = {
-  background: 'var(--color-bg-2)',
-  borderColor: 'var(--color-border)',
-  color: 'var(--color-text)',
-};
-
-function Campo({
-  etiqueta,
-  ayuda,
-  children,
-}: {
-  etiqueta: string;
-  ayuda?: string;
-  children: React.ReactNode;
-}) {
+function Campo({ etiqueta, ayuda, children }: { etiqueta: string; ayuda?: string; children: React.ReactNode }) {
   return (
     <label className="block text-sm">
-      <span style={{ color: 'var(--color-muted)' }}>{etiqueta}</span>
+      <span className="text-muted-foreground">{etiqueta}</span>
       <div className="mt-1.5">{children}</div>
-      {ayuda && (
-        <span className="mt-1 block text-[11.5px]" style={{ color: 'var(--color-muted-2)' }}>
-          {ayuda}
-        </span>
-      )}
+      {ayuda && <span className="mt-1 block text-[11.5px] text-muted-foreground">{ayuda}</span>}
     </label>
   );
 }
@@ -261,28 +344,15 @@ function Interruptor({
   ayuda: string;
 }) {
   return (
-    <label
-      className="flex cursor-pointer items-start gap-3 rounded-xl border p-3 text-sm transition-colors"
-      style={{
-        borderColor: activo ? 'var(--color-accent)' : 'var(--color-border)',
-        background: activo
-          ? 'color-mix(in srgb, var(--color-accent) 8%, transparent)'
-          : 'var(--color-bg-2)',
-      }}
+    <Label
+      className={`flex cursor-pointer items-start gap-3 rounded-xl border p-3 text-sm transition-colors ${activo ? 'border-ring bg-accent/60' : 'border-border bg-muted'}`}
     >
-      <input
-        type="checkbox"
-        checked={activo}
-        onChange={(e) => onCambio(e.target.checked)}
-        className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--color-accent-strong)]"
-      />
+      <Switch checked={activo} onCheckedChange={onCambio} className="mt-0.5" />
       <span>
         <span className="font-semibold">{etiqueta}</span>
-        <span className="mt-0.5 block text-[11.5px]" style={{ color: 'var(--color-muted-2)' }}>
-          {ayuda}
-        </span>
+        <span className="mt-0.5 block text-[11.5px] font-normal text-muted-foreground">{ayuda}</span>
       </span>
-    </label>
+    </Label>
   );
 }
 
@@ -312,10 +382,7 @@ function Vacio({ titulo, texto, onCrear, cta }: { titulo: string; texto: string;
       <p className="mx-auto mt-2 max-w-md text-sm" style={{ color: 'var(--color-muted)' }}>
         {texto}
       </p>
-      <button onClick={onCrear} className="kz-btn kz-btn-primario mt-6">
-        <Plus size={16} />
-        {cta}
-      </button>
+      <Button onClick={onCrear} size="lg" className="mt-6"><Plus /> {cta}</Button>
     </div>
   );
 }
@@ -333,15 +400,7 @@ function BarraFormulario({
       style={{ borderColor: 'var(--color-border)' }}
     >
       <h2 className="text-base font-bold">{titulo}</h2>
-      <button
-        type="button"
-        onClick={onCerrar}
-        aria-label="Cerrar el formulario"
-        className="rounded-lg border px-2.5 py-1 text-sm"
-        style={{ borderColor: 'var(--color-border)', color: 'var(--color-muted)' }}
-      >
-        <X size={14} />
-      </button>
+      <Button type="button" variant="ghost" size="icon" onClick={onCerrar} aria-label="Cerrar el formulario"><X /></Button>
     </div>
   );
 }
@@ -352,12 +411,8 @@ function Acciones({ busy, onCancelar }: { busy: boolean; onCancelar: () => void 
       className="mt-7 flex gap-3 border-t pt-5"
       style={{ borderColor: 'var(--color-border)' }}
     >
-      <button type="submit" disabled={busy} className="kz-btn kz-btn-primario disabled:opacity-50">
-        {busy ? 'Guardando…' : 'Guardar'}
-      </button>
-      <button type="button" onClick={onCancelar} className="kz-btn kz-btn-secundario">
-        Cancelar
-      </button>
+      <Button type="submit" disabled={busy}>{busy ? 'Guardando…' : 'Guardar'}</Button>
+      <Button type="button" variant="outline" onClick={onCancelar}>Cancelar</Button>
     </div>
   );
 }
@@ -376,6 +431,7 @@ function Aviso({ mensaje }: { mensaje: string }) {
 
 function Fila({
   titulo,
+  tituloTexto,
   detalle,
   etiquetas,
   imagen,
@@ -383,6 +439,8 @@ function Fila({
   onBorrar,
 }: {
   titulo: React.ReactNode;
+  /** El título en texto plano, para la pregunta de borrar. */
+  tituloTexto: string;
   detalle: React.ReactNode;
   etiquetas: React.ReactNode;
   /** URL de imagen (proyectos). undefined = fila sin columna de imagen. */
@@ -415,23 +473,22 @@ function Fila({
         </p>
       </div>
       <div className="flex gap-2 text-sm">
-        <button
-          onClick={onEditar}
-          className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 transition-colors hover:border-[var(--color-accent)]"
-          style={{ borderColor: 'var(--color-border)' }}
-        >
-          <Pencil size={13} />
-          Editar
-        </button>
-        <button
-          onClick={onBorrar}
-          aria-label="Borrar"
-          className="inline-flex items-center gap-1.5 rounded-lg border border-transparent px-3 py-1.5 transition-colors hover:border-[rgba(255,107,107,0.4)]"
-          style={{ color: '#ff6b6b' }}
-        >
-          <Trash2 size={13} />
-          Borrar
-        </button>
+        <Button variant="outline" size="sm" onClick={onEditar}><Pencil /> Editar</Button>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive"><Trash2 /> Borrar</Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>¿Borrar "{tituloTexto}"?</AlertDialogTitle>
+              <AlertDialogDescription>No se puede deshacer. Si solo querés sacarlo del sitio, dejalo como borrador.</AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+              <AlertDialogAction onClick={onBorrar} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">Borrar</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </li>
   );
@@ -451,15 +508,10 @@ function Encabezado({
   return (
     <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
       <div>
-        <h2 className="text-xl font-black tracking-tight">{titulo}</h2>
-        <p className="mt-1 text-sm" style={{ color: 'var(--color-muted)' }}>
-          {texto}
-        </p>
+        <h2 className="kzp-titulo">{titulo}</h2>
+        <p className="kzp-sub">{texto}</p>
       </div>
-      <button onClick={onCrear} className="kz-btn kz-btn-primario">
-        <Plus size={16} />
-        {cta}
-      </button>
+      <Button onClick={onCrear}><Plus /> {cta}</Button>
     </div>
   );
 }
@@ -495,37 +547,29 @@ function Login({ onEntrar }: { onEntrar: (u: PanelUser) => void }) {
 
       <div className="mt-6 space-y-4">
         <Campo etiqueta="Correo">
-          <input
+          <Input
             type="email"
             autoFocus
             autoComplete="username"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className={INPUT}
-            style={INPUT_STYLE}
           />
         </Campo>
         <Campo etiqueta="Contraseña">
-          <input
+          <Input
             type="password"
             autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className={INPUT}
-            style={INPUT_STYLE}
           />
         </Campo>
       </div>
 
       {error && <Aviso mensaje={error} />}
 
-      <button
-        type="submit"
-        disabled={busy}
-        className="kz-btn kz-btn-primario mt-6 w-full justify-center disabled:opacity-50"
-      >
+      <Button type="submit" size="lg" disabled={busy} className="mt-6 w-full">
         {busy ? 'Entrando…' : 'Entrar'}
-      </button>
+      </Button>
     </form>
   );
 }
@@ -568,6 +612,7 @@ function Proyectos({ onConteo }: { onConteo: (n: number) => void }) {
       await panelSaveProject(editando);
       setEditando(null);
       await cargar();
+      toast.success(editando.published ? 'Proyecto guardado y publicado.' : 'Proyecto guardado como borrador.');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'No se pudo guardar');
     }
@@ -575,10 +620,10 @@ function Proyectos({ onConteo }: { onConteo: (n: number) => void }) {
   }
 
   async function borrar(p: Project) {
-    // Borrar un proyecto no se deshace: se pregunta.
-    if (!p.id || !confirm(`¿Borrar "${p.title}"? No se puede deshacer.`)) return;
+    if (!p.id) return;
     await panelDeleteProject(p.id);
     await cargar();
+    toast.success(`"${p.title}" borrado.`);
   }
 
   const nuevo = () => {
@@ -605,57 +650,45 @@ function Proyectos({ onConteo }: { onConteo: (n: number) => void }) {
           <div className="p-6">
             <div className="grid gap-4 sm:grid-cols-2">
               <Campo etiqueta="Título" ayuda="Si dejás el enlace vacío, se arma con esto.">
-                <input
+                <Input
                   value={editando.title ?? ''}
                   onChange={(e) => setEditando({ ...editando, title: e.target.value })}
-                  className={INPUT}
-                  style={INPUT_STYLE}
                 />
               </Campo>
               <Campo etiqueta="Enlace (slug)" ayuda="/proyectos/kizer-pos">
-                <input
+                <Input
                   value={editando.slug ?? ''}
                   onChange={(e) => setEditando({ ...editando, slug: e.target.value })}
                   placeholder="se arma solo del título"
-                  className={INPUT}
-                  style={INPUT_STYLE}
                 />
               </Campo>
               <Campo etiqueta="Cliente">
-                <input
+                <Input
                   value={editando.client ?? ''}
                   onChange={(e) => setEditando({ ...editando, client: e.target.value })}
-                  className={INPUT}
-                  style={INPUT_STYLE}
                 />
               </Campo>
               <Campo etiqueta="Período" ayuda="2026, o 2025–2026">
-                <input
+                <Input
                   value={editando.period ?? ''}
                   onChange={(e) => setEditando({ ...editando, period: e.target.value })}
-                  className={INPUT}
-                  style={INPUT_STYLE}
                 />
               </Campo>
               <Campo etiqueta="Ver en vivo (URL)">
-                <input
+                <Input
                   value={editando.liveUrl ?? ''}
                   onChange={(e) => setEditando({ ...editando, liveUrl: e.target.value })}
                   placeholder="https://…"
-                  className={INPUT}
-                  style={INPUT_STYLE}
                 />
               </Campo>
               <Campo
                 etiqueta="Redes del cliente"
                 ayuda="URLs separadas por coma. Salen en la tarjeta como referencia de quién es."
               >
-                <input
+                <Input
                   value={(editando.socials ?? []).join(', ')}
                   onChange={(e) => setEditando({ ...editando, socials: e.target.value.split(',') })}
                   placeholder="https://instagram.com/…, https://facebook.com/…"
-                  className={INPUT}
-                  style={INPUT_STYLE}
                 />
               </Campo>
             </div>
@@ -673,43 +706,35 @@ function Proyectos({ onConteo }: { onConteo: (n: number) => void }) {
 
             <div className="mt-4">
               <Campo etiqueta="Resumen" ayuda="Una línea. Es lo que se lee en la tarjeta.">
-                <input
+                <Input
                   value={editando.summary ?? ''}
                   onChange={(e) => setEditando({ ...editando, summary: e.target.value })}
-                  className={INPUT}
-                  style={INPUT_STYLE}
                 />
               </Campo>
             </div>
 
             <div className="mt-4">
               <Campo etiqueta="El caso completo" ayuda="Opcional: qué problema resolvía y cómo.">
-                <textarea
+                <Textarea
                   rows={5}
                   value={editando.body ?? ''}
                   onChange={(e) => setEditando({ ...editando, body: e.target.value })}
-                  className={INPUT}
-                  style={INPUT_STYLE}
                 />
               </Campo>
             </div>
 
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <Campo etiqueta="Etiquetas" ayuda="Separadas por coma: pos, tauri, react">
-                <input
+                <Input
                   value={(editando.tags ?? []).join(', ')}
                   onChange={(e) => setEditando({ ...editando, tags: e.target.value.split(',') })}
-                  className={INPUT}
-                  style={INPUT_STYLE}
                 />
               </Campo>
               <Campo etiqueta="Orden" ayuda="Menor primero.">
-                <input
+                <Input
                   type="number"
                   value={editando.position ?? 0}
                   onChange={(e) => setEditando({ ...editando, position: Number(e.target.value) })}
-                  className={INPUT}
-                  style={INPUT_STYLE}
                 />
               </Campo>
             </div>
@@ -743,6 +768,7 @@ function Proyectos({ onConteo }: { onConteo: (n: number) => void }) {
             <Fila
               key={p.id}
               titulo={p.title}
+              tituloTexto={p.title}
               imagen={p.imageUrl}
               detalle={
                 <>
@@ -802,6 +828,7 @@ function Testimonios({ onConteo }: { onConteo: (n: number) => void }) {
       await panelSaveTestimonial(editando);
       setEditando(null);
       await cargar();
+      toast.success(editando.published ? 'Testimonio guardado y publicado.' : 'Testimonio guardado como borrador.');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'No se pudo guardar');
     }
@@ -809,9 +836,10 @@ function Testimonios({ onConteo }: { onConteo: (n: number) => void }) {
   }
 
   async function borrar(t: Testimonial) {
-    if (!t.id || !confirm(`¿Borrar el testimonio de ${t.author}? No se puede deshacer.`)) return;
+    if (!t.id) return;
     await panelDeleteTestimonial(t.id);
     await cargar();
+    toast.success(`Testimonio de ${t.author} borrado.`);
   }
 
   const nuevo = () => {
@@ -842,65 +870,51 @@ function Testimonios({ onConteo }: { onConteo: (n: number) => void }) {
           <div className="p-6">
             <div className="grid gap-4 sm:grid-cols-3">
               <Campo etiqueta="Quién lo dijo">
-                <input
+                <Input
                   value={editando.author ?? ''}
                   onChange={(e) => setEditando({ ...editando, author: e.target.value })}
-                  className={INPUT}
-                  style={INPUT_STYLE}
                 />
               </Campo>
               <Campo etiqueta="Cargo" ayuda="Opcional. Vacío no se muestra.">
-                <input
+                <Input
                   value={editando.role ?? ''}
                   onChange={(e) => setEditando({ ...editando, role: e.target.value })}
-                  className={INPUT}
-                  style={INPUT_STYLE}
                 />
               </Campo>
               <Campo etiqueta="Empresa" ayuda="Opcional.">
-                <input
+                <Input
                   value={editando.company ?? ''}
                   onChange={(e) => setEditando({ ...editando, company: e.target.value })}
-                  className={INPUT}
-                  style={INPUT_STYLE}
                 />
               </Campo>
             </div>
 
             <div className="mt-4">
               <Campo etiqueta="Lo que dijo" ayuda="Tal cual lo dijo. Mínimo 20 caracteres.">
-                <textarea
+                <Textarea
                   rows={4}
                   value={editando.text ?? ''}
                   onChange={(e) => setEditando({ ...editando, text: e.target.value })}
-                  className={INPUT}
-                  style={INPUT_STYLE}
                 />
               </Campo>
             </div>
 
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <Campo etiqueta="Calificación" ayuda="De 1 a 5 estrellas.">
-                <select
-                  value={editando.rating ?? 5}
-                  onChange={(e) => setEditando({ ...editando, rating: Number(e.target.value) })}
-                  className={INPUT}
-                  style={INPUT_STYLE}
-                >
-                  {[5, 4, 3, 2, 1].map((n) => (
-                    <option key={n} value={n}>
-                      {n}
-                    </option>
-                  ))}
-                </select>
+                <Select value={String(editando.rating ?? 5)} onValueChange={(v) => setEditando({ ...editando, rating: Number(v) })}>
+                  <SelectTrigger aria-label="Calificación"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {[5, 4, 3, 2, 1].map((n) => (
+                      <SelectItem key={n} value={String(n)}>{'★'.repeat(n)} {n}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </Campo>
               <Campo etiqueta="Orden" ayuda="Menor primero.">
-                <input
+                <Input
                   type="number"
                   value={editando.position ?? 0}
                   onChange={(e) => setEditando({ ...editando, position: Number(e.target.value) })}
-                  className={INPUT}
-                  style={INPUT_STYLE}
                 />
               </Campo>
             </div>
@@ -939,6 +953,7 @@ function Testimonios({ onConteo }: { onConteo: (n: number) => void }) {
           {lista.map((t) => (
             <Fila
               key={t.id}
+              tituloTexto={`testimonio de ${t.author}`}
               titulo={
                 <>
                   {t.author}

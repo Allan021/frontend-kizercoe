@@ -131,19 +131,56 @@ export type Visita = {
   fecha: string | null;
   hora: string | null;
   notas: string | null;
+  /** La ficha de la instalación: para no andar buscando nada en WhatsApp. */
+  mapsUrl: string | null;
+  contratoUrl: string | null;
+  /** Usuarios y contraseñas del DVR y de la app, IP, modelo… */
+  datos: string | null;
+  createdAt: string;
+};
+
+/** Una nota de la bitácora de una instalación, con foto si la hay. */
+export type Bitacora = {
+  id: string;
+  visitaId: string;
+  autor: string;
+  texto: string;
+  fotoUrl: string | null;
   createdAt: string;
 };
 
 export const panelVisitas = () => pedir<Visita[]>('/v1/panel/visitas', conToken());
 
-export const panelUpdateVisita = (
-  id: string,
-  cambios: { fecha?: string; hora?: string; estado?: VisitaEstado; notas?: string },
-) =>
+export const panelBitacora = (visitaId: string) => pedir<Bitacora[]>(`/v1/panel/visitas/${visitaId}/bitacora`, conToken());
+
+export const panelAnotarBitacora = (visitaId: string, n: { texto: string; fotoUrl?: string | null }) =>
+  pedir<Bitacora>(`/v1/panel/visitas/${visitaId}/bitacora`, conToken({ method: 'POST', body: JSON.stringify(n) }));
+
+export type VisitaCambios = {
+  fecha?: string;
+  hora?: string;
+  estado?: VisitaEstado;
+  notas?: string;
+  municipio?: string | null;
+  direccion?: string;
+  mapsUrl?: string | null;
+  contratoUrl?: string | null;
+  datos?: string | null;
+};
+
+export const panelUpdateVisita = (id: string, cambios: VisitaCambios) =>
   pedir<{ visita: Visita; whatsapp: { ok: boolean; error?: string } | null }>(
     `/v1/panel/visitas/${id}`,
     conToken({ method: 'PATCH', body: JSON.stringify(cambios) }),
   );
+
+// ── Asistente de IA del panel ──
+
+export type MensajeIA = { rol: 'user' | 'assistant'; texto: string };
+
+/** Claude con el CRM a la vista: leads, visitas, instalaciones y staff. */
+export const panelAsistente = (mensajes: MensajeIA[]) =>
+  pedir<{ respuesta: string }>('/v1/panel/asistente', conToken({ method: 'POST', body: JSON.stringify({ mensajes }) }));
 
 // ── Mi staff ──
 
