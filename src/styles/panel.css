@@ -38,6 +38,7 @@
   --kzp-azul: #7fb2ff;
   --kzp-violeta: #b9a6ff;
 }
+[data-theme='dark'] .kz-panel .kz-card { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), var(--kzp-sombra); }
 [data-theme='dark'] .kz-panel .kzp-nav-item[aria-current='page'] {
   background: linear-gradient(90deg, rgba(46, 229, 157, 0.2), rgba(46, 229, 157, 0.04));
 }
@@ -227,7 +228,7 @@
 .kz-panel .kz-card {
   background: var(--bg);
   box-shadow: var(--kzp-sombra);
-  border-radius: 16px;
+  border-radius: 20px;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 .kz-panel .kz-card:hover { box-shadow: var(--kzp-sombra-alta); }
@@ -235,10 +236,10 @@
 .kzp-kpi {
   position: relative;
   overflow: hidden;
-  padding: 18px 18px 16px;
+  padding: 20px 22px 18px;
   border: 1px solid var(--line);
-  border-radius: 16px;
-  background: var(--bg);
+  border-radius: 22px;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--ink) 4%, var(--bg)), var(--bg));
   box-shadow: var(--kzp-sombra);
   text-align: left;
   cursor: pointer;
@@ -257,13 +258,21 @@
 .kzp-kpi-titulo { font-size: 12.5px; font-weight: 500; color: var(--ink2); display: flex; align-items: center; gap: 8px; }
 .kzp-kpi-valor {
   display: block;
-  margin-top: 8px;
-  font-size: 34px;
-  line-height: 1;
-  font-weight: 800;
+  margin-top: 10px;
+  font-size: 40px;
+  line-height: 1.05;
+  font-weight: 700;
   letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
 }
+[data-theme='dark'] .kz-panel .kzp-kpi-valor {
+  background: linear-gradient(180deg, #fff, #b8c8dc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+[data-theme='dark'] .kz-panel .kzp-kpi { background: linear-gradient(160deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015)); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08); }
+[data-theme='dark'] .kz-panel .kzp-kpi::after { filter: blur(30px); opacity: 0.55; background: var(--kzp-tono, var(--green)); }
 .kzp-kpi-nota { display: block; margin-top: 8px; font-size: 12px; color: var(--mute); }
 
 .kzp-chip {
@@ -278,9 +287,72 @@
   color: var(--kzp-tono, var(--green2));
 }
 
-.kzp-titulo { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; }
-@media (min-width: 640px) { .kzp-titulo { font-size: 26px; } }
-.kzp-sub { margin-top: 4px; font-size: 14px; color: var(--ink2); }
+.kzp-titulo { font-size: clamp(30px, 4vw, 44px); font-weight: 700; letter-spacing: -0.025em; line-height: 1.1; }
+.kzp-sub { margin-top: 6px; font-size: 15px; color: var(--ink2); max-width: 70ch; }
+
+/* Botón principal: degradado verde con brillo, como el v2. */
+.kz-panel .bg-primary:not([data-slot]) {
+  background: linear-gradient(135deg, var(--green), #17c9b0);
+  color: #04221a;
+  font-weight: 700;
+  box-shadow: 0 10px 28px -10px color-mix(in srgb, var(--green) 70%, transparent);
+}
+.kz-panel .bg-primary:not([data-slot]):hover { filter: brightness(1.06); }
+[data-theme='light'] .kz-panel .bg-primary:not([data-slot]) { color: #fff; }
+
+/* Columnas tipo tablero (visitas) y sus tarjetas. */
+.kzp-col {
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--bg);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), var(--kzp-sombra);
+}
+.kzp-col-item {
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg2);
+  transition: border-color 0.18s ease;
+}
+.kzp-col-item:hover { border-color: color-mix(in srgb, var(--green) 45%, transparent); }
+[data-theme='dark'] .kz-panel .kzp-col-item { background: #070b14; }
+
+.kzp-avatar {
+  display: grid;
+  place-items: center;
+  width: 22px; height: 22px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--kzp-azul) 18%, var(--bg2));
+  color: var(--kzp-azul);
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.kzp-envivo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--green2);
+  background: color-mix(in srgb, var(--green) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--green) 20%, transparent);
+}
+
+.kzp-vivo {
+  margin: 0 4px 6px;
+  padding: 14px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--green) 14%, transparent), rgba(25, 184, 255, 0.06));
+  border: 1px solid color-mix(in srgb, var(--green) 20%, transparent);
+}
+.kzp-vivo-titulo { display: flex; align-items: center; gap: 8px; font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--green2); }
+.kzp-vivo-titulo .kz-latido { box-shadow: 0 0 12px var(--green); }
+.kzp-vivo-texto { margin-top: 6px; font-size: 13px; line-height: 1.4; color: var(--ink2); }
 
 /* Entrada suave de cada vista. */
 @media (prefers-reduced-motion: no-preference) {

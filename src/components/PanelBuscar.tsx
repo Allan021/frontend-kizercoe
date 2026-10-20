@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { CalendarDays, CreditCard, FolderKanban, Home, Layers, MapPin, MessageSquareQuote, Sparkles, UserCog, Users, Wrench } from 'lucide-react';
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import { panelLeads, panelStaff, panelVisitas, type Lead, type Staff, type Visita } from '@/lib/api';
+import { panelFacturas, panelLeads, panelOrdenes, panelStaff, panelVisitas, type Factura, type Lead, type Orden, type Staff, type Visita } from '@/lib/api';
 import type { Pestana } from '@/components/Panel';
 
 /**
@@ -26,15 +26,15 @@ const SECCIONES: { id: Pestana; titulo: string; Icono: typeof Home }[] = [
 
 export function PanelBuscar({ abierta, onCerrar, onIr }: { abierta: boolean; onCerrar: () => void; onIr: (p: Pestana, q?: string) => void }) {
   const [q, setQ] = useState('');
-  const [datos, setDatos] = useState<{ leads: Lead[]; visitas: Visita[]; staff: Staff[] } | null>(null);
+  const [datos, setDatos] = useState<{ leads: Lead[]; visitas: Visita[]; staff: Staff[]; ordenes: Orden[]; facturas: Factura[] } | null>(null);
 
   useEffect(() => {
     if (!abierta) return;
     setQ('');
     if (!datos) {
-      Promise.all([panelLeads(), panelVisitas(), panelStaff()])
-        .then(([leads, visitas, staff]) => setDatos({ leads, visitas, staff }))
-        .catch(() => setDatos({ leads: [], visitas: [], staff: [] }));
+      Promise.all([panelLeads(), panelVisitas(), panelStaff(), panelOrdenes().catch(() => [] as Orden[]), panelFacturas().catch(() => [] as Factura[])])
+        .then(([leads, visitas, staff, ordenes, facturas]) => setDatos({ leads, visitas, staff, ordenes, facturas }))
+        .catch(() => setDatos({ leads: [], visitas: [], staff: [], ordenes: [], facturas: [] }));
     }
   }, [abierta, datos]);
 
@@ -49,6 +49,8 @@ export function PanelBuscar({ abierta, onCerrar, onIr }: { abierta: boolean; onC
       leads: t && datos ? datos.leads.filter((l) => coincide(l.name, l.email, l.phone, l.company, l.service)).slice(0, 12) : [],
       visitas: t && datos ? datos.visitas.filter((v) => coincide(v.nombre, v.telefono, v.municipio, v.direccion)).slice(0, 12) : [],
       staff: t && datos ? datos.staff.filter((s) => coincide(s.nombre, s.telefono, s.rol)) : [],
+      ordenes: t && datos ? datos.ordenes.filter((o) => coincide(o.num, o.cliente, o.equipo, o.modelo, o.serie, o.telefono, o.falla)).slice(0, 10) : [],
+      facturas: t && datos ? datos.facturas.filter((f) => coincide(f.num, f.cliente, f.concepto, f.telefono)).slice(0, 10) : [],
     };
   }, [q, datos]);
 
@@ -59,7 +61,7 @@ export function PanelBuscar({ abierta, onCerrar, onIr }: { abierta: boolean; onC
 
   return (
     <CommandDialog open={abierta} onOpenChange={(o) => !o && onCerrar()}>
-      <CommandInput value={q} onValueChange={setQ} placeholder="Buscar lead, visita, persona o sección…" />
+      <CommandInput value={q} onValueChange={setQ} placeholder="Buscar orden, cliente, visita, factura, persona o sección…" />
       <CommandList>
         <CommandEmpty>{datos ? 'Nada con ese texto.' : 'Cargando…'}</CommandEmpty>
         {r.secciones.length > 0 && (
@@ -94,6 +96,32 @@ export function PanelBuscar({ abierta, onCerrar, onIr }: { abierta: boolean; onC
                   <span className="block truncate text-[12px] text-muted-foreground">
                     {v.estado} · {[v.municipio, v.direccion].filter(Boolean).join(', ')}
                   </span>
+                </span>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        )}
+        {r.ordenes.length > 0 && (
+          <CommandGroup heading="Taller">
+            {r.ordenes.map((o) => (
+              <CommandItem key={o.id} value={`orden ${o.id}`} onSelect={() => elegir('taller')}>
+                <Wrench />
+                <span className="min-w-0">
+                  <span className="block truncate font-medium">{o.num} · {o.equipo}</span>
+                  <span className="block truncate text-[12px] text-muted-foreground">{o.cliente} · {o.falla} · {o.estado}</span>
+                </span>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        )}
+        {r.facturas.length > 0 && (
+          <CommandGroup heading="Cobros">
+            {r.facturas.map((f) => (
+              <CommandItem key={f.id} value={`factura ${f.id}`} onSelect={() => elegir('cobros')}>
+                <CreditCard />
+                <span className="min-w-0">
+                  <span className="block truncate font-medium">{f.num} · {f.cliente}</span>
+                  <span className="block truncate text-[12px] text-muted-foreground">{f.concepto} · {f.estado}</span>
                 </span>
               </CommandItem>
             ))}

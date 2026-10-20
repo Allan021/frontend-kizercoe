@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ArrowRight,
+  Bell,
   Bot,
   CalendarDays,
   CreditCard,
@@ -189,6 +190,23 @@ function Escritorio({ user, onSalir }: { user: PanelUser; onSalir: () => void })
   const [busquedaLeads, setBusquedaLeads] = useState<string | undefined>(undefined);
   const [conteos, setConteos] = useState<Partial<Record<Pestana, number | null>>>({});
   const { tema, alternar } = usarTema();
+  const [campana, setCampana] = useState(false);
+  const [api, setApi] = useState<'ok' | 'mal' | null>(null);
+  useEffect(() => {
+    const ver = () => fetch(`${API_URL}/health`, { signal: AbortSignal.timeout(8000) }).then((r) => setApi(r.ok ? 'ok' : 'mal')).catch(() => setApi('mal'));
+    void ver();
+    const t = setInterval(ver, 60_000);
+    return () => clearInterval(t);
+  }, []);
+  // Lo que hay que atender, para la campana: contadores de las pestañas con alerta.
+  const avisos = useMemo(() => {
+    const items: { id: Pestana; texto: string }[] = [];
+    if (conteos.leads) items.push({ id: 'leads', texto: `${conteos.leads} lead${conteos.leads === 1 ? '' : 's'} por contestar` });
+    if (conteos.visitas) items.push({ id: 'visitas', texto: `${conteos.visitas} visita${conteos.visitas === 1 ? '' : 's'} por confirmar` });
+    if (conteos.taller) items.push({ id: 'taller', texto: `${conteos.taller} equipo${conteos.taller === 1 ? '' : 's'} en el taller` });
+    if (conteos.cobros) items.push({ id: 'cobros', texto: `${conteos.cobros} factura${conteos.cobros === 1 ? '' : 's'} por cobrar` });
+    return items;
+  }, [conteos]);
 
   const marcar = useCallback((p: Pestana) => (n: number) => setConteos((c) => (c[p] === n ? c : { ...c, [p]: n })), []);
   const ir = useCallback((p: Pestana, q?: string) => {
@@ -245,13 +263,19 @@ function Escritorio({ user, onSalir }: { user: PanelUser; onSalir: () => void })
         <nav className="flex flex-col gap-1">
           {SECCIONES.map((s) => <Item key={s.id} s={s} />)}
         </nav>
-        <div className="mt-auto space-y-2 px-2">
-          <p className="flex items-center gap-2 text-[12.5px]" style={{ color: 'var(--color-muted)' }}>
-            <span className="kz-latido" /> {user.name}
-          </p>
-          <button onClick={onSalir} className="kzp-nav-item !min-h-[40px] !px-2 text-[13px]">
-            <LogOut size={15} /> Salir
-          </button>
+        <div className="mt-auto space-y-2">
+          <div className="kzp-vivo">
+            <p className="kzp-vivo-titulo"><span className="kz-latido" style={api === 'mal' ? { background: 'var(--kzp-rojo)', boxShadow: 'none', animation: 'none' } : undefined} /> {api === 'mal' ? 'API sin respuesta' : 'Sistema en vivo'}</p>
+            <p className="kzp-vivo-texto">{api === 'mal' ? 'Revisá Railway: el panel no puede guardar.' : 'Bot, taller y cobros sincronizados · El Progreso, HN'}</p>
+          </div>
+          <div className="flex items-center gap-2.5 px-2 py-1 text-[13.5px]">
+            <span className="kzp-avatar !h-8 !w-8 !text-[12px]" style={{ background: 'linear-gradient(135deg, var(--green), #17c9b0)', color: '#04221a' }}>{user.name.charAt(0).toUpperCase()}</span>
+            <span className="min-w-0 flex-1"><span className="block truncate font-semibold">{user.name}</span><span className="block text-[11.5px] text-muted-foreground">CEO · Kizercode</span></span>
+            <Tooltip>
+              <TooltipTrigger asChild><button onClick={onSalir} className="kzp-icono-btn !h-9 !w-9" aria-label="Salir"><LogOut size={15} /></button></TooltipTrigger>
+              <TooltipContent>Salir</TooltipContent>
+            </Tooltip>
+          </div>
         </div>
       </aside>
 
@@ -259,14 +283,26 @@ function Escritorio({ user, onSalir }: { user: PanelUser; onSalir: () => void })
       <div className="min-w-0">
         <header className="kzp-top">
           <span className="lg:hidden"><Logo alto={30} /></span>
-          <div className="hidden min-w-0 lg:block">
-            <p className="truncate text-[15px] font-bold tracking-tight">{activa.etiqueta}</p>
+          <div className="hidden min-w-0 items-center gap-2.5 lg:flex">
+            <p className="truncate text-[17px] font-bold tracking-tight">{activa.etiqueta}</p>
+            <span className="kzp-envivo" style={api === 'mal' ? { color: 'var(--kzp-rojo)', borderColor: 'color-mix(in srgb, var(--kzp-rojo) 30%, transparent)', background: 'color-mix(in srgb, var(--kzp-rojo) 10%, transparent)' } : undefined}>
+              <span className="h-1.5 w-1.5 rounded-full bg-current" /> {api === 'mal' ? 'Sin API' : 'En vivo'}
+            </span>
           </div>
           <button onClick={() => setBuscando(true)} className="kzp-buscar ml-auto" aria-label="Buscar en el panel (Ctrl K)">
             <Search size={16} />
-            <span className="truncate">Buscar lead, visita, persona…</span>
+            <span className="truncate">Buscar orden, cliente, cámara, factura…</span>
             <kbd className="kzp-kbd hidden sm:inline">Ctrl K</kbd>
           </button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button onClick={() => setCampana(true)} className="kzp-icono-btn relative" aria-label={`Pendientes: ${avisos.length}`}>
+                <Bell size={17} />
+                {avisos.length > 0 && <span className="absolute right-2 top-2 h-2 w-2 rounded-full" style={{ background: 'var(--green)', boxShadow: '0 0 8px var(--green)' }} />}
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>Pendientes</TooltipContent>
+          </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
               <button onClick={alternar} className="kzp-icono-btn" aria-label={tema === 'dark' ? 'Tema claro' : 'Tema oscuro'}>
@@ -308,6 +344,10 @@ function Escritorio({ user, onSalir }: { user: PanelUser; onSalir: () => void })
             <PanelAsistente />
           </div>
           <div hidden={pestana !== 'equipo'} className={pestana === 'equipo' ? 'kzp-vista' : ''}>
+            <div className="mb-5">
+              <h2 className="kzp-titulo">Equipo y sitio</h2>
+              <p className="kzp-sub">Staff que el bot reconoce, proyectos y testimonios publicados en kizercode.com.</p>
+            </div>
             <div className="mb-6 flex flex-wrap gap-2" role="tablist" aria-label="Equipo y sitio">
               {EQUIPO.map((t) => (
                 <button key={t.id} role="tab" aria-selected={subEquipo === t.id} onClick={() => setSubEquipo(t.id)} className={`kz-tab inline-flex items-center gap-1.5 ${subEquipo === t.id ? 'kz-tab-activa' : ''}`}>
@@ -316,7 +356,7 @@ function Escritorio({ user, onSalir }: { user: PanelUser; onSalir: () => void })
                 </button>
               ))}
             </div>
-            <div hidden={subEquipo !== 'staff'}><PanelStaff onConteo={marcar('staff')} /></div>
+            <div hidden={subEquipo !== 'staff'}><PanelStaff onConteo={marcar('staff')} enEquipo /></div>
             <div hidden={subEquipo !== 'proyectos'}><Proyectos onConteo={marcar('proyectos')} /></div>
             <div hidden={subEquipo !== 'testimonios'}><Testimonios onConteo={marcar('testimonios')} /></div>
           </div>
@@ -344,6 +384,22 @@ function Escritorio({ user, onSalir }: { user: PanelUser; onSalir: () => void })
       </Dialog>
 
       <PanelBuscar abierta={buscando} onCerrar={() => setBuscando(false)} onIr={ir} />
+      <Dialog open={campana} onOpenChange={setCampana}>
+        <DialogContent className="max-w-sm rounded-2xl">
+          <DialogHeader><DialogTitle>Pendientes</DialogTitle></DialogHeader>
+          {avisos.length === 0 ? (
+            <p className="text-sm text-muted-foreground">Nada pendiente. Todo atendido.</p>
+          ) : (
+            <div className="grid gap-1">
+              {avisos.map((a) => (
+                <button key={a.id} onClick={() => { ir(a.id); setCampana(false); }} className="kzp-nav-item">
+                  <span className="h-2 w-2 rounded-full" style={{ background: 'var(--green)' }} /> {a.texto}
+                </button>
+              ))}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
@@ -536,8 +592,8 @@ function Encabezado({
   return (
     <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
       <div>
-        <h2 className="kzp-titulo">{titulo}</h2>
-        <p className="kzp-sub">{texto}</p>
+        <h3 className="text-[17px] font-semibold">{titulo}</h3>
+        <p className="mt-0.5 text-[13.5px] text-muted-foreground">{texto}</p>
       </div>
       <Button onClick={onCrear}><Plus /> {cta}</Button>
     </div>

@@ -32,7 +32,7 @@ const etiquetaRol = (r: string) => ROLES.find(([k]) => k === r)?.[1] ?? r;
 
 const VACIO: StaffDatos = { nombre: '', telefono: '', rol: 'tecnico', activo: true, notas: '' };
 
-export function PanelStaff({ onConteo }: { onConteo: (n: number) => void }) {
+export function PanelStaff({ onConteo, enEquipo }: { onConteo: (n: number) => void; enEquipo?: boolean }) {
   const [lista, setLista] = useState<Staff[] | null>(null);
   const [editando, setEditando] = useState<Staff | 'nuevo' | null>(null);
 
@@ -83,8 +83,8 @@ export function PanelStaff({ onConteo }: { onConteo: (n: number) => void }) {
     <section>
       <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div className="max-w-2xl">
-          <h2 className="kzp-titulo">Mi staff</h2>
-          <p className="kzp-sub">
+          {enEquipo ? <h3 className="text-[17px] font-semibold">Mi staff</h3> : <h2 className="kzp-titulo">Mi staff</h2>}
+          <p className={enEquipo ? 'mt-0.5 text-[13.5px] text-muted-foreground' : 'kzp-sub'}>
             Cuando alguien de esta lista le escribe al WhatsApp, el bot no le vende: lo saluda por su nombre, le pregunta por
             su trabajo y lleva la bitácora de cada instalación. A los clientes que preguntan por su instalación los manda al técnico.
           </p>

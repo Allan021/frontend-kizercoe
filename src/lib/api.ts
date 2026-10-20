@@ -136,8 +136,28 @@ export type Visita = {
   contratoUrl: string | null;
   /** Usuarios y contraseñas del DVR y de la app, IP, modelo… */
   datos: string | null;
+  /** Quién va: nombre del técnico del staff. */
+  tecnico: string | null;
   createdAt: string;
 };
+
+/** Una visita programada desde el panel, no desde el bot. */
+export type VisitaNueva = {
+  nombre: string;
+  telefono: string;
+  servicio: string;
+  tipo: 'visita' | 'local';
+  municipio?: string | null;
+  direccion: string;
+  fecha?: string | null;
+  hora?: string | null;
+  tecnico?: string | null;
+  notas?: string | null;
+  avisar: boolean;
+};
+
+export const panelCrearVisita = (d: VisitaNueva) =>
+  pedir<{ visita: Visita; whatsapp: { ok: boolean; error?: string } | null }>('/v1/panel/visitas', conToken({ method: 'POST', body: JSON.stringify(d) }));
 
 /** Una nota de la bitácora de una instalación, con foto si la hay. */
 export type Bitacora = {
@@ -166,6 +186,7 @@ export type VisitaCambios = {
   mapsUrl?: string | null;
   contratoUrl?: string | null;
   datos?: string | null;
+  tecnico?: string | null;
 };
 
 export const panelUpdateVisita = (id: string, cambios: VisitaCambios) =>
