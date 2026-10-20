@@ -10,6 +10,7 @@ import { panelBorrarStaff, panelCrearStaff, panelEditarStaff, panelStaff, waDe, 
  */
 
 const ROLES = [
+  ['ceo', 'CEO'],
   ['tecnico', 'Técnico'],
   ['ventas', 'Ventas'],
   ['admin', 'Administración'],
