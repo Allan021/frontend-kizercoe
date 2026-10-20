@@ -4,10 +4,12 @@ import {
   ArrowRight,
   Bot,
   CalendarDays,
+  CreditCard,
   Eye,
   EyeOff,
   FolderKanban,
   Home,
+  Layers,
   Loader2,
   NotebookPen,
   MoreHorizontal,
@@ -24,10 +26,14 @@ import {
   Star,
   UserCog,
   Users,
+  Wrench,
   X,
 } from 'lucide-react';
 import { PanelAsistente } from '@/components/PanelAsistente';
 import { PanelBuscar } from '@/components/PanelBuscar';
+import { PanelCobros } from '@/components/PanelCobros';
+import { PanelServicios } from '@/components/PanelServicios';
+import { PanelTaller } from '@/components/PanelTaller';
 import { PanelHoy } from '@/components/PanelHoy';
 import { PanelLeads } from '@/components/PanelLeads';
 import { PanelStaff } from '@/components/PanelStaff';
@@ -152,23 +158,32 @@ function usarTema() {
 
 // ── Escritorio ──
 
-export type Pestana = 'hoy' | 'leads' | 'visitas' | 'asistente' | 'staff' | 'proyectos' | 'testimonios';
+export type Pestana = 'hoy' | 'leads' | 'visitas' | 'taller' | 'servicios' | 'cobros' | 'equipo' | 'asistente' | 'staff' | 'proyectos' | 'testimonios';
 
 const SECCIONES: { id: Pestana; etiqueta: string; corta: string; Icono: typeof Home }[] = [
   { id: 'hoy', etiqueta: 'Hoy', corta: 'Hoy', Icono: Home },
   { id: 'leads', etiqueta: 'Leads y clientes', corta: 'Leads', Icono: Users },
   { id: 'visitas', etiqueta: 'Visitas e instalaciones', corta: 'Visitas', Icono: CalendarDays },
+  { id: 'taller', etiqueta: 'Taller', corta: 'Taller', Icono: Wrench },
+  { id: 'servicios', etiqueta: 'Servicios', corta: 'Servicios', Icono: Layers },
+  { id: 'cobros', etiqueta: 'Cobros', corta: 'Cobros', Icono: CreditCard },
+  { id: 'equipo', etiqueta: 'Equipo y sitio', corta: 'Equipo', Icono: UserCog },
   { id: 'asistente', etiqueta: 'Asistente IA', corta: 'IA', Icono: Sparkles },
-  { id: 'staff', etiqueta: 'Mi staff', corta: 'Staff', Icono: UserCog },
-  { id: 'proyectos', etiqueta: 'Proyectos', corta: 'Proyectos', Icono: FolderKanban },
-  { id: 'testimonios', etiqueta: 'Testimonios', corta: 'Testimonios', Icono: MessageSquareQuote },
 ];
 /** En el teléfono caben 4 directos; el resto va en "Más". */
-const INFERIOR: Pestana[] = ['hoy', 'leads', 'visitas', 'asistente'];
-const MAS: Pestana[] = ['staff', 'proyectos', 'testimonios'];
+const INFERIOR: Pestana[] = ['hoy', 'leads', 'taller', 'cobros'];
+const MAS: Pestana[] = ['visitas', 'servicios', 'equipo', 'asistente'];
+/** Staff, proyectos y testimonios viven dentro de "Equipo y sitio". */
+const EQUIPO: { id: Pestana; etiqueta: string; Icono: typeof Home }[] = [
+  { id: 'staff', etiqueta: 'Mi staff', Icono: UserCog },
+  { id: 'proyectos', etiqueta: 'Proyectos publicados', Icono: FolderKanban },
+  { id: 'testimonios', etiqueta: 'Testimonios', Icono: MessageSquareQuote },
+];
+const DENTRO_EQUIPO: Pestana[] = ['staff', 'proyectos', 'testimonios'];
 
 function Escritorio({ user, onSalir }: { user: PanelUser; onSalir: () => void }) {
   const [pestana, setPestana] = useState<Pestana>('hoy');
+  const [subEquipo, setSubEquipo] = useState<Pestana>('staff');
   const [buscando, setBuscando] = useState(false);
   const [mas, setMas] = useState(false);
   const [busquedaLeads, setBusquedaLeads] = useState<string | undefined>(undefined);
@@ -177,7 +192,11 @@ function Escritorio({ user, onSalir }: { user: PanelUser; onSalir: () => void })
 
   const marcar = useCallback((p: Pestana) => (n: number) => setConteos((c) => (c[p] === n ? c : { ...c, [p]: n })), []);
   const ir = useCallback((p: Pestana, q?: string) => {
-    setPestana(p);
+    // Staff, proyectos y testimonios abren "Equipo y sitio" en su pestaña.
+    if (DENTRO_EQUIPO.includes(p)) {
+      setSubEquipo(p);
+      setPestana('equipo');
+    } else setPestana(p);
     if (p === 'leads' && q !== undefined) setBusquedaLeads(q);
     window.scrollTo({ top: 0 });
   }, []);
@@ -195,7 +214,7 @@ function Escritorio({ user, onSalir }: { user: PanelUser; onSalir: () => void })
   }, []);
 
   // Las pestañas con cosas por atender llevan el número en ámbar.
-  const alerta = useMemo(() => new Set<Pestana>(['leads', 'visitas']), []);
+  const alerta = useMemo(() => new Set<Pestana>(['leads', 'visitas', 'taller', 'cobros']), []);
   const activa = SECCIONES.find((s) => s.id === pestana)!;
 
   const Item = ({ s, inferior }: { s: (typeof SECCIONES)[number]; inferior?: boolean }) => {
@@ -276,17 +295,30 @@ function Escritorio({ user, onSalir }: { user: PanelUser; onSalir: () => void })
           <div hidden={pestana !== 'visitas'} className={pestana === 'visitas' ? 'kzp-vista' : ''}>
             <PanelVisitas onConteo={marcar('visitas')} />
           </div>
+          <div hidden={pestana !== 'taller'} className={pestana === 'taller' ? 'kzp-vista' : ''}>
+            <PanelTaller onConteo={marcar('taller')} user={user.name} />
+          </div>
+          <div hidden={pestana !== 'servicios'} className={pestana === 'servicios' ? 'kzp-vista' : ''}>
+            <PanelServicios onConteo={marcar('servicios')} />
+          </div>
+          <div hidden={pestana !== 'cobros'} className={pestana === 'cobros' ? 'kzp-vista' : ''}>
+            <PanelCobros onConteo={marcar('cobros')} />
+          </div>
           <div hidden={pestana !== 'asistente'} className={pestana === 'asistente' ? 'kzp-vista' : ''}>
             <PanelAsistente />
           </div>
-          <div hidden={pestana !== 'staff'} className={pestana === 'staff' ? 'kzp-vista' : ''}>
-            <PanelStaff onConteo={marcar('staff')} />
-          </div>
-          <div hidden={pestana !== 'proyectos'} className={pestana === 'proyectos' ? 'kzp-vista' : ''}>
-            <Proyectos onConteo={marcar('proyectos')} />
-          </div>
-          <div hidden={pestana !== 'testimonios'} className={pestana === 'testimonios' ? 'kzp-vista' : ''}>
-            <Testimonios onConteo={marcar('testimonios')} />
+          <div hidden={pestana !== 'equipo'} className={pestana === 'equipo' ? 'kzp-vista' : ''}>
+            <div className="mb-6 flex flex-wrap gap-2" role="tablist" aria-label="Equipo y sitio">
+              {EQUIPO.map((t) => (
+                <button key={t.id} role="tab" aria-selected={subEquipo === t.id} onClick={() => setSubEquipo(t.id)} className={`kz-tab inline-flex items-center gap-1.5 ${subEquipo === t.id ? 'kz-tab-activa' : ''}`}>
+                  <t.Icono size={14} /> {t.etiqueta}
+                  {conteos[t.id] !== null && conteos[t.id] !== undefined && <span className="font-mono text-[11.5px] opacity-70">{conteos[t.id]}</span>}
+                </button>
+              ))}
+            </div>
+            <div hidden={subEquipo !== 'staff'}><PanelStaff onConteo={marcar('staff')} /></div>
+            <div hidden={subEquipo !== 'proyectos'}><Proyectos onConteo={marcar('proyectos')} /></div>
+            <div hidden={subEquipo !== 'testimonios'}><Testimonios onConteo={marcar('testimonios')} /></div>
           </div>
         </main>
       </div>

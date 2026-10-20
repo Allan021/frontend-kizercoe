@@ -12,16 +12,34 @@
   --kzp-rojo: #d63c3c;
   --kzp-ambar: #c48a00;
   --kzp-azul: #2f6fed;
+  --kzp-violeta: #7c5cf6;
   min-height: 100dvh;
   position: relative;
   isolation: isolate;
 }
+/* Oscuro v2: casi negro, tarjetas navy profundo, verde neón. Solo en el panel. */
 [data-theme='dark'] .kz-panel {
-  --kzp-sombra: 0 1px 2px rgba(0, 0, 0, 0.25), 0 10px 30px -18px rgba(0, 0, 0, 0.6);
-  --kzp-sombra-alta: 0 2px 4px rgba(0, 0, 0, 0.3), 0 18px 48px -20px rgba(0, 0, 0, 0.7);
+  --bg: #0c1220;
+  --bg2: #111a2c;
+  --bg3: #172339;
+  --line: rgba(255, 255, 255, 0.08);
+  --ink: #e7eef8;
+  --ink2: #b8c8dc;
+  --mute: #8aa0bb;
+  --green: #2ee59d;
+  --green2: #2ee59d;
+  --green-bright: #6ff0bb;
+  --green-soft: rgba(46, 229, 157, 0.14);
+  --kzp-sombra: 0 1px 2px rgba(0, 0, 0, 0.35), 0 10px 30px -18px rgba(0, 0, 0, 0.7);
+  --kzp-sombra-alta: 0 2px 4px rgba(0, 0, 0, 0.4), 0 18px 48px -20px rgba(0, 0, 0, 0.8);
+  --kzp-vidrio: rgba(7, 11, 20, 0.82);
   --kzp-rojo: #ff7b7b;
-  --kzp-ambar: #ffc44d;
-  --kzp-azul: #7aa2ff;
+  --kzp-ambar: #f5b941;
+  --kzp-azul: #7fb2ff;
+  --kzp-violeta: #b9a6ff;
+}
+[data-theme='dark'] .kz-panel .kzp-nav-item[aria-current='page'] {
+  background: linear-gradient(90deg, rgba(46, 229, 157, 0.2), rgba(46, 229, 157, 0.04));
 }
 
 /* Fondo: una aurora verde y navy muy tenue, fija, para que el blanco no sea plano. */
@@ -38,9 +56,9 @@
 }
 [data-theme='dark'] .kz-panel::before {
   background:
-    radial-gradient(900px 420px at 8% -10%, color-mix(in srgb, var(--green) 18%, transparent), transparent 60%),
-    radial-gradient(700px 360px at 100% 0%, rgba(122, 162, 255, 0.1), transparent 60%),
-    var(--bg);
+    radial-gradient(900px 500px at 85% -10%, rgba(46, 229, 157, 0.14), transparent 60%),
+    radial-gradient(700px 500px at -10% 110%, rgba(25, 184, 255, 0.1), transparent 60%),
+    #070b14;
 }
 
 /* ── Estructura ── */

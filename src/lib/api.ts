@@ -174,6 +174,108 @@ export const panelUpdateVisita = (id: string, cambios: VisitaCambios) =>
     conToken({ method: 'PATCH', body: JSON.stringify(cambios) }),
   );
 
+// ── Taller ──
+
+export type EstadoOrden = 'recibido' | 'diagnostico' | 'reparacion' | 'listo' | 'entregado';
+export type ItemOrden = { nombre: string; precio: number };
+export type PagoOrden = { monto: number; metodo: string; fecha: string; ref: string; estado: 'por_confirmar' | 'confirmado'; comprobanteUrl: string | null };
+export type EntradaLog = { cuando: string; quien: string; texto: string };
+
+/** Una reparación en el taller, desde que entra el equipo hasta que se entrega. */
+export type Orden = {
+  id: string;
+  num: string;
+  tipo: 'pc' | 'cel' | 'otro';
+  equipo: string;
+  cliente: string;
+  telefono: string | null;
+  falla: string;
+  modelo: string | null;
+  serie: string | null;
+  accesorios: string | null;
+  diagnostico: string | null;
+  estado: EstadoOrden;
+  tecnico: string | null;
+  items: ItemOrden[];
+  pagos: PagoOrden[];
+  fotos: string[];
+  log: EntradaLog[];
+  createdAt: string;
+  updatedAt: string;
+};
+export type OrdenDatos = Partial<Omit<Orden, 'id' | 'num' | 'createdAt' | 'updatedAt'>>;
+
+export const panelOrdenes = () => pedir<Orden[]>('/v1/panel/ordenes', conToken());
+export const panelCrearOrden = (d: OrdenDatos) => pedir<Orden>('/v1/panel/ordenes', conToken({ method: 'POST', body: JSON.stringify(d) }));
+export const panelEditarOrden = (id: string, d: OrdenDatos) => pedir<Orden>(`/v1/panel/ordenes/${id}`, conToken({ method: 'PATCH', body: JSON.stringify(d) }));
+export const panelBorrarOrden = (id: string) => pedir<{ ok: boolean }>(`/v1/panel/ordenes/${id}`, conToken({ method: 'DELETE' }));
+export const panelAvisarOrden = (id: string, texto: string) =>
+  pedir<{ ok: boolean; error?: string }>(`/v1/panel/ordenes/${id}/avisar`, conToken({ method: 'POST', body: JSON.stringify({ texto }) }));
+
+// ── Servicios (contratos) ──
+
+export type CategoriaContrato = 'web' | 'software' | 'marketing' | 'camaras' | 'equipo';
+export type CamaraContrato = { n: number; ubicacion: string; modelo: string; cable: number; canal: number };
+
+export type Contrato = {
+  id: string;
+  categoria: CategoriaContrato;
+  titulo: string;
+  cliente: string;
+  telefono: string | null;
+  detalle: string | null;
+  fase: string | null;
+  pct: number;
+  monto: number;
+  estado: string;
+  visitaId: string | null;
+  camaras: CamaraContrato[];
+  dvr: string | null;
+  notasTecnico: string | null;
+  contratoUrl: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+export type ContratoDatos = Partial<Omit<Contrato, 'id' | 'createdAt' | 'updatedAt'>>;
+
+export const panelContratos = () => pedir<Contrato[]>('/v1/panel/contratos', conToken());
+export const panelCrearContrato = (d: ContratoDatos) => pedir<Contrato>('/v1/panel/contratos', conToken({ method: 'POST', body: JSON.stringify(d) }));
+export const panelEditarContrato = (id: string, d: ContratoDatos) => pedir<Contrato>(`/v1/panel/contratos/${id}`, conToken({ method: 'PATCH', body: JSON.stringify(d) }));
+export const panelBorrarContrato = (id: string) => pedir<{ ok: boolean }>(`/v1/panel/contratos/${id}`, conToken({ method: 'DELETE' }));
+
+// ── Cobros ──
+
+export type EstadoFactura = 'pendiente' | 'abono' | 'pagada';
+export type Factura = {
+  id: string;
+  num: string;
+  cliente: string;
+  telefono: string | null;
+  concepto: string;
+  monto: number;
+  estado: EstadoFactura;
+  metodo: string | null;
+  comprobanteUrl: string | null;
+  origen: 'taller' | 'contrato' | 'otro';
+  origenId: string | null;
+  vence: string | null;
+  pagadaAt: string | null;
+  createdAt: string;
+};
+export type FacturaDatos = Partial<Omit<Factura, 'id' | 'num' | 'createdAt' | 'pagadaAt'>>;
+
+export const panelFacturas = () => pedir<Factura[]>('/v1/panel/facturas', conToken());
+export const panelCrearFactura = (d: FacturaDatos) => pedir<Factura>('/v1/panel/facturas', conToken({ method: 'POST', body: JSON.stringify(d) }));
+export const panelEditarFactura = (id: string, d: FacturaDatos) => pedir<Factura>(`/v1/panel/facturas/${id}`, conToken({ method: 'PATCH', body: JSON.stringify(d) }));
+export const panelBorrarFactura = (id: string) => pedir<{ ok: boolean }>(`/v1/panel/facturas/${id}`, conToken({ method: 'DELETE' }));
+
+export const panelAjustes = () => pedir<Record<string, string>>('/v1/panel/ajustes', conToken());
+export const panelGuardarAjuste = (clave: string, valor: string) =>
+  pedir<{ clave: string; valor: string }>(`/v1/panel/ajustes/${clave}`, conToken({ method: 'PUT', body: JSON.stringify({ valor }) }));
+
+/** L 12,500 como se escribe acá. */
+export const lempiras = (n: number) => `L ${Math.round(n).toLocaleString('es-HN')}`;
+
 // ── Asistente de IA del panel ──
 
 export type MensajeIA = { rol: 'user' | 'assistant'; texto: string };

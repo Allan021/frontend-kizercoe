@@ -14,9 +14,11 @@ import { panelAsistente, type MensajeIA } from '@/lib/api';
 
 const SUGERENCIAS = [
   'Resumime el día: qué tengo que atender primero',
+  '¿Qué órdenes del taller tienen saldo pendiente?',
+  '¿Cuánto hemos cobrado este mes y qué falta por cobrar?',
   '¿Qué leads de cámaras llevan más de dos días sin contestar?',
-  '¿Qué instalaciones tienen algo pendiente en la bitácora?',
-  'Redactá un mensaje de seguimiento para los leads contactados esta semana',
+  '¿Cuántos metros de cable llevamos en las instalaciones de este mes?',
+  'Redactá el aviso de equipo listo para la última orden del taller',
 ];
 
 export function PanelAsistente() {
@@ -53,7 +55,7 @@ export function PanelAsistente() {
           <h2 className="kzp-titulo flex items-center gap-2">
             <Sparkles className="text-accent-foreground" size={22} /> Asistente
           </h2>
-          <p className="kzp-sub">Conoce tus leads, visitas, instalaciones y staff al momento. Preguntale como a alguien del equipo.</p>
+          <p className="kzp-sub">Ve tus leads, visitas, instalaciones, taller, servicios y cobros al momento. Preguntale como a alguien del equipo.</p>
         </div>
         {mensajes.length > 0 && (
           <Button variant="ghost" size="sm" onClick={() => setMensajes([])}><Trash2 /> Nueva conversación</Button>

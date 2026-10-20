@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { CalendarDays, FolderKanban, Home, MapPin, MessageSquareQuote, Sparkles, UserCog, Users } from 'lucide-react';
+import { CalendarDays, CreditCard, FolderKanban, Home, Layers, MapPin, MessageSquareQuote, Sparkles, UserCog, Users, Wrench } from 'lucide-react';
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { panelLeads, panelStaff, panelVisitas, type Lead, type Staff, type Visita } from '@/lib/api';
 import type { Pestana } from '@/components/Panel';
@@ -15,6 +15,9 @@ const SECCIONES: { id: Pestana; titulo: string; Icono: typeof Home }[] = [
   { id: 'hoy', titulo: 'Hoy', Icono: Home },
   { id: 'leads', titulo: 'Leads y clientes', Icono: Users },
   { id: 'visitas', titulo: 'Visitas e instalaciones', Icono: CalendarDays },
+  { id: 'taller', titulo: 'Taller', Icono: Wrench },
+  { id: 'servicios', titulo: 'Servicios', Icono: Layers },
+  { id: 'cobros', titulo: 'Cobros y facturación', Icono: CreditCard },
   { id: 'asistente', titulo: 'Asistente IA', Icono: Sparkles },
   { id: 'staff', titulo: 'Mi staff', Icono: UserCog },
   { id: 'proyectos', titulo: 'Proyectos', Icono: FolderKanban },

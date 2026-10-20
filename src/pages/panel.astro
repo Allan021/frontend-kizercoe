@@ -6,6 +6,10 @@ import '@/styles/panel.css';
 
 <!-- noindex: el panel no tiene por qué salir en Google. -->
 <Layout title="Panel — Kizercode" description="Administración de Kizercode" noindex>
+  <!-- El panel es oscuro por defecto (como el diseño v2); el toggle lo cambia y lo recuerda. -->
+  <script is:inline>
+    if (!localStorage.getItem('kz-theme')) document.documentElement.setAttribute('data-theme', 'dark');
+  </script>
   <div class="kz-panel">
     <!-- client:only porque todo depende del token del navegador: no hay nada
          que renderizar en el servidor. -->
