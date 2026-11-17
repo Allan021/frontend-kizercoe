@@ -4,6 +4,7 @@ import { productos } from '@/lib/productos';
 import { industrias } from '@/lib/industrias';
 import { guiasOrdenadas } from '@/lib/guias';
 import { ciudadesCamaras } from '@/lib/ciudades';
+import { casosDe, slugCaso } from '@/lib/casos';
 
 /**
  * /llms.txt — el resumen del sitio para ChatGPT, Claude, Perplexity y compañía
@@ -14,6 +15,7 @@ const SITIO = 'https://www.kizercode.com';
 
 export const GET: APIRoute = async () => {
   const guias = await guiasOrdenadas();
+  const casos = await casosDe(false);
   const lineas = [
     '# Kizercode',
     '',
@@ -48,6 +50,10 @@ export const GET: APIRoute = async () => {
     '',
     ...industrias.map((i) => `- [Software para ${i.nombre.toLowerCase()}](${SITIO}/industrias/${i.slug}/)`),
     '',
+    '## Casos de éxito',
+    '',
+    ...casos.map((c) => `- [${c.data.title}](${SITIO}/casos/${slugCaso(c)}/): ${c.data.description}`),
+    '',
     '## Guías',
     '',
     ...guias.map((g) => `- [${g.data.title}](${SITIO}/guias/${g.id}/): ${g.data.description}`),
@@ -57,6 +63,7 @@ export const GET: APIRoute = async () => {
     `- [Precios](${SITIO}/precios/): todos los precios en una página`,
     `- [Proyectos](${SITIO}/proyectos/): casos reales`,
     `- [Nosotros](${SITIO}/nosotros/): historia y equipo`,
+    `- [Programa de socios](${SITIO}/socios/): contadores y asesores ganan el 10 % del primer proyecto de cada cliente que refieren`,
     `- [Guías](${SITIO}/guias/): artículos para decidir antes de contratar (solo en español)`,
     `- [Contacto](${SITIO}/contacto/): cotización gratis en menos de 24 horas`,
     `- [English version](${SITIO}/en/services/)`,

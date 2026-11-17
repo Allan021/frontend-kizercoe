@@ -1,0 +1,74 @@
+---
+import { Icon } from 'astro-icon/components';
+import Layout from '@/layouts/Layout.astro';
+import Nav from '@/components/Nav.astro';
+import Footer from '@/components/Footer.astro';
+import FloatingWhatsApp from '@/components/FloatingWhatsApp.astro';
+import IdiomaPorUrl from '@/components/IdiomaPorUrl.astro';
+import { casosDe, slugCaso, urlCaso } from '@/lib/casos';
+
+/** /casos/ — índice de casos de éxito. /en/case-studies/ renderiza esta misma página. */
+const en = Astro.url.pathname.startsWith('/en/');
+const casos = await casosDe(en);
+const url = en ? '/en/case-studies/' : '/casos/';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: en ? 'Kizercode case studies' : 'Casos de éxito de Kizercode',
+  url: new URL(url, Astro.site).href,
+  inLanguage: en ? 'en' : 'es-HN',
+  publisher: { '@id': 'https://www.kizercode.com/#business' },
+  hasPart: casos.map((c) => ({ '@type': 'Article', headline: c.data.title, url: new URL(urlCaso(slugCaso(c), en), Astro.site).href })),
+};
+---
+<Layout
+  title={en ? 'Case Studies — Real Results | Kizercode' : 'Casos de éxito — Resultados con números | Kizercode'}
+  description={en
+    ? 'Kizercode case studies: the challenge, what we built and the measurable result, for clients in Honduras, Colombia and the United States.'
+    : 'Casos de éxito de Kizercode: el reto, lo que construimos y el resultado medible, para clientes de Honduras, Colombia y Estados Unidos.'}
+  locale={en ? 'en_US' : undefined}
+  forzarLang={en ? 'en' : 'es'}
+  urlEs="/casos/"
+  urlEn="/en/case-studies/"
+>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+  <Nav />
+  <IdiomaPorUrl otra={en ? '/casos/' : '/en/case-studies/'} />
+  <main id="contenido">
+    <section style="background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%)">
+      <div class="mx-auto flex max-w-[760px] flex-col items-center gap-4 px-6 pb-4 pt-16 text-center">
+        <p class="kz-eyebrow">{en ? 'Case studies' : 'Casos de éxito'}</p>
+        <h1 class="font-bold" style="font-size: clamp(34px, 4.6vw, 54px); line-height: 1.1; letter-spacing: -0.02em; text-wrap: balance">
+          {en ? 'Results with numbers, not adjectives.' : 'Resultados con números, no con adjetivos.'}
+        </h1>
+        <p class="max-w-[580px] text-lg leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+          {en ? 'What each client needed, what we built and what changed.' : 'Qué necesitaba cada cliente, qué construimos y qué cambió.'}
+        </p>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-[1200px] px-6 pb-20 pt-10">
+      <ul class="grid list-none gap-6" style="grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr))">
+        {casos.map((c) => (
+          <li>
+            <a href={urlCaso(slugCaso(c), en)} class="kz-card flex h-full flex-col overflow-hidden" style="color: var(--ink)">
+              {c.data.imagen && <img src={c.data.imagen} alt="" width="720" height="450" loading="lazy" decoding="async" class="block aspect-[16/10] w-full object-cover" />}
+              <div class="flex flex-1 flex-col gap-2 p-7">
+                <span class="kz-eyebrow" style="font-size: 12px">{c.data.industria} · {c.data.lugar}</span>
+                <span class="font-bold leading-none" style="font-size: 40px; letter-spacing: -0.02em; color: var(--green2)">{c.data.metricas[0].valor}</span>
+                <span class="text-[14px]" style="color: var(--ink2)">{c.data.metricas[0].etiqueta}</span>
+                <h2 class="mt-2 text-[20px] font-bold leading-snug" style="text-wrap: balance">{c.data.cliente}</h2>
+                <span class="mt-auto pt-2 text-[14px] font-semibold" style="color: var(--green2)">
+                  {en ? 'Read the case study' : 'Leer el caso'} <Icon name="lucide:arrow-right" class="inline h-3.5 w-3.5 align-[-2px]" aria-hidden="true" />
+                </span>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </main>
+  <Footer />
+  <FloatingWhatsApp />
+</Layout>

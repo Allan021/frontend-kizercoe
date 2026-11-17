@@ -1,0 +1,204 @@
+---
+import { Icon } from 'astro-icon/components';
+import { render } from 'astro:content';
+import Layout from '@/layouts/Layout.astro';
+import Nav from '@/components/Nav.astro';
+import Footer from '@/components/Footer.astro';
+import FloatingWhatsApp from '@/components/FloatingWhatsApp.astro';
+import IdiomaPorUrl from '@/components/IdiomaPorUrl.astro';
+import { servicios } from '@/lib/servicios';
+import { casosDe, slugCaso, urlCaso, type Caso } from '@/lib/casos';
+
+/**
+ * Un caso de éxito, al estilo de las agencias grandes: la cifra arriba, la
+ * ficha del proyecto, reto → solución → resultado y el CTA al servicio.
+ * /en/case-studies/<slug>/ renderiza esta misma página con el caso en inglés.
+ */
+export async function getStaticPaths() {
+  const casos = await casosDe(false);
+  return casos.map((caso) => ({ params: { slug: slugCaso(caso) }, props: { caso } }));
+}
+interface Props {
+  caso: Caso;
+}
+const { caso } = Astro.props;
+const d = caso.data;
+const { Content } = await render(caso);
+const en = Astro.url.pathname.startsWith('/en/');
+const slug = slugCaso(caso);
+const s = servicios.find((v) => v.slug === d.servicio)!;
+
+const otroIdioma = (await casosDe(!en)).some((c) => slugCaso(c) === slug);
+const url = urlCaso(slug, en);
+const urlAbs = new URL(url, Astro.site).href;
+const urlServicio = en ? `/en/services/${s.slugEn}/` : `/servicios/${s.slug}/`;
+const indice = en ? '/en/case-studies/' : '/casos/';
+const otros = (await casosDe(en)).filter((c) => c.id !== caso.id).slice(0, 3);
+
+const t = en
+  ? { casos: 'Case studies', cliente: 'Client', industria: 'Industry', lugar: 'Location', periodo: 'Period', servicio: 'Service', stack: 'Technology', vivo: 'Visit the live site', cta: 'Want results like these?', ctaSub: 'Tell us about your project. Free diagnosis, fixed price in writing and a reply in under 24 hours.', cotizar: 'Request a quote', ver: `See ${s.name.toLowerCase()}`, mas: 'More case studies', wa: `Hi! I read the ${d.cliente} case study and want something similar.` }
+  : { casos: 'Casos de éxito', cliente: 'Cliente', industria: 'Industria', lugar: 'Lugar', periodo: 'Periodo', servicio: 'Servicio', stack: 'Tecnología', vivo: 'Ver el sitio en vivo', cta: '¿Querés resultados así?', ctaSub: 'Contanos tu proyecto. Diagnóstico gratis, precio fijo por escrito y respuesta en menos de 24 horas.', cotizar: 'Pedir cotización', ver: `Ver ${s.nombre.toLowerCase()}`, mas: 'Más casos de éxito', wa: `Hola! Leí el caso de ${d.cliente} y quiero algo parecido.` };
+const wa = `https://wa.me/50488091744?text=${encodeURIComponent(t.wa)}`;
+
+const ficha = [
+  { k: t.cliente, v: d.cliente },
+  { k: t.industria, v: d.industria },
+  { k: t.lugar, v: d.lugar },
+  { k: t.periodo, v: d.periodo },
+  { k: t.servicio, v: en ? s.name : s.nombre, href: urlServicio },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: d.title,
+      description: d.description,
+      inLanguage: en ? 'en' : 'es-HN',
+      datePublished: d.date.toISOString().slice(0, 10),
+      author: { '@id': 'https://www.kizercode.com/#business' },
+      publisher: { '@id': 'https://www.kizercode.com/#business' },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': urlAbs },
+      image: d.imagen ?? new URL('/og-image.png', Astro.site).href,
+      about: {
+        '@type': 'CreativeWork',
+        name: d.cliente,
+        ...(d.enlace ? { url: d.enlace } : {}),
+        creator: { '@id': 'https://www.kizercode.com/#business' },
+        sourceOrganization: { '@type': 'Organization', name: d.cliente, address: d.lugar },
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Kizercode', item: new URL(en ? '/en/' : '/', Astro.site).href },
+        { '@type': 'ListItem', position: 2, name: t.casos, item: new URL(indice, Astro.site).href },
+        { '@type': 'ListItem', position: 3, name: d.cliente, item: urlAbs },
+      ],
+    },
+  ],
+};
+---
+<Layout
+  title={`${d.metaTitle ?? d.title} | Kizercode`}
+  description={d.description}
+  type="article"
+  image={d.imagen}
+  imageAlt={d.title}
+  locale={en ? 'en_US' : undefined}
+  forzarLang={en ? 'en' : 'es'}
+  urlEs={otroIdioma || !en ? urlCaso(slug, false) : undefined}
+  urlEn={otroIdioma || en ? urlCaso(slug, true) : undefined}
+  soloEs={!en && !otroIdioma}
+  servicio={s.nombre}
+  waEs={t.wa}
+  waEn={t.wa}
+>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+  <Nav />
+  <IdiomaPorUrl otra={otroIdioma ? urlCaso(slug, !en) : en ? '/casos/' : '/en/'} />
+  <main id="contenido">
+    <header style="background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%)">
+      <div class="mx-auto flex max-w-[1100px] flex-col gap-5 px-6 pb-10 pt-14">
+        <nav aria-label="breadcrumb" class="text-[13px] font-medium" style="color: var(--mute)">
+          <a href={en ? '/en/' : '/'} style="color: var(--mute)">Kizercode</a>
+          <span aria-hidden="true"> / </span>
+          <a href={indice} style="color: var(--mute)">{t.casos}</a>
+          <span aria-hidden="true"> / </span>
+          <span style="color: var(--ink2)">{d.cliente}</span>
+        </nav>
+        <p class="kz-eyebrow" style="font-size: 12px">{d.industria} · {d.lugar}</p>
+        <h1 class="max-w-[880px] font-bold" style="font-size: clamp(32px, 4.6vw, 54px); line-height: 1.1; letter-spacing: -0.02em; text-wrap: balance">
+          {d.title}
+        </h1>
+        <p class="max-w-[720px] text-[18px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">{d.description}</p>
+
+        <dl class="mt-4 grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))">
+          {d.metricas.map((m, i) => (
+            <div class="kz-card flex flex-col-reverse gap-1 p-6">
+              <dt class="text-[14.5px] leading-snug" style="color: var(--ink2)">{m.etiqueta}</dt>
+              <dd class="font-bold leading-none" style={`font-size: ${i === 0 ? 'clamp(36px, 5vw, 52px)' : 'clamp(26px, 3vw, 34px)'}; letter-spacing: -0.02em; color: ${i === 0 ? 'var(--green2)' : 'var(--ink)'}`}>{m.valor}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </header>
+
+    <div class="mx-auto grid max-w-[1100px] gap-12 px-6 pb-20 lg:grid-cols-[1fr_300px]">
+      <div class="min-w-0">
+        {d.imagen && (
+          <figure class="mb-12 overflow-hidden rounded-2xl border" style="border-color: var(--line)">
+            <img src={d.imagen} alt={`${d.cliente}: ${d.title}`} width="1200" height="750" loading="eager" decoding="async" class="block h-auto w-full" />
+          </figure>
+        )}
+        <article class="kz-prosa">
+          <Content />
+        </article>
+
+        {d.testimonio && (
+          <blockquote class="kz-card mt-12 p-8">
+            <p class="text-[20px] font-medium leading-relaxed" style="color: var(--ink); text-wrap: pretty">"{d.testimonio.texto}"</p>
+            <footer class="mt-4 text-[14.5px]" style="color: var(--ink2)"><strong>{d.testimonio.autor}</strong>, {d.testimonio.cargo}</footer>
+          </blockquote>
+        )}
+      </div>
+
+      <aside class="flex flex-col gap-6 lg:sticky lg:top-24 lg:self-start">
+        <dl class="kz-card flex flex-col gap-4 p-6 text-[14.5px]">
+          {ficha.map((f) => (
+            <div>
+              <dt class="text-[12px] font-semibold uppercase tracking-[0.06em]" style="color: var(--mute)">{f.k}</dt>
+              <dd class="mt-0.5 font-medium" style="color: var(--ink)">{f.href ? <a href={f.href} style="color: var(--green2)">{f.v}</a> : f.v}</dd>
+            </div>
+          ))}
+          {d.stack.length > 0 && (
+            <div>
+              <dt class="text-[12px] font-semibold uppercase tracking-[0.06em]" style="color: var(--mute)">{t.stack}</dt>
+              <dd class="mt-1.5 flex flex-wrap gap-1.5">
+                {d.stack.map((x) => <span class="rounded-full px-2.5 py-1 text-[12.5px] font-medium" style="background: var(--bg2); color: var(--ink2)">{x}</span>)}
+              </dd>
+            </div>
+          )}
+        </dl>
+        {d.enlace && (
+          <a href={d.enlace} target="_blank" rel="noopener" class="kz-btn kz-btn-secundario justify-center" style="padding: 12px 18px; font-size: 14.5px">
+            {t.vivo} <Icon name="lucide:arrow-up-right" class="h-4 w-4" aria-hidden="true" />
+          </a>
+        )}
+      </aside>
+    </div>
+
+    <section class="mx-auto max-w-[1100px] px-6 pb-20">
+      <div class="flex flex-col gap-4 rounded-3xl p-8 md:p-10" style="background: var(--green-soft); border: 1px solid color-mix(in srgb, var(--green) 30%, transparent)">
+        <p class="text-[26px] font-bold leading-snug" style="letter-spacing: -0.01em; text-wrap: balance">{t.cta}</p>
+        <p class="max-w-[620px] text-[16px] leading-relaxed" style="color: var(--ink2)">{t.ctaSub}</p>
+        <div class="flex flex-wrap gap-3">
+          <a href={wa} target="_blank" rel="noopener noreferrer" class="kz-btn kz-btn-primario" style="padding: 14px 24px; font-size: 15px">
+            <img src="/whatsapp.svg" alt="" width="18" height="18" class="block" /> WhatsApp
+          </a>
+          <a href={en ? '/en/contact/' : '/contacto/'} class="kz-btn kz-btn-secundario" style="padding: 14px 24px; font-size: 15px; background: var(--bg)">{t.cotizar}</a>
+          <a href={urlServicio} class="kz-btn kz-btn-secundario" style="padding: 14px 24px; font-size: 15px; background: var(--bg)">{t.ver}</a>
+        </div>
+      </div>
+
+      {otros.length > 0 && (
+        <nav aria-labelledby="mas-casos" class="mt-14">
+          <h2 id="mas-casos" class="mb-4 text-[18px] font-bold">{t.mas}</h2>
+          <ul class="grid list-none gap-3" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr))">
+            {otros.map((o) => (
+              <li>
+                <a href={urlCaso(slugCaso(o), en)} class="kz-card flex h-full flex-col gap-1 p-5" style="color: var(--ink)">
+                  <span class="text-[22px] font-bold" style="color: var(--green2)">{o.data.metricas[0].valor}</span>
+                  <span class="text-[15px] font-semibold">{o.data.cliente}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
+    </section>
+  </main>
+  <Footer />
+  <FloatingWhatsApp />
+</Layout>

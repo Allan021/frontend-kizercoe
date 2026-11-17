@@ -1,0 +1,11 @@
+---
+// Misma página que /casos/<slug>/, con el caso en inglés (casos/en/).
+import Pagina from '../../casos/[slug].astro';
+import { casosDe, slugCaso } from '@/lib/casos';
+
+export async function getStaticPaths() {
+  const casos = await casosDe(true);
+  return casos.map((caso) => ({ params: { slug: slugCaso(caso) }, props: { caso } }));
+}
+---
+<Pagina caso={Astro.props.caso} />

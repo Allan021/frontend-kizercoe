@@ -1,11 +1,17 @@
 ---
 import ProjectsGrid from '@/components/Projects.tsx';
 import { fetchProjects } from '@/lib/api';
+import { casosDe, slugCaso, urlCaso } from '@/lib/casos';
 
 // Al compilar: los proyectos van en el HTML. Sin API, igual que antes.
 const inicial = await fetchProjects().catch(() => null);
 // Schema del portafolio solo donde se pide (/proyectos), no en la portada.
 const { schema = false } = Astro.props;
+
+// Caso de éxito destacado arriba de la grilla: el número es lo que vende.
+const [destacado] = await casosDe(false);
+const destacadoEn = destacado && (await casosDe(true)).find((c) => slugCaso(c) === slugCaso(destacado));
+const enPagina = Astro.url.pathname.startsWith('/en/');
 const jsonLd = inicial?.length && {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
@@ -38,6 +44,22 @@ const jsonLd = inicial?.length && {
         <span class="es">Sistemas que hoy están corriendo en negocios reales.</span>
       </p>
     </div>
+
+    {destacado && (
+      <a href={urlCaso(slugCaso(destacado), enPagina && !!destacadoEn)} class="kz-card kz-destacado mb-8 flex flex-wrap items-center gap-x-8 gap-y-3 p-7" style="color: var(--ink)">
+        <span class="font-bold leading-none" style="font-size: clamp(34px, 4.4vw, 48px); letter-spacing: -0.02em; color: var(--green2)">{destacado.data.metricas[0].valor}</span>
+        <span class="flex min-w-[240px] flex-1 flex-col gap-1">
+          <span class="text-[17px] font-bold">{destacado.data.cliente} · {destacado.data.lugar}</span>
+          <span class="text-[15px]" style="color: var(--ink2)">
+            <span class="es">{destacado.data.metricas[0].etiqueta}</span>
+            <span class="en">{destacadoEn?.data.metricas[0].etiqueta ?? destacado.data.metricas[0].etiqueta}</span>
+          </span>
+        </span>
+        <span class="text-[14.5px] font-semibold" style="color: var(--green2)">
+          <span class="es">Leer el caso</span><span class="en">Read the case study</span> →
+        </span>
+      </a>
+    )}
 
     <!-- client:visible: no se pide nada a la API hasta que la sección entra
          en pantalla. Los casos se administran desde /panel. -->

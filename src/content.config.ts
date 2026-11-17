@@ -30,4 +30,31 @@ const guias = defineCollection({
   }),
 });
 
-export const collections = { guias };
+/**
+ * Casos de éxito: reto → solución → resultado, con números. Solo datos que el
+ * cliente confirmó; un caso sin número no va. La versión en inglés vive en
+ * casos/en/<mismo-nombre>.md y sale en /en/case-studies/.
+ */
+const casos = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/casos' }),
+  schema: z.object({
+    title: z.string(),
+    metaTitle: z.string().max(50).optional(),
+    description: z.string().max(155),
+    cliente: z.string(),
+    /** Lugar del cliente, ej. "Bogotá, Colombia". */
+    lugar: z.string(),
+    industria: z.string(),
+    servicio: z.enum(slugs),
+    periodo: z.string(),
+    date: z.coerce.date(),
+    /** 2–4 cifras grandes del encabezado. La primera es la principal. */
+    metricas: z.array(z.object({ valor: z.string(), etiqueta: z.string() })).min(1).max(4),
+    stack: z.array(z.string()).default([]),
+    imagen: z.string().url().optional(),
+    enlace: z.string().url().optional(),
+    testimonio: z.object({ texto: z.string(), autor: z.string(), cargo: z.string() }).optional(),
+  }),
+});
+
+export const collections = { guias, casos };

@@ -202,40 +202,6 @@ const jsonLd = {
   .kz-indice a { color: var(--ink2); transition: color 0.2s ease; }
   .kz-indice a:hover { color: var(--green2); }
 
-  /* Tipografía del artículo: el Markdown llega sin clases. */
-  .kz-prosa { font-size: 17px; line-height: 1.75; color: var(--ink2); }
-  .kz-prosa > :global(* + *) { margin-top: 1.15em; }
-  .kz-prosa :global(h2) {
-    margin-top: 2.2em; color: var(--ink); font-size: clamp(24px, 2.6vw, 30px);
-    line-height: 1.2; letter-spacing: -0.02em; font-weight: 700; text-wrap: balance;
-    scroll-margin-top: 96px;
-  }
-  .kz-prosa :global(h3) {
-    margin-top: 1.8em; color: var(--ink); font-size: 20px; line-height: 1.3;
-    font-weight: 700; scroll-margin-top: 96px;
-  }
-  .kz-prosa :global(h2 + *), .kz-prosa :global(h3 + *) { margin-top: 0.6em; }
-  .kz-prosa :global(p) { text-wrap: pretty; }
-  .kz-prosa :global(strong) { color: var(--ink); font-weight: 600; }
-  .kz-prosa :global(a) { color: var(--green2); font-weight: 500; text-decoration: underline; text-underline-offset: 3px; }
-  .kz-prosa :global(a:hover) { color: var(--green); }
-  .kz-prosa :global(ul) { list-style: disc; padding-left: 1.4em; }
-  .kz-prosa :global(ol) { list-style: decimal; padding-left: 1.4em; }
-  .kz-prosa :global(li + li) { margin-top: 0.45em; }
-  .kz-prosa :global(li::marker) { color: var(--green); }
-  .kz-prosa :global(blockquote) {
-    border-left: 3px solid var(--green); padding: 0.2em 0 0.2em 1.1em; color: var(--ink);
-  }
-  .kz-prosa :global(table) {
-    display: block; width: 100%; overflow-x: auto; border-collapse: collapse;
-    font-size: 15px; line-height: 1.5;
-  }
-  .kz-prosa :global(th), .kz-prosa :global(td) {
-    border-bottom: 1px solid var(--line); padding: 10px 12px; text-align: left; vertical-align: top;
-  }
-  .kz-prosa :global(th) { color: var(--ink); font-weight: 600; background: var(--bg2); white-space: nowrap; }
-  .kz-prosa :global(hr) { border: 0; border-top: 1px solid var(--line); margin: 2.4em 0; }
-
   .kz-gfaq summary { list-style: none; }
   .kz-gfaq summary::-webkit-details-marker { display: none; }
   .kz-gfaq-signo { font-size: 20px; line-height: 1; color: var(--green); transition: transform 0.2s ease; }
