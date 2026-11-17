@@ -3,7 +3,10 @@
   "outputDirectory": "dist",
   "installCommand": "npm install",
   "framework": "astro",
+  "trailingSlash": true,
   "redirects": [
+    { "source": "/servicios/reparacion-telefonos/", "destination": "/servicios/reparacion-computadoras/", "permanent": true },
+    { "source": "/en/services/phone-repair/", "destination": "/en/services/computer-repair/", "permanent": true },
     { "source": "/servicios/diseno-ux-ui", "destination": "/servicios/sistemas-a-la-medida/", "permanent": true },
     { "source": "/servicios/diseno-ux-ui/", "destination": "/servicios/sistemas-a-la-medida/", "permanent": true },
     { "source": "/servicios/identidad-visual", "destination": "/servicios/paginas-web/", "permanent": true },

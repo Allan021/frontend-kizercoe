@@ -7,7 +7,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "typecheck": "astro check",
-    "fotos": "node scripts/optimizar-fotos.mjs"
+    "fotos": "node scripts/optimizar-fotos.mjs",
+    "indexnow": "node scripts/indexnow.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^4.1.0",

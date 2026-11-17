@@ -1,5 +1,9 @@
 ---
 import ReviewsList from '@/components/Reviews.tsx';
+import { fetchTestimonials } from '@/lib/api';
+
+// Al compilar: así el testimonio va en el HTML. Sin API, igual que antes.
+const inicial = await fetchTestimonials().catch(() => null);
 ---
 
 <section id="resenas" class="mx-auto w-full max-w-[1200px] px-6 py-20">
@@ -17,5 +21,5 @@ import ReviewsList from '@/components/Reviews.tsx';
 
   <!-- Los testimonios se cargan de la API y se administran desde /panel.
        Si no hay ninguno publicado, esta sección no muestra nada. -->
-  <ReviewsList client:visible />
+  <ReviewsList client:visible inicial={inicial} />
 </section>

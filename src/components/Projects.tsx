@@ -35,12 +35,9 @@ function iconoDeRed(url: string): { Icono: LucideIcon; nombre: string } {
 }
 
 /**
- * Los proyectos, leídos de la API en el navegador.
- *
- * Se piden en el cliente y no al compilar a propósito: así publicar uno desde
- * el panel se ve en el sitio al instante, sin volver a desplegar. El precio es
- * que estas tarjetas no las indexa el buscador — cuando el portafolio importe
- * para SEO, esto se pasa a build-time con un redeploy por publicación.
+ * Los proyectos: los del build vienen en `inicial` y salen en el HTML (los
+ * lee Google y las IA); después se vuelven a pedir a la API en el navegador,
+ * así lo que se publica desde el panel se ve al instante sin redeploy.
  */
 /** Cuántos proyectos se vieron la última vez: para pintar esa misma cantidad
  *  de skeletons y que la sección no brinque cuando conteste la API. */
@@ -73,8 +70,8 @@ function TarjetaFantasma() {
   );
 }
 
-export default function Projects() {
-  const [projects, setProjects] = useState<Project[] | null>(null);
+export default function Projects({ inicial = null }: { inicial?: Project[] | null }) {
+  const [projects, setProjects] = useState<Project[] | null>(inicial);
   const [fallo, setFallo] = useState(false);
   // 3 por defecto; si ya se visitó, la cantidad real de la última vez.
   const [esperadas, setEsperadas] = useState(3);
@@ -95,7 +92,8 @@ export default function Projects() {
           /* sin storage no pasa nada */
         }
       })
-      .catch(() => setFallo(true));
+      // Si la API falla pero el build trajo proyectos, se quedan esos.
+      .catch(() => { if (!inicial?.length) setFallo(true); });
   }, []);
 
   // Si la API no responde o no hay nada, se esconde la sección entera —

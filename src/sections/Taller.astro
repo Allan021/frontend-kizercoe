@@ -1,7 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components';
 /**
- * Taller: reparación de computadoras y celulares, cámaras de seguridad y
+ * Taller: reparación de computadoras, cámaras de seguridad y
  * compra y venta. Cada servicio lleva a su página propia.
  */
 const pasos = [
@@ -13,7 +13,6 @@ const pasos = [
 
 const servicios = [
   { href: '/servicios/reparacion-computadoras/', en: 'Computer repair', es: 'Reparación de computadoras', d_en: 'Formatting, SSD, RAM, screens', d_es: 'Formateo, SSD, memoria, pantallas' },
-  { href: '/servicios/reparacion-telefonos/', en: 'Phone repair', es: 'Reparación de celulares', d_en: 'Screens, batteries, charging ports', d_es: 'Pantallas, baterías, puertos de carga' },
   { href: '/servicios/instalacion-camaras/', en: 'Security cameras', es: 'Cámaras de seguridad', d_en: 'Installed and on your phone', d_es: 'Instaladas y en tu celular' },
   { href: '/contacto/?servicio=Computer%20Repair', en: 'Buy and sell', es: 'Compra y venta', d_en: 'Tested, working devices', d_es: 'Equipo probado y funcionando' },
 ];
@@ -28,8 +27,8 @@ const servicios = [
         <span class="es">Reparamos tu equipo e instalamos tus cámaras.</span>
       </h2>
       <p class="text-[17px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
-        <span class="en">Computers, laptops and phones with a free diagnosis: we tell you what it has and what it costs, and you approve before we touch anything. We also install security cameras you can watch from your phone, and buy and sell tested equipment.</span>
-        <span class="es">Computadoras, laptops y celulares con diagnóstico gratis: te decimos qué tiene y cuánto cuesta, y vos aprobás antes de que toquemos nada. También instalamos cámaras de seguridad que ves desde el celular, y compramos y vendemos equipo probado.</span>
+        <span class="en">Computers and laptops with a free diagnosis: we tell you what it has and what it costs, and you approve before we touch anything. We also install security cameras you can watch from your phone, and buy and sell tested equipment.</span>
+        <span class="es">Computadoras y laptops con diagnóstico gratis: te decimos qué tiene y cuánto cuesta, y vos aprobás antes de que toquemos nada. También instalamos cámaras de seguridad que ves desde el celular, y compramos y vendemos equipo probado.</span>
       </p>
       <ul class="grid list-none gap-2.5" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))">
         {servicios.map((s) => (

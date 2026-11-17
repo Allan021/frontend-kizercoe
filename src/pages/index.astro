@@ -26,7 +26,7 @@ const en = Astro.url.pathname.startsWith('/en/');
 ---
 <Layout
   title={en ? 'Kizercode — Software, Branding and Growth | Honduras' : undefined}
-  description={en ? 'Custom software, web and mobile apps, AI agents, digital marketing, and computer and phone repair in El Progreso, Yoro, Honduras.' : undefined}
+  description={en ? 'Custom software, web and mobile apps, AI agents, digital marketing, and computer repair in El Progreso, Yoro, Honduras.' : undefined}
   locale={en ? 'en_US' : undefined}
   forzarLang={en ? 'en' : 'es'}
   urlEs="/"
@@ -47,7 +47,7 @@ const en = Astro.url.pathname.startsWith('/en/');
     <Process />
     <Taller />
     <Pricing />
-    <FAQ />
+    <FAQ schema />
     <CTA />
     <Integraciones />
     <Comparativa />

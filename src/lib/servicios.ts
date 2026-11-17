@@ -442,6 +442,9 @@ export const servicios: Servicio[] = [
       { qEs: '¿Mis archivos están seguros?', qEn: 'Are my files safe?', aEs: 'Sí. No tocamos tu información sin avisarte, y si hay riesgo te lo decimos antes.', aEn: 'Yes. We never touch your data without telling you, and we flag any risk beforehand.' },
     ],
   },
+  // ponytail: reparación de celulares desactivada (no se ofrece hoy). Para
+  // volver: quitar el comentario y borrar el redirect en vercel.json.
+  /*
   {
     slug: 'reparacion-telefonos',
     slugEn: 'phone-repair',
@@ -479,6 +482,7 @@ export const servicios: Servicio[] = [
       { qEs: '¿Mi celular todavía tiene garantía de fábrica?', qEn: 'Is my phone still under factory warranty?', aEs: 'Si todavía la tiene, te lo decimos antes de abrirlo: a veces conviene ir primero con la marca.', aEn: 'If it still has one, we tell you before opening it: sometimes it is better to go to the brand first.' },
     ],
   },
+  */
   {
     slug: 'instalacion-camaras',
     slugEn: 'security-cameras',

@@ -1,5 +1,6 @@
 ---
 title: "DVR o NVR: qué cámaras de seguridad conviene instalar en tu casa o negocio"
+metaTitle: "DVR o NVR: qué cámaras de seguridad instalar"
 description: "DVR o NVR, bala o domo, cuántas cámaras y qué equipo hace falta: guía clara para elegir cámaras de seguridad en El Progreso y el valle de Sula."
 date: 2026-10-10
 servicio: instalacion-camaras

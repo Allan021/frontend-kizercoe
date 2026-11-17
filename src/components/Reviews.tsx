@@ -14,13 +14,14 @@ import type { Testimonial } from '@/types';
 
 const COLORES = ['var(--green)', 'var(--green2)', 'var(--green)', 'var(--green2)'];
 
-export default function Reviews() {
-  const [lista, setLista] = useState<Testimonial[] | null>(null);
+/** `inicial` sale del build y va en el HTML; la API lo refresca en el navegador. */
+export default function Reviews({ inicial = null }: { inicial?: Testimonial[] | null }) {
+  const [lista, setLista] = useState<Testimonial[] | null>(inicial);
 
   useEffect(() => {
     fetchTestimonials()
       .then(setLista)
-      .catch(() => setLista([]));
+      .catch(() => { if (!inicial?.length) setLista([]); });
   }, []);
 
   if (!lista) {

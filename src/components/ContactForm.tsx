@@ -72,7 +72,7 @@ const OPCIONES: Opcion[] = [
     es: 'SEO, anuncios o redes', en: 'SEO, ads or social media', icono: Megaphone,
     ayudaEs: 'Qué vendés, a quién, y si ya tenés página o redes activas.',
     ayudaEn: 'What you sell, to whom, and whether you already have a site or active social accounts.' },
-  { id: 'reparacion', valor: 'Computer Repair', es: 'Reparar compu o celular', en: 'Fix my computer or phone', icono: Wrench,
+  { id: 'reparacion', valor: 'Computer Repair', es: 'Reparar mi computadora', en: 'Fix my computer', icono: Wrench,
     ayudaEs: 'Qué equipo es (marca y modelo si lo sabés) y qué le está pasando.',
     ayudaEn: 'Which device it is (brand and model if you know) and what is happening to it.' },
   { id: 'camaras', valor: 'Security Cameras', es: 'Cámaras de seguridad', en: 'Security cameras', icono: Cctv,

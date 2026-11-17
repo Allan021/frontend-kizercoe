@@ -3,6 +3,7 @@ import { servicios } from '@/lib/servicios';
 import { productos } from '@/lib/productos';
 import { industrias } from '@/lib/industrias';
 import { guiasOrdenadas } from '@/lib/guias';
+import { ciudadesCamaras } from '@/lib/ciudades';
 
 /**
  * /llms.txt — el resumen del sitio para ChatGPT, Claude, Perplexity y compañía
@@ -16,7 +17,7 @@ export const GET: APIRoute = async () => {
   const lineas = [
     '# Kizercode',
     '',
-    '> Agencia de software y taller de tecnología en Plaza Bendeck, El Progreso, Yoro, Honduras. Páginas web, tiendas en línea, sistemas a la medida, apps, automatización con IA, marketing digital, instalación de cámaras de seguridad y reparación de computadoras y celulares. Precio fijo por escrito antes de empezar y 30 días de garantía en el software.',
+    '> Agencia de software y taller de tecnología en Plaza Bendeck, El Progreso, Yoro, Honduras. Páginas web, tiendas en línea, sistemas a la medida, apps, automatización con IA, marketing digital, instalación de cámaras de seguridad y reparación de computadoras. Precio fijo por escrito antes de empezar y 30 días de garantía en el software.',
     '',
     '- Dirección: Plaza Bendeck, El Progreso, Yoro, Honduras',
     '- Horario: lunes a sábado, 7:00 a.m. a 6:00 p.m.',
@@ -31,6 +32,10 @@ export const GET: APIRoute = async () => {
       (s) =>
         `- [${s.nombre}](${SITIO}/servicios/${s.slug}/): ${s.descEs}${s.lps ? ` Desde ${s.lps} (${s.usd}).` : ''}`,
     ),
+    '',
+    '## Cámaras de seguridad por ciudad',
+    '',
+    ...ciudadesCamaras.map((c) => `- [Cámaras de seguridad en ${c.nombre}, ${c.depto}](${SITIO}/servicios/instalacion-camaras/${c.slug}/)`),
     '',
     '## Productos propios',
     '',

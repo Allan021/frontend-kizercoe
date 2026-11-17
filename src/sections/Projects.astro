@@ -1,5 +1,28 @@
 ---
 import ProjectsGrid from '@/components/Projects.tsx';
+import { fetchProjects } from '@/lib/api';
+
+// Al compilar: los proyectos van en el HTML. Sin API, igual que antes.
+const inicial = await fetchProjects().catch(() => null);
+// Schema del portafolio solo donde se pide (/proyectos), no en la portada.
+const { schema = false } = Astro.props;
+const jsonLd = inicial?.length && {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  itemListElement: inicial.map((p, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    item: {
+      '@type': 'CreativeWork',
+      name: p.title,
+      description: p.summary,
+      ...(p.imageUrl ? { image: p.imageUrl } : {}),
+      ...(p.liveUrl ? { url: p.liveUrl } : {}),
+      ...(p.client ? { sourceOrganization: { '@type': 'Organization', name: p.client } } : {}),
+      creator: { '@id': 'https://www.kizercode.com/#business' },
+    },
+  })),
+};
 ---
 
 <section id="casos" class="border-y" style="background: var(--bg2); border-color: var(--line)">
@@ -18,6 +41,7 @@ import ProjectsGrid from '@/components/Projects.tsx';
 
     <!-- client:visible: no se pide nada a la API hasta que la sección entra
          en pantalla. Los casos se administran desde /panel. -->
-    <ProjectsGrid client:visible />
+    <ProjectsGrid client:visible inicial={inicial} />
+    {schema && jsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   </div>
 </section>

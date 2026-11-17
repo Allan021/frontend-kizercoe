@@ -15,6 +15,8 @@ const guias = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/guias' }),
   schema: z.object({
     title: z.string(),
+    /** Título corto para Google (<title>) cuando el H1 pasa de ~50 caracteres. */
+    metaTitle: z.string().max(50).optional(),
     // Lo que Google muestra bajo el título: más largo se corta.
     description: z.string().max(155),
     date: z.coerce.date(),

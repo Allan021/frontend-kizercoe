@@ -8,6 +8,7 @@ import Nav from '@/components/Nav.astro';
 import Footer from '@/components/Footer.astro';
 import FloatingWhatsApp from '@/components/FloatingWhatsApp.astro';
 import type { Servicio } from '@/lib/servicios';
+import { ciudadesCamaras } from '@/lib/ciudades';
 
 /**
  * La landing de cámaras de seguridad. Tiene plantilla propia y no la genérica
@@ -627,9 +628,13 @@ const reglas = [
                 : 'We operate from El Progreso, Yoro, and cover the Sula valley. If you are outside this list, write to us: we will tell you straight whether we can get there and on what terms.'}
             </p>
             <div class="mt-7 flex flex-wrap gap-2">
-              {zonas.map((z, i) => (
-                <span class={i === 0 ? 'kz-zona kz-zona-base' : 'kz-zona'}>{z}</span>
-              ))}
+              {zonas.map((z, i) => {
+                // Las ciudades con página propia (solo en español) van enlazadas.
+                const c = es && ciudadesCamaras.find((x) => x.nombre === z);
+                return c
+                  ? <a href={`/servicios/instalacion-camaras/${c.slug}/`} class="kz-zona">{z}</a>
+                  : <span class={i === 0 ? 'kz-zona kz-zona-base' : 'kz-zona'}>{z}</span>;
+              })}
             </div>
           </div>
 

@@ -1,0 +1,194 @@
+---
+import { Icon } from 'astro-icon/components';
+import Layout from '@/layouts/Layout.astro';
+import Nav from '@/components/Nav.astro';
+import Footer from '@/components/Footer.astro';
+import FloatingWhatsApp from '@/components/FloatingWhatsApp.astro';
+import IdiomaPorUrl from '@/components/IdiomaPorUrl.astro';
+import { servicios } from '@/lib/servicios';
+import { ciudadesCamaras } from '@/lib/ciudades';
+
+/**
+ * Cámaras de seguridad por ciudad (/servicios/instalacion-camaras/<ciudad>/).
+ *
+ * Para quien busca "cámaras de seguridad San Pedro Sula": página corta con lo
+ * que cambia por ciudad (la visita, la zona) y el resumen del servicio, y el
+ * detalle técnico en la página principal. No es una copia de esa página con
+ * otro nombre: eso Google lo trata como doorway y lo hunde.
+ *
+ * Sin fotos por ciudad a propósito: las de la galería que dicen "San Pedro
+ * Sula" o "Villanueva" son ilustrativas, no trabajos hechos allá. Cuando haya
+ * una instalación real en una ciudad, su foto va acá.
+ */
+export function getStaticPaths() {
+  return ciudadesCamaras.map((c) => ({ params: { ciudad: c.slug }, props: { c } }));
+}
+const { c } = Astro.props;
+const s = servicios.find((v) => v.slug === 'instalacion-camaras')!;
+
+const url = `/servicios/instalacion-camaras/${c.slug}/`;
+const urlAbs = new URL(url, Astro.site).href;
+const lugar = `${c.nombre}, ${c.depto}`;
+const waTexto = `Hola! Quiero cotizar cámaras de seguridad en ${c.nombre}.`;
+const wa = `https://wa.me/50488091744?text=${encodeURIComponent(waTexto)}`;
+const cotizar = `/contacto/?servicio=${encodeURIComponent(s.formServicio)}`;
+
+const pasos = [
+  { t: 'Visita gratis', d: `Vamos a tu casa o negocio en ${c.nombre}, caminamos el lugar y marcamos los puntos ciegos.` },
+  { t: 'Propuesta por escrito', d: 'Equipo con marca y modelo, metros de cable, mano de obra y el total. Nada empieza hasta que la aprobás.' },
+  { t: 'Instalación', d: 'Cable canalizado, cajas selladas contra la lluvia, grabador en gabinete y todo etiquetado.' },
+  { t: 'Entrega', d: 'Probamos cámara por cámara con vos, configuramos la app en tu celular y te quedás con la contraseña.' },
+];
+
+const paquetes = [
+  { n: '4', t: 'Casa o local pequeño', d: 'Portón, entrada, caja o sala, y patio.' },
+  { n: '8', t: 'Negocio con bodega', d: 'Lo anterior más bodega, pasillos y área de personal.' },
+  { n: '16', t: 'Local grande o varias plantas', d: 'Cobertura por planta, parqueo y perímetro.' },
+];
+
+// Las del servicio que aplican igual en cualquier ciudad, más la de la visita.
+const faq = [
+  { q: `¿Instalan cámaras de seguridad en ${c.nombre}?`, a: `Sí. Operamos desde El Progreso, Yoro, e instalamos en ${lugar}. La visita para medir el lugar y la cotización por escrito no tienen costo.` },
+  ...s.faq
+    .filter((f) => ['¿Cuánto cuesta?', '¿Cuántas cámaras necesito?', '¿Cuál es la diferencia entre DVR y NVR?', '¿Funcionan si se va la luz o el internet?', '¿Cuánto tarda la instalación?', '¿Pueden ampliar o arreglar el sistema que ya tengo?'].includes(f.qEs))
+    .map((f) => ({ q: f.qEs, a: f.aEs })),
+];
+
+const otras = ciudadesCamaras.filter((o) => o.slug !== c.slug);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Service',
+      name: `Instalación de cámaras de seguridad en ${c.nombre}`,
+      serviceType: 'Instalación de cámaras de seguridad (CCTV)',
+      url: urlAbs,
+      areaServed: { '@type': 'City', name: c.nombre, containedInPlace: { '@type': 'AdministrativeArea', name: c.depto } },
+      provider: { '@id': 'https://www.kizercode.com/#business' },
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Kizercode', item: 'https://www.kizercode.com/' },
+        { '@type': 'ListItem', position: 2, name: 'Servicios', item: new URL('/servicios/', Astro.site).href },
+        { '@type': 'ListItem', position: 3, name: s.nombre, item: new URL('/servicios/instalacion-camaras/', Astro.site).href },
+        { '@type': 'ListItem', position: 4, name: c.nombre, item: urlAbs },
+      ],
+    },
+  ],
+};
+---
+<Layout
+  title={`Cámaras de seguridad en ${c.nombre} | Kizercode`}
+  description={`Instalación de cámaras de seguridad en ${lugar}: visita y cotización gratis, precio por escrito, DVR o NVR y video en vivo en tu celular.`}
+  forzarLang="es"
+  urlEs={url}
+  soloEs
+  servicio={s.nombre}
+  waEs={waTexto}
+>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+  <Nav />
+  <IdiomaPorUrl otra="/en/services/security-cameras/" />
+  <main id="contenido">
+    <header style="background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%)">
+      <div class="mx-auto flex max-w-[860px] flex-col gap-5 px-6 pb-10 pt-14">
+        <nav aria-label="breadcrumb" class="text-[13px] font-medium" style="color: var(--mute)">
+          <a href="/" style="color: var(--mute)">Kizercode</a>
+          <span aria-hidden="true"> / </span>
+          <a href="/servicios/instalacion-camaras/" style="color: var(--mute)">{s.nombre}</a>
+          <span aria-hidden="true"> / </span>
+          <span style="color: var(--ink2)">{c.nombre}</span>
+        </nav>
+        <h1 class="font-bold" style="font-size: clamp(32px, 4.4vw, 48px); line-height: 1.12; letter-spacing: -0.02em; text-wrap: balance">
+          Instalación de cámaras de seguridad en {c.nombre}
+        </h1>
+        <p class="text-[18px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
+          Instalamos cámaras en casas y negocios de {lugar}. Primero vamos a medir el lugar sin costo, después te damos el precio por escrito con marca y modelo, y al final te dejamos el video en vivo en tu celular.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a href={wa} target="_blank" rel="noopener noreferrer" class="kz-btn kz-btn-primario" style="padding: 14px 24px; font-size: 15px">
+            <img src="/whatsapp.svg" alt="" width="18" height="18" class="block" />
+            Agendar visita en {c.nombre}
+          </a>
+          <a href={cotizar} class="kz-btn kz-btn-secundario" style="padding: 14px 24px; font-size: 15px">Pedir cotización</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="mx-auto flex max-w-[860px] flex-col gap-14 px-6 pb-20">
+      <section aria-labelledby="como">
+        <h2 id="como" class="kz-h2 mb-6" style="font-size: clamp(24px, 2.6vw, 30px)">Cómo trabajamos en {c.nombre}</h2>
+        <ol class="grid list-none gap-4" style="grid-template-columns: repeat(auto-fit, minmax(190px, 1fr))">
+          {pasos.map((p, i) => (
+            <li class="kz-card p-5">
+              <p class="kz-eyebrow mb-2" style="font-size: 12px">Paso {i + 1}</p>
+              <p class="mb-1.5 text-[16px] font-bold">{p.t}</p>
+              <p class="text-[14.5px] leading-relaxed" style="color: var(--ink2)">{p.d}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section aria-labelledby="cuantas">
+        <h2 id="cuantas" class="kz-h2 mb-3" style="font-size: clamp(24px, 2.6vw, 30px)">¿Cuántas cámaras necesitás?</h2>
+        <p class="mb-6 text-[16px] leading-relaxed" style="color: var(--ink2)">
+          La cantidad exacta sale de la visita, no de un paquete armado por teléfono. Como referencia:
+        </p>
+        <div class="grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))">
+          {paquetes.map((p) => (
+            <div class="kz-card p-5">
+              <p class="text-[32px] font-bold leading-none" style="color: var(--green2)">{p.n}</p>
+              <p class="mt-2 text-[16px] font-bold">{p.t}</p>
+              <p class="mt-1 text-[14.5px] leading-relaxed" style="color: var(--ink2)">{p.d}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section aria-labelledby="incluye">
+        <h2 id="incluye" class="kz-h2 mb-6" style="font-size: clamp(24px, 2.6vw, 30px)">Qué incluye la instalación</h2>
+        <ul class="grid list-none gap-x-8 gap-y-3" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))">
+          {s.incluye.map((i) => (
+            <li class="flex items-start gap-3 text-[15.5px]">
+              <Icon name="lucide:check" class="mt-1 h-4 w-4 shrink-0" style="color: var(--green2)" aria-hidden="true" />
+              {i.es}
+            </li>
+          ))}
+        </ul>
+        <p class="mt-6 text-[15.5px]">
+          ¿Querés ver los tipos de cámara, el equipo y nuestras reglas de instalación?
+          <a href="/servicios/instalacion-camaras/" class="font-semibold" style="color: var(--green2)">Ver la página completa de cámaras de seguridad</a>
+          o leé la guía <a href="/guias/dvr-o-nvr-camaras-de-seguridad/" class="font-semibold" style="color: var(--green2)">DVR o NVR: qué conviene</a>.
+        </p>
+      </section>
+
+      <section aria-labelledby="preguntas">
+        <h2 id="preguntas" class="kz-h2 mb-3" style="font-size: clamp(24px, 2.6vw, 30px)">Preguntas frecuentes</h2>
+        {faq.map((f) => (
+          <details class="border-b" style="border-color: var(--line)">
+            <summary class="cursor-pointer py-4 text-[16px] font-semibold">{f.q}</summary>
+            <p class="pb-5 text-[16px] leading-relaxed" style="color: var(--ink2)">{f.a}</p>
+          </details>
+        ))}
+      </section>
+
+      <nav aria-labelledby="otras">
+        <h2 id="otras" class="mb-4 text-[18px] font-bold">También instalamos en</h2>
+        <ul class="flex list-none flex-wrap gap-2">
+          <li><a href="/servicios/instalacion-camaras/" class="kz-btn kz-btn-secundario text-sm" style="padding: 8px 14px">El Progreso</a></li>
+          {otras.map((o) => (
+            <li><a href={`/servicios/instalacion-camaras/${o.slug}/`} class="kz-btn kz-btn-secundario text-sm" style="padding: 8px 14px">{o.nombre}</a></li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  </main>
+  <Footer />
+  <FloatingWhatsApp />
+</Layout>

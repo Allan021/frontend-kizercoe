@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Analitica from '@/components/Analitica.astro';
 import LeadWhatsApp from '@/components/LeadWhatsApp.astro';
+import { servicios } from '@/lib/servicios';
 
 interface Props {
   title?: string;
@@ -33,10 +34,10 @@ interface Props {
 const {
   // En español por defecto: el cliente que busca en Google está en Honduras.
   title = 'Kizercode — Software, Marca y Crecimiento | Honduras',
-  description = 'Software a la medida, apps web y móviles, agentes de IA, marketing digital y reparación de computadoras y teléfonos en El Progreso, Yoro, Honduras.',
+  description = 'Software a la medida, apps web y móviles, agentes de IA, marketing digital y reparación de computadoras en El Progreso, Yoro, Honduras.',
   image = '/og-image.png',
   imageAlt = 'Kizercode — Agencia de software y marca en Honduras',
-  keywords = 'software development Honduras, web apps, mobile apps, marketing digital, billing systems, digital transformation, enterprise software, reparación de computadoras El Progreso, reparación de celulares Honduras, compra y venta de computadoras, instalación de cámaras de seguridad El Progreso, El Progreso Yoro',
+  keywords = 'software development Honduras, web apps, mobile apps, marketing digital, billing systems, digital transformation, enterprise software, reparación de computadoras El Progreso, compra y venta de computadoras, instalación de cámaras de seguridad El Progreso, El Progreso Yoro',
   locale = 'es_HN',
   type = 'website',
   noindex = false,
@@ -55,7 +56,9 @@ const ogImageURL = new URL(image, Astro.site);
 
 // Herramientas de Google, activadas por env para no ensuciar el desarrollo:
 // GA_ID viene de Analytics (G-XXXXXXX) y la verificación de Search Console.
-const GA_ID = import.meta.env.PUBLIC_GA_ID;
+// trim: la variable en Vercel traía un salto de línea al final y el ID salía
+// con ese salto pegado en gtag('config').
+const GA_ID = import.meta.env.PUBLIC_GA_ID?.trim();
 const GOOGLE_VERIFICATION = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 ---
 <!doctype html>
@@ -124,14 +127,17 @@ const GOOGLE_VERIFICATION = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
         "name": "Kizercode",
         // Fija: es la misma entidad en todas las páginas. Si cambia con cada una,
         // Google y las IA ven un negocio distinto por URL.
-        "description": "Agencia de software y taller de tecnología en El Progreso, Yoro, Honduras: páginas web, tiendas en línea, sistemas a la medida, apps, IA, marketing digital, instalación de cámaras de seguridad y reparación de computadoras y celulares.",
+        "description": "Agencia de software y taller de tecnología en El Progreso, Yoro, Honduras: páginas web, tiendas en línea, sistemas a la medida, apps, IA, marketing digital, instalación de cámaras de seguridad y reparación de computadoras.",
         "url": "https://www.kizercode.com",
+        // Cuadrado: Google no usa como logo una imagen apaisada de 1200×630.
         "logo": {
           "@type": "ImageObject",
-          "url": "https://www.kizercode.com/og-image.png",
-          "width": 1200,
-          "height": 630
+          "url": "https://www.kizercode.com/apple-touch-icon.png",
+          "width": 180,
+          "height": 180
         },
+        "email": "hello@kizercode.com",
+        "founder": { "@id": "https://www.kizercode.com/#fundador" },
         "image": "https://www.kizercode.com/og-image.png",
         "priceRange": "$$",
         "areaServed": [
@@ -163,14 +169,11 @@ const GOOGLE_VERIFICATION = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
           "email": "hello@kizercode.com",
           "availableLanguage": ["English", "Spanish"]
         },
-        "makesOffer": [
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Custom software and web applications" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "AI automation and integrations" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Digital marketing and SEO" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Reparación de computadoras y teléfonos" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Compra y venta de equipos" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Instalación de cámaras de seguridad" } }
-        ],
+        // De servicios.ts, con su URL: cada oferta apunta a la página que la explica.
+        "makesOffer": servicios.map((s) => ({
+          "@type": "Offer",
+          "itemOffered": { "@type": "Service", "name": s.nombre, "url": `https://www.kizercode.com/servicios/${s.slug}/` }
+        })),
         "sameAs": [
           "https://www.facebook.com/profile.php?id=61590361725838",
           "https://www.linkedin.com/company/kizercode",
@@ -182,7 +185,19 @@ const GOOGLE_VERIFICATION = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
         "@id": "https://www.kizercode.com/#website",
         "url": "https://www.kizercode.com",
         "name": "Kizercode",
+        "inLanguage": ["es-HN", "en"],
         "publisher": { "@id": "https://www.kizercode.com/#business" }
+      },
+      // La persona detrás del negocio: Google y las IA le dan más peso a un
+      // autor con nombre que a una empresa sin cara.
+      {
+        "@type": "Person",
+        "@id": "https://www.kizercode.com/#fundador",
+        "name": "Allan Aceituno",
+        "jobTitle": "Fundador",
+        "worksFor": { "@id": "https://www.kizercode.com/#business" },
+        "url": "https://www.kizercode.com/nosotros/",
+        "sameAs": ["https://www.linkedin.com/in/allan-castro-1055b4150/"]
       },
       // Los productos solo donde se habla de ellos: en la página de cámaras
       // eran ruido que diluía de qué trata la página.

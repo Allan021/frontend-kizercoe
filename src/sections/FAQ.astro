@@ -26,7 +26,22 @@ const preguntas = [
     en_a: 'Not always. We review what exists and tell you frankly whether to redesign, migrate or just fix. If a fix is enough, we say so even if it means a smaller project.',
     es_a: 'No siempre. Revisamos lo que existe y te decimos con franqueza si conviene rediseñar, migrar o solo corregir. Si con corregir alcanza, te lo decimos aunque sea un proyecto más pequeño.' },
 ];
+
+// FAQPage solo donde se pide (la portada): /contacto ya trae el suyo y dos en
+// una misma página Google los marca como duplicados.
+const { schema = false } = Astro.props;
+const en = Astro.url.pathname.startsWith('/en/');
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: preguntas.map((p) => ({
+    '@type': 'Question',
+    name: en ? p.en_q : p.es_q,
+    acceptedAnswer: { '@type': 'Answer', text: en ? p.en_a : p.es_a },
+  })),
+};
 ---
+{schema && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
 
 <section id="faq" class="border-y" style="background: var(--bg2); border-color: var(--line)">
   <div class="mx-auto grid max-w-[1200px] gap-12 px-6 py-[72px]" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))">

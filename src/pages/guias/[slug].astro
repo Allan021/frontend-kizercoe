@@ -56,7 +56,7 @@ const jsonLd = {
       inLanguage: 'es-HN',
       datePublished: fechaIso(d.date),
       dateModified: fechaIso(mod),
-      author: { '@id': 'https://www.kizercode.com/#business' },
+      author: { '@id': 'https://www.kizercode.com/#fundador' },
       publisher: { '@id': 'https://www.kizercode.com/#business' },
       mainEntityOfPage: { '@type': 'WebPage', '@id': urlAbs },
       image: new URL('/og-image.png', Astro.site).href,
@@ -85,7 +85,7 @@ const jsonLd = {
 };
 ---
 <Layout
-  title={`${d.title} | Kizercode`}
+  title={`${d.metaTitle ?? d.title} | Kizercode`}
   description={d.description}
   type="article"
   forzarLang="es"
