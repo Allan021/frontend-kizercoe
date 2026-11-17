@@ -46,6 +46,8 @@ const casos = defineCollection({
     lugar: z.string(),
     industria: z.string(),
     servicio: z.enum(slugs),
+    /** Si el caso es de un producto propio (slug de productos.ts): la ficha y el CTA llevan al producto. */
+    producto: z.string().optional(),
     periodo: z.string(),
     date: z.coerce.date(),
     /** 2–4 cifras grandes del encabezado. La primera es la principal. */

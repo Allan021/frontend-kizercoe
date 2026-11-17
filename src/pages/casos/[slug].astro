@@ -7,6 +7,7 @@ import Footer from '@/components/Footer.astro';
 import FloatingWhatsApp from '@/components/FloatingWhatsApp.astro';
 import IdiomaPorUrl from '@/components/IdiomaPorUrl.astro';
 import { servicios } from '@/lib/servicios';
+import { productos } from '@/lib/productos';
 import { casosDe, slugCaso, urlCaso, type Caso } from '@/lib/casos';
 
 /**
@@ -31,13 +32,18 @@ const s = servicios.find((v) => v.slug === d.servicio)!;
 const otroIdioma = (await casosDe(!en)).some((c) => slugCaso(c) === slug);
 const url = urlCaso(slug, en);
 const urlAbs = new URL(url, Astro.site).href;
-const urlServicio = en ? `/en/services/${s.slugEn}/` : `/servicios/${s.slug}/`;
+// Caso de un producto propio: la ficha y el CTA llevan al producto, no al servicio.
+const prod = d.producto ? productos.find((p) => p.slug === d.producto) : undefined;
+const urlServicio = prod
+  ? (en ? `/en/products/${prod.slugEn}/` : `/productos/${prod.slug}/`)
+  : (en ? `/en/services/${s.slugEn}/` : `/servicios/${s.slug}/`);
+const nombreDestino = prod ? prod.nombre : en ? s.name : s.nombre;
 const indice = en ? '/en/case-studies/' : '/casos/';
 const otros = (await casosDe(en)).filter((c) => c.id !== caso.id).slice(0, 3);
 
 const t = en
-  ? { casos: 'Case studies', cliente: 'Client', industria: 'Industry', lugar: 'Location', periodo: 'Period', servicio: 'Service', stack: 'Technology', vivo: 'Visit the live site', cta: 'Want results like these?', ctaSub: 'Tell us about your project. Free diagnosis, fixed price in writing and a reply in under 24 hours.', cotizar: 'Request a quote', ver: `See ${s.name.toLowerCase()}`, mas: 'More case studies', wa: `Hi! I read the ${d.cliente} case study and want something similar.` }
-  : { casos: 'Casos de éxito', cliente: 'Cliente', industria: 'Industria', lugar: 'Lugar', periodo: 'Periodo', servicio: 'Servicio', stack: 'Tecnología', vivo: 'Ver el sitio en vivo', cta: '¿Querés resultados así?', ctaSub: 'Contanos tu proyecto. Diagnóstico gratis, precio fijo por escrito y respuesta en menos de 24 horas.', cotizar: 'Pedir cotización', ver: `Ver ${s.nombre.toLowerCase()}`, mas: 'Más casos de éxito', wa: `Hola! Leí el caso de ${d.cliente} y quiero algo parecido.` };
+  ? { casos: 'Case studies', cliente: 'Client', industria: 'Industry', lugar: 'Location', periodo: 'Period', servicio: 'Service', stack: 'Technology', vivo: 'Visit the live site', cta: 'Want results like these?', ctaSub: 'Tell us about your project. Free diagnosis, fixed price in writing and a reply in under 24 hours.', cotizar: 'Request a quote', ver: `See ${prod ? prod.nombre : s.name.toLowerCase()}`, mas: 'More case studies', wa: `Hi! I read the ${d.cliente} case study and want something similar.` }
+  : { casos: 'Casos de éxito', cliente: 'Cliente', industria: 'Industria', lugar: 'Lugar', periodo: 'Periodo', servicio: 'Servicio', stack: 'Tecnología', vivo: 'Ver el sitio en vivo', cta: '¿Querés resultados así?', ctaSub: 'Contanos tu proyecto. Diagnóstico gratis, precio fijo por escrito y respuesta en menos de 24 horas.', cotizar: 'Pedir cotización', ver: `Ver ${prod ? prod.nombre : s.nombre.toLowerCase()}`, mas: 'Más casos de éxito', wa: `Hola! Leí el caso de ${d.cliente} y quiero algo parecido.` };
 const wa = `https://wa.me/50488091744?text=${encodeURIComponent(t.wa)}`;
 
 const ficha = [
@@ -45,7 +51,7 @@ const ficha = [
   { k: t.industria, v: d.industria },
   { k: t.lugar, v: d.lugar },
   { k: t.periodo, v: d.periodo },
-  { k: t.servicio, v: en ? s.name : s.nombre, href: urlServicio },
+  { k: prod ? (en ? 'Product' : 'Producto') : t.servicio, v: nombreDestino, href: urlServicio },
 ];
 
 const jsonLd = {
@@ -61,7 +67,14 @@ const jsonLd = {
       publisher: { '@id': 'https://www.kizercode.com/#business' },
       mainEntityOfPage: { '@type': 'WebPage', '@id': urlAbs },
       image: d.imagen ?? new URL('/og-image.png', Astro.site).href,
-      about: {
+      about: prod ? {
+        '@type': 'SoftwareApplication',
+        name: prod.nombre,
+        applicationCategory: 'BusinessApplication',
+        operatingSystem: 'Web',
+        url: new URL(urlServicio, Astro.site).href,
+        publisher: { '@id': 'https://www.kizercode.com/#business' },
+      } : {
         '@type': 'CreativeWork',
         name: d.cliente,
         ...(d.enlace ? { url: d.enlace } : {}),

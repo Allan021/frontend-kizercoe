@@ -7,6 +7,7 @@ import Footer from '@/components/Footer.astro';
 import FloatingWhatsApp from '@/components/FloatingWhatsApp.astro';
 import { industrias } from '@/lib/industrias';
 import type { Producto } from '@/lib/productos';
+import { casosDe, slugCaso, urlCaso } from '@/lib/casos';
 
 /**
  * Página de cada producto propio (/productos/x y /en/products/x): qué es,
@@ -23,6 +24,9 @@ const urlEs = `/productos/${p.slug}/`;
 const urlEn = `/en/products/${p.slugEn}/`;
 const propia = es ? urlEs : urlEn;
 const otra = es ? urlEn : urlEs;
+
+// Caso de éxito de este producto, si hay uno: va enlazado junto al estado.
+const caso = (await casosDe(!es)).find((c) => c.data.producto === p.slug);
 
 const paraQuien = p.industrias
   .map((slug) => industrias.find((i) => i.slug === slug))
@@ -207,6 +211,11 @@ const jsonLd = {
                 <span class="kz-latido" style="background: var(--green-bright)"></span>
                 {p.casoEs ? (es ? p.casoEs : p.casoEn) : (es ? 'Disponible hoy' : 'Available today')}
               </span>
+              {caso && (
+                <a href={urlCaso(slugCaso(caso), !es)} class="text-[13.5px] font-semibold underline underline-offset-4" style="color: var(--bg)">
+                  {es ? 'Leer el caso de éxito →' : 'Read the case study →'}
+                </a>
+              )}
             </span>
           </div>
           <div class={fotoAlt ? 'grid grid-cols-1 gap-3 lg:grid-cols-3' : 'flex flex-col gap-3.5'}>

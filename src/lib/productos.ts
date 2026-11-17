@@ -105,6 +105,8 @@ export const productos: Producto[] = [
     ],
     industrias: ['farmacias', 'ferreterias', 'boutiques', 'distribuidoras'],
     sinInternet: true,
+    casoEs: 'En uso en varios locales, incluidos restaurantes en EE. UU.',
+    casoEn: 'In use at several locations, including US restaurants',
     fotoAltEs: 'Cajera de una tienda en Honduras cobra con KizerPOS en la caja',
     fotoAltEn: 'Cashier at a store in Honduras ringing up a sale with KizerPOS',
   },
@@ -139,6 +141,9 @@ export const productos: Producto[] = [
     ],
     industrias: ['restaurantes'],
     sinInternet: true,
+    // ponytail: sin nombres a pedido del dueño; con permiso de un restaurante, ponerlo acá y en el caso.
+    casoEs: 'En uso en restaurantes de Estados Unidos',
+    casoEn: 'In use at restaurants in the United States',
     fotoAltEs: 'Mesero de un restaurante en Honduras toma la orden con KizerResto en una tablet',
     fotoAltEn: 'Waiter at a restaurant in Honduras taking an order with KizerResto on a tablet',
   },
