@@ -763,6 +763,8 @@ export default function ContactForm() {
 
         <p className="-mt-1 text-center text-xs" style={{ color: 'var(--mute)' }}>
           <T en="Free diagnosis · reply in under 24 h · no spam" es="Diagnóstico gratis · respuesta en menos de 24 h · nada de spam" />
+          {' · '}
+          <a href="/privacidad/" style={{ textDecoration: 'underline' }}><T en="Privacy" es="Privacidad" /></a>
         </p>
       </form>
     </div>

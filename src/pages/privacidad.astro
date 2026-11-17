@@ -1,0 +1,109 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Nav from '@/components/Nav.astro';
+import Footer from '@/components/Footer.astro';
+import IdiomaPorUrl from '@/components/IdiomaPorUrl.astro';
+
+/**
+ * Aviso de privacidad. Describe solo lo que el sitio hace de verdad:
+ * formulario de contacto y diálogo previo a WhatsApp (→ CRM del panel, correo
+ * por Resend), Google Analytics y localStorage. Si se agrega otro rastreador
+ * (píxel de Meta, etc.), hay que listarlo acá.
+ * /en/privacy/ renderiza esta misma página.
+ */
+const en = Astro.url.pathname.startsWith('/en/');
+const actualizado = en ? 'November 17, 2026' : '17 de noviembre de 2026';
+---
+<Layout
+  title={en ? 'Privacy Policy | Kizercode' : 'Aviso de privacidad | Kizercode'}
+  description={en
+    ? 'What personal data Kizercode collects on its website, what it is used for, who processes it and how to ask us to delete it.'
+    : 'Qué datos personales recoge Kizercode en su sitio web, para qué los usa, quién los procesa y cómo pedir que los borremos.'}
+  locale={en ? 'en_US' : undefined}
+  forzarLang={en ? 'en' : 'es'}
+  urlEs="/privacidad/"
+  urlEn="/en/privacy/"
+>
+  <Nav />
+  <IdiomaPorUrl otra={en ? '/privacidad/' : '/en/privacy/'} />
+  <main id="contenido" class="mx-auto max-w-[760px] px-6 pb-20 pt-14">
+    {en ? (
+      <article class="kz-prosa">
+        <h1>Privacy Policy</h1>
+        <p><em>Last updated: {actualizado}</em></p>
+        <p>This policy explains what personal data Kizercode ("we"), based in El Progreso, Yoro, Honduras, collects through www.kizercode.com and what we do with it. Questions: <a href="mailto:hello@kizercode.com">hello@kizercode.com</a>.</p>
+
+        <h2>What we collect</h2>
+        <ul>
+          <li><strong>Contact form:</strong> name, email, and optionally phone, company, service of interest, budget, timeline and your message.</li>
+          <li><strong>Before opening WhatsApp or a product demo:</strong> name and email, plus the service or product you clicked on.</li>
+          <li><strong>Usage data:</strong> Google Analytics records pages visited, approximate location, device and browser, using cookies.</li>
+          <li><strong>In your browser (localStorage):</strong> your language and theme preference, and the name and email you already gave us, so we don't ask again. This stays on your device.</li>
+        </ul>
+        <p>We do not ask for payment card data on this website.</p>
+
+        <h2>What we use it for</h2>
+        <ul>
+          <li>To answer your request, prepare a quote and follow up.</li>
+          <li>To know which services and pages interest people, and improve the site.</li>
+        </ul>
+        <p>We do not sell or rent your data, and we don't add you to mailing lists you didn't ask for.</p>
+
+        <h2>Who processes it</h2>
+        <p>We use providers to run the site: Vercel (hosting), Google Analytics (statistics), Resend (email delivery), our own server and database for the contact records, and WhatsApp (Meta) when you choose to write to us there. Each provider handles the data under its own privacy policy, and some of them store it outside Honduras.</p>
+
+        <h2>How long we keep it</h2>
+        <p>Contact data is kept while there is a business relationship or a pending conversation, and up to two years after the last contact, unless you ask us to delete it earlier.</p>
+
+        <h2>Your rights</h2>
+        <p>You can ask us to show you, correct or delete your data by writing to <a href="mailto:hello@kizercode.com">hello@kizercode.com</a>. We reply within 15 business days. You can also block or delete cookies in your browser; the site keeps working without them.</p>
+
+        <h2>Data in client projects</h2>
+        <p>When we build or maintain a system for a client (POS, CRM, store, etc.), the data inside it belongs to the client. We access it only to provide the contracted service.</p>
+
+        <h2>Changes</h2>
+        <p>If we change this policy we will update the date at the top of this page.</p>
+        <p>See also our <a href="/en/terms/">Terms and Conditions</a>.</p>
+      </article>
+    ) : (
+      <article class="kz-prosa">
+        <h1>Aviso de privacidad</h1>
+        <p><em>Última actualización: {actualizado}</em></p>
+        <p>Este aviso explica qué datos personales recoge Kizercode ("nosotros"), con sede en El Progreso, Yoro, Honduras, a través de www.kizercode.com y qué hacemos con ellos. Dudas: <a href="mailto:hello@kizercode.com">hello@kizercode.com</a>.</p>
+
+        <h2>Qué datos recogemos</h2>
+        <ul>
+          <li><strong>Formulario de contacto:</strong> nombre, correo y, si los das, teléfono, empresa, servicio que te interesa, presupuesto, plazo y tu mensaje.</li>
+          <li><strong>Antes de abrir WhatsApp o la demo de un producto:</strong> nombre y correo, y el servicio o producto en el que hiciste clic.</li>
+          <li><strong>Datos de uso:</strong> Google Analytics registra páginas visitadas, ubicación aproximada, dispositivo y navegador, mediante cookies.</li>
+          <li><strong>En tu navegador (localStorage):</strong> tu idioma y tema preferidos, y el nombre y correo que ya nos diste, para no volver a pedírtelos. Eso se queda en tu dispositivo.</li>
+        </ul>
+        <p>En este sitio no pedimos datos de tarjetas de pago.</p>
+
+        <h2>Para qué los usamos</h2>
+        <ul>
+          <li>Para responder tu solicitud, prepararte una cotización y darte seguimiento.</li>
+          <li>Para saber qué servicios y páginas interesan, y mejorar el sitio.</li>
+        </ul>
+        <p>No vendemos ni alquilamos tus datos, y no te agregamos a listas de correo que no pediste.</p>
+
+        <h2>Quién los procesa</h2>
+        <p>Usamos proveedores para operar el sitio: Vercel (alojamiento), Google Analytics (estadísticas), Resend (envío de correos), nuestro propio servidor y base de datos para los registros de contacto, y WhatsApp (Meta) cuando decidís escribirnos por ahí. Cada proveedor trata los datos según su propia política de privacidad, y algunos los guardan fuera de Honduras.</p>
+
+        <h2>Cuánto tiempo los guardamos</h2>
+        <p>Los datos de contacto se guardan mientras haya una relación comercial o una conversación pendiente, y hasta dos años después del último contacto, salvo que nos pidas borrarlos antes.</p>
+
+        <h2>Tus derechos</h2>
+        <p>Podés pedirnos ver, corregir o borrar tus datos escribiendo a <a href="mailto:hello@kizercode.com">hello@kizercode.com</a>. Respondemos en un máximo de 15 días hábiles. También podés bloquear o borrar las cookies en tu navegador; el sitio sigue funcionando sin ellas.</p>
+
+        <h2>Datos en proyectos de clientes</h2>
+        <p>Cuando hacemos o mantenemos un sistema para un cliente (punto de venta, CRM, tienda, etc.), los datos que contiene son del cliente. Solo entramos a ellos para dar el servicio contratado.</p>
+
+        <h2>Cambios</h2>
+        <p>Si cambiamos este aviso, actualizamos la fecha de arriba.</p>
+        <p>Ver también los <a href="/terminos/">Términos y condiciones</a>.</p>
+      </article>
+    )}
+  </main>
+  <Footer />
+</Layout>

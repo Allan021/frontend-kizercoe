@@ -1,0 +1,116 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Nav from '@/components/Nav.astro';
+import Footer from '@/components/Footer.astro';
+import IdiomaPorUrl from '@/components/IdiomaPorUrl.astro';
+
+/**
+ * Términos y condiciones del sitio y de los servicios. Repite solo lo que el
+ * sitio ya promete (precio fijo por escrito, 30 días de garantía, código a
+ * nombre del cliente); el detalle de cada proyecto manda en su cotización.
+ * /en/terms/ renderiza esta misma página.
+ */
+const en = Astro.url.pathname.startsWith('/en/');
+const actualizado = en ? 'November 17, 2026' : '17 de noviembre de 2026';
+---
+<Layout
+  title={en ? 'Terms and Conditions | Kizercode' : 'Términos y condiciones | Kizercode'}
+  description={en
+    ? 'Terms for using the Kizercode website and hiring our services: written quotes, payments, ownership of the work, 30-day warranty and liability.'
+    : 'Condiciones para usar el sitio de Kizercode y contratar nuestros servicios: cotización por escrito, pagos, propiedad del trabajo, garantía de 30 días y responsabilidad.'}
+  locale={en ? 'en_US' : undefined}
+  forzarLang={en ? 'en' : 'es'}
+  urlEs="/terminos/"
+  urlEn="/en/terms/"
+>
+  <Nav />
+  <IdiomaPorUrl otra={en ? '/terminos/' : '/en/terms/'} />
+  <main id="contenido" class="mx-auto max-w-[760px] px-6 pb-20 pt-14">
+    {en ? (
+      <article class="kz-prosa">
+        <h1>Terms and Conditions</h1>
+        <p><em>Last updated: {actualizado}</em></p>
+        <p>These terms apply to the use of www.kizercode.com and to the services offered by Kizercode, based in El Progreso, Yoro, Honduras. By using the site or hiring a service you accept them.</p>
+
+        <h2>1. Prices and quotes</h2>
+        <p>Prices on the website are reference prices ("from"). The price of each project is the one in its written quote, in lempiras or US dollars. Once the quote is accepted, the price does not change unless you ask for work outside its scope.</p>
+
+        <h2>2. Payments</h2>
+        <p>Payment schedule, methods and dates are those stated in the quote or contract. We may pause the work while a due payment is pending.</p>
+
+        <h2>3. Scope and changes</h2>
+        <p>The work covers what the quote describes. Changes or new features requested later are quoted separately before they are done.</p>
+
+        <h2>4. Your part</h2>
+        <p>Delivery times depend on receiving on time what we need from you: content, photos, product lists, access and approvals. Delays on that side move the dates.</p>
+
+        <h2>5. Ownership</h2>
+        <p>Once the project is paid in full, the code, database, domain and design files made for you are yours, under your name. Third-party components (libraries, fonts, platforms) keep their own licenses. Our own products (KizerPOS, KizerResto, Kizer Cobros, Kizer Check, ClínicoSalud) are licensed for use; their source code remains Kizercode's unless agreed otherwise in writing. We may show the project in our portfolio unless you ask us not to.</p>
+
+        <h2>6. Warranty</h2>
+        <p>We give a 30-day warranty from delivery: if something we delivered does not work as agreed, we fix it at no cost. It does not cover changes made by third parties, misuse, new requirements, or failures of external services (hosting, internet, payment gateways, WhatsApp, etc.). Equipment we install carries the manufacturer's warranty.</p>
+
+        <h2>7. Third-party services</h2>
+        <p>Some projects use services billed by third parties (domain, hosting, AI models, WhatsApp, payment gateways). Those costs and their terms are stated in the quote, including who pays them.</p>
+
+        <h2>8. Liability</h2>
+        <p>We work with care, but we are not liable for indirect losses (lost sales, profits or data) arising from the use of the work or from failures of third-party services. Our total liability for a project is limited to the amount paid for it. Keeping backups of your own information is your responsibility unless backup is part of the contracted service.</p>
+
+        <h2>9. Use of the website</h2>
+        <p>The content of this site (texts, images, logos) belongs to Kizercode or is used with permission; do not copy it for commercial purposes without authorization. Guides and articles are general information, not professional advice for your specific case.</p>
+
+        <h2>10. Privacy</h2>
+        <p>How we handle personal data is explained in our <a href="/en/privacy/">Privacy Policy</a>.</p>
+
+        <h2>11. Law and disputes</h2>
+        <p>These terms are governed by the laws of Honduras. We will first try to resolve any disagreement by talking; if that is not possible, the competent courts of Honduras will decide.</p>
+
+        <h2>12. Changes and contact</h2>
+        <p>We may update these terms; the date at the top shows the current version. A signed quote or contract prevails over these terms. Questions: <a href="mailto:hello@kizercode.com">hello@kizercode.com</a> or +504 8809-1744.</p>
+      </article>
+    ) : (
+      <article class="kz-prosa">
+        <h1>Términos y condiciones</h1>
+        <p><em>Última actualización: {actualizado}</em></p>
+        <p>Estos términos aplican al uso de www.kizercode.com y a los servicios que ofrece Kizercode, con sede en El Progreso, Yoro, Honduras. Al usar el sitio o contratar un servicio los aceptás.</p>
+
+        <h2>1. Precios y cotizaciones</h2>
+        <p>Los precios del sitio son de referencia ("desde"). El precio de cada proyecto es el de su cotización por escrito, en lempiras o dólares. Una vez aceptada, el precio no cambia, salvo que pidás trabajo fuera de lo cotizado.</p>
+
+        <h2>2. Pagos</h2>
+        <p>La forma, los plazos y las fechas de pago son los que dice la cotización o el contrato. Podemos pausar el trabajo mientras haya un pago vencido.</p>
+
+        <h2>3. Alcance y cambios</h2>
+        <p>El trabajo cubre lo que describe la cotización. Los cambios o funciones nuevas que se pidan después se cotizan aparte antes de hacerlos.</p>
+
+        <h2>4. Tu parte</h2>
+        <p>Los tiempos de entrega dependen de recibir a tiempo lo que necesitamos de vos: contenido, fotos, listas de productos, accesos y aprobaciones. Los atrasos de ese lado mueven las fechas.</p>
+
+        <h2>5. Propiedad</h2>
+        <p>Una vez pagado el proyecto completo, el código, la base de datos, el dominio y los archivos de diseño hechos para vos son tuyos y quedan a tu nombre. Los componentes de terceros (librerías, fuentes, plataformas) mantienen sus propias licencias. Nuestros productos propios (KizerPOS, KizerResto, Kizer Cobros, Kizer Check, ClínicoSalud) se entregan con licencia de uso; su código fuente sigue siendo de Kizercode, salvo acuerdo distinto por escrito. Podemos mostrar el proyecto en nuestro portafolio, salvo que nos pidás que no.</p>
+
+        <h2>6. Garantía</h2>
+        <p>Damos 30 días de garantía desde la entrega: si algo de lo entregado no funciona como se acordó, lo corregimos sin costo. No cubre cambios hechos por terceros, mal uso, requisitos nuevos ni fallas de servicios externos (hosting, internet, pasarelas de pago, WhatsApp, etc.). Los equipos que instalamos llevan la garantía del fabricante.</p>
+
+        <h2>7. Servicios de terceros</h2>
+        <p>Algunos proyectos usan servicios que cobran terceros (dominio, hosting, modelos de IA, WhatsApp, pasarelas de pago). Esos costos y sus condiciones van en la cotización, con quién los paga.</p>
+
+        <h2>8. Responsabilidad</h2>
+        <p>Trabajamos con cuidado, pero no respondemos por pérdidas indirectas (ventas, ganancias o datos perdidos) derivadas del uso del trabajo o de fallas de servicios de terceros. Nuestra responsabilidad total por un proyecto se limita al monto pagado por él. Respaldar tu propia información es tu responsabilidad, salvo que el respaldo sea parte del servicio contratado.</p>
+
+        <h2>9. Uso del sitio</h2>
+        <p>El contenido de este sitio (textos, imágenes, logos) es de Kizercode o se usa con permiso; no lo copiés con fines comerciales sin autorización. Las guías y artículos son información general, no asesoría profesional para tu caso.</p>
+
+        <h2>10. Privacidad</h2>
+        <p>Cómo tratamos los datos personales lo explica nuestro <a href="/privacidad/">Aviso de privacidad</a>.</p>
+
+        <h2>11. Ley aplicable y disputas</h2>
+        <p>Estos términos se rigen por las leyes de Honduras. Cualquier desacuerdo primero intentamos resolverlo conversando; si no se puede, deciden los tribunales competentes de Honduras.</p>
+
+        <h2>12. Cambios y contacto</h2>
+        <p>Podemos actualizar estos términos; la fecha de arriba indica la versión vigente. Una cotización o contrato firmado prevalece sobre estos términos. Dudas: <a href="mailto:hello@kizercode.com">hello@kizercode.com</a> o +504 8809-1744.</p>
+      </article>
+    )}
+  </main>
+  <Footer />
+</Layout>
