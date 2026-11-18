@@ -87,12 +87,12 @@ export const extras: Record<string, ServicioExtra> = {
     costoTituloEs: '¿Cuánto cuesta una página web en Honduras?',
     costoTituloEn: 'How much does a website cost in Honduras?',
     costoEs: [
-      'Una página web con Kizercode cuesta desde L 4,000 (unos $150), en pago único. Ese precio cubre una página para tu negocio con diseño propio, botón de WhatsApp, mapa de Google, optimizada para celular, SEO básico y 30 días de garantía.',
+      'Una página web con Kizercode cuesta desde L 3,000 (unos $115), en pago único. Ese precio cubre una página para tu negocio con diseño moderno y propio, chatbot con IA, botón de WhatsApp, mapa de Google, optimizada para celular, SEO básico y 30 días de garantía.',
       'Lo que mueve el precio es el alcance: cuántas secciones o páginas necesitás, si hay que escribir el contenido desde cero, si querés un panel para publicar vos mismo o si necesitás formularios, idiomas o integraciones extra. Una página sencilla queda cerca del precio de partida.',
       'Después del diagnóstico gratis te mandamos el precio fijo exacto por escrito, en lempiras o dólares. Ese monto no se mueve, y los cambios nuevos que pidás después se cotizan aparte para que vos decidás.',
     ],
     costoEn: [
-      'A website with Kizercode starts at $150 (L 4,000), as a one-time payment. That covers a site for your business with its own design, a WhatsApp button, a Google map, mobile optimization, basic SEO and a 30-day warranty.',
+      'A website with Kizercode starts at $115 (L 3,000), as a one-time payment. That covers a site for your business with its own modern design, an AI chatbot, a WhatsApp button, a Google map, mobile optimization, basic SEO and a 30-day warranty.',
       'What moves the price is scope: how many sections or pages you need, whether the content has to be written from scratch, whether you want a panel to publish yourself, or whether you need forms, languages or extra integrations. A simple site stays close to the starting price.',
       'After the free diagnosis we send you the exact fixed price in writing, in lempiras or dollars. That amount does not move, and any new changes you ask for later are quoted separately so you decide.',
     ],
@@ -448,11 +448,11 @@ export const extras: Record<string, ServicioExtra> = {
     costoTituloEn: 'How much does SEO cost in Honduras?',
     costoEs: [
       'El SEO no tiene un precio único porque depende de dónde arrancás: no es lo mismo un sitio que ya existe y solo necesita ajustes que uno lento, sin contenido y sin ficha de Google Business. Por eso empezamos con un diagnóstico gratis y te damos el precio por escrito.',
-      'Lo que mueve el costo es cuántas palabras clave vamos a trabajar, qué tan competidas están en tu rubro y tu zona, cuánto contenido hay que escribir y cuánto trabajo técnico necesita el sitio. Si todavía no tenés página, una web con SEO básico arranca desde L 4,000 (unos $150).',
+      'Lo que mueve el costo es cuántas palabras clave vamos a trabajar, qué tan competidas están en tu rubro y tu zona, cuánto contenido hay que escribir y cuánto trabajo técnico necesita el sitio. Si todavía no tenés página, una web con SEO básico arranca desde L 3,000 (unos $115).',
     ],
     costoEn: [
       'SEO has no single price because it depends on where you start: a site that exists and only needs tuning is not the same as a slow one with no content and no Google Business profile. That is why we start with a free diagnosis and give you the price in writing.',
-      'What moves the cost is how many keywords we work on, how competitive they are in your industry and area, how much content must be written and how much technical work the site needs. If you do not have a website yet, a site with basic SEO starts at $150 (L 4,000).',
+      'What moves the cost is how many keywords we work on, how competitive they are in your industry and area, how much content must be written and how much technical work the site needs. If you do not have a website yet, a site with basic SEO starts at $115 (L 3,000).',
     ],
     faq: [
       {

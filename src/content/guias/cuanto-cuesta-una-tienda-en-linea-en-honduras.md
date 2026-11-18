@@ -34,7 +34,7 @@ La respuesta corta: **con Kizercode, una tienda en línea cuesta desde L 14,500 
 
 ## Página web o tienda en línea: cuál necesitás
 
-Una **página web** informa: quién sos, qué vendés, dónde estás y cómo escribirte. El cliente ve el producto y te escribe por WhatsApp para comprar. Con Kizercode arranca en [L 4,000](/servicios/paginas-web/).
+Una **página web** informa: quién sos, qué vendés, dónde estás y cómo escribirte. El cliente ve el producto y te escribe por WhatsApp para comprar. Con Kizercode arranca en [L 3,000](/servicios/paginas-web/).
 
 Una **tienda en línea** cobra: el cliente elige, paga y vos recibís el pedido listo para despachar, aunque sean las 11 de la noche. Si hoy pasás el día contestando "¿cuánto cuesta?" y "¿tienen en talla M?" por WhatsApp, probablemente ya necesitás una tienda.
 

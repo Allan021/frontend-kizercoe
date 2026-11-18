@@ -4,7 +4,7 @@ import IconoWhatsApp from '@/components/IconoWhatsApp.astro';
 /**
  * Kaizer: el asistente con IA del sitio (el "Jarvis" de Kizercode).
  *
- * Botón flotante abajo a la izquierda (el de WhatsApp va a la derecha) que abre
+ * Botón flotante abajo a la derecha, a la par del de WhatsApp, que abre
  * un chat. Las respuestas llegan por streaming desde la API (/v1/kaizer/chat),
  * que además guarda cada pregunta: ahí y en Analytics (kaizer_abrir,
  * kaizer_mensaje, kaizer_error) es donde se mide.
@@ -13,6 +13,8 @@ import IconoWhatsApp from '@/components/IconoWhatsApp.astro';
  * y se borra al cerrar la pestaña.
  */
 const WA = `https://wa.me/50488091744?text=${encodeURIComponent('Hola! Estaba hablando con Kaizer en el sitio y quiero seguir por aquí.')}`;
+// Kaizer vectorizado: pastor alemán de orejas paradas, máscara negra y la lengua afuera.
+const PERRO = `<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M14 32 8 3l22 18z" fill="#2a211c"/><path d="M50 32 56 3 34 21z" fill="#2a211c"/><path d="m16 26-3.5-16L24 20z" fill="#d49a5a"/><path d="m48 26 3.5-16L40 20z" fill="#d49a5a"/><path d="M32 14c-11.5 0-20 8.5-20 19.5 0 8.5 5.5 13.5 10 18 3 3 6.5 6.5 10 6.5s7-3.5 10-6.5c4.5-4.5 10-9.5 10-18C52 22.5 43.5 14 32 14z" fill="#e3a961"/><path d="M32 14c-6 0-10.5 2.5-10.5 6.5 0 3.5 3 5 5.5 7.5 1.5 1.5 3.2 3 5 3s3.5-1.5 5-3c2.5-2.5 5.5-4 5.5-7.5C42.5 16.5 38 14 32 14z" fill="#3a2c22"/><path d="M32 33c-6 0-10 4.5-10 10.5 0 5 3.5 9.5 7 11.500h6c3.5-2 7-6.5 7-11.5C42 37.5 38 33 32 33z" fill="#2a211c"/><path d="M27.5 49q4.5 3 9 0v6a4.5 4.5 0 0 1-9 0z" fill="#ff7d96"/><path d="M32 51v5" stroke="#e05a76" stroke-width="1.2" stroke-linecap="round"/><ellipse cx="32" cy="41" rx="4.6" ry="3.3" fill="#0b0807"/><ellipse cx="30.8" cy="40" rx="1.3" ry=".7" fill="#5a4a40"/><circle cx="22.5" cy="31" r="3.1" fill="#1a1411"/><circle cx="41.5" cy="31" r="3.1" fill="#1a1411"/><circle cx="23.6" cy="29.9" r="1.1" fill="#fff"/><circle cx="42.6" cy="29.9" r="1.1" fill="#fff"/><path d="M18.5 25.5q4-3 8 0M37.5 25.5q4-3 8 0" stroke="#8a5a2b" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>`;
 const sugerencias = [
   { es: '¿Cuánto cuesta una página web?', en: 'How much does a website cost?' },
   { es: '¿Qué sistema le conviene a mi negocio?', en: 'Which system fits my business?' },
@@ -21,17 +23,17 @@ const sugerencias = [
 ---
 
 <button type="button" id="kai-fab" class="kai-fab" aria-expanded="false" aria-controls="kai-panel">
-  <img src="/kaizer.webp" alt="" width="36" height="36" class="kai-perro" />
+  <span class="kai-cara" set:html={PERRO} />
   <span class="kai-fab-txt"><span class="en">Ask Kaizer</span><span class="es">Preguntale a Kaizer</span></span>
   <span class="kai-fab-corto">Kaizer</span>
 </button>
 
 <section id="kai-panel" class="kai-panel" role="dialog" aria-labelledby="kai-titulo" hidden>
   <header class="kai-cab">
-    <img src="/kaizer.webp" alt="Kaizer, el pastor alemán de Kizercode" width="46" height="46" class="kai-perro kai-perro-g" />
+    <img src="/kaizer.webp" alt="Kaizer" width="46" height="46" class="kai-perro kai-perro-g" />
     <div class="min-w-0 flex-1">
       <p id="kai-titulo" class="kai-nombre">Kaizer</p>
-      <p class="kai-sub"><span class="en">Kizercode's German shepherd · AI</span><span class="es">El pastor alemán de Kizercode · IA</span></p>
+      <p class="kai-sub"><span class="en">Kizercode's AI assistant</span><span class="es">Asistente con IA de Kizercode</span></p>
     </div>
     <button type="button" id="kai-nuevo" class="kai-ic" aria-label="Nueva conversación" title="Nueva conversación"><Icon name="lucide:rotate-ccw" class="h-4 w-4" aria-hidden="true" /></button>
     <button type="button" id="kai-cerrar" class="kai-ic" aria-label="Cerrar"><Icon name="lucide:x" class="h-5 w-5" aria-hidden="true" /></button>
@@ -39,8 +41,8 @@ const sugerencias = [
 
   <div id="kai-msgs" class="kai-msgs" aria-live="polite">
     <div class="kai-m kai-a">
-      <span class="en">Woof! I'm Kaizer, Kizercode's German shepherd 🐾 Ask me anything: your business, technology, or what we can build for you.</span>
-      <span class="es">¡Guau! Soy Kaizer, el pastor alemán de Kizercode 🐾 Preguntame lo que querás: de tu negocio, de tecnología o de lo que podemos hacer por vos.</span>
+      <span class="en">Woof! I'm Kaizer 🐾 Ask me anything: your business, technology, or what we can build for you.</span>
+      <span class="es">¡Guau! Soy Kaizer 🐾 Preguntame lo que querás: de tu negocio, de tecnología o de lo que podemos hacer por vos.</span>
     </div>
   </div>
 
@@ -265,13 +267,21 @@ const sugerencias = [
 
 <style is:global>
   /* Global: las burbujas se crean con JS y no llevan el atributo de Astro. */
-  .kai-fab { position: fixed; left: 22px; bottom: 22px; z-index: 30; display: inline-flex; align-items: center; gap: 10px; padding: 6px 18px 6px 7px; border-radius: 999px; cursor: pointer;
-    background: #0b1a33; color: #fff; font-size: 15px; font-weight: 600; border: 2px solid var(--bg); box-shadow: 0 10px 30px rgba(11,26,51,.3); transition: transform .2s ease; }
-  .kai-fab:hover { transform: translateY(-2px); }
+  /* Abajo a la derecha, a la par del botón de WhatsApp. Verde brillante con borde blanco:
+     se nota igual sobre el fondo claro y sobre el oscuro. */
+  .kai-fab { position: fixed; right: 22px; bottom: 22px; z-index: 30; display: inline-flex; align-items: center; gap: 10px; height: 60px; padding: 0 22px 0 6px; border-radius: 999px; cursor: pointer;
+    background: linear-gradient(135deg, #5be3ad, #1fbf80); color: #0b1a33; font-size: 15.5px; font-weight: 700; letter-spacing: -.01em;
+    border: 2px solid #fff; box-shadow: 0 12px 32px rgba(13,128,80,.45), 0 0 0 0 rgba(62,211,154,.6); transition: transform .2s ease; }
+  body:has(#wa-fab) .kai-fab { right: 94px; }
+  .kai-fab:hover { transform: translateY(-3px); }
   .kai-fab[hidden], .kai-panel[hidden], .kai-sug[hidden] { display: none !important; }
   .kai-fab-corto { display: none; }
+  .kai-cara { flex: none; display: grid; place-items: end center; overflow: hidden; width: 46px; height: 46px; border-radius: 999px; background: #0b1a33; }
+  .kai-cara svg { display: block; width: 90%; height: 90%; }
   @media (max-width: 520px) {
-    .kai-fab { left: 14px; }
+    .kai-fab { right: 14px; bottom: 16px; height: 56px; padding-right: 18px; }
+    body:has(#wa-fab) .kai-fab { right: 80px; }
+    .kai-cara { width: 42px; height: 42px; }
     .kai-fab-txt { display: none; }
     .kai-fab-corto { display: inline; }
   }
@@ -285,14 +295,18 @@ const sugerencias = [
   .kai-wa:hover { background: var(--green-btn); color: #fff; }
   @media (prefers-reduced-motion: no-preference) {
     .kai-perro { animation: kai-pulso 2.4s ease-out infinite; }
+    .kai-fab { animation: kai-llama 2.6s ease-out infinite; }
+    .kai-fab:hover .kai-cara svg { animation: kai-ladea .5s ease-in-out; }
     .kai-panel:not([hidden]) { animation: kai-entra .25s cubic-bezier(.2,.7,.2,1); }
     .kai-puntos i { animation: kai-punto 1s ease-in-out infinite; }
   }
   @keyframes kai-pulso { 70% { box-shadow: 0 0 0 10px rgba(62,211,154,0); } 100% { box-shadow: 0 0 0 0 rgba(62,211,154,0); } }
+  @keyframes kai-llama { 70% { box-shadow: 0 12px 32px rgba(13,128,80,.45), 0 0 0 14px rgba(62,211,154,0); } 100% { box-shadow: 0 12px 32px rgba(13,128,80,.45), 0 0 0 0 rgba(62,211,154,0); } }
+  @keyframes kai-ladea { 30% { transform: rotate(-9deg); } 70% { transform: rotate(7deg); } }
   @keyframes kai-entra { from { opacity: 0; transform: translateY(12px) scale(.98); } }
   @keyframes kai-punto { 0%, 60%, 100% { opacity: .3; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-3px); } }
 
-  .kai-panel { position: fixed; left: 22px; bottom: 22px; z-index: 40; display: flex; flex-direction: column; overflow: hidden;
+  .kai-panel { position: fixed; right: 22px; bottom: 22px; z-index: 40; display: flex; flex-direction: column; overflow: hidden;
     width: 390px; max-width: calc(100vw - 24px); height: min(600px, calc(100dvh - 44px)); border-radius: 22px;
     background: var(--bg); color: var(--ink); border: 1px solid var(--line); box-shadow: 0 30px 80px -20px rgba(11,26,51,.5); }
   @media (max-width: 520px) { .kai-panel { left: 12px; right: 12px; bottom: 12px; width: auto; height: min(620px, calc(100dvh - 24px)); } }

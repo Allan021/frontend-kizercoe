@@ -1,6 +1,6 @@
 ---
 title: "¿Cuánto cuesta una página web en Honduras en 2026?"
-description: "Precios reales de una página web en Honduras en 2026: qué sube el costo, qué preguntar antes de contratar y cuánto cobra Kizercode (desde L 4,000)."
+description: "Precios reales de una página web en Honduras en 2026: qué sube el costo, qué preguntar antes de contratar y cuánto cobra Kizercode (desde L 3,000)."
 date: 2026-10-10
 servicio: paginas-web
 tags:
@@ -10,7 +10,7 @@ tags:
   - tienda en línea Honduras
 faq:
   - q: "¿Cuánto cuesta una página web en Honduras en 2026?"
-    a: "Depende de lo que tenga que hacer. Con Kizercode, una página web para tu negocio cuesta desde L 4,000 (unos $150) en pago único, con diseño propio, botón de WhatsApp, mapa de Google, optimizada para celular, SEO básico y 30 días de garantía. Una tienda en línea arranca desde L 14,500 ($550) y un sistema a la medida desde L 25,000 ($950)."
+    a: "Depende de lo que tenga que hacer. Con Kizercode, una página web para tu negocio cuesta desde L 3,000 (unos $115) en pago único, con diseño propio, chatbot con IA, botón de WhatsApp, mapa de Google, optimizada para celular, SEO básico y 30 días de garantía. Una tienda en línea arranca desde L 14,500 ($550) y un sistema a la medida desde L 25,000 ($950)."
   - q: "¿El dominio y el hosting van incluidos?"
     a: "En Kizercode los configuramos y quedan registrados a tu nombre, no al nuestro. Como el dominio y el hosting se renuevan con el proveedor, pedí siempre que la cotización diga cuánto cuesta la renovación y quién la paga."
   - q: "¿En cuánto tiempo está lista una página web?"
@@ -30,7 +30,7 @@ relacionados:
     href: "/servicios/modernizacion-web/"
 ---
 
-La respuesta corta: **con Kizercode, una página web para tu negocio cuesta desde L 4,000 (unos $150), en pago único**. Pero "una página web" puede ser una sola pantalla con tu WhatsApp o una tienda con pagos con tarjeta, y el precio cambia mucho entre una cosa y la otra. En esta guía te explicamos qué es lo que de verdad mueve el precio, qué tenés que preguntar antes de pagarle a cualquiera y cómo cobramos nosotros, con los números que publicamos en nuestra [página de precios](/precios/).
+La respuesta corta: **con Kizercode, una página web para tu negocio cuesta desde L 3,000 (unos $115), en pago único**. Pero "una página web" puede ser una sola pantalla con tu WhatsApp o una tienda con pagos con tarjeta, y el precio cambia mucho entre una cosa y la otra. En esta guía te explicamos qué es lo que de verdad mueve el precio, qué tenés que preguntar antes de pagarle a cualquiera y cómo cobramos nosotros, con los números que publicamos en nuestra [página de precios](/precios/).
 
 ## Los precios de Kizercode, sin letra chica
 
@@ -38,7 +38,7 @@ Estos son nuestros precios "desde", en lempiras y en dólares. Todos son pago ú
 
 | Lo que necesitás | Desde | Lo que incluye |
 | --- | --- | --- |
-| [Página web](/servicios/paginas-web/) | L 4,000 ($150) | Diseño a tu marca, WhatsApp y mapa, optimizada para celular, SEO básico, Google Business conectado |
+| [Página web](/servicios/paginas-web/) | L 3,000 ($115) | Diseño a tu marca, chatbot con IA, WhatsApp y mapa, optimizada para celular, SEO básico, Google Business conectado |
 | [Modernizar un sitio viejo](/servicios/modernizacion-web/) | L 6,500 ($250) | Rediseño con tu contenido, tu dominio se queda, velocidad y SEO al día |
 | [Agente de IA para WhatsApp](/servicios/automatizacion-ia/) | L 8,000 ($300) | Responde y cotiza 24/7 con tus precios reales |
 | [Tienda en línea](/servicios/tiendas-en-linea/) | L 14,500 ($550) | Catálogo, carrito, pagos con tarjeta, chatbot con IA, panel para tus productos |
@@ -61,11 +61,11 @@ Los textos y las fotos son la parte que más atrasa un proyecto. Si ya tenés tu
 
 ### 3. Diseño propio o plantilla
 
-Una plantilla barata se ve igual a cientos de páginas más y muchas veces viene cargada de cosas que no usás y que la hacen lenta en celular. Un diseño a la medida cuesta más trabajo, pero se ve como tu negocio. Nuestras páginas desde L 4,000 llevan **diseño a tu marca y colores**, no una plantilla genérica, y te mostramos el diseño antes de publicar para que lo apruebes.
+Una plantilla barata se ve igual a cientos de páginas más y muchas veces viene cargada de cosas que no usás y que la hacen lenta en celular. Un diseño a la medida cuesta más trabajo, pero se ve como tu negocio. Nuestras páginas desde L 3,000 llevan **diseño a tu marca y colores**, no una plantilla genérica, y te mostramos el diseño antes de publicar para que lo apruebes.
 
 ### 4. Si tiene que vender en línea
 
-Este es el salto más grande. Una página informa; una **tienda en línea** cobra. Necesita catálogo con fotos, variantes y precios, carrito, pasarela de pago con tarjeta de crédito y débito, avisos de pedido y un panel para que subás tus productos. Por eso nuestra tienda arranca en L 14,500 y no en L 4,000.
+Este es el salto más grande. Una página informa; una **tienda en línea** cobra. Necesita catálogo con fotos, variantes y precios, carrito, pasarela de pago con tarjeta de crédito y débito, avisos de pedido y un panel para que subás tus productos. Por eso nuestra tienda arranca en L 14,500 y no en L 3,000.
 
 Un detalle que mucha gente no sabe: la pasarela de pago cobra su propia comisión por cada pago con tarjeta, y esa comisión la cobra el banco o la pasarela, no quien te hizo la tienda. Lo que sí podés evitar es pagarle un porcentaje a una plataforma por cada venta: una tienda propia no tiene esa comisión.
 
@@ -133,7 +133,7 @@ No siempre hay que empezar de cero. Si tu sitio está en Wix, WordPress o donde 
 
 ## En resumen
 
-- Una página web con Kizercode cuesta **desde L 4,000 ($150)**, pago único, con diseño propio, WhatsApp, mapa, SEO básico y 30 días de garantía.
+- Una página web con Kizercode cuesta **desde L 3,000 ($115)**, pago único, con diseño propio, chatbot con IA, WhatsApp, mapa, SEO básico y 30 días de garantía.
 - Lo que más sube el precio: vender en línea, las integraciones con otros sistemas y la cantidad de páginas y contenido.
 - Antes de contratar, exigí precio por escrito, dominio y código a tu nombre, y claridad sobre renovaciones y cambios.
 

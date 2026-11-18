@@ -78,7 +78,7 @@ const jsonLd = {
         : { '@type': 'Country', name: 'Honduras' },
       provider: { '@id': 'https://www.kizercode.com/#business' },
       // Lempiras primero: es el precio que dice la página en español. Antes
-      // decía solo USD 150 contra "L 4,000" del texto, y una IA citaba cualquiera.
+      // decía solo USD 150 contra "L 3,000" del texto, y una IA citaba cualquiera.
       ...(desdeLps > 0
         ? { offers: [oferta(desdeLps, 'HNL'), ...(desdeUsd > 0 ? [oferta(desdeUsd, 'USD')] : [])] }
         : {}),
