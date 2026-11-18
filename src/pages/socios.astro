@@ -11,8 +11,8 @@ import { servicios } from '@/lib/servicios';
  * Programa de socios: contadores y asesores que refieren clientes a cambio
  * del 10 % del primer proyecto. Solo en español: es para Honduras.
  *
- * Los dos botones son wa.me, así que LeadWhatsApp pide nombre y correo y el
- * lead entra al CRM con servicio "Programa de socios".
+ * El socio activa su tarjeta en #activar (queda en el CRM como "Programa de
+ * socios") y recibe /tarjeta/?de=<nombre> con QR.
  * Si cambia la comisión, cambiar COMISION y revisar el FAQ.
  */
 const COMISION = 0.1;
@@ -29,6 +29,12 @@ const ejemplos = ['paginas-web', 'tiendas-en-linea', 'sistemas-a-la-medida']
     return { nombre: s.nombre, precio: lps(precio), comision: lps(Math.round(precio * COMISION)) };
   });
 
+const cifras = [
+  { n: '10 %', l: 'del primer proyecto' },
+  { n: 'L 0', l: 'costo para vos' },
+  { n: '1 min', l: 'para activar tu tarjeta' },
+];
+
 const pasos = [
   { t: 'Activás tu tarjeta', d: 'Aquí abajo, en un minuto. Te llevás una tarjeta digital con tu nombre, con su enlace y su QR. Sin costo y sin exclusividad.' },
   { t: 'Se la pasás al cliente', d: 'Por WhatsApp o mostrándole el QR. Cuando nos escribe desde tu tarjeta, queda registrado como referido tuyo. Te confirmamos cada uno.' },
@@ -43,6 +49,14 @@ const senales = [
   { i: 'lucide:fingerprint', t: 'Asistencia y planilla manual', d: 'Marcaje en papel y horas extra calculadas a ojo.' },
   { i: 'lucide:utensils', t: 'Restaurante con comandas en papel', d: 'Pedidos que se pierden entre la mesa y la cocina.' },
   { i: 'lucide:store', t: 'Vende solo en el local', d: 'Sin página ni tienda en línea, y contestando precios por WhatsApp todo el día.' },
+];
+
+const garantias = [
+  'Precio fijo por escrito antes de empezar.',
+  '30 días de garantía sobre lo entregado.',
+  'Código, datos y dominio a nombre del cliente.',
+  'Migración de sus datos desde Excel incluida.',
+  'Sistemas con reportes y cierre del día: el cliente te llega con los números ordenados.',
 ];
 
 const faq = [
@@ -76,6 +90,9 @@ const jsonLd = {
     },
   ],
 };
+
+// Fondo del hero del inicio: cuadrícula que se desvanece.
+const rejilla = 'background-image: linear-gradient(color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1px); background-size: 56px 56px; mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 100%); -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 100%)';
 ---
 <Layout
   title="Programa de socios para contadores: 10 % por referido | Kizercode"
@@ -90,129 +107,185 @@ const jsonLd = {
   <Nav />
   <IdiomaPorUrl otra="/en/" />
   <main id="contenido">
-    <header style="background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%)">
-      <div class="mx-auto flex max-w-[860px] flex-col items-center gap-5 px-6 pb-12 pt-16 text-center">
-        <p class="kz-eyebrow">Programa de socios</p>
-        <h1 class="font-bold" style="font-size: clamp(34px, 4.8vw, 56px); line-height: 1.08; letter-spacing: -0.02em; text-wrap: balance">
-          Referí clientes y ganá el 10 % de cada proyecto.
+    <header class="relative overflow-hidden" style="background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%)">
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0" style={rejilla}></div>
+      <div aria-hidden="true" class="pointer-events-none absolute left-1/2 -translate-x-1/2" style="top: -180px; width: 820px; height: 520px; background: radial-gradient(closest-side, color-mix(in srgb, var(--green) 22%, transparent), transparent)"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute rounded-full border" style="top: 120px; right: -120px; width: 360px; height: 360px; border-color: color-mix(in srgb, var(--green) 25%, transparent)"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute rounded-full border border-dashed" style="top: 160px; right: -80px; width: 280px; height: 280px; border-color: color-mix(in srgb, var(--green) 35%, transparent)"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute" style="top: 240px; left: -140px; width: 320px; height: 320px; border-radius: 32px; transform: rotate(18deg); border: 1px solid color-mix(in srgb, var(--ink) 10%, transparent); background: color-mix(in srgb, var(--green) 4%, transparent)"></div>
+
+      <div aria-hidden="true" class="kz-so-flotante" style="top: 110px; left: 4%"><span class="kz-latido"></span> Tu cliente paga lo mismo</div>
+      <div aria-hidden="true" class="kz-so-flotante kz-flotante-navy" style="top: 150px; right: 4%"><span class="kz-latido" style="background: var(--green-bright)"></span> Pago por transferencia</div>
+      <div aria-hidden="true" class="kz-so-flotante" style="top: 400px; left: 3%"><Icon name="lucide:qr-code" class="h-4 w-4" style="color: var(--green2)" /> Tarjeta con tu QR</div>
+      <div aria-hidden="true" class="kz-so-flotante" style="top: 420px; right: 3%"><Icon name="lucide:handshake" class="h-4 w-4" style="color: var(--green2)" /> Vos presentás, nosotros vendemos</div>
+
+      <div class="relative mx-auto flex max-w-[900px] flex-col items-center gap-6 px-6 pb-14 pt-16 text-center sm:pt-[84px]">
+        <p class="kz-badge border" style="border-color: color-mix(in srgb, var(--green) 30%, transparent); padding: 7px 14px; font-size: 13px">
+          <span class="kz-latido"></span> Programa de socios para contadores
+        </p>
+        <h1 class="font-bold" style="font-size: clamp(36px, 5.2vw, 62px); line-height: 1.08; letter-spacing: -0.02em; text-wrap: balance">
+          Referí clientes y ganá <span style="color: var(--green)">el 10 % de cada proyecto.</span>
         </h1>
         <p class="max-w-[640px] text-[18px] leading-relaxed" style="color: var(--ink2); text-wrap: pretty">
           Para contadores y asesores que ven todos los días negocios atrapados en Excel y cuadernos. Vos nos presentás, nosotros hacemos el resto, y tu cliente no paga un lempira más.
         </p>
+
+        <ul class="grid w-full max-w-[620px] list-none grid-cols-3 gap-3 pt-1">
+          {cifras.map((s) => (
+            <li class="flex flex-col gap-1 rounded-[14px] border px-2 py-4" style="background: var(--bg); border-color: var(--line)">
+              <span class="font-bold" style="font-size: clamp(22px, 4vw, 30px); letter-spacing: -0.02em; color: var(--green)">{s.n}</span>
+              <span class="text-[12.5px] font-medium leading-snug" style="color: var(--ink2)">{s.l}</span>
+            </li>
+          ))}
+        </ul>
+
         <div class="flex flex-wrap justify-center gap-3">
-          <a href="#activar" class="kz-btn kz-btn-primario" style="padding: 14px 26px; font-size: 15.5px">
+          <a href="#activar" class="kz-btn kz-btn-primario" style="padding: 16px 28px; font-size: 16px">
             <Icon name="lucide:badge-check" class="h-5 w-5" aria-hidden="true" /> Activar mi tarjeta de socio
           </a>
-          <a href={waReferir} target="_blank" rel="noopener noreferrer" data-servicio={SERVICIO} class="kz-btn kz-btn-secundario" style="padding: 14px 26px; font-size: 15.5px">Ya soy socio: referir un cliente</a>
+          <a href={waReferir} target="_blank" rel="noopener noreferrer" data-servicio={SERVICIO} class="kz-btn kz-btn-secundario" style="padding: 16px 28px; font-size: 16px; background: var(--bg)">Ya soy socio: referir un cliente</a>
         </div>
         <p class="text-[13.5px]" style="color: var(--mute)">Sin costo · Sin exclusividad · Sin mínimo de referidos</p>
       </div>
     </header>
 
-    <div class="mx-auto flex max-w-[1100px] flex-col gap-20 px-6 pb-20">
+    <div class="mx-auto flex max-w-[1100px] flex-col gap-24 px-6 pb-24 pt-6">
       <section aria-labelledby="como">
-        <h2 id="como" class="kz-h2 mb-8 text-center">Cómo funciona</h2>
-        <ol class="grid list-none gap-4" style="grid-template-columns: repeat(auto-fit, minmax(230px, 1fr))">
+        <p class="kz-eyebrow mb-3 text-center">Cuatro pasos</p>
+        <h2 id="como" class="kz-h2 mb-10 text-center">Cómo funciona</h2>
+        <ol class="kz-so-pasos grid list-none gap-4" style="grid-template-columns: repeat(auto-fit, minmax(230px, 1fr))">
           {pasos.map((p, i) => (
-            <li class="kz-card flex flex-col gap-2 p-6">
-              <span class="flex h-9 w-9 items-center justify-center rounded-full text-[15px] font-bold" style="background: var(--green-soft); color: var(--green2)">{i + 1}</span>
-              <p class="mt-1 text-[17px] font-bold">{p.t}</p>
+            <li class="kz-card relative flex flex-col gap-2 overflow-hidden p-6">
+              <span aria-hidden="true" class="kz-so-num">0{i + 1}</span>
+              <span class="flex h-10 w-10 items-center justify-center rounded-xl text-[15px] font-bold" style="background: var(--green-soft); color: var(--green2)">{i + 1}</span>
+              <p class="mt-2 text-[17px] font-bold">{p.t}</p>
               <p class="text-[15px] leading-relaxed" style="color: var(--ink2)">{p.d}</p>
             </li>
           ))}
         </ol>
       </section>
 
-      <section id="activar" aria-labelledby="activar-titulo" class="kz-act mx-auto w-full max-w-[860px] scroll-mt-24">
-        <div class="grid gap-8 rounded-3xl p-8 md:grid-cols-2 md:p-10" style="background: var(--navy); color: #fff">
-          <div class="flex flex-col gap-3">
+      <section id="activar" aria-labelledby="activar-titulo" class="mx-auto w-full max-w-[980px] scroll-mt-24">
+        <div class="relative isolate grid gap-10 overflow-hidden rounded-[28px] p-6 sm:p-10 md:grid-cols-2 md:p-12" style="background: var(--navy); color: #fff">
+          <div aria-hidden="true" class="kz-act-rejilla"></div>
+          <div aria-hidden="true" class="kz-act-luz"></div>
+
+          <div class="flex min-w-0 flex-col gap-4">
             <p class="kz-eyebrow" style="color: var(--green-bright)">Tarjeta de socio</p>
-            <h2 id="activar-titulo" class="text-[30px] font-bold leading-tight" style="letter-spacing: -0.02em">Activá tu tarjeta digital en un minuto.</h2>
+            <h2 id="activar-titulo" class="font-bold leading-tight" style="font-size: clamp(28px, 3.4vw, 36px); letter-spacing: -0.02em; text-wrap: balance">Activá tu tarjeta digital en un minuto.</h2>
             <p class="text-[15.5px] leading-relaxed" style="color: #c9d4ea">
-              Es la tarjeta de Kizercode con tu nombre: "Te lo recomienda [tu nombre]". Mandala por WhatsApp o mostrá el QR. Cada cliente que nos escriba desde ahí queda registrado como tuyo.
+              Es la tarjeta de Kizercode con tu nombre. Mandala por WhatsApp o mostrá el QR. Cada cliente que nos escriba desde ahí queda registrado como tuyo.
             </p>
-            <a href="/tarjeta/" target="_blank" class="mt-1 text-[14px] font-semibold underline underline-offset-4" style="color: var(--green-bright)">Ver cómo se ve la tarjeta →</a>
+
+            <!-- Vista previa: el nombre se actualiza mientras lo escriben. -->
+            <div class="kz-mock" aria-hidden="true">
+              <div class="flex items-center justify-between gap-3">
+                <img src="/logo-oscuro.webp" alt="" width="96" height="32" class="h-7 w-auto" loading="lazy" />
+                <span class="kz-mock-chip">Tarjeta de socio</span>
+              </div>
+              <p class="kz-mock-ref"><Icon name="lucide:handshake" class="h-4 w-4 shrink-0" /> <span>Te lo recomienda <strong id="mock-nombre">Tu nombre</strong></span></p>
+              <p class="kz-mock-h">Tu negocio, <span>en sistema.</span></p>
+              <div class="kz-mock-pie"><span>kizercode.com/tarjeta</span><Icon name="lucide:qr-code" class="h-7 w-7" /></div>
+            </div>
+            <a href="/tarjeta/" target="_blank" class="text-[14px] font-semibold underline underline-offset-4" style="color: var(--green-bright)">Ver la tarjeta completa →</a>
           </div>
 
-          <form id="act-form" class="flex flex-col gap-3" novalidate>
+          <form id="act-form" class="kz-act-panel flex flex-col gap-4 self-start" novalidate>
             <label class="kz-act-campo"><span>Tu nombre completo</span><input name="name" required minlength="3" maxlength="60" autocomplete="name" placeholder="Ej. Lic. Ana Martínez" /></label>
-            <label class="kz-act-campo"><span>Tu correo</span><input name="email" type="email" required maxlength="254" autocomplete="email" inputmode="email" /></label>
+            <label class="kz-act-campo"><span>Tu correo</span><input name="email" type="email" required maxlength="254" autocomplete="email" inputmode="email" placeholder="tu@correo.com" /></label>
             <label class="kz-act-campo"><span>Tu WhatsApp</span><input name="phone" type="tel" required minlength="8" maxlength="20" autocomplete="tel" inputmode="tel" placeholder="9999-9999" /></label>
             <p id="act-error" class="text-[14px]" style="color: #ff8a8a" hidden></p>
-            <button type="submit" class="kz-btn kz-btn-primario mt-1" style="min-height: 52px; font-size: 16px">Activar mi tarjeta</button>
+            <button type="submit" class="kz-btn kz-btn-primario mt-1" style="min-height: 54px; font-size: 16px">Activar mi tarjeta</button>
+            <ul class="flex list-none flex-wrap gap-x-4 gap-y-1 text-[12.5px]" style="color: #c9d4ea">
+              {['Gratis', 'Sin exclusividad', 'Lista al instante'].map((x) => (
+                <li class="flex items-center gap-1.5"><Icon name="lucide:check" class="h-3.5 w-3.5" style="color: var(--green-bright)" aria-hidden="true" /> {x}</li>
+              ))}
+            </ul>
             <p class="text-[12.5px]" style="color: #8fa0bf">Al activarla aceptás los <a href="/terminos/" class="underline">términos</a> y el <a href="/privacidad/" class="underline">aviso de privacidad</a>.</p>
           </form>
 
-          <div id="act-lista" class="flex flex-col gap-4 md:col-span-2" hidden>
-            <p class="flex items-center gap-2 text-[18px] font-bold" style="color: var(--green-bright)"><Icon name="lucide:badge-check" class="h-6 w-6 shrink-0" aria-hidden="true" /> <span>Tu tarjeta está activa, <span id="act-nombre"></span>.</span></p>
-            <div class="flex flex-col items-center gap-5 md:flex-row md:items-start">
-              <div id="act-qr" class="w-[200px] shrink-0 rounded-2xl bg-white p-2.5" role="img" aria-label="QR de tu tarjeta de socio"></div>
-              <div class="flex w-full min-w-0 flex-col gap-3">
-                <input id="act-enlace" readonly class="w-full rounded-xl px-4 py-3 text-[14px]" style="background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.2); color: #fff" />
-                <a id="act-wa" target="_blank" rel="noopener noreferrer" class="kz-btn kz-btn-primario" style="min-height: 50px"><Icon name="lucide:send" class="h-5 w-5" aria-hidden="true" /> Mandarla por WhatsApp</a>
-                <div class="grid grid-cols-2 gap-3">
-                  <button type="button" id="act-copiar" class="kz-btn" style="min-height: 48px; background: rgba(255,255,255,.1); color: #fff"><Icon name="lucide:copy" class="h-5 w-5" aria-hidden="true" /> <span>Copiar</span></button>
-                  <a id="act-ver" target="_blank" class="kz-btn" style="min-height: 48px; background: rgba(255,255,255,.1); color: #fff"><Icon name="lucide:external-link" class="h-5 w-5" aria-hidden="true" /> Abrir</a>
-                </div>
-                <p class="text-[13px]" style="color: #8fa0bf">Guardá este enlace: es tu tarjeta. Si lo perdés, volvé a esta página desde el mismo teléfono.</p>
+          <div id="act-lista" class="kz-act-panel flex min-w-0 flex-col gap-5 self-start" hidden>
+            <p class="flex items-center gap-2 text-[18px] font-bold leading-snug" style="color: var(--green-bright)"><Icon name="lucide:badge-check" class="h-6 w-6 shrink-0" aria-hidden="true" /> <span>Tu tarjeta está activa, <span id="act-nombre"></span>.</span></p>
+            <div id="act-qr" class="mx-auto w-[190px] rounded-2xl bg-white p-2.5" role="img" aria-label="QR de tu tarjeta de socio"></div>
+            <div class="flex w-full min-w-0 flex-col gap-3">
+              <input id="act-enlace" readonly aria-label="Enlace de tu tarjeta" class="w-full rounded-xl px-4 py-3 text-[14px]" style="background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.2); color: #fff" />
+              <a id="act-wa" target="_blank" rel="noopener noreferrer" class="kz-btn kz-btn-primario" style="min-height: 52px"><Icon name="lucide:send" class="h-5 w-5" aria-hidden="true" /> Mandarla por WhatsApp</a>
+              <div class="grid grid-cols-2 gap-3">
+                <button type="button" id="act-copiar" class="kz-btn kz-act-sec"><Icon name="lucide:copy" class="h-5 w-5" aria-hidden="true" /> <span>Copiar</span></button>
+                <a id="act-ver" target="_blank" class="kz-btn kz-act-sec"><Icon name="lucide:external-link" class="h-5 w-5" aria-hidden="true" /> Abrir</a>
               </div>
+              <p class="text-[13px]" style="color: #8fa0bf">Guardá este enlace: es tu tarjeta. Si lo perdés, volvé a esta página desde el mismo teléfono.</p>
             </div>
           </div>
         </div>
       </section>
 
       <section aria-labelledby="cuanto">
+        <p class="kz-eyebrow mb-3 text-center">Comisión</p>
         <h2 id="cuanto" class="kz-h2 mb-3 text-center">Cuánto ganás</h2>
-        <p class="mx-auto mb-8 max-w-[600px] text-center text-[16px] leading-relaxed" style="color: var(--ink2)">
-          El 10 % de lo que el cliente paga por su primer proyecto. Ejemplos con nuestros precios de entrada:
+        <p class="mx-auto mb-10 max-w-[600px] text-center text-[16px] leading-relaxed" style="color: var(--ink2)">
+          El 10 % de lo que el cliente paga por su primer proyecto. Mové la barra y mirá tu comisión.
         </p>
-        <div class="grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr))">
-          {ejemplos.map((e) => (
-            <div class="kz-card flex flex-col gap-1 p-6">
-              <p class="text-[15px] font-semibold" style="color: var(--ink2)">{e.nombre} desde {e.precio}</p>
-              <p class="font-bold leading-none" style="font-size: 40px; letter-spacing: -0.02em; color: var(--green2)">{e.comision}</p>
-              <p class="text-[14px]" style="color: var(--mute)">para vos</p>
+        <div class="grid gap-4 md:grid-cols-[1.15fr_1fr]">
+          <div class="kz-card flex flex-col justify-center gap-5 p-7 sm:p-9" style="background: var(--bg2)">
+            <label for="calc" class="flex flex-wrap items-baseline justify-between gap-2 text-[15px] font-semibold" style="color: var(--ink2)">
+              Si el proyecto de tu cliente vale <output id="calc-precio" for="calc" class="text-[22px] font-bold" style="color: var(--ink)">L 25,000</output>
+            </label>
+            <input id="calc" type="range" min="4000" max="200000" step="1000" value="25000" data-comision={COMISION} class="kz-so-rango" />
+            <div class="flex flex-wrap items-end justify-between gap-3 border-t pt-5" style="border-color: var(--line)">
+              <span class="text-[15px] font-semibold" style="color: var(--ink2)">Vos ganás</span>
+              <output id="calc-com" for="calc" class="font-bold leading-none" style="font-size: clamp(44px, 8vw, 64px); letter-spacing: -0.03em; color: var(--green)">L 2,500</output>
             </div>
-          ))}
+          </div>
+          <ul class="flex list-none flex-col gap-4">
+            {ejemplos.map((e) => (
+              <li class="kz-card flex flex-1 items-center justify-between gap-4 p-5">
+                <span>
+                  <span class="block text-[16px] font-bold">{e.nombre}</span>
+                  <span class="text-[14px]" style="color: var(--mute)">desde {e.precio}</span>
+                </span>
+                <span class="text-right">
+                  <span class="block whitespace-nowrap font-bold leading-none" style="font-size: 28px; letter-spacing: -0.02em; color: var(--green2)">{e.comision}</span>
+                  <span class="text-[13px]" style="color: var(--mute)">para vos</span>
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
-        <p class="mt-4 text-center text-[14px]" style="color: var(--mute)">Los proyectos grandes valen más: la comisión crece con el proyecto.</p>
+        <p class="mt-5 text-center text-[14px]" style="color: var(--mute)">Los proyectos grandes valen más: la comisión crece con el proyecto.</p>
       </section>
 
       <section aria-labelledby="quien">
+        <p class="kz-eyebrow mb-3 text-center">A quién presentarnos</p>
         <h2 id="quien" class="kz-h2 mb-3 text-center">Qué clientes referir</h2>
-        <p class="mx-auto mb-8 max-w-[600px] text-center text-[16px] leading-relaxed" style="color: var(--ink2)">
+        <p class="mx-auto mb-10 max-w-[600px] text-center text-[16px] leading-relaxed" style="color: var(--ink2)">
           Si un cliente tuyo tiene alguna de estas señales, ya está perdiendo plata sin sistema:
         </p>
-        <ul class="grid list-none gap-4" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))">
+        <ul class="grid list-none gap-4" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr))">
           {senales.map((s) => (
             <li class="kz-card flex gap-4 p-5">
-              <Icon name={s.i} class="mt-0.5 h-6 w-6 shrink-0" style="color: var(--green2)" aria-hidden="true" />
+              <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl" style="background: var(--green-soft); color: var(--green2)"><Icon name={s.i} class="h-5 w-5" aria-hidden="true" /></span>
               <span>
                 <span class="block text-[16px] font-bold">{s.t}</span>
-                <span class="text-[14.5px]" style="color: var(--ink2)">{s.d}</span>
+                <span class="text-[14.5px] leading-relaxed" style="color: var(--ink2)">{s.d}</span>
               </span>
             </li>
           ))}
         </ul>
       </section>
 
-      <section aria-labelledby="quedas" class="grid gap-8 md:grid-cols-2 md:items-center">
+      <section aria-labelledby="quedas" class="grid gap-8 rounded-[28px] border p-7 sm:p-10 md:grid-cols-2 md:items-center" style="background: var(--bg2); border-color: var(--line)">
         <div>
+          <p class="kz-eyebrow mb-3">Tu recomendación, cuidada</p>
           <h2 id="quedas" class="kz-h2 mb-4">Quedás bien con tu cliente</h2>
           <p class="text-[16px] leading-relaxed" style="color: var(--ink2)">
             Tu nombre va de por medio cuando recomendás a alguien. Por eso trabajamos igual con cada referido:
           </p>
         </div>
         <ul class="flex list-none flex-col gap-3">
-          {[
-            'Precio fijo por escrito antes de empezar.',
-            '30 días de garantía sobre lo entregado.',
-            'Código, datos y dominio a nombre del cliente.',
-            'Migración de sus datos desde Excel incluida.',
-            'Sistemas con reportes y cierre del día: el cliente te llega con los números ordenados.',
-          ].map((x) => (
-            <li class="flex items-start gap-3 text-[15.5px]">
-              <Icon name="lucide:check" class="mt-1 h-4 w-4 shrink-0" style="color: var(--green2)" aria-hidden="true" />
+          {garantias.map((x) => (
+            <li class="flex items-start gap-3 rounded-[14px] border p-4 text-[15.5px]" style="background: var(--bg); border-color: var(--line)">
+              <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full" style="background: var(--green-soft); color: var(--green2)"><Icon name="lucide:check" class="h-3.5 w-3.5" aria-hidden="true" /></span>
               {x}
             </li>
           ))}
@@ -220,22 +293,27 @@ const jsonLd = {
       </section>
 
       <section aria-labelledby="preguntas" class="mx-auto w-full max-w-[860px]">
-        <h2 id="preguntas" class="kz-h2 mb-3">Preguntas frecuentes</h2>
-        {faq.map((f) => (
-          <details class="border-b" style="border-color: var(--line)">
-            <summary class="cursor-pointer py-4 text-[16px] font-semibold">{f.q}</summary>
-            <p class="pb-5 text-[16px] leading-relaxed" style="color: var(--ink2)">{f.a}</p>
-          </details>
-        ))}
-        <p class="mt-6 text-[14px]" style="color: var(--mute)">
+        <p class="kz-eyebrow mb-3 text-center">Dudas</p>
+        <h2 id="preguntas" class="kz-h2 mb-8 text-center">Preguntas frecuentes</h2>
+        <div class="flex flex-col gap-3">
+          {faq.map((f) => (
+            <details class="kz-card kz-so-faq">
+              <summary>{f.q}</summary>
+              <p>{f.a}</p>
+            </details>
+          ))}
+        </div>
+        <p class="mt-6 text-center text-[14px]" style="color: var(--mute)">
           La comisión aplica al primer proyecto contratado y pagado por cada cliente referido. Aplican nuestros <a href="/terminos/" style="text-decoration: underline">términos y condiciones</a>.
         </p>
       </section>
 
-      <section class="flex flex-col items-center gap-4 rounded-3xl p-10 text-center" style="background: var(--green-soft); border: 1px solid color-mix(in srgb, var(--green) 30%, transparent)">
-        <p class="text-[28px] font-bold leading-snug" style="letter-spacing: -0.01em; text-wrap: balance">¿Tenés clientes que necesitan dejar Excel?</p>
-        <p class="max-w-[540px] text-[16px]" style="color: var(--ink2)">Activá tu tarjeta y empezá a referir hoy.</p>
-        <a href="#activar" class="kz-btn kz-btn-primario" style="padding: 14px 26px; font-size: 15.5px">Activar mi tarjeta de socio</a>
+      <section class="relative isolate flex flex-col items-center gap-5 overflow-hidden rounded-[28px] px-6 py-14 text-center" style="background: var(--navy); color: #fff">
+        <div aria-hidden="true" class="kz-act-rejilla"></div>
+        <div aria-hidden="true" class="kz-act-luz kz-act-luz-centro"></div>
+        <p class="font-bold leading-tight" style="font-size: clamp(28px, 3.6vw, 40px); letter-spacing: -0.02em; text-wrap: balance">¿Tenés clientes que necesitan <span style="color: var(--green-bright)">dejar Excel?</span></p>
+        <p class="max-w-[540px] text-[16px]" style="color: #c9d4ea">Activá tu tarjeta y empezá a referir hoy.</p>
+        <a href="#activar" class="kz-btn kz-btn-primario" style="padding: 16px 28px; font-size: 16px"><Icon name="lucide:badge-check" class="h-5 w-5" aria-hidden="true" /> Activar mi tarjeta de socio</a>
       </section>
     </div>
   </main>
@@ -254,6 +332,22 @@ const jsonLd = {
   const form = document.getElementById('act-form') as HTMLFormElement;
   const lista = document.getElementById('act-lista')!;
   const error = document.getElementById('act-error')!;
+  const mock = document.getElementById('mock-nombre')!;
+
+  // Vista previa: la tarjeta de muestra lleva el nombre mientras lo escriben.
+  (form.elements.namedItem('name') as HTMLInputElement).addEventListener('input', (e) => {
+    mock.textContent = (e.target as HTMLInputElement).value.trim().slice(0, 60) || 'Tu nombre';
+  });
+
+  // Calculadora de comisión.
+  const rango = document.getElementById('calc') as HTMLInputElement;
+  const lps = (n: number) => `L ${Math.round(n).toLocaleString('en-US')}`;
+  const calcular = () => {
+    document.getElementById('calc-precio')!.textContent = lps(+rango.value);
+    document.getElementById('calc-com')!.textContent = lps(+rango.value * Number(rango.dataset.comision));
+  };
+  rango.addEventListener('input', calcular);
+  calcular();
 
   function mostrar(nombre: string) {
     const url = new URL('/tarjeta/', location.origin);
@@ -261,6 +355,7 @@ const jsonLd = {
     const enlace = url.toString();
     form.hidden = true;
     lista.hidden = false;
+    mock.textContent = nombre;
     document.getElementById('act-nombre')!.textContent = nombre;
     (document.getElementById('act-enlace') as HTMLInputElement).value = enlace;
     (document.getElementById('act-ver') as HTMLAnchorElement).href = enlace;
@@ -325,9 +420,58 @@ const jsonLd = {
 <style>
   /* flex/grid de Tailwind le gana a [hidden]: sin esto se ven el formulario y la tarjeta a la vez. */
   #act-form[hidden], #act-lista[hidden] { display: none !important; }
+
+  /* Tarjetitas flotantes del hero (solo pantallas anchas), como en el inicio. */
+  .kz-so-flotante { position: absolute; pointer-events: none; display: none; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 12px;
+    background: var(--bg); border: 1px solid var(--line); box-shadow: 0 12px 30px rgba(11,26,51,.1); font-size: 12px; font-weight: 600; color: var(--ink2); }
+  .kz-so-flotante.kz-flotante-navy { background: var(--navy); color: var(--bg); border: 0; }
+  @media (min-width: 1200px) { .kz-so-flotante { display: flex; } }
+
+  .kz-so-num { position: absolute; right: 14px; top: 2px; font-size: 64px; font-weight: 700; line-height: 1; letter-spacing: -.04em; color: var(--green-soft); }
+  .kz-so-pasos li > :not(.kz-so-num) { position: relative; }
+
+  /* Bloques navy: cuadrícula y luz verde. */
+  .kz-act-rejilla { position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    background-image: linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 0%, #000 20%, transparent 100%); mask-image: radial-gradient(ellipse 80% 80% at 50% 0%, #000 20%, transparent 100%); }
+  .kz-act-luz { position: absolute; z-index: -1; right: -160px; top: -220px; width: 560px; height: 480px; pointer-events: none;
+    background: radial-gradient(closest-side, rgba(62,211,154,.3), transparent); }
+  .kz-act-luz-centro { right: auto; left: 50%; transform: translateX(-50%); }
+
+  .kz-act-panel { padding: 22px; border-radius: 22px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12); }
+  @media (min-width: 640px) { .kz-act-panel { padding: 28px; } }
   .kz-act-campo { display: flex; flex-direction: column; gap: 6px; font-size: 13.5px; font-weight: 600; color: #c9d4ea; }
-  .kz-act-campo input { min-height: 48px; border-radius: 12px; padding: 0 14px; font-size: 16px; font-weight: 500; color: #fff; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.2); }
+  .kz-act-campo input { min-height: 50px; border-radius: 12px; padding: 0 14px; font-size: 16px; font-weight: 500; color: #fff; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.2); transition: background-color .2s ease; }
   .kz-act-campo input::placeholder { color: #8fa0bf; }
-  .kz-act-campo input:focus { outline: 2px solid var(--green-bright); outline-offset: 1px; }
+  .kz-act-campo input:focus { outline: 2px solid var(--green-bright); outline-offset: 1px; background: rgba(255,255,255,.12); }
+  .kz-act-sec { min-height: 48px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); color: #fff; }
+  .kz-act-sec:hover { border-color: var(--green-bright); color: var(--green-bright); }
   #act-qr :global(svg) { display: block; width: 100%; height: auto; }
+
+  /* Tarjeta de muestra. */
+  .kz-mock { position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 340px; margin: 10px 0 6px; padding: 18px; border-radius: 20px;
+    background: linear-gradient(150deg, #1a3766 0%, #0f2444 70%); border: 1px solid rgba(255,255,255,.14);
+    box-shadow: 0 24px 50px -18px rgba(0,0,0,.6); transform: rotate(-2deg); transition: transform .3s ease; }
+  .kz-mock:hover { transform: rotate(0); }
+  .kz-mock::before { content: ''; position: absolute; right: -70px; top: -90px; width: 220px; height: 220px; background: radial-gradient(closest-side, rgba(62,211,154,.4), transparent); }
+  .kz-mock > * { position: relative; }
+  .kz-mock-chip { font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; padding: 4px 9px; border-radius: 999px; border: 1px solid rgba(255,255,255,.22); color: #dbe4f5; }
+  .kz-mock-ref { display: flex; align-items: center; gap: 8px; padding: 8px 11px; border-radius: 11px; background: rgba(62,211,154,.14); border: 1px solid rgba(62,211,154,.45); color: var(--green-bright); font-size: 12.5px; }
+  .kz-mock-ref span { min-width: 0; overflow-wrap: anywhere; }
+  .kz-mock-ref strong { color: #fff; }
+  .kz-mock-h { font-size: 26px; font-weight: 700; line-height: 1.05; letter-spacing: -.03em; color: #fff; }
+  .kz-mock-h span { color: var(--green-bright); }
+  .kz-mock-pie { display: flex; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid rgba(255,255,255,.12);
+    font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 11.5px; color: #c9d4ea; }
+
+  .kz-so-rango { width: 100%; height: 28px; accent-color: var(--green); cursor: pointer; }
+
+  .kz-so-faq summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 20px; cursor: pointer; list-style: none; font-size: 16px; font-weight: 600; }
+  .kz-so-faq summary::-webkit-details-marker { display: none; }
+  .kz-so-faq summary::after { content: '+'; flex: none; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 999px;
+    background: var(--green-soft); color: var(--green2); font-size: 18px; font-weight: 500; line-height: 1; transition: transform .2s ease; }
+  .kz-so-faq[open] summary::after { transform: rotate(45deg); }
+  .kz-so-faq[open] { border-color: var(--green); }
+  .kz-so-faq p { padding: 0 20px 20px; font-size: 15.5px; line-height: 1.7; color: var(--ink2); }
 </style>
