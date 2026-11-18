@@ -1,0 +1,329 @@
+---
+import { Icon } from 'astro-icon/components';
+import IconoWhatsApp from '@/components/IconoWhatsApp.astro';
+/**
+ * Kaizer: el asistente con IA del sitio (el "Jarvis" de Kizercode).
+ *
+ * Botón flotante abajo a la izquierda (el de WhatsApp va a la derecha) que abre
+ * un chat. Las respuestas llegan por streaming desde la API (/v1/kaizer/chat),
+ * que además guarda cada pregunta: ahí y en Analytics (kaizer_abrir,
+ * kaizer_mensaje, kaizer_error) es donde se mide.
+ *
+ * La conversación vive en sessionStorage: sigue abierta al cambiar de página
+ * y se borra al cerrar la pestaña.
+ */
+const WA = `https://wa.me/50488091744?text=${encodeURIComponent('Hola! Estaba hablando con Kaizer en el sitio y quiero seguir por aquí.')}`;
+const sugerencias = [
+  { es: '¿Cuánto cuesta una página web?', en: 'How much does a website cost?' },
+  { es: '¿Qué sistema le conviene a mi negocio?', en: 'Which system fits my business?' },
+  { es: '¿Cómo vende KizerPOS sin internet?', en: 'How does KizerPOS sell offline?' },
+];
+---
+
+<button type="button" id="kai-fab" class="kai-fab" aria-expanded="false" aria-controls="kai-panel">
+  <img src="/kaizer.webp" alt="" width="36" height="36" class="kai-perro" />
+  <span class="kai-fab-txt"><span class="en">Ask Kaizer</span><span class="es">Preguntale a Kaizer</span></span>
+  <span class="kai-fab-corto">Kaizer</span>
+</button>
+
+<section id="kai-panel" class="kai-panel" role="dialog" aria-labelledby="kai-titulo" hidden>
+  <header class="kai-cab">
+    <img src="/kaizer.webp" alt="Kaizer, el pastor alemán de Kizercode" width="46" height="46" class="kai-perro kai-perro-g" />
+    <div class="min-w-0 flex-1">
+      <p id="kai-titulo" class="kai-nombre">Kaizer</p>
+      <p class="kai-sub"><span class="en">Kizercode's German shepherd · AI</span><span class="es">El pastor alemán de Kizercode · IA</span></p>
+    </div>
+    <button type="button" id="kai-nuevo" class="kai-ic" aria-label="Nueva conversación" title="Nueva conversación"><Icon name="lucide:rotate-ccw" class="h-4 w-4" aria-hidden="true" /></button>
+    <button type="button" id="kai-cerrar" class="kai-ic" aria-label="Cerrar"><Icon name="lucide:x" class="h-5 w-5" aria-hidden="true" /></button>
+  </header>
+
+  <div id="kai-msgs" class="kai-msgs" aria-live="polite">
+    <div class="kai-m kai-a">
+      <span class="en">Woof! I'm Kaizer, Kizercode's German shepherd 🐾 Ask me anything: your business, technology, or what we can build for you.</span>
+      <span class="es">¡Guau! Soy Kaizer, el pastor alemán de Kizercode 🐾 Preguntame lo que querás: de tu negocio, de tecnología o de lo que podemos hacer por vos.</span>
+    </div>
+  </div>
+
+  <div id="kai-sug" class="kai-sug">
+    {sugerencias.map((s) => (
+      <button type="button"><span class="en">{s.en}</span><span class="es">{s.es}</span></button>
+    ))}
+  </div>
+
+  <a href={WA} target="_blank" rel="noopener noreferrer" data-servicio="Kaizer (chat del sitio)" class="kai-wa">
+    <IconoWhatsApp size={18} />
+    <span class="en">Want to talk on WhatsApp?</span><span class="es">¿Querés hablar por WhatsApp?</span>
+  </a>
+
+  <form id="kai-form" class="kai-form">
+    <textarea id="kai-input" rows="1" maxlength="1500" required aria-label="Tu pregunta" data-es="Escribí tu pregunta..." data-en="Type your question..."></textarea>
+    <button type="submit" aria-label="Enviar"><Icon name="lucide:arrow-up" class="h-5 w-5" aria-hidden="true" /></button>
+  </form>
+  <p class="kai-nota">
+    <span class="en">Kaizer is an AI and can make mistakes. Chats are saved to improve it. <a href="/en/privacy/">Privacy</a></span>
+    <span class="es">Kaizer es una IA y puede equivocarse. Guardamos el chat para mejorarlo. <a href="/privacidad/">Privacidad</a></span>
+  </p>
+</section>
+
+<script>
+  import { API_URL } from '@/lib/api';
+
+  type Msg = { rol: 'user' | 'assistant'; texto: string };
+  const CLAVE = 'kz-kaizer';
+  const fab = document.getElementById('kai-fab') as HTMLButtonElement;
+  const panel = document.getElementById('kai-panel')!;
+  const msgs = document.getElementById('kai-msgs')!;
+  const sug = document.getElementById('kai-sug')!;
+  const form = document.getElementById('kai-form') as HTMLFormElement;
+  const input = document.getElementById('kai-input') as HTMLTextAreaElement;
+  const saludo = msgs.innerHTML;
+  const idioma = () => (document.documentElement.lang === 'en' ? 'en' : 'es');
+  const medir = (evento: string, datos: Record<string, unknown> = {}) => (window as any).gtag?.('event', evento, datos);
+
+  let hist: Msg[] = [];
+  let abierto = false;
+  let ocupado = false;
+  try {
+    const g = JSON.parse(sessionStorage.getItem(CLAVE) ?? 'null');
+    if (Array.isArray(g?.hist)) hist = g.hist;
+    abierto = !!g?.abierto;
+  } catch {}
+  const guardar = () => { try { sessionStorage.setItem(CLAVE, JSON.stringify({ hist, abierto })); } catch {} };
+
+  // Id anónimo de la conversación: junta los mensajes de una misma persona en las métricas.
+  function sesion(): string {
+    try {
+      let s = localStorage.getItem('kz-kaizer-sesion');
+      if (!s) localStorage.setItem('kz-kaizer-sesion', (s = crypto.randomUUID()));
+      return s;
+    } catch {
+      return 'anon-' + Math.random().toString(36).slice(2, 12);
+    }
+  }
+
+  // El texto del modelo se escapa SIEMPRE antes de darle formato: nunca entra HTML suyo.
+  const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+  function pintar(t: string): string {
+    return esc(t)
+      .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2">$1</a>')
+      .replace(/(^|[\s(])(https?:\/\/[^\s<)]*[^\s<).,;:!?])/g, '$1<a href="$2">$2</a>')
+      .replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/`([^`\n]+)`/g, '<code>$1</code>')
+      .replace(/^[-*] /gm, '• ');
+  }
+
+  function burbuja(m: Msg): HTMLElement {
+    const d = document.createElement('div');
+    d.className = `kai-m ${m.rol === 'user' ? 'kai-u' : 'kai-a'}`;
+    llenar(d, m);
+    msgs.appendChild(d);
+    return d;
+  }
+  function llenar(d: HTMLElement, m: Msg) {
+    if (m.rol === 'user') {
+      d.textContent = m.texto;
+      return;
+    }
+    d.innerHTML = pintar(m.texto);
+    d.querySelectorAll('a').forEach((a) => {
+      // El lead que sale del chat entra al CRM marcado como de Kaizer.
+      if (a.hostname === 'wa.me') a.dataset.servicio = 'Kaizer (chat del sitio)';
+      if (a.hostname !== location.hostname) {
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+      }
+    });
+  }
+  const bajar = () => { msgs.scrollTop = msgs.scrollHeight; };
+
+  function dibujar() {
+    msgs.innerHTML = saludo;
+    hist.forEach(burbuja);
+    sug.hidden = hist.length > 0;
+    bajar();
+  }
+
+  function abrir(si: boolean) {
+    abierto = si;
+    panel.hidden = !si;
+    fab.hidden = si;
+    fab.setAttribute('aria-expanded', String(si));
+    guardar();
+    if (si) {
+      input.placeholder = input.dataset[idioma()] ?? '';
+      bajar();
+      // En teléfono no se enfoca: el teclado taparía el chat recién abierto.
+      if (matchMedia('(min-width: 640px)').matches) input.focus();
+    }
+  }
+
+  async function enviar(texto: string) {
+    texto = texto.trim().slice(0, 1500);
+    if (!texto || ocupado) return;
+    ocupado = true;
+    form.classList.add('kai-ocupado');
+    hist.push({ rol: 'user', texto });
+    burbuja(hist[hist.length - 1]!);
+    sug.hidden = true;
+    const resp: Msg = { rol: 'assistant', texto: '' };
+    const caja = burbuja(resp);
+    caja.innerHTML = '<span class="kai-puntos"><i></i><i></i><i></i></span>';
+    bajar();
+    medir('kaizer_mensaje', { numero: hist.filter((m) => m.rol === 'user').length, pagina: location.pathname });
+
+    try {
+      const r = await fetch(`${API_URL}/v1/kaizer/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        // Los últimos turnos bastan para el contexto y mantienen chico el pedido.
+        body: JSON.stringify({ sesion: sesion(), pagina: location.pathname, idioma: idioma(), mensajes: hist.slice(-20) }),
+      });
+      if (r.status === 429) throw new Error('limite');
+      if (!r.ok || !r.body) throw new Error('red');
+      const lector = r.body.getReader();
+      const deco = new TextDecoder();
+      let buf = '';
+      for (;;) {
+        const { done, value } = await lector.read();
+        if (done) break;
+        buf += deco.decode(value, { stream: true });
+        const partes = buf.split('\n\n');
+        buf = partes.pop()!;
+        for (const p of partes) {
+          if (!p.startsWith('data: ')) continue;
+          const o = JSON.parse(p.slice(6)) as { t?: string; error?: boolean };
+          if (o.error) throw new Error('modelo');
+          if (o.t) {
+            resp.texto += o.t;
+            llenar(caja, resp);
+            bajar();
+          }
+        }
+      }
+      if (!resp.texto) throw new Error('vacio');
+      hist.push(resp);
+    } catch (e) {
+      medir('kaizer_error', { motivo: e instanceof Error ? e.message : 'otro' });
+      const es = idioma() === 'es';
+      const limite = e instanceof Error && e.message === 'limite';
+      // Lo que alcanzó a llegar se deja; el aviso no entra al historial.
+      const aviso = limite
+        ? es ? 'Llevamos muchos mensajes seguidos. Dame unos minutos o escribinos al WhatsApp: https://wa.me/50488091744' : 'That was a lot of messages. Give me a few minutes or message us on WhatsApp: https://wa.me/50488091744'
+        : es ? 'No pude contestar ahorita. Probá otra vez o escribinos al WhatsApp: https://wa.me/50488091744' : "I couldn't answer just now. Try again or message us on WhatsApp: https://wa.me/50488091744";
+      if (resp.texto) {
+        hist.push(resp);
+        burbuja({ rol: 'assistant', texto: aviso });
+      } else {
+        hist.pop();
+        llenar(caja, { rol: 'assistant', texto: aviso });
+      }
+      bajar();
+    } finally {
+      ocupado = false;
+      form.classList.remove('kai-ocupado');
+      guardar();
+    }
+  }
+
+  fab.addEventListener('click', () => {
+    abrir(true);
+    medir('kaizer_abrir', { pagina: location.pathname });
+  });
+  document.getElementById('kai-cerrar')!.addEventListener('click', () => abrir(false));
+  document.getElementById('kai-nuevo')!.addEventListener('click', () => {
+    if (ocupado) return;
+    hist = [];
+    guardar();
+    dibujar();
+  });
+  panel.addEventListener('keydown', (e) => { if (e.key === 'Escape') { abrir(false); fab.focus(); } });
+  sug.addEventListener('click', (e) => {
+    const b = (e.target as HTMLElement).closest('button');
+    if (b) enviar(b.textContent ?? '');
+  });
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const t = input.value;
+    input.value = '';
+    input.style.height = '';
+    enviar(t);
+  });
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) {
+      e.preventDefault();
+      form.requestSubmit();
+    }
+  });
+  input.addEventListener('input', () => {
+    input.style.height = '';
+    input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+  });
+
+  dibujar();
+  if (abierto) abrir(true);
+</script>
+
+<style is:global>
+  /* Global: las burbujas se crean con JS y no llevan el atributo de Astro. */
+  .kai-fab { position: fixed; left: 22px; bottom: 22px; z-index: 30; display: inline-flex; align-items: center; gap: 10px; padding: 6px 18px 6px 7px; border-radius: 999px; cursor: pointer;
+    background: #0b1a33; color: #fff; font-size: 15px; font-weight: 600; border: 2px solid var(--bg); box-shadow: 0 10px 30px rgba(11,26,51,.3); transition: transform .2s ease; }
+  .kai-fab:hover { transform: translateY(-2px); }
+  .kai-fab[hidden], .kai-panel[hidden], .kai-sug[hidden] { display: none !important; }
+  .kai-fab-corto { display: none; }
+  @media (max-width: 520px) {
+    .kai-fab { left: 14px; }
+    .kai-fab-txt { display: none; }
+    .kai-fab-corto { display: inline; }
+  }
+
+  /* La cara de Kaizer. */
+  .kai-perro { position: relative; flex: none; object-fit: cover; width: 36px; height: 36px; border-radius: 999px;
+    background: radial-gradient(circle at 50% 30%, #3ed39a, #0d8050); box-shadow: 0 0 0 0 rgba(62,211,154,.55); }
+  .kai-perro-g { width: 46px; height: 46px; }
+  .kai-wa { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 10px 12px 0; padding: 9px 12px; border-radius: 12px;
+    background: var(--green-soft); color: var(--green2); font-size: 13.5px; font-weight: 600; transition: background-color .2s ease, color .2s ease; }
+  .kai-wa:hover { background: var(--green-btn); color: #fff; }
+  @media (prefers-reduced-motion: no-preference) {
+    .kai-perro { animation: kai-pulso 2.4s ease-out infinite; }
+    .kai-panel:not([hidden]) { animation: kai-entra .25s cubic-bezier(.2,.7,.2,1); }
+    .kai-puntos i { animation: kai-punto 1s ease-in-out infinite; }
+  }
+  @keyframes kai-pulso { 70% { box-shadow: 0 0 0 10px rgba(62,211,154,0); } 100% { box-shadow: 0 0 0 0 rgba(62,211,154,0); } }
+  @keyframes kai-entra { from { opacity: 0; transform: translateY(12px) scale(.98); } }
+  @keyframes kai-punto { 0%, 60%, 100% { opacity: .3; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-3px); } }
+
+  .kai-panel { position: fixed; left: 22px; bottom: 22px; z-index: 40; display: flex; flex-direction: column; overflow: hidden;
+    width: 390px; max-width: calc(100vw - 24px); height: min(600px, calc(100dvh - 44px)); border-radius: 22px;
+    background: var(--bg); color: var(--ink); border: 1px solid var(--line); box-shadow: 0 30px 80px -20px rgba(11,26,51,.5); }
+  @media (max-width: 520px) { .kai-panel { left: 12px; right: 12px; bottom: 12px; width: auto; height: min(620px, calc(100dvh - 24px)); } }
+
+  .kai-cab { position: relative; overflow: hidden; display: flex; align-items: center; gap: 12px; padding: 14px 12px 14px 16px; color: #fff;
+    background: radial-gradient(closest-side at 100% 0%, rgba(62,211,154,.35), transparent 70%) no-repeat right -60px top -80px / 300px 260px, #0b1a33; }
+  .kai-nombre { font-size: 16.5px; font-weight: 700; letter-spacing: -.01em; line-height: 1.2; }
+  .kai-sub { font-size: 12px; color: #c9d4ea; }
+  .kai-ic { display: grid; place-items: center; width: 34px; height: 34px; flex: none; border-radius: 10px; cursor: pointer; color: #dbe4f5; transition: background-color .2s ease, color .2s ease; }
+  .kai-ic:hover { background: rgba(255,255,255,.1); color: #3ed39a; }
+
+  .kai-msgs { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; display: flex; flex-direction: column; gap: 10px; padding: 16px; background: var(--bg2); }
+  .kai-m { max-width: 88%; padding: 10px 14px; border-radius: 16px; font-size: 14.5px; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .kai-a { align-self: flex-start; background: var(--bg); border: 1px solid var(--line); border-bottom-left-radius: 6px; }
+  .kai-u { align-self: flex-end; background: var(--green-btn); color: #fff; border-bottom-right-radius: 6px; }
+  .kai-a a { color: var(--green2); font-weight: 500; text-decoration: underline; text-underline-offset: 3px; }
+  .kai-a strong { font-weight: 600; }
+  .kai-a code { padding: 1px 5px; border-radius: 6px; background: var(--bg2); font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; }
+  .kai-puntos { display: inline-flex; gap: 4px; padding: 4px 0; }
+  .kai-puntos i { width: 6px; height: 6px; border-radius: 999px; background: var(--green); }
+
+  .kai-sug { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 16px 12px; background: var(--bg2); }
+  .kai-sug button { padding: 8px 12px; border-radius: 999px; cursor: pointer; background: var(--bg); border: 1px solid var(--line); color: var(--ink2); font-size: 13px; font-weight: 500; text-align: left; transition: border-color .2s ease, color .2s ease; }
+  .kai-sug button:hover { border-color: var(--green); color: var(--green2); }
+
+  .kai-form { display: flex; align-items: flex-end; gap: 8px; padding: 10px 12px 6px; }
+  .kai-form textarea { flex: 1; min-width: 0; resize: none; min-height: 44px; max-height: 120px; padding: 10px 14px; border-radius: 14px; background: var(--bg2); border: 1px solid var(--line); color: var(--ink); font-size: 16px; line-height: 1.4; }
+  .kai-form textarea:focus { outline: 2px solid var(--green); outline-offset: 1px; }
+  .kai-form button { display: grid; place-items: center; width: 44px; height: 44px; flex: none; border-radius: 14px; cursor: pointer; background: var(--green-btn); color: #fff; transition: background-color .2s ease, opacity .2s ease; }
+  .kai-form button:hover { background: var(--green-btn-hover); }
+  .kai-ocupado button { opacity: .5; pointer-events: none; }
+  .kai-nota { padding: 0 14px 10px; font-size: 11px; line-height: 1.4; color: var(--mute); text-align: center; }
+  .kai-nota a { text-decoration: underline; }
+</style>

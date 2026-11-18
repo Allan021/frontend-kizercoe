@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Analitica from '@/components/Analitica.astro';
 import LeadWhatsApp from '@/components/LeadWhatsApp.astro';
+import Kaizer from '@/components/Kaizer.astro';
 import { servicios } from '@/lib/servicios';
 
 interface Props {
@@ -251,6 +252,7 @@ const GOOGLE_VERIFICATION = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
   </a>
   <slot />
   {!noindex && <LeadWhatsApp />}
+  {!noindex && <Kaizer />}
   <!-- GSAP se fue con el rediseño: el diseño nuevo no anima secciones y el
        sitio se ahorra ~126 KB de JavaScript. -->
 </body>
