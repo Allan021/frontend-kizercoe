@@ -1,0 +1,180 @@
+---
+import { Icon } from 'astro-icon/components';
+import Layout from '@/layouts/Layout.astro';
+import { servicios } from '@/lib/servicios';
+
+/**
+ * /tarjeta/ — tarjeta digital de Kizercode para dueños de negocio.
+ *
+ * Se entrega con QR en persona o por WhatsApp. Con ?de=<nombre> es la
+ * tarjeta de un socio (contador): muestra "Te lo recomienda X", el WhatsApp
+ * sale con "Me recomendó X" y el lead entra al CRM como "Referido por X".
+ * Así se sabe a quién pagarle la comisión.
+ * ponytail: el socio se identifica por el nombre que escribió; si dos se llaman
+ * igual, pedir el apellido al activar (en /socios/).
+ */
+const precio = (slug: string) => servicios.find((s) => s.slug === slug)?.lps;
+const lineas = [
+  { href: '/productos/kizerpos/', icon: 'lucide:store', t: 'Punto de venta KizerPOS', d: 'Vende sin internet, inventario y fiado' },
+  { href: '/productos/kizerresto/', icon: 'lucide:utensils', t: 'KizerResto para restaurantes', d: 'Comanda a cocina y factura con CAI' },
+  { href: '/servicios/sistemas-a-la-medida/', icon: 'lucide:layout-dashboard', t: 'Sistema a la medida', d: `Desde ${precio('sistemas-a-la-medida')}, adiós Excel` },
+  { href: '/servicios/tiendas-en-linea/', icon: 'lucide:shopping-cart', t: 'Tienda en línea', d: `Desde ${precio('tiendas-en-linea')}, cobro con tarjeta` },
+  { href: '/servicios/paginas-web/', icon: 'lucide:globe', t: 'Página web', d: `Desde ${precio('paginas-web')}, lista en una semana` },
+  { href: '/servicios/automatizacion-ia/', icon: 'lucide:bot', t: 'Chatbot de WhatsApp con IA', d: `Desde ${precio('automatizacion-ia')}, contesta 24/7` },
+];
+const WA_BASE = 'Hola! Vi la tarjeta digital de Kizercode y quiero información.';
+const wa = `https://wa.me/50488091744?text=${encodeURIComponent(WA_BASE)}`;
+---
+<Layout
+  title="Tarjeta digital | Kizercode"
+  description="Kizercode: punto de venta, sistemas a la medida, tiendas en línea y chatbots con IA para tu negocio. WhatsApp 8809-1744, Plaza Bendeck, El Progreso."
+  forzarLang="es"
+  urlEs="/tarjeta/"
+  soloEs
+  servicio="Tarjeta digital"
+  waEs={WA_BASE}
+>
+  <main id="contenido" class="kz-tj">
+    <div class="kz-tj-caja">
+      <header class="kz-tj-top">
+        <img src="/logo-oscuro.webp" alt="Kizercode" width="132" height="44" class="h-11 w-auto" />
+        <span class="kz-tj-chip">Hecho en Honduras</span>
+      </header>
+
+      <p id="ref" class="kz-tj-ref" hidden>
+        <Icon name="lucide:handshake" class="h-5 w-5 shrink-0" aria-hidden="true" />
+        <span>Te lo recomienda <strong id="ref-nombre"></strong></span>
+      </p>
+
+      <h1 class="kz-tj-h1">Tu negocio, <span>en sistema.</span></h1>
+      <p class="kz-tj-sub">Software para negocios de Honduras: punto de venta, sistemas, tiendas en línea e IA. Precio fijo por escrito antes de empezar.</p>
+
+      <div class="kz-tj-acciones">
+        <a href={wa} target="_blank" rel="noopener noreferrer" class="kz-tj-btn kz-tj-wa">
+          <img src="/whatsapp.svg" alt="" width="22" height="22" /> Escribir por WhatsApp
+        </a>
+        <div class="grid grid-cols-2 gap-3">
+          <a href="tel:+50488091744" class="kz-tj-btn kz-tj-sec"><Icon name="lucide:phone" class="h-5 w-5" aria-hidden="true" /> Llamar</a>
+          <a href="/kizercode.vcf" download="Kizercode.vcf" class="kz-tj-btn kz-tj-sec"><Icon name="lucide:user-plus" class="h-5 w-5" aria-hidden="true" /> Guardar contacto</a>
+        </div>
+      </div>
+
+      <a href="/casos/" class="kz-tj-prueba">
+        <span><b>+US$450K</b><small>vendidos en línea</small></span>
+        <span><b>+200</b><small>supermercados</small></span>
+        <span><b>EE. UU.</b><small>restaurantes con KizerResto</small></span>
+      </a>
+
+      <nav aria-label="Lo que hacemos" class="kz-tj-lista">
+        {lineas.map((l) => (
+          <a href={l.href}>
+            <span class="kz-tj-ic"><Icon name={l.icon} class="h-5 w-5" aria-hidden="true" /></span>
+            <span class="min-w-0 flex-1"><b>{l.t}</b><small>{l.d}</small></span>
+            <Icon name="lucide:chevron-right" class="h-4 w-4 shrink-0 opacity-60" aria-hidden="true" />
+          </a>
+        ))}
+      </nav>
+
+      <ul class="kz-tj-garantias">
+        <li><Icon name="lucide:check" class="h-4 w-4" aria-hidden="true" /> Diagnóstico gratis</li>
+        <li><Icon name="lucide:check" class="h-4 w-4" aria-hidden="true" /> 30 días de garantía</li>
+        <li><Icon name="lucide:check" class="h-4 w-4" aria-hidden="true" /> Código a tu nombre</li>
+      </ul>
+
+      <section class="kz-tj-qr" aria-labelledby="qr-titulo">
+        <h2 id="qr-titulo">Compartí esta tarjeta</h2>
+        <div id="qr" class="kz-tj-qrimg" role="img" aria-label="Código QR de esta tarjeta"></div>
+        <div class="grid grid-cols-2 gap-3">
+          <button type="button" id="compartir" class="kz-tj-btn kz-tj-sec"><Icon name="lucide:share-2" class="h-5 w-5" aria-hidden="true" /> Compartir</button>
+          <button type="button" id="copiar" class="kz-tj-btn kz-tj-sec"><Icon name="lucide:link" class="h-5 w-5" aria-hidden="true" /> <span>Copiar enlace</span></button>
+        </div>
+      </section>
+
+      <footer class="kz-tj-pie">
+        <a href="https://www.google.com/maps/search/?api=1&query=Plaza+Bendeck+El+Progreso+Yoro+Honduras" target="_blank" rel="noopener">
+          <Icon name="lucide:map-pin" class="h-4 w-4" aria-hidden="true" /> Plaza Bendeck, El Progreso, Yoro
+        </a>
+        <span>Lunes a sábado, 7:00 a.m. a 6:00 p.m.</span>
+        <a href="/">www.kizercode.com</a>
+      </footer>
+    </div>
+  </main>
+</Layout>
+
+<script is:inline src="/vendor/qrcode-1.4.4.js"></script>
+<script>
+  // Socio: ?de=Nombre. Solo texto (textContent), recortado: viene de la URL.
+  const de = (new URLSearchParams(location.search).get('de') ?? '').replace(/\s+/g, ' ').trim().slice(0, 60);
+  if (de) {
+    document.getElementById('ref')!.hidden = false;
+    document.getElementById('ref-nombre')!.textContent = de;
+    // LeadWhatsApp lee esto al hacer clic: el CRM anota quién lo refirió.
+    document.body.dataset.servicio = `Referido por ${de}`;
+    document.body.dataset.waEs = `Hola! Me recomendó ${de} y quiero información sobre Kizercode.`;
+  }
+
+  const url = new URL('/tarjeta/', location.origin);
+  if (de) url.searchParams.set('de', de);
+  const enlace = url.toString();
+
+  const q = (window as any).qrcode?.(0, 'M');
+  if (q) {
+    q.addData(enlace);
+    q.make();
+    document.getElementById('qr')!.innerHTML = q.createSvgTag({ cellSize: 6, margin: 2, scalable: true });
+  }
+
+  const copiar = document.getElementById('copiar')!;
+  copiar.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(enlace);
+      copiar.querySelector('span')!.textContent = '¡Copiado!';
+    } catch {
+      prompt('Copiá este enlace:', enlace);
+    }
+  });
+  document.getElementById('compartir')!.addEventListener('click', () => {
+    const texto = 'Kizercode: punto de venta, sistemas, tiendas en línea e IA para tu negocio.';
+    if (navigator.share) navigator.share({ title: 'Kizercode', text: texto, url: enlace }).catch(() => {});
+    else window.open(`https://wa.me/?text=${encodeURIComponent(`${texto} ${enlace}`)}`, '_blank', 'noopener');
+  });
+</script>
+
+<style>
+  .kz-tj { min-height: 100svh; display: flex; justify-content: center; padding: 24px 16px 40px; color: #fff;
+    background: radial-gradient(circle at 10% 0%, rgba(47,227,154,.28), transparent 40%), radial-gradient(circle at 100% 100%, rgba(40,120,255,.25), transparent 45%), #0b1a33; }
+  .kz-tj-caja { width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: 22px; }
+  .kz-tj-top { display: flex; align-items: center; justify-content: space-between; }
+  .kz-tj-chip { font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(255,255,255,.25); color: #c9d4ea; }
+  .kz-tj-ref { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 16px; background: rgba(47,227,154,.14); border: 1px solid rgba(47,227,154,.4); color: #2fe39a; font-size: 15px; }
+  .kz-tj-ref strong { color: #fff; }
+  .kz-tj-h1 { font-size: 44px; line-height: 1.05; font-weight: 800; letter-spacing: -.03em; }
+  .kz-tj-h1 span { color: #2fe39a; }
+  .kz-tj-sub { margin-top: -8px; font-size: 16.5px; line-height: 1.5; color: #c9d4ea; }
+  .kz-tj-acciones { display: flex; flex-direction: column; gap: 12px; }
+  .kz-tj-btn { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; border-radius: 16px; font-weight: 700; font-size: 15.5px; transition: transform .15s ease, background .2s ease; }
+  .kz-tj-btn:active { transform: scale(.98); }
+  .kz-tj-wa { min-height: 60px; font-size: 17px; background: #2fe39a; color: #0b1a33; box-shadow: 0 14px 40px rgba(47,227,154,.3); }
+  .kz-tj-wa img { filter: brightness(0) saturate(100%) invert(9%) sepia(30%) saturate(2600%) hue-rotate(200deg); }
+  .kz-tj-sec { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); color: #fff; }
+  .kz-tj-sec:hover { background: rgba(255,255,255,.14); }
+  .kz-tj-prueba { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 16px; border-radius: 18px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); text-align: center; }
+  .kz-tj-prueba b { display: block; font-size: 21px; font-weight: 800; color: #2fe39a; letter-spacing: -.02em; }
+  .kz-tj-prueba small { display: block; font-size: 12px; line-height: 1.3; color: #c9d4ea; margin-top: 2px; }
+  .kz-tj-lista { display: flex; flex-direction: column; border-radius: 18px; overflow: hidden; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); }
+  .kz-tj-lista a { display: flex; align-items: center; gap: 14px; padding: 14px 16px; }
+  .kz-tj-lista a + a { border-top: 1px solid rgba(255,255,255,.1); }
+  .kz-tj-lista a:hover { background: rgba(255,255,255,.05); }
+  .kz-tj-lista b { display: block; font-size: 15px; font-weight: 700; }
+  .kz-tj-lista small { display: block; font-size: 13px; color: #c9d4ea; }
+  .kz-tj-ic { display: grid; place-items: center; width: 40px; height: 40px; flex: none; border-radius: 12px; background: rgba(47,227,154,.14); color: #2fe39a; }
+  .kz-tj-garantias { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 16px; font-size: 13.5px; color: #c9d4ea; }
+  .kz-tj-garantias li { display: flex; align-items: center; gap: 6px; }
+  .kz-tj-garantias :global(svg) { color: #2fe39a; }
+  .kz-tj-qr { display: flex; flex-direction: column; gap: 14px; padding: 20px; border-radius: 18px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); }
+  .kz-tj-qr h2 { font-size: 16px; font-weight: 700; text-align: center; }
+  .kz-tj-qrimg { width: 200px; margin: 0 auto; padding: 10px; border-radius: 16px; background: #fff; }
+  .kz-tj-qrimg :global(svg) { display: block; width: 100%; height: auto; }
+  .kz-tj-pie { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 13.5px; color: #8fa0bf; text-align: center; }
+  .kz-tj-pie a { display: inline-flex; align-items: center; gap: 6px; color: #c9d4ea; }
+</style>

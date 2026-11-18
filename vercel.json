@@ -28,6 +28,13 @@
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800" }
       ]
+    },
+    {
+      "source": "/kizercode.vcf",
+      "headers": [
+        { "key": "Content-Type", "value": "text/vcard; charset=utf-8" },
+        { "key": "Content-Disposition", "value": "attachment; filename=\"Kizercode.vcf\"" }
+      ]
     }
   ]
 }

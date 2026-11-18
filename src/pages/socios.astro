@@ -19,7 +19,6 @@ const COMISION = 0.1;
 const url = '/socios/';
 const SERVICIO = 'Programa de socios';
 
-const waSocio = `https://wa.me/50488091744?text=${encodeURIComponent('Hola! Quiero ser socio de Kizercode y referir clientes.')}`;
 const waReferir = `https://wa.me/50488091744?text=${encodeURIComponent('Hola! Soy socio de Kizercode y quiero referir un cliente.\n\nNegocio:\nContacto:\nQué necesita:')}`;
 
 const lps = (n: number) => `L ${n.toLocaleString('en-US')}`;
@@ -31,8 +30,8 @@ const ejemplos = ['paginas-web', 'tiendas-en-linea', 'sistemas-a-la-medida']
   });
 
 const pasos = [
-  { t: 'Te registrás', d: 'Nos escribís por WhatsApp. Te confirmamos y quedás como socio. Sin costo y sin contrato de exclusividad.' },
-  { t: 'Nos presentás al cliente', d: 'Con su permiso, nos pasás su contacto o armás un grupo de WhatsApp con los dos. Te confirmamos cada referido apenas llega.' },
+  { t: 'Activás tu tarjeta', d: 'Aquí abajo, en un minuto. Te llevás una tarjeta digital con tu nombre, con su enlace y su QR. Sin costo y sin exclusividad.' },
+  { t: 'Se la pasás al cliente', d: 'Por WhatsApp o mostrándole el QR. Cuando nos escribe desde tu tarjeta, queda registrado como referido tuyo. Te confirmamos cada uno.' },
   { t: 'Nosotros vendemos', d: 'Hacemos el diagnóstico gratis y la cotización por escrito. Vos no tenés que vender ni saber de tecnología.' },
   { t: 'Cobrás el 10 %', d: 'Del valor del primer proyecto que el cliente contrate, a medida que el cliente paga. Si paga en cuotas, te pagamos el 10 % de cada una.' },
 ];
@@ -101,8 +100,8 @@ const jsonLd = {
           Para contadores y asesores que ven todos los días negocios atrapados en Excel y cuadernos. Vos nos presentás, nosotros hacemos el resto, y tu cliente no paga un lempira más.
         </p>
         <div class="flex flex-wrap justify-center gap-3">
-          <a href={waSocio} target="_blank" rel="noopener noreferrer" data-servicio={SERVICIO} class="kz-btn kz-btn-primario" style="padding: 14px 26px; font-size: 15.5px">
-            <img src="/whatsapp.svg" alt="" width="18" height="18" class="block" /> Quiero ser socio
+          <a href="#activar" class="kz-btn kz-btn-primario" style="padding: 14px 26px; font-size: 15.5px">
+            <Icon name="lucide:badge-check" class="h-5 w-5" aria-hidden="true" /> Activar mi tarjeta de socio
           </a>
           <a href={waReferir} target="_blank" rel="noopener noreferrer" data-servicio={SERVICIO} class="kz-btn kz-btn-secundario" style="padding: 14px 26px; font-size: 15.5px">Ya soy socio: referir un cliente</a>
         </div>
@@ -122,6 +121,44 @@ const jsonLd = {
             </li>
           ))}
         </ol>
+      </section>
+
+      <section id="activar" aria-labelledby="activar-titulo" class="kz-act mx-auto w-full max-w-[860px] scroll-mt-24">
+        <div class="grid gap-8 rounded-3xl p-8 md:grid-cols-2 md:p-10" style="background: var(--navy); color: #fff">
+          <div class="flex flex-col gap-3">
+            <p class="kz-eyebrow" style="color: var(--green-bright)">Tarjeta de socio</p>
+            <h2 id="activar-titulo" class="text-[30px] font-bold leading-tight" style="letter-spacing: -0.02em">Activá tu tarjeta digital en un minuto.</h2>
+            <p class="text-[15.5px] leading-relaxed" style="color: #c9d4ea">
+              Es la tarjeta de Kizercode con tu nombre: "Te lo recomienda [tu nombre]". Mandala por WhatsApp o mostrá el QR. Cada cliente que nos escriba desde ahí queda registrado como tuyo.
+            </p>
+            <a href="/tarjeta/" target="_blank" class="mt-1 text-[14px] font-semibold underline underline-offset-4" style="color: var(--green-bright)">Ver cómo se ve la tarjeta →</a>
+          </div>
+
+          <form id="act-form" class="flex flex-col gap-3" novalidate>
+            <label class="kz-act-campo"><span>Tu nombre completo</span><input name="name" required minlength="3" maxlength="60" autocomplete="name" placeholder="Ej. Lic. Ana Martínez" /></label>
+            <label class="kz-act-campo"><span>Tu correo</span><input name="email" type="email" required maxlength="254" autocomplete="email" inputmode="email" /></label>
+            <label class="kz-act-campo"><span>Tu WhatsApp</span><input name="phone" type="tel" required minlength="8" maxlength="20" autocomplete="tel" inputmode="tel" placeholder="9999-9999" /></label>
+            <p id="act-error" class="text-[14px]" style="color: #ff8a8a" hidden></p>
+            <button type="submit" class="kz-btn kz-btn-primario mt-1" style="min-height: 52px; font-size: 16px">Activar mi tarjeta</button>
+            <p class="text-[12.5px]" style="color: #8fa0bf">Al activarla aceptás los <a href="/terminos/" class="underline">términos</a> y el <a href="/privacidad/" class="underline">aviso de privacidad</a>.</p>
+          </form>
+
+          <div id="act-lista" class="flex flex-col gap-4 md:col-span-2" hidden>
+            <p class="flex items-center gap-2 text-[18px] font-bold" style="color: var(--green-bright)"><Icon name="lucide:badge-check" class="h-6 w-6 shrink-0" aria-hidden="true" /> <span>Tu tarjeta está activa, <span id="act-nombre"></span>.</span></p>
+            <div class="flex flex-col items-center gap-5 md:flex-row md:items-start">
+              <div id="act-qr" class="w-[200px] shrink-0 rounded-2xl bg-white p-2.5" role="img" aria-label="QR de tu tarjeta de socio"></div>
+              <div class="flex w-full min-w-0 flex-col gap-3">
+                <input id="act-enlace" readonly class="w-full rounded-xl px-4 py-3 text-[14px]" style="background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.2); color: #fff" />
+                <a id="act-wa" target="_blank" rel="noopener noreferrer" class="kz-btn kz-btn-primario" style="min-height: 50px"><Icon name="lucide:send" class="h-5 w-5" aria-hidden="true" /> Mandarla por WhatsApp</a>
+                <div class="grid grid-cols-2 gap-3">
+                  <button type="button" id="act-copiar" class="kz-btn" style="min-height: 48px; background: rgba(255,255,255,.1); color: #fff"><Icon name="lucide:copy" class="h-5 w-5" aria-hidden="true" /> <span>Copiar</span></button>
+                  <a id="act-ver" target="_blank" class="kz-btn" style="min-height: 48px; background: rgba(255,255,255,.1); color: #fff"><Icon name="lucide:external-link" class="h-5 w-5" aria-hidden="true" /> Abrir</a>
+                </div>
+                <p class="text-[13px]" style="color: #8fa0bf">Guardá este enlace: es tu tarjeta. Si lo perdés, volvé a esta página desde el mismo teléfono.</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section aria-labelledby="cuanto">
@@ -197,13 +234,100 @@ const jsonLd = {
 
       <section class="flex flex-col items-center gap-4 rounded-3xl p-10 text-center" style="background: var(--green-soft); border: 1px solid color-mix(in srgb, var(--green) 30%, transparent)">
         <p class="text-[28px] font-bold leading-snug" style="letter-spacing: -0.01em; text-wrap: balance">¿Tenés clientes que necesitan dejar Excel?</p>
-        <p class="max-w-[540px] text-[16px]" style="color: var(--ink2)">Escribinos y en 5 minutos quedás registrado.</p>
-        <a href={waSocio} target="_blank" rel="noopener noreferrer" data-servicio={SERVICIO} class="kz-btn kz-btn-primario" style="padding: 14px 26px; font-size: 15.5px">
-          <img src="/whatsapp.svg" alt="" width="18" height="18" class="block" /> Quiero ser socio
-        </a>
+        <p class="max-w-[540px] text-[16px]" style="color: var(--ink2)">Activá tu tarjeta y empezá a referir hoy.</p>
+        <a href="#activar" class="kz-btn kz-btn-primario" style="padding: 14px 26px; font-size: 15.5px">Activar mi tarjeta de socio</a>
       </section>
     </div>
   </main>
   <Footer />
   <FloatingWhatsApp />
 </Layout>
+
+<script is:inline src="/vendor/qrcode-1.4.4.js"></script>
+<script>
+  import { submitContact } from '@/lib/api';
+
+  // Activar la tarjeta: registra al socio en el CRM (servicio "Programa de
+  // socios") y le arma su enlace /tarjeta/?de=<nombre> con QR. Queda guardado
+  // en este navegador para que vuelva a verlo.
+  const CLAVE = 'kz-socio';
+  const form = document.getElementById('act-form') as HTMLFormElement;
+  const lista = document.getElementById('act-lista')!;
+  const error = document.getElementById('act-error')!;
+
+  function mostrar(nombre: string) {
+    const url = new URL('/tarjeta/', location.origin);
+    url.searchParams.set('de', nombre);
+    const enlace = url.toString();
+    form.hidden = true;
+    lista.hidden = false;
+    document.getElementById('act-nombre')!.textContent = nombre;
+    (document.getElementById('act-enlace') as HTMLInputElement).value = enlace;
+    (document.getElementById('act-ver') as HTMLAnchorElement).href = enlace;
+    const texto = `Te comparto la tarjeta de Kizercode. Hacen sistemas, punto de venta, tiendas en línea y páginas web para negocios. Escribiles desde aquí y deciles que vas de mi parte: ${enlace}`;
+    (document.getElementById('act-wa') as HTMLAnchorElement).href = `https://wa.me/?text=${encodeURIComponent(texto)}`;
+    const q = (window as any).qrcode?.(0, 'M');
+    if (q) {
+      q.addData(enlace);
+      q.make();
+      document.getElementById('act-qr')!.innerHTML = q.createSvgTag({ cellSize: 6, margin: 2, scalable: true });
+    }
+  }
+
+  try {
+    const ya = JSON.parse(localStorage.getItem(CLAVE) ?? 'null');
+    if (ya?.nombre) mostrar(ya.nombre);
+  } catch {}
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()) {
+      error.textContent = 'Revisá tu nombre, correo y WhatsApp.';
+      error.hidden = false;
+      return;
+    }
+    const d = new FormData(form);
+    const nombre = String(d.get('name')).replace(/\s+/g, ' ').trim().slice(0, 60);
+    const boton = form.querySelector('button')!;
+    boton.disabled = true;
+    boton.textContent = 'Activando...';
+    try {
+      await submitContact({
+        name: nombre,
+        email: String(d.get('email')).trim(),
+        phone: String(d.get('phone')).trim(),
+        service: 'Programa de socios',
+        message: `Activó su tarjeta de socio.\nEnlace: ${location.origin}/tarjeta/?de=${encodeURIComponent(nombre)}`,
+      });
+      try { localStorage.setItem(CLAVE, JSON.stringify({ nombre })); } catch {}
+      (window as any).gtag?.('event', 'generate_lead', { method: 'socio' });
+      mostrar(nombre);
+    } catch {
+      error.textContent = 'No se pudo activar. Probá otra vez o escribinos al WhatsApp 8809-1744.';
+      error.hidden = false;
+      boton.disabled = false;
+      boton.textContent = 'Activar mi tarjeta';
+    }
+  });
+
+  const copiar = document.getElementById('act-copiar')!;
+  copiar.addEventListener('click', async () => {
+    const v = (document.getElementById('act-enlace') as HTMLInputElement).value;
+    try {
+      await navigator.clipboard.writeText(v);
+      copiar.querySelector('span')!.textContent = '¡Copiado!';
+    } catch {
+      (document.getElementById('act-enlace') as HTMLInputElement).select();
+    }
+  });
+</script>
+
+<style>
+  /* flex/grid de Tailwind le gana a [hidden]: sin esto se ven el formulario y la tarjeta a la vez. */
+  #act-form[hidden], #act-lista[hidden] { display: none !important; }
+  .kz-act-campo { display: flex; flex-direction: column; gap: 6px; font-size: 13.5px; font-weight: 600; color: #c9d4ea; }
+  .kz-act-campo input { min-height: 48px; border-radius: 12px; padding: 0 14px; font-size: 16px; font-weight: 500; color: #fff; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.2); }
+  .kz-act-campo input::placeholder { color: #8fa0bf; }
+  .kz-act-campo input:focus { outline: 2px solid var(--green-bright); outline-offset: 1px; }
+  #act-qr :global(svg) { display: block; width: 100%; height: auto; }
+</style>
