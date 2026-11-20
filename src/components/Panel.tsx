@@ -29,6 +29,7 @@ import {
   Users,
   Wrench,
   X,
+  Megaphone,
 } from 'lucide-react';
 import { PanelAsistente } from '@/components/PanelAsistente';
 import { PanelBuscar } from '@/components/PanelBuscar';
@@ -39,6 +40,7 @@ import { PanelHoy } from '@/components/PanelHoy';
 import { PanelLeads } from '@/components/PanelLeads';
 import { PanelStaff } from '@/components/PanelStaff';
 import { PanelVisitas } from '@/components/PanelVisitas';
+import { PanelRedes } from '@/components/PanelRedes';
 import { SubirImagen } from '@/components/SubirImagen';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -159,7 +161,7 @@ function usarTema() {
 
 // ── Escritorio ──
 
-export type Pestana = 'hoy' | 'leads' | 'visitas' | 'taller' | 'servicios' | 'cobros' | 'equipo' | 'asistente' | 'staff' | 'proyectos' | 'testimonios';
+export type Pestana = 'hoy' | 'leads' | 'visitas' | 'taller' | 'servicios' | 'cobros' | 'equipo' | 'asistente' | 'redes' | 'staff' | 'proyectos' | 'testimonios';
 
 const SECCIONES: { id: Pestana; etiqueta: string; corta: string; Icono: typeof Home }[] = [
   { id: 'hoy', etiqueta: 'Hoy', corta: 'Hoy', Icono: Home },
@@ -168,12 +170,13 @@ const SECCIONES: { id: Pestana; etiqueta: string; corta: string; Icono: typeof H
   { id: 'taller', etiqueta: 'Taller', corta: 'Taller', Icono: Wrench },
   { id: 'servicios', etiqueta: 'Servicios', corta: 'Servicios', Icono: Layers },
   { id: 'cobros', etiqueta: 'Cobros', corta: 'Cobros', Icono: CreditCard },
+  { id: 'redes', etiqueta: 'Redes', corta: 'Redes', Icono: Megaphone },
   { id: 'equipo', etiqueta: 'Equipo y sitio', corta: 'Equipo', Icono: UserCog },
   { id: 'asistente', etiqueta: 'Asistente IA', corta: 'IA', Icono: Sparkles },
 ];
 /** En el teléfono caben 4 directos; el resto va en "Más". */
 const INFERIOR: Pestana[] = ['hoy', 'leads', 'taller', 'cobros'];
-const MAS: Pestana[] = ['visitas', 'servicios', 'equipo', 'asistente'];
+const MAS: Pestana[] = ['visitas', 'servicios', 'redes', 'equipo', 'asistente'];
 /** Staff, proyectos y testimonios viven dentro de "Equipo y sitio". */
 const EQUIPO: { id: Pestana; etiqueta: string; Icono: typeof Home }[] = [
   { id: 'staff', etiqueta: 'Mi staff', Icono: UserCog },
@@ -342,6 +345,9 @@ function Escritorio({ user, onSalir }: { user: PanelUser; onSalir: () => void })
           </div>
           <div hidden={pestana !== 'asistente'} className={pestana === 'asistente' ? 'kzp-vista' : ''}>
             <PanelAsistente />
+          </div>
+          <div hidden={pestana !== 'redes'} className={pestana === 'redes' ? 'kzp-vista' : ''}>
+            {pestana === 'redes' && <PanelRedes />}
           </div>
           <div hidden={pestana !== 'equipo'} className={pestana === 'equipo' ? 'kzp-vista' : ''}>
             <div className="mb-5">
