@@ -1,5 +1,5 @@
 {
- "generado": "2026-11-20T22:08:12.367Z",
+ "generado": "2026-11-20T23:41:58.555Z",
  "calendario": [
   {
    "fecha": "2026-10-14T18:30",
@@ -220,11 +220,38 @@
   {
    "fecha": "2026-11-20T18:30",
    "tipo": "reel",
-   "texto": "Son las 11:47 p.m. Un cliente quiere comprarte.\n\nVos estás dormido. Tu competencia tiene tienda en línea. 😬\n\nTienda en línea desde L 14,500, pago único:\n\n💳 Cobro con tarjeta, transferencia o contra entrega\n🤖 Chatbot con IA que contesta y vende\n📦 Te avisa de cada pedido\n🚫 Cero comisión de plataforma por venta\n\nEscribí TIENDA al WhatsApp 8809-1744.\n\n#TiendaEnLínea #VentasOnline #Emprendedores #Honduras",
+   "texto": "Son las 11:47 p.m. Un cliente quiere comprarte.\n\nVos estás dormido. Tu competencia tiene tienda en línea. 😬\n\nTienda en línea desde L 14,500, pago único:\n\n💳 Cobro con tarjeta, transferencia o contra entrega\n🤖 Chatbot con IA que contesta y vende\n📦 Te avisa de cada pedido\n🚫 Cero comisión de plataforma por venta\n\nEscribí TIENDA al WhatsApp 8809-1744.\n\n#TiendaEnLínea #VentasOnline #Emprendedores #Honduras\n\n👍 ¿Querés seguir viendo más soluciones tecnológicas para tu negocio? Dale like a la página.",
    "link": null,
    "programado": true,
    "archivo": "/redes/tiendas-en-linea.mp4",
    "portada": "/redes/tiendas-en-linea.jpg"
+  },
+  {
+   "fecha": "2026-11-20T19:15",
+   "tipo": "reel",
+   "texto": "¿Tu página web sigue igual que en 2012? 😬\n\nHoy una web trae:\n📊 Panel con tus números\n🤖 Un agente de IA que atiende a quien entra\n📱 Diseño perfecto en el celular\n\nEscribinos al WhatsApp 8809-1744 📲\n\n👍 ¿Querés seguir viendo más soluciones tecnológicas para tu negocio? Dale like a la página.\n\n#PáginasWeb #Kizercode #Honduras #Emprendedores",
+   "link": null,
+   "programado": true,
+   "archivo": "/redes/antes-web.mp4",
+   "portada": "/redes/antes-web.jpg"
+  },
+  {
+   "fecha": "2026-11-20T19:40",
+   "tipo": "foto",
+   "texto": "Tu negocio, en sistema. 💚\n\nPunto de venta, sistemas a la medida, tiendas en línea e inteligencia artificial. Escaneá el código y guardá nuestro contacto.\n\nEscribinos al WhatsApp 8809-1744 📲\n\n👍 ¿Querés seguir viendo más soluciones tecnológicas para tu negocio? Dale like a la página.\n\n#Kizercode #HechoEnHonduras #Software #Emprendedores",
+   "link": null,
+   "programado": true,
+   "archivo": "/redes/tarjeta-qr.jpg",
+   "portada": "/redes/tarjeta-qr.jpg"
+  },
+  {
+   "fecha": "2026-11-20T20:00",
+   "tipo": "reel",
+   "texto": "¿Seguís contestando cada mensaje a mano? 📱\n\nHoy los agentes de inteligencia artificial:\n💬 Responden al instante\n📄 Arman la cotización\n📅 Agendan la cita\n\nA cualquier hora, mientras vos atendés tu negocio.\n\nEscribinos al WhatsApp 8809-1744 📲\n\n👍 ¿Querés seguir viendo más soluciones tecnológicas para tu negocio? Dale like a la página.\n\n#InteligenciaArtificial #Kizercode #Honduras #Emprendedores",
+   "link": null,
+   "programado": true,
+   "archivo": "/redes/antes-agentes.mp4",
+   "portada": "/redes/antes-agentes.jpg"
   },
   {
    "fecha": "2026-11-21T12:00",
@@ -245,9 +272,18 @@
    "portada": "/redes/tarjeta-socios.jpg"
   },
   {
+   "fecha": "2026-11-22T12:00",
+   "tipo": "reel",
+   "texto": "¿Todavía pedís usuario y contraseña para todo? 🔑\n\nHoy tus clientes entran con un código QR o un enlace mágico: un toque y adentro, sin claves que olvidar.\n\n#QR #Kizercode #Honduras #Emprendedores\n\nEscribinos al WhatsApp 8809-1744 📲\n\n👍 ¿Querés seguir viendo más soluciones tecnológicas para tu negocio? Dale like a la página.",
+   "link": null,
+   "programado": true,
+   "archivo": "/redes/antes-qr.mp4",
+   "portada": "/redes/antes-qr.jpg"
+  },
+  {
    "fecha": "2026-11-22T18:30",
    "tipo": "reel",
-   "texto": "¿Querés ver KizerPOS funcionando antes de decidir? 👇\n\nComentá POS y te mandamos la demo por mensaje.\n\n✅ Vendé aunque se vaya el internet\n✅ Inventario con una foto\n✅ Varias tiendas en un solo panel\n✅ Kaizer AI responde tus consultas\n\n#KizerPOS #PuntoDeVenta #Inventario #Honduras #Emprendedores",
+   "texto": "¿Tu inventario es un relajo y no sabés cuánto vendiste hoy? 👇\n\nComentá POS y te mandamos la demo por mensaje.\n\n✅ Vendé aunque se vaya el internet\n✅ Inventario con una foto\n✅ Varias tiendas en un solo panel\n✅ Kaizer AI responde tus consultas\n\n#KizerPOS #PuntoDeVenta #Inventario #Honduras #Emprendedores",
    "link": null,
    "programado": true,
    "archivo": "/redes/comenta-pos.mp4",
@@ -308,6 +344,15 @@
    "portada": "/redes/tarjeta-sweeps.jpg"
   },
   {
+   "fecha": "2026-11-26T12:00",
+   "tipo": "reel",
+   "texto": "¿Mandás la misma promoción contacto por contacto? 😩\n\nCon campañas de WhatsApp le llega a todos tus clientes en un solo envío, y ves quién leyó y respondió.\n\n#WhatsApp #Marketing #Kizercode #Honduras\n\nEscribinos al WhatsApp 8809-1744 📲\n\n👍 ¿Querés seguir viendo más soluciones tecnológicas para tu negocio? Dale like a la página.",
+   "link": null,
+   "programado": true,
+   "archivo": "/redes/antes-whatsapp.mp4",
+   "portada": "/redes/antes-whatsapp.jpg"
+  },
+  {
    "fecha": "2026-11-26T18:30",
    "tipo": "reel",
    "texto": "“Quiero abrir otra sucursal, pero tengo un solo relajo con mi inventario.” 😩\n\nKaizer, nuestro perrito, te cuenta cómo KizerPOS lo resuelve: vender sin internet, inventario con una foto, varias tiendas y Kaizer AI para tus consultas.\n\nEscribinos al WhatsApp 8809-1744 📲\n\n#KizerPOS #Inventario #Honduras #Emprendedores",
@@ -351,6 +396,15 @@
    "programado": true,
    "archivo": "/redes/tarjeta-resto.jpg",
    "portada": "/redes/tarjeta-resto.jpg"
+  },
+  {
+   "fecha": "2026-11-29T12:00",
+   "tipo": "reel",
+   "texto": "¿Cuándo fue la última vez que le escribiste a tus clientes? 📧\n\nCon email marketing tus ofertas les llegan solas, y ves quién abrió y quién hizo clic.\n\n#EmailMarketing #Kizercode #Honduras #Emprendedores\n\nEscribinos al WhatsApp 8809-1744 📲\n\n👍 ¿Querés seguir viendo más soluciones tecnológicas para tu negocio? Dale like a la página.",
+   "link": null,
+   "programado": true,
+   "archivo": "/redes/antes-email.mp4",
+   "portada": "/redes/antes-email.jpg"
   },
   {
    "fecha": "2026-11-29T18:30",
@@ -414,6 +468,15 @@
    "programado": true,
    "archivo": "/redes/tarjeta-socios-chat.jpg",
    "portada": "/redes/tarjeta-socios-chat.jpg"
+  },
+  {
+   "fecha": "2026-12-03T12:00",
+   "tipo": "reel",
+   "texto": "¿Pagás anuncios y no sabés si venden? 📣\n\nHacemos campañas en Facebook e Instagram para el público correcto, y medidas: ves qué anuncio te trae clientes.\n\n#Anuncios #MarketingDigital #Kizercode #Honduras\n\nEscribinos al WhatsApp 8809-1744 📲\n\n👍 ¿Querés seguir viendo más soluciones tecnológicas para tu negocio? Dale like a la página.",
+   "link": null,
+   "programado": true,
+   "archivo": "/redes/antes-anuncios.mp4",
+   "portada": "/redes/antes-anuncios.jpg"
   },
   {
    "fecha": "2026-12-03T18:30",
@@ -588,6 +651,60 @@
   }
  ],
  "biblioteca": [
+  {
+   "nombre": "antes-agentes.mp4",
+   "tipo": "video",
+   "fechas": [
+    "2026-11-20T20:00"
+   ],
+   "archivo": "/redes/antes-agentes.mp4",
+   "portada": "/redes/antes-agentes.jpg"
+  },
+  {
+   "nombre": "antes-anuncios.mp4",
+   "tipo": "video",
+   "fechas": [
+    "2026-12-03T12:00"
+   ],
+   "archivo": "/redes/antes-anuncios.mp4",
+   "portada": "/redes/antes-anuncios.jpg"
+  },
+  {
+   "nombre": "antes-email.mp4",
+   "tipo": "video",
+   "fechas": [
+    "2026-11-29T12:00"
+   ],
+   "archivo": "/redes/antes-email.mp4",
+   "portada": "/redes/antes-email.jpg"
+  },
+  {
+   "nombre": "antes-qr.mp4",
+   "tipo": "video",
+   "fechas": [
+    "2026-11-22T12:00"
+   ],
+   "archivo": "/redes/antes-qr.mp4",
+   "portada": "/redes/antes-qr.jpg"
+  },
+  {
+   "nombre": "antes-web.mp4",
+   "tipo": "video",
+   "fechas": [
+    "2026-11-20T19:15"
+   ],
+   "archivo": "/redes/antes-web.mp4",
+   "portada": "/redes/antes-web.jpg"
+  },
+  {
+   "nombre": "antes-whatsapp.mp4",
+   "tipo": "video",
+   "fechas": [
+    "2026-11-26T12:00"
+   ],
+   "archivo": "/redes/antes-whatsapp.mp4",
+   "portada": "/redes/antes-whatsapp.jpg"
+  },
   {
    "nombre": "anuncios.mp4",
    "tipo": "video",
@@ -1028,7 +1145,9 @@
   {
    "nombre": "tarjeta-qr.jpg",
    "tipo": "foto",
-   "fechas": [],
+   "fechas": [
+    "2026-11-20T19:40"
+   ],
    "archivo": "/redes/tarjeta-qr.jpg",
    "portada": "/redes/tarjeta-qr.jpg"
   },
