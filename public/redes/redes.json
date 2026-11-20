@@ -1,5 +1,5 @@
 {
- "generado": "2026-11-20T21:21:53.712Z",
+ "generado": "2026-11-20T21:47:42.287Z",
  "calendario": [
   {
    "fecha": "2026-10-14T18:30",
@@ -189,6 +189,33 @@
    "programado": false,
    "archivo": "/redes/tarjeta-feria.jpg",
    "portada": "/redes/tarjeta-feria.jpg"
+  },
+  {
+   "fecha": "2026-11-20T16:20",
+   "tipo": "foto",
+   "texto": "Bienvenidos a la familia Kizercode. 🐾\n\nNuestro nombre viene de Kizer, nuestro pastor alemán. Se nos fue antes de tiempo, y decidimos que su nombre no se iba a quedar aquí: va a cruzar fronteras con software hecho en Honduras.\n\n¿De qué va este proyecto? De ayudar a los negocios a trabajar mejor:\n\n🌐 Páginas web profesionales y tiendas en línea\n⚙️ Sistemas a la medida y apps móviles\n🧾 KizerPOS, KizerResto, Kizer Cobros y Kizer Check\n🤖 Asistentes con inteligencia artificial\n🎥 Cámaras y soporte técnico\n\nPor eso nuestra mascota es Kaizer, el perrito que vas a ver en nuestros videos. Cada sistema que entregamos lleva un poquito de él.\n\nGracias por estar aquí. Esto apenas empieza. 💚\n\n#Kizercode #HechoEnHonduras #ElProgreso #Software #Emprendedores",
+   "link": null,
+   "programado": true,
+   "archivo": "/redes/tarjeta-bienvenida.jpg",
+   "portada": "/redes/tarjeta-bienvenida.jpg"
+  },
+  {
+   "fecha": "2026-11-20T16:50",
+   "tipo": "reel",
+   "texto": "Tu página web es la primera impresión de tu negocio. ¿Qué dice la tuya? 🌐\n\nHacemos páginas web profesionales: rápidas, que se ven bien en el celular y que aparecen en Google.\n\n✅ Diseño a la medida de tu marca\n✅ Lista para el teléfono\n✅ Precio por escrito antes de empezar\n\nEscribí WEB al WhatsApp 8809-1744 y te decimos cómo quedaría la tuya.\n\n#PáginasWeb #DiseñoWeb #Honduras #ElProgreso #Emprendedores",
+   "link": null,
+   "programado": true,
+   "archivo": "/redes/modernizacion-web.mp4",
+   "portada": "/redes/modernizacion-web.jpg"
+  },
+  {
+   "fecha": "2026-11-20T17:20",
+   "tipo": "foto",
+   "texto": "Tu negocio, en internet y en sistema. 🚀\n\nEn Kizercode hacemos:\n\n🌐 Páginas web profesionales\n🛒 Tiendas en línea\n⚙️ Sistemas a la medida\n📱 Apps móviles\n🤖 Asistentes con IA\n🎥 Cámaras y soporte técnico\n\nTodo diseñado y programado en El Progreso, Honduras.\n\nEscribí PROYECTO al WhatsApp 8809-1744 y contanos qué necesitás.\n\n#Kizercode #Software #PáginasWeb #Honduras #Emprendedores",
+   "link": null,
+   "programado": true,
+   "archivo": "/redes/tarjeta-servicios.jpg",
+   "portada": "/redes/tarjeta-servicios.jpg"
   },
   {
    "fecha": "2026-11-20T18:30",
@@ -622,7 +649,8 @@
    "nombre": "modernizacion-web.mp4",
    "tipo": "video",
    "fechas": [
-    "2026-11-06T18:30"
+    "2026-11-06T18:30",
+    "2026-11-20T16:50"
    ],
    "archivo": "/redes/modernizacion-web.mp4",
    "portada": "/redes/modernizacion-web.jpg"
@@ -684,6 +712,15 @@
    "portada": "/redes/sistemas-a-la-medida.jpg"
   },
   {
+   "nombre": "tarjeta-bienvenida.jpg",
+   "tipo": "foto",
+   "fechas": [
+    "2026-11-20T16:20"
+   ],
+   "archivo": "/redes/tarjeta-bienvenida.jpg",
+   "portada": "/redes/tarjeta-bienvenida.jpg"
+  },
+  {
    "nombre": "tarjeta-casos.jpg",
    "tipo": "foto",
    "fechas": [
@@ -734,6 +771,15 @@
    ],
    "archivo": "/redes/tarjeta-resto.jpg",
    "portada": "/redes/tarjeta-resto.jpg"
+  },
+  {
+   "nombre": "tarjeta-servicios.jpg",
+   "tipo": "foto",
+   "fechas": [
+    "2026-11-20T17:20"
+   ],
+   "archivo": "/redes/tarjeta-servicios.jpg",
+   "portada": "/redes/tarjeta-servicios.jpg"
   },
   {
    "nombre": "tarjeta-socios-chat.jpg",
