@@ -337,3 +337,25 @@ export function waDe(phone: string): string | null {
   if (d.length < 8) return null;
   return `https://wa.me/${d.length === 8 ? `504${d}` : d}`;
 }
+
+// ── Redes ──
+
+export type PostRed = {
+  id: string;
+  fecha: string;
+  tipo: 'reel' | 'foto' | 'texto';
+  red: string;
+  texto: string;
+  archivo: string | null;
+  portada: string | null;
+  link: string | null;
+  fbId: string | null;
+};
+
+export const panelRedes = () => pedir<PostRed[]>('/v1/panel/redes', conToken());
+
+export const panelEditarPostRed = (id: string, cambios: { texto?: string; fecha?: string }) =>
+  pedir<PostRed>(`/v1/panel/redes/${id}`, conToken({ method: 'PATCH', body: JSON.stringify(cambios) }));
+
+export const panelQuitarPostRed = (id: string) =>
+  pedir<{ ok: boolean }>(`/v1/panel/redes/${id}`, conToken({ method: 'DELETE' }));
