@@ -1,5 +1,5 @@
 {
- "generado": "2026-11-20T23:41:58.555Z",
+ "generado": "2026-11-21T03:16:54.886Z",
  "calendario": [
   {
    "fecha": "2026-10-14T18:30",
@@ -252,6 +252,15 @@
    "programado": true,
    "archivo": "/redes/antes-agentes.mp4",
    "portada": "/redes/antes-agentes.jpg"
+  },
+  {
+   "fecha": "2026-11-20T21:35",
+   "tipo": "reel",
+   "texto": "¿Tu negocio sigue en cuaderno y sin página web? 📒\n\nEn Kizercode hacemos páginas web, tiendas en línea, sistemas a la medida, apps y asistentes con inteligencia artificial.\n\nY tenemos sistemas ya listos: KizerPOS para tiendas, KizerResto para restaurantes, Kizer Cobros para préstamos y Kizer Check para la asistencia.\n\nHecho en El Progreso, Honduras 🇭🇳\n\nEscribinos al WhatsApp 8809-1744 📲\n\n👍 ¿Querés seguir viendo más soluciones tecnológicas para tu negocio? Dale like a la página.\n\n#Kizercode #Honduras #ElProgreso #Emprendedores #PaginasWeb",
+   "link": null,
+   "programado": true,
+   "archivo": "/redes/todo-kizercode.mp4",
+   "portada": "/redes/todo-kizercode.jpg"
   },
   {
    "fecha": "2026-11-21T12:00",
@@ -1241,6 +1250,15 @@
    ],
    "archivo": "/redes/tiendas-en-linea.mp4",
    "portada": "/redes/tiendas-en-linea.jpg"
+  },
+  {
+   "nombre": "todo-kizercode.mp4",
+   "tipo": "video",
+   "fechas": [
+    "2026-11-20T21:35"
+   ],
+   "archivo": "/redes/todo-kizercode.mp4",
+   "portada": "/redes/todo-kizercode.jpg"
   }
  ]
 }
