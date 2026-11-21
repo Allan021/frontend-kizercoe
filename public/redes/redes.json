@@ -1,5 +1,5 @@
 {
- "generado": "2026-11-21T04:23:03.587Z",
+ "generado": "2026-11-21T18:39:28.110Z",
  "calendario": [
   {
    "fecha": "2026-10-14T18:30",
@@ -288,6 +288,15 @@
    "programado": true,
    "archivo": "/redes/tarjeta-socios.jpg",
    "portada": "/redes/tarjeta-socios.jpg"
+  },
+  {
+   "fecha": "2026-11-21T20:00",
+   "tipo": "reel",
+   "texto": "¿Fila hasta la calle y las mesas vacías? 😩🍽️\n\nEl gerente ya no sabía qué hacer… hasta que se metió Kaizer con la solución.\n\nCon KizerResto tus clientes piden desde la mesa con un código QR, la comanda llega directo a cocina, la cuenta se divide sola y la factura sale al instante.\n\nEscribinos al WhatsApp 8809-1744 y te lo mostramos 📲\n\n👍 ¿Querés ver más historias de Kaizer? Dale like a la página y compartí.\n\n#KizerResto #Restaurantes #Honduras #ElProgreso #Kizercode",
+   "link": null,
+   "programado": true,
+   "archivo": "/redes/historia-resto-fila.mp4",
+   "portada": "/redes/historia-resto-fila.jpg"
   },
   {
    "fecha": "2026-11-22T12:00",
@@ -924,6 +933,15 @@
    ],
    "archivo": "/redes/historia-kizercode.mp4",
    "portada": "/redes/historia-kizercode.jpg"
+  },
+  {
+   "nombre": "historia-resto-fila.mp4",
+   "tipo": "video",
+   "fechas": [
+    "2026-11-21T20:00"
+   ],
+   "archivo": "/redes/historia-resto-fila.mp4",
+   "portada": "/redes/historia-resto-fila.jpg"
   },
   {
    "nombre": "kaizer-check.mp4",
