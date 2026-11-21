@@ -1,5 +1,5 @@
 {
- "generado": "2026-11-21T03:16:54.886Z",
+ "generado": "2026-11-21T04:23:03.587Z",
  "calendario": [
   {
    "fecha": "2026-10-14T18:30",
@@ -261,6 +261,15 @@
    "programado": true,
    "archivo": "/redes/todo-kizercode.mp4",
    "portada": "/redes/todo-kizercode.jpg"
+  },
+  {
+   "fecha": "2026-11-21T08:00",
+   "tipo": "reel",
+   "texto": "¿Tu negocio sigue en cuaderno y sin página web? 📒\n\nEn Kizercode hacemos cualquier página web: landing pages, tiendas en línea y sistemas a la medida. De lo más sencillo a lo más complejo.\n\nYa lo hicimos: la tienda en línea de la Feria del Millón, en Colombia, y la plataforma de Sweepstouch para más de 200 supermercados en Estados Unidos.\n\nY tenemos sistemas ya listos: KizerPOS para tiendas, KizerResto para restaurantes, Kizer Cobros para préstamos y Kizer Check para la asistencia.\n\nHecho en El Progreso, Honduras 🇭🇳\n\nEscribinos al WhatsApp 8809-1744 📲\n\n👍 ¿Querés seguir viendo más soluciones tecnológicas para tu negocio? Dale like a la página.\n\n#Kizercode #Honduras #ElProgreso #Emprendedores #PaginasWeb",
+   "link": null,
+   "programado": true,
+   "archivo": "/redes/historia-kizercode.mp4",
+   "portada": "/redes/historia-kizercode.jpg"
   },
   {
    "fecha": "2026-11-21T12:00",
@@ -906,6 +915,15 @@
    ],
    "archivo": "/redes/gancho-resto.mp4",
    "portada": "/redes/gancho-resto.jpg"
+  },
+  {
+   "nombre": "historia-kizercode.mp4",
+   "tipo": "video",
+   "fechas": [
+    "2026-11-21T08:00"
+   ],
+   "archivo": "/redes/historia-kizercode.mp4",
+   "portada": "/redes/historia-kizercode.jpg"
   },
   {
    "nombre": "kaizer-check.mp4",
